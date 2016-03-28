@@ -9,7 +9,7 @@ build:
               sudo gem install sass
               sudo gem install compass
       - npm-install
-      - elasticine/bower-install
+      - plasticine/bower-install
       - wercker/grunt:
           tasks: build
           fail-on-warnings: true
