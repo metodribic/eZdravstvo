@@ -21,7 +21,6 @@ You will need npm, bower and ruby (compass).
 - Install [compass](http://compass-style.org/install) and include in system path.
 
 ```shell
-cd front/	# Assuming you are in project root
 npm install
 bower install
 grunt serve	# To start frontend
@@ -60,6 +59,6 @@ Database creating is still in progress.
 
 #### Deployment ####
 Test server is at http://tpo-yoyosan.rhcloud.com/ (backend) and http://tpof-yoyosan.rhcloud.com/
-(frontend).
+(frontend). Abc
 
 We will use slavnik.fri.uni-lj.si as production server. More info soon.
