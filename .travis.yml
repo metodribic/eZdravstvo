@@ -1,0 +1,17 @@
+language: node_js
+install: npm install
+before_script:
+    - 'gem update --system'
+    - 'gem install compass'
+    - 'npm install -g bower grunt-cli'
+    - 'bower install'
+
+deploy:
+  provider: openshift
+  user: rokmirt@gmail.com
+  password:
+    secure: bSbZ+bRqhjXluF0QDoy7JvdPtHfbTu1aP2AwBoTXGNhjtczTR/ZL9IVCILnsG4x4vo0agaZiUJtDWUeCGyek7s4hfboesA5VPfD2UnYoaM3HfWtXVuJyrIju1JSKQl+dXXzLDOyn0sOF9VemzilKxv5CDL3uqtGL+9627EilsaIJqaZ80jjws/AvE2YY8eGEHwfRMfAtUPNKWN0Ut/9RND/evBCWC/+U/OM84hdKkBMl7CBY0IQxoHVjQzyiZ8Syzw591MpsUVOhMwbp9oDf0ZNZIp/7/v1/BFBeYfouzc3anwyXEJ5aixq+L+ha9MFV084STly/kqCZiEIapB4b9OdjW04VboSsNt7jcpYOcoyXM5YCVP5+9Coxg+zX96IFkMJBD1jNyXQO8UPxb1BKXEnxJiQ0MaE0ZQbT5Sp2SLW7G8eIsKiu5SqLcCcDdIrmlnj2s4jdO2Pcrc5f/tGFl4jacrD6ig1SgfnnJEAGBOy2Ru+9pio+EHSMER0lj5fE/fIiwxoCj6r40SPSqDkuw8WTWyb43kmAGCjG4kKQA5Gz5kZ6LfjXEP/B4SMOm0KLpOVTS6GF3itnW8qKFHG+UbcCkZZ6iE4NycuHBZXbJmnCTn/TzHtOnNOBtvW+55T4PEDNAC/gnTRVC8dFh2GLpiBt1jkb9XCd1YZinJQ7v9c=
+  app: $APP
+  domain: $DOMAIN
+  on:
+    repo: yoyo-san/tpo
