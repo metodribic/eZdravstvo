@@ -416,6 +416,7 @@ module.exports = function (grunt) {
             'styles/fonts/{,*/}*.*',
             'plugins/**',
             'dist/**',
+            'pages/**',
             'bootstrap/**'
           ]
         }, {
