@@ -62,8 +62,11 @@ Test server is at http://tpo-yoyosan.rhcloud.com/ (backend) and http://tpof-yoyo
 (frontend).
 
 Database access: https://tpo-yoyosan.rhcloud.com/phpmyadmin/
+
 Database: *tpo*
+
 User: *adminZPytHQu*
+
 Password: *Jz4hnAtrZzAI* 
 
 We will use slavnik.fri.uni-lj.si as production server. More info soon.
