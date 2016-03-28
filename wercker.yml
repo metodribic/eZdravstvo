@@ -25,9 +25,7 @@ deploy:
         name: Initialize new repository
         code: |
           rm -rf .git
-          if [[ -z ${BACKEND} ]]; then
-              cd dist/
-          fi
+          if [[ -z ${BACKEND} ]]; then cd dist ; fi
           git init
           git config --global user.name "wercker"
           git config --global user.email "pleasemailus@wercker.com"
