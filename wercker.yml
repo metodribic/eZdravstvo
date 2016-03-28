@@ -1,0 +1,34 @@
+box: wercker/nodejs@1.4.1
+build:
+  steps:
+      - wercker/install-packages:
+          packages: ruby-full rubygems1.8
+      - script:
+          name: install compass
+          code: |-
+              sudo gem install sass
+              sudo gem install compass
+      - npm-install
+      - elasticine/bower-install
+      - wercker/grunt:
+          tasks: build
+          fail-on-warnings: true
+deploy:
+  steps:
+    - wercker/add-to-known_hosts@1.4.0:
+        hostname: $SERVER_HOSTNAME
+        fingerprint: $SERVER_FINGERPRINT
+        port: 22
+    - wercker/add-ssh-key:
+        keyname: OPENSHIFT
+    - script:
+        name: Initialize new repository
+        code: |
+          rm -rf .git
+          git init
+          git config --global user.name "wercker"
+          git config --global user.email "pleasemailus@wercker.com"
+          git remote add origin $SERVER_URL
+          git add -f $SOURCE
+          git commit -m "Result of deploy $WERCKER_GIT_COMMIT"
+          git push -f origin master
