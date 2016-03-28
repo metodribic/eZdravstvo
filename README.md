@@ -1,4 +1,8 @@
 # This is awesome TPO project #
+
+### Status ###
+[![wercker status](https://app.wercker.com/status/aeb20820488130dfb55a14330a7e056b/m "wercker
+status")](https://app.wercker.com/project/bykey/aeb20820488130dfb55a14330a7e056b)
 ### Members ###
 - Jernej Koželj
 - Rok Mirt
@@ -41,7 +45,7 @@ cd wsgi/backend/	#Assuming you are in project root
 virtualenv env
 source env/bin/activate  # On Windows use env\Scripts\activate
 
-# Install Django and Django REST framework into the virtualenv
+# Install Django and Django REST framework into the virtualenv (or run python setup.py install)
 pip install django
 pip install djangorestframework
 
@@ -65,8 +69,8 @@ Database access: https://tpo-yoyosan.rhcloud.com/phpmyadmin/
 
 Database: *tpo*
 
-User: *adminZPytHQu*
+User: adminZPytHQu
 
-Password: *Jz4hnAtrZzAI* 
+Password: Jz4hnAtrZzAI 
 
 We will use slavnik.fri.uni-lj.si as production server. More info soon.
