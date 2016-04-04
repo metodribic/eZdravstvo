@@ -3,8 +3,8 @@
 /* Contorller za nadzorno ploščo
 
  Podatki so grupirani v več skupin:
-    osebni podatki,
-    podatki o izbranem osebnem zdravniku in zobozdravniku ter njunih medicinskih sestrah,
+    osebni podatki, 👍
+    podatki o izbranem osebnem zdravniku in zobozdravniku ter njunih medicinskih sestrah, 👍
     podatki o opravljenih pregledih,
     podatki o boleznih,
     podatki o alergijah,

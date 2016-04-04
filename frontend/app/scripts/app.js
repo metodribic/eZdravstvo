@@ -23,7 +23,7 @@ angular
 
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)  {
     /* Defaut route */
-    $urlRouterProvider.otherwise('/NadzornaPlosca');
+    $urlRouterProvider.otherwise('/domov');
 
     /* states */
     $stateProvider
