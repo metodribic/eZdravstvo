@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from wsgi.backend.tpo.models import Pregled, Uporabnik, Posta
+
+from tpo.models import Pregled, Uporabnik, Posta
+
 
 
 class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
