@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'tpo',
+    'tpo'
 ]
 
 MIDDLEWARE_CLASSES = [

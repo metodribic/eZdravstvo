@@ -2,8 +2,9 @@ from rest_framework import viewsets
 
 
 # Create your views here.
-from wsgi.backend.tpo.models import Pregled, Uporabnik
-from wsgi.backend.tpo.serializers import UporabnikSerializer, PregledSerializer
+from tpo.models import Pregled, Uporabnik, Posta
+from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer
+
 
 
 # USER
@@ -19,3 +20,10 @@ class UporabnikiViewSet(viewsets.ModelViewSet):
 class PreglediViewSet(viewsets.ModelViewSet):
     queryset = Pregled.objects.all()
     serializer_class = PregledSerializer
+
+
+
+# PREG
+class PostaViewSet(viewsets.ModelViewSet):
+    queryset = Posta.objects.all()
+    serializer_class = PostaSerializer
