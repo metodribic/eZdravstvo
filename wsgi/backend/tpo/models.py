@@ -58,3 +58,4 @@ class Bolezni(models.Model):
     mkb10 = models.CharField(max_length=45)
     naziv = models.CharField(max_length=45)
     alergija = models.BooleanField()
+
