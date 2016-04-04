@@ -9,22 +9,26 @@
  * Main module of the application.
  */
 angular
-  .module('testApp', [
+  .module('tpo', [
     'ngAnimate',
     'ngCookies',
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'ui.router'
   ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        controllerAs: 'main'
-      })
-      .otherwise({
-        redirectTo: '/'
+
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)  {
+    /* Defaut route */
+    $urlRouterProvider.otherwise('/NadzornaPlosca');
+
+    /* states */
+    $stateProvider
+      .state('nadzornaPlosca', {
+        url: '/domov',
+        templateUrl: '../views/nadzornaPlosca.html',
+        controller: 'NadzornaPloscaCtrl'
       });
-  });
+  }]);
