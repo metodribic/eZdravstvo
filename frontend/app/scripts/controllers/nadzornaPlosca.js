@@ -19,6 +19,7 @@
 angular.module('tpo')
   .controller('NadzornaPloscaCtrl', ['$scope','Uporabniki', function ($scope, Uporabniki) {
     $scope.test = 'Nadzorna plosca';
-    var uporabniki = Uporabniki.get();
-    console.log(uporabniki);
+    Uporabniki.get({iduporabnik:1}).$promise.then(function(response){
+      $scope.uporabnik = response;
+    });
   }]);
