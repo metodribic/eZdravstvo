@@ -19,7 +19,8 @@ setup(
     install_requires=[
         'Django==1.9.2',
         'djangorestframework==3.3.2',
-        'mysqlclient==1.3.6'
+        'mysqlclient==1.3.6',
+        'django-cors-headers'
     ],
     #dependency_links=[
     #    'https://pypi.python.org/simple/django/'
