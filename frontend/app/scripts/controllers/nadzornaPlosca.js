@@ -19,7 +19,9 @@
 angular.module('tpo')
   .controller('NadzornaPloscaCtrl', ['$scope','Uporabniki', function ($scope, Uporabniki) {
     $scope.test = 'Nadzorna plosca';
+    /* GET user */
     Uporabniki.get({iduporabnik:1}).$promise.then(function(response){
+      /* shrani uporabnika v $scope, da lahk dostopaš v view do njega */
       $scope.uporabnik = response;
     });
   }]);
