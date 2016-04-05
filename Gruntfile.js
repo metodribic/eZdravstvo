@@ -193,7 +193,7 @@ module.exports = function (grunt) {
           expand: true,
           cwd: '.tmp/styles/',
           src: '{,*/}*.css',
-          dest: '.tmp/styles/'
+          dest: '<%= yeoman.dist %>/styles/'
         }]
       }
     },
@@ -415,8 +415,10 @@ module.exports = function (grunt) {
             'images/{,*/}*.{webp}',
             'styles/fonts/{,*/}*.*',
             'plugins/**',
+            'scripts/**',
             'dist/**',
             'pages/**',
+            'views/**',
             'bootstrap/**'
           ]
         }, {
@@ -504,7 +506,6 @@ module.exports = function (grunt) {
     'ngAnnotate',
     'copy:dist',
     'cdnify',
-    'filerev',
     'usemin',
     'htmlmin'
   ]);
