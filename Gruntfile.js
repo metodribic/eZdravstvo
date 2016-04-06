@@ -371,7 +371,7 @@ module.exports = function (grunt) {
     ngtemplates: {
       dist: {
         options: {
-          module: 'testoApp',
+          module: 'tpo',
           htmlmin: '<%= htmlmin.dist.options %>',
           usemin: 'scripts/scripts.js'
         },
@@ -414,7 +414,11 @@ module.exports = function (grunt) {
             '*.html',
             'images/{,*/}*.{webp}',
             'styles/fonts/{,*/}*.*',
-            'views/*.*'
+            'views/**',
+            'plugins/**',
+            'bootstrap/**',
+            'dist/**',
+
           ]
         }, {
           expand: true,
@@ -503,6 +507,7 @@ module.exports = function (grunt) {
     'cdnify',
     'cssmin',
     'uglify',
+    'filerev',
     'usemin',
     'htmlmin'
   ]);

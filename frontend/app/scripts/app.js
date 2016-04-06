@@ -2,9 +2,9 @@
 
 /**
  * @ngdoc overview
- * @name testApp
+ * @name tpo
  * @description
- * # testApp
+ * # tpo
  *
  * Main module of the application.
  */
@@ -19,8 +19,6 @@ angular
     'ui.router',
     'tpo.services'
   ])
-
-
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)  {
     /* Defaut route */
     $urlRouterProvider.otherwise('/domov');
