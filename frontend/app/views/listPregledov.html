@@ -1,174 +1,24 @@
-<div class="col-md-6">
-  <!-- box: osebni podatki -->
-  <div class="box">
-    <div class="box-header with-border">
-      <h3 class="box-title">Osebni podatki</h3>
-
-      <!-- COLLAPSE -->
-      <div class="box-tools pull-right">
-        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-        </button>
-
-      </div>
-    </div>
-    <!-- /.box-header -->
-    <div class="box-body">
-      <div class="row">
-        <div class="col-md-12">
-          <!-- TABLE: OSEBNI PODATKI -->
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <td>
-                  <b class="medical-person"><i class="fa fa-user">&nbsp;</i>TEST TEST TEST</b>
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b>Ime:</b></td>
-                <td>Doe</td>
-              </tr>
-              <tr>
-                <td><b>Priimek:</b></td>
-                <td>Moe</td>
-              </tr>
-              <tr>
-                <td><b>Datum rojstva:</b></td>
-                <td>12.3.1992</td>
-              </tr>
-              <tr>
-                <td><b>Kraj rojstva:</b></td>
-                <td>Celje</td>
-              </tr>
-              <tr>
-                <td><b>Naslov:</b></td>
-                <td>Tržaška cesta 64, 1000 Ljubljana</td>
-              </tr>
-              <tr>
-                <td><b>Številka ZZZS</b></td>
-                <td>04184942829</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-    </div>
-    <!-- ./box-body -->
-  </div>
-  <!-- /.box -->
-</div>
-
-<div class="col-md-6">
-<!-- box: podatki o zdravniku -->
-<div class="box">
-  <div class="box-header with-border">
-    <h3 class="box-title">Podatki o zdravniku in osebju</h3>
-
-    <!-- COLLAPSE -->
-    <div class="box-tools pull-right">
-      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-      </button>
-
-    </div>
-  </div>
-  <!-- /.box-header -->
-  <div class="box-body">
-    <div class="row">
-      <div class="col-md-6">
-        <!-- TABLE: OSEBNI PODATKI -->
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <td>
-                <b class="medical-person"><i class="fa fa-user-md">&nbsp;</i>Osebni zdravnik</b>
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><b>Ime:</b></td>
-              <td>Janko</td>
-            </tr>
-            <tr>
-              <td><b>Priimek:</b></td>
-              <td>Moere</td>
-            </tr>
-            <tr>
-              <td><b>Specializacija</b></td>
-              <td>dr. med.</td>
-            </tr>
-            <tr>
-              <td><b>Ustanova</b></td>
-              <td>Zdr. dom Žalec</td>
-            </tr>
-            <tr>
-              <td><b>Ambulanta</b></td>
-              <td>Ambulanta Moere</td>
-            </tr>
-            <tr>
-              <td><b>Naslov:</b></td>
-              <td>Topniška cesta 164, 1000 Ljubljana</td>
-            </tr>
-            <tr>
-              <td><b>Osebje</b></td>
-              <td>Sestra st.1<br>Sestra st.2</td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
-      <!-- /.col -->
-
-      <div class="col-md-6">
-        <!-- TABLE: OSEBNI PODATKI -->
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <td>
-                <b class="medical-person"><i class="fa fa-user-md"></i>&nbsp;Osebni zobozdravnik</b>
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><b>Ime:</b></td>
-              <td>Maja</td>
-            </tr>
-            <tr>
-              <td><b>Priimek:</b></td>
-              <td>P. Ferjančič</td>
-            </tr>
-            <tr>
-              <td><b>Specializacija</b></td>
-              <td>dr. zoboz.</td>
-            </tr>
-            <tr>
-              <td><b>Ustanova</b></td>
-              <td>Zasebna amb.</td>
-            </tr>
-            <tr>
-              <td><b>Ambulanta</b></td>
-              <td>Ambulanta Ferjančič</td>
-            </tr>
-            <tr>
-              <td><b>Naslov:</b></td>
-              <td>Tibilijska cesta 64, 1000 Ljubljana</td>
-            </tr>
-            <tr>
-              <td><b>Osebje</b></td>
-              <td>Sestra st.1<br>Sestra st.2<br>Sestra st.3</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- /.col -->
-    </div>
-    <!-- /.row -->
-  </div>
-  <!-- ./box-body -->
-</div>
-<!-- /.box -->
+<div class="col-12">
+<table class="table">
+    <thead>
+      <tr>
+        <th>Številka</th>
+        <th>Datum</th>
+        <th>Zdravnik</th>
+        <th>Bolezen</th>
+        <th>Zdravilo</th>
+        <!-- headerji v tabeli -->
+      </tr>
+    </thead>
+    <tbody>
+      <!-- v controllerju moreš met $scope.pregledi tabelo, kjer so noter vsi pregledi ko jih hočeš prikazat, torej moreš naredit Pregledi.ge().$promise.then() itd itd podobn ko pr men v nadzorni-->
+      <tr ng-repeat="pregled in pregledi">
+        <td>{{pregled.datum}}</td>
+        <td>{{pregled.zdarvnik}}</td>
+        <td>{{pregled.bolezen}}</td>
+        <td>{{pregled.zdravilo}}</td>
+        <!-- pač po istem kopitu prikazuješ naprej vse atribute ko jih rabiš prikazat, gor pa pač dodaš še naslove  -->
+      </tr>
+    </tbody>
+  </table>
 </div>

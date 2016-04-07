@@ -32,5 +32,18 @@ angular
         url: '/domov',
         templateUrl: '../views/nadzornaPlosca.html',
         controller: 'NadzornaPloscaCtrl'
+      })
+
+      .state('listPregledov', {
+        url: '/listPregledov',
+        templateUrl: '../views/listPregledov.html',
+        controller: 'ListPregledovCtrl'
+      })
+
+      .state('pregledPodrobno', {
+        url: '/pregledPodrobno',
+        templateUrl: '../views/pregledPodrobno.html',
+        controller: 'PregledPodrobnoCtrl'
       });
+
   }]);

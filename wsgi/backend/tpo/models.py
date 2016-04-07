@@ -52,6 +52,14 @@ class Pregled(models.Model):
     opombe = models.CharField(max_length=2048)
     datum = models.DateField()
     zdravnik = models.ForeignKey('Zdravnik')
+    meritve = models.CharField(max_length=2048)
+    bolezni = models.ForeignKey('Bolezni')
+    alergije = models.ForeignKey('Bolezni')
+    zdravilo = models.ForeignKey('Zdravilo')
+    dieta = models.ForeignKey('Dieta')
+    navodila = models.CharField(max_length=2048)
+    datum_naslednji = models.DateField()
+
 
 
 class Bolezni(models.Model):

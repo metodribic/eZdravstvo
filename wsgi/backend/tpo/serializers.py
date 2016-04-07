@@ -14,7 +14,7 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
 class PregledSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Pregled
-        fields = ('opombe', 'datum', 'zdravnik')
+        fields = ('opombe', 'datum', 'zdravnik', 'meritve', 'bolezni', 'alergije', 'zdravila', 'dieta', 'navodila', 'datum_naslednji')
 
 
 class PostaSerializer(serializers.HyperlinkedModelSerializer):
