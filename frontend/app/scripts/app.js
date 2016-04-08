@@ -2,9 +2,9 @@
 
 /**
  * @ngdoc overview
- * @name testApp
+ * @name tpo
  * @description
- * # testApp
+ * # tpo
  *
  * Main module of the application.
  */
