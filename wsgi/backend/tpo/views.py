@@ -16,14 +16,14 @@ class UporabnikiViewSet(viewsets.ModelViewSet):
     serializer_class = UporabnikSerializer
 
 
-# PREG
+# PREGLED
 class PreglediViewSet(viewsets.ModelViewSet):
     queryset = Pregled.objects.all()
     serializer_class = PregledSerializer
 
 
 
-# PREG
+# POSTA
 class PostaViewSet(viewsets.ModelViewSet):
     queryset = Posta.objects.all()
     serializer_class = PostaSerializer

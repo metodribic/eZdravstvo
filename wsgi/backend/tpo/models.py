@@ -6,33 +6,34 @@ from django.db import models
 
 # Create your models here.
 class Uporabnik(User):
-    ime = models.CharField(max_length=100)
-    priimek = models.CharField(max_length=100)
-    datum_rojstva = models.DateField()
-    kraj_rojstva = models.CharField(max_length=50)
-    naslov = models.CharField(max_length=100)
-    posta = models.ForeignKey('Posta')
-    st_zzzs = models.IntegerField()
-    spol = models.CharField(max_length=1)
-    krvna_skupina = models.CharField(max_length=3)
-    ambulanta = models.ForeignKey('Ambulanta')
+    ime = models.CharField(max_length=100, blank=True)
+    priimek = models.CharField(max_length=100, blank=True)
+    datum_rojstva = models.DateField(blank=True)
+    kraj_rojstva = models.CharField(max_length=50, blank=True)
+    naslov = models.CharField(max_length=100, blank=True)
+    posta = models.ForeignKey('Posta', blank=True, null=True)
+    st_zzzs = models.IntegerField(blank=True, null=True)
+    spol = models.CharField(max_length=1, blank=True)
+    krvna_skupina = models.CharField(max_length=3, blank=True, null=True)
+    ambulanta = models.ForeignKey('Ambulanta', blank=True, null=True)
+    zdravnik = models.ManyToManyField('Zdravnik', blank=True)
+    meritev = models.ForeignKey('Meritev', blank=True, null=True)
+    zdravila = models.ManyToManyField('Zdravilo', blank=True)
+    bolezni = models.ManyToManyField('Bolezni', blank=True)
+    pregledi = models.ForeignKey('Pregled', blank=True, null=True)
     role = models.ForeignKey('Roles')
-    zdravnik = models.ManyToManyField('Zdravnik')
-    meritev = models.ForeignKey('Meritev')
-    zdravila = models.ManyToManyField('Zdravilo')
-    bolezni = models.ManyToManyField('Bolezni')
-    pregledi = models.ForeignKey('Pregled')
 
 
 class Zdravnik(User):
-    ime = models.CharField(max_length=100)
-    priimek = models.CharField(max_length=100)
-    sifra = models.IntegerField()               # SIFRA USTANOVE
-    naziv = models.CharField(max_length=50)
-    ambulanta = models.ForeignKey('Ambulanta')
-    tip = models.CharField(max_length=50)       # ZDRAVNIK ALI ZOBOZDRAVNIK
-    medicinske_sestre = models.ForeignKey('Osebje')
+    ime = models.CharField(max_length=100, blank=True)
+    priimek = models.CharField(max_length=100, blank=True)
+    sifra = models.IntegerField(blank=True)               # SIFRA USTANOVE
+    naziv = models.CharField(max_length=50, blank=True)
+    ambulanta = models.ForeignKey('Ambulanta', blank=True, null=True)
+    tip = models.CharField(max_length=50, blank=True)       # ZDRAVNIK ALI ZOBOZDRAVNIK
+    medicinske_sestre = models.ForeignKey('Osebje', blank=True, null=True)
     role = models.ForeignKey('Roles')
+    sprejema_paciente = models.BooleanField()
 
 
 class Osebje(User):
@@ -57,7 +58,6 @@ class Ustanova(models.Model):
 
 
 class Posta(models.Model):
-    stevilka = models.IntegerField()
     kraj = models.CharField(max_length=100)
 
 
