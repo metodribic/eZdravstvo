@@ -168,7 +168,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="pregled in pregledi">
+            <tr ng-repeat="pregled in uporabnik.pregledi">
               <td ui-sref="#">{{pregled.datum date:'dd-mm-yyyy HH:mm'}}</td>
               <td>{{pregled.zdravnik}}</td>
               <td>{{pregled.bolezni}}</td>
@@ -193,7 +193,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="meritev in meritve">
+            <tr ng-repeat="meritev in uporabnik.meritev">
               <td ui-sref="#">{{meritev.datum | date:'dd-mm-yyyy HH:mm'}}</td>
               <td>{{meritev.tip}}</td>
               <td>{{meritev.vrednost_meritve}}</td>
@@ -216,7 +216,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="bolezen in bolezni">
+            <tr ng-repeat="bolezen in uporabnik.bolezni">
               <td ui-sref="#">{{bolezen.naziv}}</td>
               <td>{{bolezen.mkb10}}</td>
               <td>
@@ -243,7 +243,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="zdravilo in zdravila">
+              <tr ng-repeat="zdravilo in uporabnik.zdravila">
                 <td>{{zdravilo.zdravilo}}</td>
                 <td>{{zdravilo.navodila}}</td>
               </tr>
@@ -261,7 +261,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="dieta in diete">
+              <tr ng-repeat="dieta in uporabnik.dieta">
                 <td>{{dieta.naziv}}</td>
                 <td>{{dieta.sifra}}</td>
                 <td ng-href="dieta.url">{{dieta.url}}</td>

@@ -2,14 +2,13 @@ from rest_framework import viewsets
 
 
 # Create your views here.
-from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje
-from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, OsebjeSerializer
+from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles
+from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
+    OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer
 
 
+#UPORABNIK
 class UporabnikiViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
     queryset = Uporabnik.objects.all().order_by('-date_joined')
     serializer_class = UporabnikSerializer
 
@@ -38,7 +37,7 @@ class UstanovaViewSet(viewsets.ModelViewSet):
     serializer_class = UstanovaSerializer
 
 
-# USTANOVA
+# ZDRAVNIK
 class ZdravnikViewSet(viewsets.ModelViewSet):
     queryset = Zdravnik.objects.all()
     serializer_class = ZdravnikSerializer
@@ -48,3 +47,33 @@ class ZdravnikViewSet(viewsets.ModelViewSet):
 class OsebjeViewSet(viewsets.ModelViewSet):
     queryset = Osebje.objects.all()
     serializer_class = OsebjeSerializer
+
+
+# MERITVE
+class MeritevViewSet(viewsets.ModelViewSet):
+    queryset = Meritev.objects.all()
+    serializer_class = MeritevSerializer
+
+
+# MERITVE
+class DietaViewSet(viewsets.ModelViewSet):
+    queryset = Dieta.objects.all()
+    serializer_class = DietaSerializer
+
+
+# BOLEZNI
+class BolezniViewSet(viewsets.ModelViewSet):
+    queryset = Bolezni.objects.all()
+    serializer_class = BolezniSerializer
+
+
+# ZDRAVILO
+class ZdraviloViewSet(viewsets.ModelViewSet):
+    queryset = Zdravilo.objects.all()
+    serializer_class = ZdraviloSerializer
+
+
+# ZDRAVILO
+class RolesViewSet(viewsets.ModelViewSet):
+    queryset = Roles.objects.all()
+    serializer_class = VlogaSerializer
