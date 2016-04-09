@@ -105,4 +105,5 @@ class Meritev(models.Model):
     nemogoce_max = models.FloatField()
     cas_merjenja = models.CharField(max_length=100)
     vrednost_meritve = models.FloatField()
+    datum = models.DateField()
 

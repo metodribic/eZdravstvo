@@ -32,4 +32,10 @@ angular
         templateUrl: '../views/nadzornaPlosca.html',
         controller: 'NadzornaPloscaCtrl'
       });
-  }]);
+  }])
+
+  .run(function ($rootScope) {
+      $rootScope.uporabnik = {
+        id : 1
+      };
+  });
