@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-# Create your models here.
 class Uporabnik(User):
     ime = models.CharField(max_length=100, blank=True)
     priimek = models.CharField(max_length=100, blank=True)

@@ -36,7 +36,7 @@ angular
 
   .run(function ($rootScope, Uporabniki) {
     Uporabniki.get({iduporabnik: 1}).$promise.then(function(response){
-      /* shrani uporabnika v $scope, da lahk dostopaš v view do njega */
+      /* shrani uporabnika v $scope, da lahk dostopaš v view-ju do njega */
       $rootScope.uporabnik = response;
       console.log($rootScope.uporabnik);
     })
