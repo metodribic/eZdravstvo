@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 
-from tpo.models import Pregled, Uporabnik, Posta, Roles
+from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni
 
 
 class VlogaSerializer(serializers.HyperlinkedModelSerializer):
@@ -10,25 +10,58 @@ class VlogaSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('naziv',)
 
 
-class PostaSerializer(serializers.HyperlinkedModelSerializer):
+class AmbulantaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Posta
-        fields = ('kraj',)
-
-
-class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
-    role = VlogaSerializer()
-    posta = PostaSerializer()
-
-    class Meta:
-        model = Uporabnik
-        fields = ('username','ime','priimek','datum_rojstva','kraj_rojstva','naslov','posta','st_zzzs','spol','krvna_skupina','ambulanta','zdravnik','meritev','zdravila','bolezni','pregledi','role')
+        model = Ambulanta
 
 
 class PregledSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Pregled
-        fields = ('opombe','datum','zdravnik','meritve','bolezen','zdravilo','dieta','datum_naslednjega')
+
+
+class PostaSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Posta
+        fields = ('id', 'kraj')
+
+class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Zdravnik
+
+
+class MeritevSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Meritev
+
+
+class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Zdravilo
+
+
+class BolezniSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Bolezni
+
+
+class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
+    role = VlogaSerializer()
+    posta = PostaSerializer()
+    ambulanta = AmbulantaSerializer()
+    pregledi = PregledSerializer()
+    meritev = MeritevSerializer()
+    zdravila = ZdraviloSerializer(many=True)
+    bolezni = BolezniSerializer(many=True)
+    zdravnik = ZdravnikSerializer(many=True)
+
+    class Meta:
+        model = Uporabnik
+        #fields = ('username','ime','priimek','datum_rojstva','kraj_rojstva','naslov','posta','st_zzzs','spol','krvna_skupina','ambulanta','zdravnik','meritev','zdravila','bolezni','pregledi','role')
+
+
+
+
 
 
 

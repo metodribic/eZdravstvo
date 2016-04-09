@@ -23,7 +23,7 @@ angular.module('tpo')
     Uporabniki.get({iduporabnik: $rootScope.uporabnik.id}).$promise.then(function(response){
       /* shrani uporabnika v $scope, da lahk dostopaš v view do njega */
       $scope.uporabnik = response;
-      console.log($rootScope.uporabnik.id);
+      console.log($scope.uporabnik);
     })
     .catch(function(errorCallback){
       if (errorCallback.status == 404) {
