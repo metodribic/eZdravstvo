@@ -34,8 +34,10 @@ angular
       });
   }])
 
-  .run(function ($rootScope) {
-      $rootScope.uporabnik = {
-        id : 1
-      };
+  .run(function ($rootScope, Uporabniki) {
+    Uporabniki.get({iduporabnik: 3}).$promise.then(function(response){
+      /* shrani uporabnika v $scope, da lahk dostopaš v view do njega */
+      $rootScope.uporabnik = response;
+      console.log($rootScope.uporabnik);
+    })
   });

@@ -20,15 +20,27 @@ angular.module('tpo')
   .controller('NadzornaPloscaCtrl', ['$scope','Uporabniki','$rootScope', function ($scope, Uporabniki, $rootScope) {
 
     /* GET user */
-    Uporabniki.get({iduporabnik: $rootScope.uporabnik.id}).$promise.then(function(response){
-      /* shrani uporabnika v $scope, da lahk dostopaš v view do njega */
-      $scope.uporabnik = response;
-      console.log($scope.uporabnik);
-    })
-    .catch(function(errorCallback){
-      if (errorCallback.status == 404) {
-        console.log('User not found!');
-      }
-    });
+    // Uporabniki.get({iduporabnik: $rootScope.uporabnik.id}).$promise.then(function(response){
+    //   /* shrani uporabnika v $scope, da lahk dostopaš v view do njega */
+    //   $scope.uporabnik = response;
+    //   console.log($scope.uporabnik);
+    // })
+    // .catch(function(errorCallback){
+    //   if (errorCallback.status == 404) {
+    //     console.log('User not found!');
+    //   }
+    // });
+
+    $scope.osebniZdranik = {};
+    $scope.osebniZobozdravnik = {};
+    // console.log($rootScope.uporabnik);
+    // for(var zdravnik in $rootScope.uporabnik.zdravnik){
+    //   if(zdravnik.tip == 'osebni'){
+    //     $scope.osebniZdranik = zdravnik;
+    //   }
+    //   if(zdravnik.tip == 'zobozdravnik') {
+    //     $scope.osebniZobozdravnik = zdravnik;
+    //   }
+    // }
 
   }]);

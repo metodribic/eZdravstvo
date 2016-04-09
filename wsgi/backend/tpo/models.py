@@ -45,17 +45,17 @@ class Osebje(User):
     role = models.ForeignKey('Roles')
 
 
+class Ustanova(models.Model):
+    naziv = models.CharField(max_length=100)
+    naslov = models.CharField(max_length=100)
+    posta = models.ForeignKey('Posta')
+
+
 class Ambulanta(models.Model):
     naziv = models.CharField(max_length=100)
     naslov = models.CharField(max_length=100)
     posta = models.ForeignKey('Posta')
     ustanova = models.ForeignKey('Ustanova')
-
-
-class Ustanova(models.Model):
-    naziv = models.CharField(max_length=100)
-    naslov = models.CharField(max_length=100)
-    posta = models.ForeignKey('Posta')
 
 
 class Posta(models.Model):

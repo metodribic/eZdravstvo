@@ -36,7 +36,7 @@
               </tr>
               <tr>
                 <td><b>Datum rojstva:</b></td>
-                <td>{{uporabnik.datum_rojstva}}</td>
+                <td>{{uporabnik.datum_rojstva | date: 'dd.MM.yyyy'}}</td>
               </tr>
               <tr>
                 <td><b>Kraj rojstva:</b></td>
@@ -44,7 +44,7 @@
               </tr>
               <tr>
                 <td><b>Naslov:</b></td>
-                <td>{{uporabnik.naslov}}, POSTA_NEEDED</td>
+                <td>{{uporabnik.naslov}}, {{uporabnik.posta.id}} {{uporabnik.posta.kraj}}</td>
               </tr>
               <tr>
                 <td><b>Številka ZZZS</b></td>
@@ -66,31 +66,34 @@
             <tbody>
               <tr>
                 <td><b>Ime:</b></td>
-                <td>Janko</td>
+                <td>{{osebniZdranik.ime}}</td>
               </tr>
               <tr>
                 <td><b>Priimek:</b></td>
-                <td>Moere</td>
+                <td>{{osebniZdranik.priimek}}</td>
               </tr>
               <tr>
                 <td><b>Specializacija</b></td>
-                <td>dr. med.</td>
+                <td>{{osebniZdranik.naziv}}</td>
               </tr>
               <tr>
                 <td><b>Ustanova</b></td>
-                <td>Zdr. dom Žalec</td>
+                <td>{{osebniZdranik.ambulanta.ustanova.naziv}}</td>
               </tr>
               <tr>
                 <td><b>Ambulanta</b></td>
-                <td>Ambulanta Moere</td>
+                <td>{{osebniZdranik.ambulanta}}</td>
               </tr>
               <tr>
                 <td><b>Naslov:</b></td>
-                <td>Topniška cesta 164, 1000 Ljubljana</td>
+                <td>{{osebniZdranik.ambulanta.ustanova.naslov}},&nbsp;
+                    {{osebniZdranik.ambulanta.posta.id}}&nbsp;
+                    {{osebniZdranik.ambulanta.posta.kraj}}
+                </td>
               </tr>
               <tr>
                 <td><b>Osebje</b></td>
-                <td>Sestra st.1<br>Sestra st.2</td>
+                <td>{{osebniZdranik.osebje.toString()}}</td>
               </tr>
 
             </tbody>
@@ -111,32 +114,36 @@
             <tbody>
               <tr>
                 <td><b>Ime:</b></td>
-                <td>Maja</td>
+                <td>{{osebniZobozdravnik.ime}}</td>
               </tr>
               <tr>
                 <td><b>Priimek:</b></td>
-                <td>P. Ferjančič</td>
+                <td>{{osebniZobozdravnik.priimek}}</td>
               </tr>
               <tr>
                 <td><b>Specializacija</b></td>
-                <td>dr. zoboz.</td>
+                <td>{{osebniZobozdravnik.naziv}}</td>
               </tr>
               <tr>
                 <td><b>Ustanova</b></td>
-                <td>Zasebna amb.</td>
+                <td>{{osebniZobozdravnik.ambulanta.ustanova.naziv}}</td>
               </tr>
               <tr>
                 <td><b>Ambulanta</b></td>
-                <td>Ambulanta Ferjančič</td>
+                <td>{{osebniZobozdravnik.ambulanta}}</td>
               </tr>
               <tr>
                 <td><b>Naslov:</b></td>
-                <td>Tibilijska cesta 64, 1000 Ljubljana</td>
+                <td>{{osebniZobozdravnik.ambulanta.ustanova.naslov}},&nbsp;
+                    {{osebniZobozdravnik.ambulanta.posta.id}}&nbsp;
+                    {{osebniZobozdravnik.ambulanta.posta.kraj}}
+                </td>
               </tr>
               <tr>
                 <td><b>Osebje</b></td>
-                <td>Sestra st.1<br>Sestra st.2<br>Sestra st.3</td>
+                <td>{{osebniZobozdravnik.osebje.toString()}}</td>
               </tr>
+
             </tbody>
           </table>
         </div>
@@ -187,7 +194,7 @@
           </thead>
           <tbody>
             <tr ng-repeat="meritev in meritve">
-              <td ui-sref="#">{{meritev.datum date:'dd-mm-yyyy HH:mm'}}</td>
+              <td ui-sref="#">{{meritev.datum | date:'dd-mm-yyyy HH:mm'}}</td>
               <td>{{meritev.tip}}</td>
               <td>{{meritev.vrednost_meritve}}</td>
             </tr>
