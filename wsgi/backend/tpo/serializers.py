@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 
-from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni
+from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni, Dieta
 
 
 class VlogaSerializer(serializers.HyperlinkedModelSerializer):
@@ -45,6 +45,12 @@ class BolezniSerializer(serializers.HyperlinkedModelSerializer):
         model = Bolezni
 
 
+class DietaSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Dieta
+
+
+
 class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     role = VlogaSerializer()
     posta = PostaSerializer()
@@ -54,6 +60,7 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     zdravila = ZdraviloSerializer(many=True)
     bolezni = BolezniSerializer(many=True)
     zdravnik = ZdravnikSerializer(many=True)
+    dieta = DietaSerializer(many=True)
 
     class Meta:
         model = Uporabnik

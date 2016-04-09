@@ -21,8 +21,8 @@ class Uporabnik(User):
     zdravila = models.ManyToManyField('Zdravilo', blank=True)
     bolezni = models.ManyToManyField('Bolezni', blank=True)
     pregledi = models.ForeignKey('Pregled', blank=True, null=True)
+    dieta = models.ManyToManyField('Dieta', blank=True)
     role = models.ForeignKey('Roles')
-    dieta = models.ForeignKey('Dieta', blank=True, null=True)
 
 
 class Zdravnik(User):
