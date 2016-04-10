@@ -26,14 +26,6 @@ angular.module('tpo.services', ['ngResource'])
  
   function loadUserCredentials() {
     var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
-    var id = window.localStorage.getItem(LOCAL_USERID_KEY);
-    if(id && !$rootScope.uporabnik) {
-        Uporabniki.get({iduporabnik: id}).$promise.then(function(response){
-            /* shrani uporabnika v $scope, da lahk dostopaš v view-ju do njega */
-            $rootScope.uporabnik = response;
-            console.log($rootScope.uporabnik);
-        });
-    }
     if (token) {
       useCredentials(token);
     }
@@ -60,6 +52,10 @@ angular.module('tpo.services', ['ngResource'])
     window.localStorage.removeItem(LOCAL_TOKEN_KEY);
     window.localStorage.removeItem(LOCAL_USERID_KEY);
   }
+
+  var getCurrentUserId = function() {
+   return window.localStorage.getItem(LOCAL_USERID_KEY);
+  };
  
     var login = function(email, pass) {
         return $q(function(resolve, reject) {
@@ -72,6 +68,7 @@ angular.module('tpo.services', ['ngResource'])
                 data: {"email": email, "password": pass}
             }).then(function successCallback(response) {
                 $rootScope.uporabnik = response.data.uporabnik;
+                console.log(response.data.uporabnik);
                 storeUserCredentials(response.data.token, response.data.uporabnik.id);
                 resolve('Login success.');
             }, function errorCallback(response) {
@@ -100,6 +97,7 @@ angular.module('tpo.services', ['ngResource'])
     isAuthorized: isAuthorized,
     isAuthenticated: function() {return isAuthenticated;},
     username: function() {return username;},
-    role: function() {return role;}
+    role: function() {return role;},
+    getCurrentUserId: getCurrentUserId
   };
 });

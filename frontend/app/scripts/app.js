@@ -40,7 +40,7 @@ angular
         "url": "http://localhost:8000",
     })
 
-  .run(function ($rootScope, $state, AuthService) {
+  .run(function ($rootScope, $state, AuthService, Uporabniki) {
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
         console.log('changing state');
         console.log(AuthService.isAuthenticated());
@@ -48,6 +48,14 @@ angular
           // User isn’t authenticated
           $state.transitionTo("/login");
           event.preventDefault(); 
-        }
+        } 
+        if(AuthService.isAuthenticated() && !$rootScope.uporabnik) {
+            var id = AuthService.getCurrentUserId();
+            Uporabniki.get({iduporabnik: id}).$promise.then(function(response){
+              /* shrani uporabnika v $scope, da lahk dostopaš v view-ju do njega */
+              $rootScope.uporabnik = response;
+              console.log($rootScope.uporabnik);
+            })
+        } 
       });
   });
