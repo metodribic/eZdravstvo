@@ -1,23 +1,78 @@
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 
 
-from tpo.models import Pregled, Uporabnik, Posta
+from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni, Dieta
 
 
-
-class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
+class VlogaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Uporabnik
-        fields = ('username', 'email', 'sifra')
+        model = Roles
+        fields = ('naziv',)
+
+
+class AmbulantaSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Ambulanta
 
 
 class PregledSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Pregled
-        fields = ('opombe', 'datum', 'zdravnik')
 
 
 class PostaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Posta
-        fields = ('stevilka', 'kraj')
+        fields = ('id', 'kraj')
+
+class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Zdravnik
+
+
+class MeritevSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Meritev
+
+
+class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Zdravilo
+
+
+class BolezniSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Bolezni
+
+
+class DietaSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Dieta
+
+
+
+class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
+    #role = VlogaSerializer()
+    #posta = PostaSerializer()
+    #ambulanta = AmbulantaSerializer()
+    #pregledi = PregledSerializer()
+    #meritev = MeritevSerializer()
+    #zdravila = ZdraviloSerializer(many=True)
+    #bolezni = BolezniSerializer(many=True)
+    #zdravnik = ZdravnikSerializer(many=True)
+    #dieta = DietaSerializer(many=True)
+
+    class Meta:
+        model = Uporabnik
+        fields = ('ime', 'id',)
+        #fields = ('username','ime','priimek','datum_rojstva','kraj_rojstva','naslov','posta','st_zzzs','spol','krvna_skupina','ambulanta','zdravnik','meritev','zdravila','bolezni','pregledi','role')
+
+
+class LoginSerializer(serializers.Serializer):
+    uporabnik = UporabnikSerializer()
+    token = serializers.CharField(max_length=50)
+
+
+class ErrorSerializer(serializers.Serializer):
+    error = serializers.CharField(max_length=500)
