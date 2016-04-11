@@ -44,7 +44,6 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'backend.urls'
-
 CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [

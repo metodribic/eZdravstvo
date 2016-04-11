@@ -21,15 +21,31 @@ angular
   ])
 
 
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)  {
+  .config(['$resourceProvider','$stateProvider', '$urlRouterProvider',
+      function($resourceProvider, $stateProvider, $urlRouterProvider)  {
     /* Defaut route */
     $urlRouterProvider.otherwise('/domov');
 
-    /* states */
+
+    // Don't strip trailing slashes from calculated URLs
+    $resourceProvider.defaults.stripTrailingSlashes = false;
+
+
+      /* states */
     $stateProvider
       .state('nadzornaPlosca', {
         url: '/domov',
         templateUrl: '../views/nadzornaPlosca.html',
         controller: 'NadzornaPloscaCtrl'
       });
+
+
+    $stateProvider
+      .state('registracijaUporabnikaAdmin', {
+        url: '/registracijaAdmin',
+        templateUrl: '../views/registracijaUporabnikaAdmin.html',
+        controller: 'registracijaUporAdminCtrl'
+      });
+
+
   }]);

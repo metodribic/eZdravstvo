@@ -1,0 +1,47 @@
+
+<div class="col-md-3">
+
+    <div class="box" >
+        <div class="box-header with-border">
+            <h3 class="box-title">Obvezna polja</h3>
+            <div class="box-body">
+
+            <form class="simple-form" >
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <!-- forma obveznih podatkov -->
+                        <table class="table table-hover">
+                            <thead>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                <td><b>Email:</b></td>
+                                <td><input type="email" ng-model="uporabnik.email" /></td>
+                                </tr>
+                                <tr>
+                                <td><b>Geslo</b></td>
+                                <td><input type="password" ng-model="uporabnik.password" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- end forma obveznih podatkov -->
+
+                    </div>
+                </div>
+                <!--
+                <div style="text-align:center" >
+                -->
+                    <input type="submit" ng-click="shraniU()" value="Save" class="btn btn-default btn-flat" />
+
+                <!--
+                </div>
+                -->
+
+            </form>
+            </div>
+        </div>
+    </div>
+
+</div>
