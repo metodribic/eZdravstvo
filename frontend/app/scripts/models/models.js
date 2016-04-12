@@ -1,7 +1,7 @@
-angular.module('tpo.services', ['ngResource'])
+angular.module('tpo.services', ['ngResource', 'config'])
 
-.factory('Uporabniki', function($resource) {
-	return $resource('http://localhost:8000/uporabniki/:iduporabnik', { iduporabnik: '@iduporabnik' }, {
+.factory('Uporabniki', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/uporabniki/:iduporabnik', { iduporabnik: '@iduporabnik' }, {
 		update: {
 			method: 'PUT'
 		}
@@ -9,16 +9,16 @@ angular.module('tpo.services', ['ngResource'])
 })
 
 .factory('Pregled', function($resource) {
-	return $resource('http://localhost:8000/pregledi/:pregeldId', { pregledId: '@pregledId' }, {
+	return $resource('http://' + API_URL + '/pregledi/:pregeldId', { pregledId: '@pregledId' }, {
 		update: {
 			method: 'PUT'
 		}
 	});
 })
 
-.service('AuthService', function($q, $http, $rootScope, Uporabniki) {
+.service('AuthService', function($q, $http, $rootScope, Uporabniki, API_URL) {
   var LOCAL_TOKEN_KEY = 'token';
-  var LOCAL_USERID_KEY = 'userId';
+  var LOCAL_USER_KEY = 'user';
   var username = '';
   var isAuthenticated = false;
   var role = '';
@@ -31,9 +31,9 @@ angular.module('tpo.services', ['ngResource'])
     }
   }
  
-  function storeUserCredentials(token, id) {
+  function storeUser(token, user) {
     window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
-    window.localStorage.setItem(LOCAL_USERID_KEY, id);
+    window.localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(user));
     useCredentials(token);
   }
  
@@ -44,42 +44,45 @@ angular.module('tpo.services', ['ngResource'])
     $http.defaults.headers.common.Authorization = 'Token ' + token;
   }
  
-  function destroyUserCredentials() {
+  function destroyUser() {
     authToken = undefined;
-    username = '';
     isAuthenticated = false;
     $http.defaults.headers.common.Authorization = undefined;
     window.localStorage.removeItem(LOCAL_TOKEN_KEY);
-    window.localStorage.removeItem(LOCAL_USERID_KEY);
+    window.localStorage.removeItem(LOCAL_USER_KEY);
   }
 
-  var getCurrentUserId = function() {
-   return window.localStorage.getItem(LOCAL_USERID_KEY);
+  var getCurrentUser = function() {
+   return JSON.parse(window.localStorage.getItem(LOCAL_USER_KEY));
   };
  
     var login = function(email, pass) {
         return $q(function(resolve, reject) {
             $http({
                 method: 'POST',
-                url: 'http://localhost:8000/login',
+                url: 'http://' + API_URL + '/login',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 data: {"email": email, "password": pass}
             }).then(function successCallback(response) {
-                $rootScope.uporabnik = response.data.uporabnik;
-                console.log(response.data.uporabnik);
-                storeUserCredentials(response.data.token, response.data.uporabnik.id);
+                if(response.data.uporabnik) {
+                    $rootScope.uporabnik = response.data.uporabnik;
+                    storeUser(response.data.token, response.data.uporabnik);
+                }
+                else if(response.data.zdravnik) {
+                    $rootScope.uporabnik = response.data.zdravnik;
+                    storeUser(response.data.token, response.data.zdravnik);
+                }
                 resolve('Login success.');
             }, function errorCallback(response) {
-                console.log(response.data);
                 reject(response.data.error);
             });
         });
     };
  
   var logout = function() {
-    destroyUserCredentials();
+    destroyUser();
   };
  
   var isAuthorized = function(authorizedRoles) {
@@ -98,6 +101,6 @@ angular.module('tpo.services', ['ngResource'])
     isAuthenticated: function() {return isAuthenticated;},
     username: function() {return username;},
     role: function() {return role;},
-    getCurrentUserId: getCurrentUserId
+    getCurrentUser: getCurrentUser
   };
 });

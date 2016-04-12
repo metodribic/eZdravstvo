@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.conf import settings
 
 
 class Uporabnik(User):
@@ -107,3 +108,7 @@ class Meritev(models.Model):
     vrednost_meritve = models.FloatField()
     datum = models.DateField()
 
+class IPLock(models.Model):
+    ip = models.CharField(max_length=40)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    numOfTries = models.IntegerField(default=0)

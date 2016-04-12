@@ -8,14 +8,15 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.authtoken.models import Token
 from django.core import serializers
 from django.http import HttpResponse
-import hashlib, traceback
+import traceback, datetime
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
-from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles
+from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
-    OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer
+    OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, LoginZdravnikSerializer
 
 class JSONResponse(HttpResponse):
     """
@@ -108,18 +109,41 @@ def login(request, format=None):
         # check if email and password are received or return 400
         email = request.data['email']
         password = request.data['password']
+        clientIp = request.META['REMOTE_ADDR']
         user = authenticate(username=email, password=password) # Returns User or None
         if user is not None:
             if user.is_active:
                 token = Token.objects.get_or_create(user=user)
-                UporabnikInst = Uporabnik.objects.get(user_ptr_id = user.id) #Must add Zdravnik as well
-                login(request, user);
-                if(UporabnikInst):  #Can be Uporabnik or Zdravnik
+                try:
+                    ipLock = IPLock.objects.get(user=user, ip=clientIp)    #Remove IP Lock
+                    ipLock.delete()
+                except ObjectDoesNotExist:
+                    pass
+                user.last_login = datetime.datetime.now()
+                user.save()
+                try:
+                    UporabnikInst = Uporabnik.objects.get(user_ptr_id = user.id) 
                     return JSONResponse(LoginSerializer({'token':token[0], 'uporabnik':UporabnikInst}, context={'request': request}).data)
+                except ObjectDoesNotExist:
+                    ZdravnikInst = Zdravnik.objects.get(user_ptr_id = user.id) 
+                    return JSONResponse(LoginZdravnikSerializer({'token':token[0], 'zdravnik':ZdravnikInst}, context={'request': request}).data)
             else:
-                response = JSONResponse({"error": "Uporabnik se ni aktiviran"})
+                response = JSONResponse({"error": "Uporabnik se ni aktiviran ali pa je IP zaklenjen"})
                 response.status_code = 400
+                return response
         else:
+            try:
+                incUser = User.objects.get(email=email) #Find user trying to login
+                ipLock = IPLock.objects.get_or_create(user=incUser, ip=clientIp)[0]    #Create lock 
+                ipLock.numOfTries = ipLock.numOfTries + 1
+                ipLock.save();
+
+                if(ipLock.numOfTries >= 3):   #Disable user
+                    incUser.is_active = False
+                    incUser.save();
+
+            except ObjectDoesNotExist:
+                pass    #Doesn't exist, no one cares. Pass.
             response = JSONResponse({"error": "Invalid login"})
             response.status_code = 401
             return response

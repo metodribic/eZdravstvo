@@ -54,6 +54,7 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
     ambulanta = AmbulantaSerializer()
     role = VlogaSerializer()
     medicinske_sestre = OsebjeSerializer()
+    id = serializers.IntegerField()  #For some reason not included otherwise
 
     class Meta:
         model = Zdravnik
@@ -104,6 +105,11 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
 
 class LoginSerializer(serializers.Serializer):
     uporabnik = UporabnikSerializer()
+    token = serializers.CharField(max_length=50)
+
+
+class LoginZdravnikSerializer(serializers.Serializer):
+    zdravnik = ZdravnikSerializer()
     token = serializers.CharField(max_length=50)
 
 

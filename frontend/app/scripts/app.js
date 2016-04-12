@@ -17,7 +17,7 @@ angular
     'ngSanitize',
     'ngTouch',
     'ui.router',
-    'tpo.services'
+    'tpo.services',
   ])
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)  {
     /* Defaut route */
@@ -36,10 +36,6 @@ angular
           });
   }])
 
-    .constant("API", {
-        "url": "http://localhost:8000",
-    })
-
   .run(function ($rootScope, $state, AuthService, Uporabniki) {
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
         console.log('changing state');
@@ -50,12 +46,8 @@ angular
           event.preventDefault(); 
         } 
         if(AuthService.isAuthenticated() && !$rootScope.uporabnik) {
-            var id = AuthService.getCurrentUserId();
-            Uporabniki.get({iduporabnik: id}).$promise.then(function(response){
-              /* shrani uporabnika v $scope, da lahk dostopaš v view-ju do njega */
-              $rootScope.uporabnik = response;
-              console.log($rootScope.uporabnik);
-            })
+          $rootScope.uporabnik = AuthService.getCurrentUser();
+          console.log($rootScope.uporabnik);
         } 
       });
   });
