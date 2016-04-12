@@ -1,4 +1,4 @@
-'use strict';
+'use strict()';
 
 /* Contorller za nadzorno ploščo
 
@@ -25,6 +25,9 @@ angular.module('tpo')
     if(!$scope.uporabnik)
       $state.go("login");
 
+    /* limit for pagination*/
+    var pagination_limit = 5;
+
     /* Loči zasebnega zdravnika ter zobozdravnika */
     $scope.osebniZdravnik = {};
     $scope.osebniZobozdravnik = {};
@@ -40,27 +43,27 @@ angular.module('tpo')
     }
 
     /* GET Uporabnik Pregledi */
-    Pregled.get({limit: 5}).$promise.then(function(response){
+    Pregled.get({limit:  pagination_limit}).$promise.then(function(response){
       $scope.pregledi = response.results;
     });
 
     /* GET Uporabnik Meritve*/
-    Meritve.get({limit:5}).$promise.then(function(response){
+    Meritve.get({limit: pagination_limit}).$promise.then(function(response){
       $scope.meritve = response.results;
     });
 
     /* GET Uporabnik Bolezni*/
-    Bolezni.get({limit:5}).$promise.then(function(response){
+    Bolezni.get({limit: pagination_limit}).$promise.then(function(response){
       $scope.bolezni = response.results;
     });
 
     /* GET Uporabnik Zdravila*/
-    Zdravila.get({limit:5}).$promise.then(function(response){
+    Zdravila.get({limit: pagination_limit}).$promise.then(function(response){
       $scope.zdravila = response.results;
     });
 
     /* GET Uporabnik Diete*/
-    Diete.get({limit:5}).$promise.then(function(response){
+    Diete.get({limit: pagination_limit}).$promise.then(function(response){
       $scope.diete = response.results;
     });
 

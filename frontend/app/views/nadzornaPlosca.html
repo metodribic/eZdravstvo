@@ -223,16 +223,16 @@
         <table class="table table-striped">
           <thead>
             <tr>
+              <th class="col-4">mkb10</th>
               <th class="col-2">Naziv</th>
-              <th class="col-4">mkb10 oznaka</th>
               <th class="col-2">Alergija</th>
               <th class="col-4">Zdravila</th>
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat="bolezen in bolezni" class="col-12">
-              <td class="col-2" ui-sref="#">{{bolezen.naziv}}</td>
               <td class="col-4" >{{bolezen.mkb10}}</td>
+              <td class="col-2" ui-sref="#">{{bolezen.naziv}}</td>
               <td class="col-2" >
                 <i ng-show="bolezen.alergija" class="fa fa-check"></i>
                 <i ng-show="!bolezen.alergija" class="fa fa-times"></i>
