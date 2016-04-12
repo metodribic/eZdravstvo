@@ -16,7 +16,7 @@ class Uporabnik(User):
     krvna_skupina = models.CharField(max_length=3, blank=True, null=True)
     ambulanta = models.ForeignKey('Ambulanta', blank=True, null=True)
     zdravnik = models.ManyToManyField('Zdravnik', blank=True)
-    meritev = models.ForeignKey('Meritev', blank=True, null=True)
+    #meritev = models.ForeignKey('Meritev', blank=True, null=True)
     zdravila = models.ManyToManyField('Zdravilo', blank=True)
     bolezni = models.ManyToManyField('Bolezni', blank=True)
     dieta = models.ManyToManyField('Dieta', blank=True)
@@ -107,4 +107,6 @@ class Meritev(models.Model):
     cas_merjenja = models.CharField(max_length=100)
     vrednost_meritve = models.FloatField()
     datum = models.DateField()
+    uporabnik = models.ForeignKey('Uporabnik')
+
 

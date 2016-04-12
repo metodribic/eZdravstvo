@@ -17,7 +17,7 @@
 */
 
 angular.module('tpo')
-  .controller('NadzornaPloscaCtrl', ['$scope','Uporabniki','$rootScope','AuthService','Pregled', function ($scope, Uporabniki, $rootScope, AuthService, Pregled) {
+  .controller('NadzornaPloscaCtrl', ['$scope','Uporabniki','$rootScope','AuthService','Pregled','Meritve', function ($scope, Uporabniki, $rootScope, AuthService, Pregled, Meritve) {
 
     var id = AuthService.getCurrentUserId();
 
@@ -27,6 +27,7 @@ angular.module('tpo')
        $scope.osebniZdravnik = {};
        $scope.osebniZobozdravnik = {};
 
+       /* Loči zasebnega zdravnika ter zobozdravnika */
        for(var index in $scope.uporabnik.zdravnik){
          var tmpZdravnik = $scope.uporabnik.zdravnik[index];
          if(tmpZdravnik.tip == 'osebni'){
@@ -36,10 +37,13 @@ angular.module('tpo')
             $scope.osebniZobozdravnik = tmpZdravnik;
           }
         }
-
+        /* GET Uporabnik Pregledi */
         Pregled.query().$promise.then(function(response){
-          console.log(response);
           $scope.pregledi = response;
+        });
+        /* GET Uporabnik Meritve*/
+        Meritve.query().$promise.then(function(response){
+          $scope.meritve = response;
         });
      })
      .catch(function(errorCallback){

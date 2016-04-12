@@ -46,6 +46,15 @@ class PreglediViewSet(viewsets.ModelViewSet):
         user = self.request.user
         return Pregled.objects.filter(uporabnik = user)
 
+# MERITVE
+class MeritevViewSet(viewsets.ModelViewSet):
+    queryset = Meritev.objects.all()
+    serializer_class = MeritevSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Meritev.objects.filter(uporabnik=user)
+
 
 # POSTA
 class PostaViewSet(viewsets.ModelViewSet):
@@ -76,13 +85,7 @@ class OsebjeViewSet(viewsets.ModelViewSet):
     serializer_class = OsebjeSerializer
 
 
-# MERITVE
-class MeritevViewSet(viewsets.ModelViewSet):
-    queryset = Meritev.objects.all()
-    serializer_class = MeritevSerializer
-
-
-# MERITVE
+# DIETA
 class DietaViewSet(viewsets.ModelViewSet):
     queryset = Dieta.objects.all()
     serializer_class = DietaSerializer

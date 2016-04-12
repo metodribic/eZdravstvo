@@ -92,7 +92,7 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     role = VlogaSerializer()
     posta = PostaSerializer()
     ambulanta = AmbulantaSerializer()
-    meritev = MeritevSerializer()
+    #meritev = MeritevSerializer()
     zdravila = ZdraviloSerializer(many=True)
     bolezni = BolezniSerializer(many=True)
     zdravnik = ZdravnikSerializer(many=True)
