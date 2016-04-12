@@ -17,30 +17,53 @@
 */
 
 angular.module('tpo')
-  .controller('NadzornaPloscaCtrl', ['$scope','Uporabniki','$rootScope', function ($scope, Uporabniki, $rootScope) {
+  .controller('NadzornaPloscaCtrl', ['$scope','Uporabniki','$rootScope','AuthService','Pregled','Meritve','Bolezni','Zdravila','Diete', function ($scope, Uporabniki, $rootScope, AuthService, Pregled, Meritve, Bolezni, Zdravila, Diete) {
+
+    var id = AuthService.getCurrentUserId();
 
     /* GET user */
-    // Uporabniki.get({iduporabnik: $rootScope.uporabnik.id}).$promise.then(function(response){
-    //   /* shrani uporabnika v $scope, da lahk dostopaš v view do njega */
-    //   $scope.uporabnik = response;
-    //   console.log($scope.uporabnik);
-    // })
-    // .catch(function(errorCallback){
-    //   if (errorCallback.status == 404) {
-    //     console.log('User not found!');
-    //   }
-    // });
+    Uporabniki.get({iduporabnik: id}).$promise.then(function(response){
+       $scope.uporabnik = response;
+       $scope.osebniZdravnik = {};
+       $scope.osebniZobozdravnik = {};
 
-    $scope.osebniZdranik = {};
-    $scope.osebniZobozdravnik = {};
-    // console.log($rootScope.uporabnik);
-    // for(var zdravnik in $rootScope.uporabnik.zdravnik){
-    //   if(zdravnik.tip == 'osebni'){
-    //     $scope.osebniZdranik = zdravnik;
-    //   }
-    //   if(zdravnik.tip == 'zobozdravnik') {
-    //     $scope.osebniZobozdravnik = zdravnik;
-    //   }
-    // }
+       /* Loči zasebnega zdravnika ter zobozdravnika */
+       for(var index in $scope.uporabnik.zdravnik){
+         var tmpZdravnik = $scope.uporabnik.zdravnik[index];
+         if(tmpZdravnik.tip == 'osebni'){
+           $scope.osebniZdravnik = tmpZdravnik;
+          }
+          if(tmpZdravnik.tip == 'zobozdravnik') {
+            $scope.osebniZobozdravnik = tmpZdravnik;
+          }
+        }
+        /* GET Uporabnik Pregledi */
+        Pregled.query().$promise.then(function(response){
+          $scope.pregledi = response;
+        });
+        /* GET Uporabnik Meritve*/
+        Meritve.query().$promise.then(function(response){
+          $scope.meritve = response;
+        });
+
+        Bolezni.query().$promise.then(function(response){
+          $scope.bolezni = response;
+        });
+
+        Zdravila.query().$promise.then(function(response){
+          $scope.zdravila = response;
+        });
+
+        Diete.query().$promise.then(function(response){
+          $scope.diete = response;
+        });
+     })
+     .catch(function(errorCallback){
+       if (errorCallback.status == 404) {
+         console.log('User not found!');
+     }
+     });
+
+
 
   }]);

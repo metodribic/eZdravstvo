@@ -31,15 +31,10 @@ class UstanovaSerializer(serializers.HyperlinkedModelSerializer):
 """ AMBULANTA """
 class AmbulantaSerializer(serializers.HyperlinkedModelSerializer):
     ustanova = UstanovaSerializer()
+    posta = PostaSerializer()
 
     class Meta:
         model = Ambulanta
-
-
-""" PREGELD """
-class PregledSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Pregled
 
 
 """ OSEBJE/MED. SESTRE """
@@ -67,6 +62,14 @@ class MeritevSerializer(serializers.HyperlinkedModelSerializer):
         model = Meritev
 
 
+""" PREGELD """
+class PregledSerializer(serializers.HyperlinkedModelSerializer):
+    zdravnik = ZdravnikSerializer()
+    meritve = MeritevSerializer()
+    class Meta:
+        model = Pregled
+
+
 """ ZDRAVILO """
 class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -90,13 +93,13 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     role = VlogaSerializer()
     posta = PostaSerializer()
     ambulanta = AmbulantaSerializer()
-    pregledi = PregledSerializer()
-    meritev = MeritevSerializer()
+    #meritev = MeritevSerializer()
     zdravila = ZdraviloSerializer(many=True)
     bolezni = BolezniSerializer(many=True)
     zdravnik = ZdravnikSerializer(many=True)
     dieta = DietaSerializer(many=True)
-    id = serializers.IntegerField()  #For some reason not included otherwise
+    id = serializers.IntegerField()
+    #pregledi = PregledSerializer(source='get_pregledi')
 
     class Meta:
         model = Uporabnik

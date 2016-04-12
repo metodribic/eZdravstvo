@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import user_passes_test
+from django.core.serializers import json
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -41,6 +43,19 @@ class PreglediViewSet(viewsets.ModelViewSet):
     queryset = Pregled.objects.all()
     serializer_class = PregledSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        return Pregled.objects.filter(uporabnik = user)
+
+# MERITVE
+class MeritevViewSet(viewsets.ModelViewSet):
+    queryset = Meritev.objects.all()
+    serializer_class = MeritevSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Meritev.objects.filter(uporabnik=user)
+
 
 # POSTA
 class PostaViewSet(viewsets.ModelViewSet):
@@ -71,34 +86,44 @@ class OsebjeViewSet(viewsets.ModelViewSet):
     serializer_class = OsebjeSerializer
 
 
-# MERITVE
-class MeritevViewSet(viewsets.ModelViewSet):
-    queryset = Meritev.objects.all()
-    serializer_class = MeritevSerializer
-
-
-# MERITVE
+# DIETA
+@permission_classes((IsAuthenticated,))
 class DietaViewSet(viewsets.ModelViewSet):
     queryset = Dieta.objects.all()
     serializer_class = DietaSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        return Dieta.objects.filter(uporabnik = user)
+
 
 # BOLEZNI
+@permission_classes((IsAuthenticated,))
 class BolezniViewSet(viewsets.ModelViewSet):
     queryset = Bolezni.objects.all()
     serializer_class = BolezniSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        return Bolezni.objects.filter(uporabnik = user)
 
+
+@permission_classes((IsAuthenticated,))
 # ZDRAVILO
 class ZdraviloViewSet(viewsets.ModelViewSet):
     queryset = Zdravilo.objects.all()
     serializer_class = ZdraviloSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        return Zdravilo.objects.filter(uporabnik=user)
 
-# ZDRAVILO
+
+# ROLES
 class RolesViewSet(viewsets.ModelViewSet):
     queryset = Roles.objects.all()
     serializer_class = VlogaSerializer
+
 
 @api_view(['POST'])
 def login(request, format=None):
@@ -152,4 +177,3 @@ def login(request, format=None):
         response = JSONResponse({"error":"Usage: {'email':'someone@someplace', 'password':'password'}"})
         response.status_code = 400; # Bad request
         return response
-
