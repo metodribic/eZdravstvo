@@ -19,36 +19,57 @@ Administrator lahko kreira nov uporabniški račun za zdravnika ali medicinsko s
  */
 
 angular.module('tpo')
-  .controller('registracijaUporAdminCtrl', ['$scope','Uporabniki','$resource', function ($scope, Uporabniki, $resource ) {
-      // check if username already exists ?
-// add uporabnik - ali auth_user ?
-      
+    .controller('registracijaUporAdminCtrl', ['$scope','Uporabniki','$resource','RegistracijaUporAdmin', function ($scope, Uporabniki, $resource, RegistracijaUporAdmin ) {
+        // check if username already exists ?
+        // add uporabnik - ali auth_user ?
 
-      $scope.uporabnik = new Uporabniki();
-      // spremeni model in tudi tole ! :D
-      $scope.uporabnik.date_joined = '2016-9-4';
-      $scope.uporabnik.is_active = 1;
-      $scope.uporabnik.is_staff = 1;
-      $scope.uporabnik.is_superuser = 0;
-      $scope.uporabnik.email = '';
-      $scope.uporabnik.username = '';
-      $scope.uporabnik.password = '';
+        // dropdown value
+        $scope.mojSelect = 'Zdravnik'; // for example
+        $scope.visibleAlert = false;
+        $scope.besedZaUpor = "neki nezi :D";
+        
+
+        $scope.showSelectValue = function(mojSelect) {
+            console.log(mojSelect);
+        }
+
+        $scope.uporabnik = new Uporabniki();
+        $scope.shraniU = function (){
+
+            $scope.uporabnik.username = $scope.uporabnik.email;
+            console.log($scope.uporabnik.email);
+            console.log($scope.uporabnik.password);
+            //$scope.uporabnik.$save();
+
+            var n = new RegistracijaUporAdmin();
+            n.email = $scope.uporabnik.email;
+            n.username = $scope.uporabnik.username;
+            n.password = $scope.uporabnik.password;
+            n.role = $scope.mojSelect;
+
+            // save user & wait for response
+            n.$save( function(succ){
+                if( succ.success === "function : {'user created':'Zdravnik'}"
+                    || succ.success === "function : {'user created':'Medicinska sestra'}" ){
+                    alert("USER CREATED!");
+                    // clear fields
+                    $scope.uporabnik.email="";
+                    $scope.uporabnik.username="";
+                    $scope.uporabnik.password="";
+                    $scope.uporabnik.role="Zdravnik";
+                }
+            }, function (err) {
+                console.log(err.data.error);
+                if(err.data.error === "User with this email already exists"){
+                    alert("User already exists!");
+                    $scope.visibleAlert = true;
+                }
+            });
+        };
 
 
-/*
-      $scope.uporabnik = {
-        username : '',
-        password : ''
-      };
-*/
-    $scope.shraniU = function (  ){
+        // catch server responses or we
 
-      $scope.uporabnik.username = $scope.uporabnik.email;
-      console.log($scope.uporabnik.email);
-      console.log($scope.uporabnik.password);
-      $scope.uporabnik.$save();
-
-    };
+    }]);
 
 
-  }]);

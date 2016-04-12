@@ -1,4 +1,4 @@
-// Generated on 2016-03-26 using generator-angular 0.15.1
+// Generated on 2016-04-05 using generator-angular 0.15.1
 'use strict';
 
 // # Globbing
@@ -21,7 +21,7 @@ module.exports = function (grunt) {
 
   // Configurable paths for the application
   var appConfig = {
-    app: require('./bower.json').appPath || 'app',
+    app: require('./bower.json').appPath || 'frontend/app',
     dist: 'dist'
   };
 
@@ -371,7 +371,7 @@ module.exports = function (grunt) {
     ngtemplates: {
       dist: {
         options: {
-          module: 'frontApp',
+          module: 'tpo',
           htmlmin: '<%= htmlmin.dist.options %>',
           usemin: 'scripts/scripts.js'
         },
@@ -414,10 +414,11 @@ module.exports = function (grunt) {
             '*.html',
             'images/{,*/}*.{webp}',
             'styles/fonts/{,*/}*.*',
+            'views/**',
             'plugins/**',
+            'bootstrap/**',
             'dist/**',
-            'pages/**',
-            'bootstrap/**'
+
           ]
         }, {
           expand: true,
@@ -426,8 +427,8 @@ module.exports = function (grunt) {
           src: ['generated/*']
         }, {
           expand: true,
-          cwd: '.',
-          src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
+          cwd: 'bower_components/bootstrap/dist',
+          src: 'fonts/*',
           dest: '<%= yeoman.dist %>'
         }]
       },
@@ -504,6 +505,8 @@ module.exports = function (grunt) {
     'ngAnnotate',
     'copy:dist',
     'cdnify',
+    'cssmin',
+    'uglify',
     'filerev',
     'usemin',
     'htmlmin'

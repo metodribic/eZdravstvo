@@ -12,6 +12,7 @@ SECRET_KEY = '&m$)jqsf69gi-j8kk*ezs=$0fq22sj*-8_h#f54tc3#!0jyb%x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+APPEND_SLASH = False
 
 ALLOWED_HOSTS = []
 
@@ -26,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
     'tpo'
 ]
@@ -44,6 +46,8 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'backend.urls'
+
+# CORS settings
 CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [
@@ -105,9 +109,12 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
 }
 
 # Test server

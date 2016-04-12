@@ -16,7 +16,7 @@
     "angular-mocks": "^1.4.0"
   },
   "appPath": "frontend/app",
-  "moduleName": "frontApp",
+  "moduleName": "tpo",
   "overrides": {
     "bootstrap": {
       "main": [

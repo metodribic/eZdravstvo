@@ -1,20 +1,21 @@
-<div class="col-md-6">
+<div class="col-md-12">
   <!-- box: osebni podatki -->
   <div class="box">
-    <div class="box-header with-border">
-      <h3 class="box-title">Osebni podatki</h3>
+    <!-- <div class="box-header with-border">
+      <h3 class="box-title">Osnovni podatki</h3>
 
-      <!-- COLLAPSE -->
       <div class="box-tools pull-right">
         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
         </button>
 
       </div>
-    </div>
+    </div> -->
     <!-- /.box-header -->
     <div class="box-body">
+      <h3 class="bottom-border">Osebni podatki</h3>
       <div class="row">
-        <div class="col-md-12">
+
+        <div class="col-md-4">
           <!-- TABLE: OSEBNI PODATKI -->
           <table class="table table-hover">
             <thead>
@@ -27,148 +28,254 @@
             <tbody>
               <tr>
                 <td><b>Ime:</b></td>
-                <td>Doe</td>
+                <td>{{uporabnik.ime}}</td>
               </tr>
               <tr>
                 <td><b>Priimek:</b></td>
-                <td>Moe</td>
+                <td>{{uporabnik.priimek}}</td>
               </tr>
               <tr>
                 <td><b>Datum rojstva:</b></td>
-                <td>12.3.1992</td>
+                <td>{{uporabnik.datum_rojstva | date: 'dd.MM.yyyy'}}</td>
               </tr>
               <tr>
                 <td><b>Kraj rojstva:</b></td>
-                <td>Celje</td>
+                <td>{{uporabnik.kraj_rojstva}}</td>
               </tr>
               <tr>
                 <td><b>Naslov:</b></td>
-                <td>Tržaška cesta 64, 1000 Ljubljana</td>
+                <td>{{uporabnik.naslov}}, {{uporabnik.posta.id}} {{uporabnik.posta.kraj}}</td>
               </tr>
               <tr>
                 <td><b>Številka ZZZS</b></td>
-                <td>04184942829</td>
+                <td>{{uporabnik.st_zzzs}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-4">
+          <!-- TABLE: OSEBNI PODATKI -->
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <td>
+                  <b class="medical-person"><i class="fa fa-user-md">&nbsp;</i>Osebni zdravnik</b>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Ime:</b></td>
+                <td>{{osebniZdranik.ime}}</td>
+              </tr>
+              <tr>
+                <td><b>Priimek:</b></td>
+                <td>{{osebniZdranik.priimek}}</td>
+              </tr>
+              <tr>
+                <td><b>Specializacija</b></td>
+                <td>{{osebniZdranik.naziv}}</td>
+              </tr>
+              <tr>
+                <td><b>Ustanova</b></td>
+                <td>{{osebniZdranik.ambulanta.ustanova.naziv}}</td>
+              </tr>
+              <tr>
+                <td><b>Ambulanta</b></td>
+                <td>{{osebniZdranik.ambulanta}}</td>
+              </tr>
+              <tr>
+                <td><b>Naslov:</b></td>
+                <td>{{osebniZdranik.ambulanta.ustanova.naslov}},&nbsp;
+                    {{osebniZdranik.ambulanta.posta.id}}&nbsp;
+                    {{osebniZdranik.ambulanta.posta.kraj}}
+                </td>
+              </tr>
+              <tr>
+                <td><b>Osebje</b></td>
+                <td>{{osebniZdranik.osebje.toString()}}</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        <!-- /.col -->
+
+        <div class="col-md-4">
+          <!-- TABLE: OSEBNI PODATKI -->
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <td>
+                  <b class="medical-person"><i class="fa fa-user-md"></i>&nbsp;Osebni zobozdravnik</b>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Ime:</b></td>
+                <td>{{osebniZobozdravnik.ime}}</td>
+              </tr>
+              <tr>
+                <td><b>Priimek:</b></td>
+                <td>{{osebniZobozdravnik.priimek}}</td>
+              </tr>
+              <tr>
+                <td><b>Specializacija</b></td>
+                <td>{{osebniZobozdravnik.naziv}}</td>
+              </tr>
+              <tr>
+                <td><b>Ustanova</b></td>
+                <td>{{osebniZobozdravnik.ambulanta.ustanova.naziv}}</td>
+              </tr>
+              <tr>
+                <td><b>Ambulanta</b></td>
+                <td>{{osebniZobozdravnik.ambulanta}}</td>
+              </tr>
+              <tr>
+                <td><b>Naslov:</b></td>
+                <td>{{osebniZobozdravnik.ambulanta.ustanova.naslov}},&nbsp;
+                    {{osebniZobozdravnik.ambulanta.posta.id}}&nbsp;
+                    {{osebniZobozdravnik.ambulanta.posta.kraj}}
+                </td>
+              </tr>
+              <tr>
+                <td><b>Osebje</b></td>
+                <td>{{osebniZobozdravnik.osebje.toString()}}</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        <!-- /.col -->
+
+      </div>
+      <!-- /.row -->
+
+      <!-- TABELA PREGLEDOV -->
+      <div class="col-12">
+        <h3 class="bottom-border">Zadnji pregledi</h3>
+        <!-- TABLE: OSEBNI PODATKI -->
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Datum pregleda</th>
+              <th>Zdravnik</th>
+              <th>Bolezni</th>
+              <th>Zdravilo</th>
+              <th>Dieta</th>
+              <th>Datum naslednjega pregleda</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="pregled in uporabnik.pregledi">
+              <td ui-sref="#">{{pregled.datum date:'dd-mm-yyyy HH:mm'}}</td>
+              <td>{{pregled.zdravnik}}</td>
+              <td>{{pregled.bolezni}}</td>
+              <td>{{pregled.zdravilo}}</td>
+              <td>{{pregled.dieta}}</td>
+              <td>{{pregled.datum_nasledjega}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- TABELA MERITEV -->
+      <div class="col-12">
+        <h3 class="bottom-border">Zadnje meritve</h3>
+        <!-- TABLE: OSEBNI PODATKI -->
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Datum</th>
+              <th>Tip meritve</th>
+              <th>Vrednost meritve</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="meritev in uporabnik.meritev">
+              <td ui-sref="#">{{meritev.datum | date:'dd-mm-yyyy HH:mm'}}</td>
+              <td>{{meritev.tip}}</td>
+              <td>{{meritev.vrednost_meritve}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- TABELA BOLEZNI IN ALERGIJE -->
+      <div class="col-12">
+        <h3 class="bottom-border">Bolezni in alergije</h3>
+        <!-- TABLE: OSEBNI PODATKI -->
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Naziv</th>
+              <th>mkb10 oznaka</th>
+              <th>Alergija</th>
+              <th>Zdravila</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="bolezen in uporabnik.bolezni">
+              <td ui-sref="#">{{bolezen.naziv}}</td>
+              <td>{{bolezen.mkb10}}</td>
+              <td>
+                <i ng-show="bolezen.alergija" class="fa fa-check"></i>
+                <i ng-show="!bolezen.alergija" class="fa fa-times"></i>
+              </td>
+              <td>{{bolezen.zdravila}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- TABELA: ZDRAVIL IN DIET -->
+      <h3 class="bottom-border">Zdravila in diete</h3>
+      <div class="row">
+
+        <div class="col-md-6">
+          <!-- TABLE: ZDRAVILA  -->
+          <table class="table table-stiped">
+            <thead>
+              <tr>
+                <th>Zdravilo</th>
+                <th>Navodilo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="zdravilo in uporabnik.zdravila">
+                <td>{{zdravilo.zdravilo}}</td>
+                <td>{{zdravilo.navodila}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-6">
+          <!-- TABLE: DIETA -->
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Naziv</th>
+                <th>Sifra</th>
+                <th>url</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="dieta in uporabnik.dieta">
+                <td>{{dieta.naziv}}</td>
+                <td>{{dieta.sifra}}</td>
+                <td ng-href="dieta.url">{{dieta.url}}</td>
               </tr>
             </tbody>
           </table>
         </div>
         <!-- /.col -->
+
       </div>
       <!-- /.row -->
+
     </div>
     <!-- ./box-body -->
   </div>
   <!-- /.box -->
-</div>
-
-<div class="col-md-6">
-<!-- box: podatki o zdravniku -->
-<div class="box">
-  <div class="box-header with-border">
-    <h3 class="box-title">Podatki o zdravniku in osebju</h3>
-
-    <!-- COLLAPSE -->
-    <div class="box-tools pull-right">
-      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-      </button>
-
-    </div>
-  </div>
-  <!-- /.box-header -->
-  <div class="box-body">
-    <div class="row">
-      <div class="col-md-6">
-        <!-- TABLE: OSEBNI PODATKI -->
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <td>
-                <b class="medical-person"><i class="fa fa-user-md">&nbsp;</i>Osebni zdravnik</b>
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><b>Ime:</b></td>
-              <td>Janko</td>
-            </tr>
-            <tr>
-              <td><b>Priimek:</b></td>
-              <td>Moere</td>
-            </tr>
-            <tr>
-              <td><b>Specializacija</b></td>
-              <td>dr. med.</td>
-            </tr>
-            <tr>
-              <td><b>Ustanova</b></td>
-              <td>Zdr. dom Žalec</td>
-            </tr>
-            <tr>
-              <td><b>Ambulanta</b></td>
-              <td>Ambulanta Moere</td>
-            </tr>
-            <tr>
-              <td><b>Naslov:</b></td>
-              <td>Topniška cesta 164, 1000 Ljubljana</td>
-            </tr>
-            <tr>
-              <td><b>Osebje</b></td>
-              <td>Sestra st.1<br>Sestra st.2</td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
-      <!-- /.col -->
-
-      <div class="col-md-6">
-        <!-- TABLE: OSEBNI PODATKI -->
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <td>
-                <b class="medical-person"><i class="fa fa-user-md"></i>&nbsp;Osebni zobozdravnik</b>
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><b>Ime:</b></td>
-              <td>Maja</td>
-            </tr>
-            <tr>
-              <td><b>Priimek:</b></td>
-              <td>P. Ferjančič</td>
-            </tr>
-            <tr>
-              <td><b>Specializacija</b></td>
-              <td>dr. zoboz.</td>
-            </tr>
-            <tr>
-              <td><b>Ustanova</b></td>
-              <td>Zasebna amb.</td>
-            </tr>
-            <tr>
-              <td><b>Ambulanta</b></td>
-              <td>Ambulanta Ferjančič</td>
-            </tr>
-            <tr>
-              <td><b>Naslov:</b></td>
-              <td>Tibilijska cesta 64, 1000 Ljubljana</td>
-            </tr>
-            <tr>
-              <td><b>Osebje</b></td>
-              <td>Sestra st.1<br>Sestra st.2<br>Sestra st.3</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- /.col -->
-    </div>
-    <!-- /.row -->
-  </div>
-  <!-- ./box-body -->
-</div>
-<!-- /.box -->
 </div>
