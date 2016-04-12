@@ -23,27 +23,27 @@ angular.module('tpo.services', ['ngResource'])
   var isAuthenticated = false;
   var role = '';
   var authToken;
- 
+
   function loadUserCredentials() {
     var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
     if (token) {
       useCredentials(token);
     }
   }
- 
+
   function storeUserCredentials(token, id) {
     window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
     window.localStorage.setItem(LOCAL_USERID_KEY, id);
     useCredentials(token);
   }
- 
+
   function useCredentials(token) {
     isAuthenticated = true;
     authToken = token;
     // Set the token as header for your requests!
     $http.defaults.headers.common.Authorization = 'Token ' + token;
   }
- 
+
   function destroyUserCredentials() {
     authToken = undefined;
     username = '';
@@ -56,7 +56,7 @@ angular.module('tpo.services', ['ngResource'])
   var getCurrentUserId = function() {
    return window.localStorage.getItem(LOCAL_USERID_KEY);
   };
- 
+
     var login = function(email, pass) {
         return $q(function(resolve, reject) {
             $http({
@@ -77,20 +77,20 @@ angular.module('tpo.services', ['ngResource'])
             });
         });
     };
- 
+
   var logout = function() {
     destroyUserCredentials();
   };
- 
+
   var isAuthorized = function(authorizedRoles) {
     if (!angular.isArray(authorizedRoles)) {
       authorizedRoles = [authorizedRoles];
     }
     return (isAuthenticated && authorizedRoles.indexOf(role) !== -1);
   };
- 
+
   loadUserCredentials();
- 
+
   return {
     login: login,
     logout: logout,

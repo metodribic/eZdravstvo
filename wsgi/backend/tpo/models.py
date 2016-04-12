@@ -19,9 +19,9 @@ class Uporabnik(User):
     meritev = models.ForeignKey('Meritev', blank=True, null=True)
     zdravila = models.ManyToManyField('Zdravilo', blank=True)
     bolezni = models.ManyToManyField('Bolezni', blank=True)
-    pregledi = models.ForeignKey('Pregled', blank=True, null=True)
     dieta = models.ManyToManyField('Dieta', blank=True)
     role = models.ForeignKey('Roles')
+
 
 
 class Zdravnik(User):
@@ -84,7 +84,8 @@ class Pregled(models.Model):
     bolezen = models.ManyToManyField('Bolezni')
     zdravilo = models.ManyToManyField('Zdravilo')
     dieta = models.ManyToManyField('Dieta')
-    datum_naslednjega = models.DateField()
+    datum_naslednjega = models.DateField(blank=True, null=True)
+    uporabnik = models.ForeignKey('Uporabnik')
 
 
 class Bolezni(models.Model):

@@ -21,15 +21,17 @@ angular
   ])
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)  {
     /* Defaut route */
-      $urlRouterProvider.otherwise('/login');
-          
+      $urlRouterProvider.otherwise('/domov');
+
       /* states */
       $stateProvider
           .state('nadzornaPlosca', {
               url: '/domov',
               templateUrl: '../views/nadzornaPlosca.html',
               controller: 'NadzornaPloscaCtrl'
-          }).state('login', {
+          })
+
+          .state('login', {
               url: '/login',
               templateUrl: '../views/login.html',
               controller: 'LoginCtrl'
@@ -42,13 +44,13 @@ angular
 
   .run(function ($rootScope, $state, AuthService, Uporabniki) {
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-        console.log('changing state');
-        console.log(AuthService.isAuthenticated());
+        // console.log('changing state');
+        // console.log(AuthService.isAuthenticated());
         if (toState.url !== '/login' && toState.url !== '/forgotPassword' && !AuthService.isAuthenticated()){
           // User isn’t authenticated
-          $state.transitionTo("/login");
-          event.preventDefault(); 
-        } 
+          $state.go("login");
+          event.preventDefault();
+        }
         if(AuthService.isAuthenticated() && !$rootScope.uporabnik) {
             var id = AuthService.getCurrentUserId();
             Uporabniki.get({iduporabnik: id}).$promise.then(function(response){
@@ -56,6 +58,6 @@ angular
               $rootScope.uporabnik = response;
               console.log($rootScope.uporabnik);
             })
-        } 
+        }
       });
   });

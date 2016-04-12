@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import user_passes_test
+from django.core.serializers import json
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -39,6 +41,10 @@ class UporabnikiViewSet(viewsets.ModelViewSet):
 class PreglediViewSet(viewsets.ModelViewSet):
     queryset = Pregled.objects.all()
     serializer_class = PregledSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Pregled.objects.filter(uporabnik = user)
 
 
 # POSTA
@@ -128,4 +134,3 @@ def login(request, format=None):
         response = JSONResponse({"error":"Usage: {'email':'someone@someplace', 'password':'password'}"})
         response.status_code = 400; # Bad request
         return response
-
