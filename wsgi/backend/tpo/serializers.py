@@ -78,6 +78,7 @@ class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
 
 """ BOLEZNI """
 class BolezniSerializer(serializers.HyperlinkedModelSerializer):
+    zdravilo = ZdraviloSerializer(many=True)
     class Meta:
         model = Bolezni
 

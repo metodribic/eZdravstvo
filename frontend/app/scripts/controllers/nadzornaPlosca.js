@@ -40,30 +40,31 @@ angular.module('tpo')
     }
 
     /* GET Uporabnik Pregledi */
-    Pregled.query().$promise.then(function(response){
-      $scope.pregledi = response;
+    Pregled.get({limit: 5}).$promise.then(function(response){
+      $scope.pregledi = response.results;
     });
 
     /* GET Uporabnik Meritve*/
-    Meritve.query().$promise.then(function(response){
-      $scope.meritve = response;
+    Meritve.get({limit:5}).$promise.then(function(response){
+      $scope.meritve = response.results;
     });
 
     /* GET Uporabnik Bolezni*/
-    Bolezni.query().$promise.then(function(response){
-      $scope.bolezni = response;
+    Bolezni.get({limit:5}).$promise.then(function(response){
+      $scope.bolezni = response.results;
     });
 
     /* GET Uporabnik Zdravila*/
-    Zdravila.query().$promise.then(function(response){
-      $scope.zdravila = response;
+    Zdravila.get({limit:5}).$promise.then(function(response){
+      $scope.zdravila = response.results;
     });
 
     /* GET Uporabnik Diete*/
-    Diete.query().$promise.then(function(response){
-      $scope.diete = response;
+    Diete.get({limit:5}).$promise.then(function(response){
+      $scope.diete = response.results;
     });
 
+    /* metoda za krajšanje linkov, če so predolgi */
     $scope.okrajsaj = function(input){
       if(input.length > 40){
         return input.substring(0,30)+"...";
