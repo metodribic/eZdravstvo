@@ -86,27 +86,43 @@ class OsebjeViewSet(viewsets.ModelViewSet):
 
 
 # DIETA
+@permission_classes((IsAuthenticated,))
 class DietaViewSet(viewsets.ModelViewSet):
     queryset = Dieta.objects.all()
     serializer_class = DietaSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        return Dieta.objects.filter(uporabnik = user)
+
 
 # BOLEZNI
+@permission_classes((IsAuthenticated,))
 class BolezniViewSet(viewsets.ModelViewSet):
     queryset = Bolezni.objects.all()
     serializer_class = BolezniSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        return Bolezni.objects.filter(uporabnik = user)
 
+
+@permission_classes((IsAuthenticated,))
 # ZDRAVILO
 class ZdraviloViewSet(viewsets.ModelViewSet):
     queryset = Zdravilo.objects.all()
     serializer_class = ZdraviloSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        return Zdravilo.objects.filter(uporabnik=user)
 
-# ZDRAVILO
+
+# ROLES
 class RolesViewSet(viewsets.ModelViewSet):
     queryset = Roles.objects.all()
     serializer_class = VlogaSerializer
+
 
 @api_view(['POST'])
 def login(request, format=None):
