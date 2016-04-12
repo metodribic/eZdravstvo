@@ -17,7 +17,6 @@ class Uporabnik(User):
     krvna_skupina = models.CharField(max_length=3, blank=True, null=True)
     ambulanta = models.ForeignKey('Ambulanta', blank=True, null=True)
     zdravnik = models.ManyToManyField('Zdravnik', blank=True)
-    #meritev = models.ForeignKey('Meritev', blank=True, null=True)
     zdravila = models.ManyToManyField('Zdravilo', blank=True)
     bolezni = models.ManyToManyField('Bolezni', blank=True)
     dieta = models.ManyToManyField('Dieta', blank=True)
@@ -68,8 +67,12 @@ class Roles(models.Model):
 
 class Dieta(models.Model):
     naziv = models.CharField(max_length=100)
-    sifra = models.IntegerField()
-    url = models.CharField(max_length=500)
+    sifra = models.CharField(max_length=20)
+    navodila = models.ManyToManyField('NavodilaDieta', blank=True)
+
+
+class NavodilaDieta(models.Model):
+    url = models.CharField(max_length=512)
 
 
 class Zdravilo(models.Model):

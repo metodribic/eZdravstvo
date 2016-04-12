@@ -52,6 +52,7 @@ angular.module('tpo')
     /* GET Uporabnik Bolezni*/
     Bolezni.query().$promise.then(function(response){
       $scope.bolezni = response;
+      console.log(response);
     });
 
     /* GET Uporabnik Zdravila*/
@@ -62,9 +63,6 @@ angular.module('tpo')
     /* GET Uporabnik Diete*/
     Diete.query().$promise.then(function(response){
       $scope.diete = response;
+      console.log(response)
     });
-
-
-
-
   }]);

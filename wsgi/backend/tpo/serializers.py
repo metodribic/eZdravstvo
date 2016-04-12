@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni, Dieta, Ustanova, Osebje
+from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni, Dieta, Ustanova, Osebje, NavodilaDieta
 
 """ POSTA """
 class PostaSerializer(serializers.HyperlinkedModelSerializer):
@@ -82,8 +82,15 @@ class BolezniSerializer(serializers.HyperlinkedModelSerializer):
         model = Bolezni
 
 
+""" DIETA NAVODILA """
+class NavodilaDietaSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = NavodilaDieta
+
+
 """ DIETA """
 class DietaSerializer(serializers.HyperlinkedModelSerializer):
+    navodila = NavodilaDietaSerializer(many=True)
     class Meta:
         model = Dieta
 
@@ -93,13 +100,11 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     role = VlogaSerializer()
     posta = PostaSerializer()
     ambulanta = AmbulantaSerializer()
-    #meritev = MeritevSerializer()
     zdravila = ZdraviloSerializer(many=True)
     bolezni = BolezniSerializer(many=True)
     zdravnik = ZdravnikSerializer(many=True)
     dieta = DietaSerializer(many=True)
     id = serializers.IntegerField()
-    #pregledi = PregledSerializer(source='get_pregledi')
 
     class Meta:
         model = Uporabnik
