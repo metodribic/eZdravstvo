@@ -259,7 +259,7 @@
             <tbody>
               <tr ng-repeat="zdravilo in zdravila">
                 <td>{{zdravilo.zdravilo}}</td>
-                <td ng-href="{{zdravilo.navodila}}">link</td>
+                <td><a ng-href="{{zdravilo.navodila}}">{{okrajsaj(zdravilo.navodila)}}</a></td>
               </tr>
             </tbody>
           </table>
@@ -269,18 +269,18 @@
           <table class="table table-striped">
             <thead>
               <tr>
-                <th>Naziv</th>
-                <th>Šifra</th>
-                <th>Navodilo</th>
+                <th class="col-3">Naziv</th>
+                <th class="col-1">Šifra</th>
+                <th class="col-8">Navodilo</th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="dieta in diete">
-                <td>{{dieta.naziv}}</td>
-                <td>{{dieta.sifra}}</td>
-                <td>
-                  <ul ng-repeat="navodilo in dieta.navodila">
-                    <li ng-href="{{navodilo.url}}">link</li>
+                <td class="col-3">{{dieta.naziv}}</td>
+                <td class="col-1">{{dieta.sifra}}</td>
+                <td class="col-8">
+                  <ul ng-repeat="navodilo in dieta.navodila" style="list-style-type:none">
+                    <li><a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url)}}</a></li>
                   </ul>
                 </td>
                 <!-- <td ng-href="{{dieta.url}}">{{dieta.url}}</td> -->
