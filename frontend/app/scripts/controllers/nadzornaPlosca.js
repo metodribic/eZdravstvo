@@ -17,7 +17,7 @@
 */
 
 angular.module('tpo')
-  .controller('NadzornaPloscaCtrl', ['$scope','Uporabniki','$rootScope','AuthService','Pregled','Meritve', function ($scope, Uporabniki, $rootScope, AuthService, Pregled, Meritve) {
+  .controller('NadzornaPloscaCtrl', ['$scope','Uporabniki','$rootScope','AuthService','Pregled','Meritve','Bolezni','Zdravila','Diete', function ($scope, Uporabniki, $rootScope, AuthService, Pregled, Meritve, Bolezni, Zdravila, Diete) {
 
     var id = AuthService.getCurrentUserId();
 
@@ -44,6 +44,18 @@ angular.module('tpo')
         /* GET Uporabnik Meritve*/
         Meritve.query().$promise.then(function(response){
           $scope.meritve = response;
+        });
+
+        Bolezni.query().$promise.then(function(response){
+          $scope.bolezni = response;
+        });
+
+        Zdravila.query().$promise.then(function(response){
+          $scope.zdravila = response;
+        });
+
+        Diete.query().$promise.then(function(response){
+          $scope.diete = response;
         });
      })
      .catch(function(errorCallback){

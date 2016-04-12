@@ -25,3 +25,30 @@ angular.module('tpo.models', ['ngResource'])
 		}
 	});
 })
+
+
+.factory('Bolezni', function($resource) {
+	return $resource('http://localhost:8000/bolezni/:bolezenId', { bolezenId: '@bolezenId' }, {
+		update: {
+			method: 'PUT'
+		}
+	});
+})
+
+
+.factory('Zdravila', function($resource) {
+	return $resource('http://localhost:8000/zdravila/:zdraviloId', { zdraviloId: '@zdraviloId' }, {
+		update: {
+			method: 'PUT'
+		}
+	});
+})
+
+
+.factory('Diete', function($resource) {
+	return $resource('http://localhost:8000/diete/:dietaId', { dietaId: '@dietaId' }, {
+		update: {
+			method: 'PUT'
+		}
+	});
+});

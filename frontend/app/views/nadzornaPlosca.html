@@ -230,7 +230,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="bolezen in uporabnik.bolezni">
+            <tr ng-repeat="bolezen in bolezni">
               <td ui-sref="#">{{bolezen.naziv}}</td>
               <td>{{bolezen.mkb10}}</td>
               <td>
@@ -257,7 +257,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="zdravilo in uporabnik.zdravila">
+              <tr ng-repeat="zdravilo in zdravila">
                 <td>{{zdravilo.zdravilo}}</td>
                 <td>{{zdravilo.navodila}}</td>
               </tr>
@@ -275,7 +275,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="dieta in uporabnik.dieta">
+              <tr ng-repeat="dieta in diete">
                 <td>{{dieta.naziv}}</td>
                 <td>{{dieta.sifra}}</td>
                 <td ng-href="dieta.url">{{dieta.url}}</td>
