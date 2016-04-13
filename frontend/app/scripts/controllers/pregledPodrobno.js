@@ -3,14 +3,15 @@
  */
 'use strict';
 
-/* Controler za podrobni pogled pregleda*/
+/* Controller za podrobni pogled pregleda*/
 
 angular.module('tpo')
-  .controller('PodrobniPregledCtrl', ['$scope','Pregledi', function ($scope, Pregledi) {
-    $scope.test = 'Pregledi';
+  .controller('PregledPodrobnoCtrl', ['$scope','Pregled', function ($scope, Pregled) {
+    //$scope.test = 'Pregled';
     /* GET pregled */
-    Pregledi.get({idpregled:1}).$promise.then(function(response){
+    Pregled.get({pregledId: 1}).$promise.then(function(response){
       /* shrani pregled v $scope, da lahk dostopaš v view do njega */
+        console.log(response);
       $scope.pregled = response;
     });
   }]);

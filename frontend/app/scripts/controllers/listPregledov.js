@@ -6,11 +6,11 @@
 /* Controler za podrobni pogled pregleda*/
 
 angular.module('tpo')
-  .controller('ListPregledovCtrl', ['$scope','PreglediList', function ($scope, PreglediList) {
-    /* GET pregled */
-      PreglediList.get()
-    PreglediList.get({idpregled:1}).$promise.then(function(response){
-      /* shrani pregled v $scope, da lahk dostopaš v view do njega */
-      $scope.pregledList = response;
+  .controller('ListPregledovCtrl', ['$scope','Pregled', function ($scope, Pregled) {
+      
+       /* GET Uporabnik Pregledi */
+    Pregled.query().$promise.then(function(response){
+      $scope.pregledi = response;
     });
   }]);
+    

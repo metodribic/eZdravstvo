@@ -11,6 +11,7 @@ module.exports = function (grunt) {
 
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
+  grunt.loadNpmTasks('grunt-ng-constant');
 
   // Automatically load required Grunt tasks
   require('jit-grunt')(grunt, {
@@ -371,7 +372,7 @@ module.exports = function (grunt) {
     ngtemplates: {
       dist: {
         options: {
-          module: 'testoApp',
+          module: 'tpo',
           htmlmin: '<%= htmlmin.dist.options %>',
           usemin: 'scripts/scripts.js'
         },
@@ -414,7 +415,11 @@ module.exports = function (grunt) {
             '*.html',
             'images/{,*/}*.{webp}',
             'styles/fonts/{,*/}*.*',
-            'views/*.*'
+            'views/**',
+            'plugins/**',
+            'bootstrap/**',
+            'dist/**',
+
           ]
         }, {
           expand: true,
@@ -451,6 +456,30 @@ module.exports = function (grunt) {
       ]
     },
 
+    ngconstant: {
+      options: {
+        name: 'config',
+        wrap: '"use strict";\n\n{%= __ngModule %}',
+        space: '  '
+      },
+      development: {
+        options: {
+          dest: '<%= yeoman.app %>/scripts/config.js'
+        },
+        constants: {
+          API_URL: 'localhost:8000'
+        }
+      },
+      production: {
+        options: {
+          dest: '<%= yeoman.dist %>/scripts/config.js'
+        },
+        constants: {
+          API_URL: 'tpo-yoyosan.rhcloud.com'
+        }
+      }
+    },
+
     // Test settings
     karma: {
       unit: {
@@ -468,6 +497,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'ngconstant:development',
       'wiredep',
       'concurrent:server',
       'postcss:server',
@@ -492,6 +522,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'ngconstant:production',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
@@ -503,6 +534,7 @@ module.exports = function (grunt) {
     'cdnify',
     'cssmin',
     'uglify',
+    'filerev',
     'usemin',
     'htmlmin'
   ]);

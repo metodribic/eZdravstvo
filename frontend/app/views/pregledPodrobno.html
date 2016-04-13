@@ -25,37 +25,10 @@
               </tr>
             </thead>
             <tbody>
+              <!-- v controllerju moreš met $scope.pregledi tabelo, kjer so noter vsi pregledi ko jih hočeš prikazat, torej moreš naredit Pregledi.ge().$promise.then() itd itd podobn ko pr men v nadzorni-->
               <tr>
-                <td><b>Datum pregleda:</b></td>
-                <td>4.5.2016</td>
-              </tr>
-              <tr>
-                <td><b>Ime zdravnika:</b></td>
-                <td>Metod Ribič</td>
-              </tr>
-              <tr>
-                <td><b>Rezultati meritev:</b></td>
-                <td>uspešno</td>
-              </tr>
-              <tr>
-                <td><b>Ugotovljene bolezni:</b></td>
-                <td>Lenoba</td>
-              </tr>
-              <tr>
-                <td><b>Ugotovljene alergije:</b></td>
-                <td>Alergija na pršice</td>
-              </tr>
-              <tr>
-                <td><b>Predpisana zdravila:</b></td>
-                <td>Persen</td>
-              </tr>
-              <tr>
-                <td><b>Predpisana dieta:</b></td>
-                <td>Ketonska</td>
-              </tr>
-              <tr>
-                <td><b>Datum naslednjega pregleda:</b></td>
-                <td>17.5.2016</td>
+                <td><b>Zdravnik:</b></td>
+                <td>{{pregled.bolezen}}</td>
               </tr>
             </tbody>
           </table>

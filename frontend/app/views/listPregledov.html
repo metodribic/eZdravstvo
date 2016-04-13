@@ -1,24 +1,39 @@
 <div class="col-12">
 <table class="table">
     <thead>
-      <tr>
-        <th>Številka</th>
-        <th>Datum</th>
-        <th>Zdravnik</th>
-        <th>Bolezen</th>
-        <th>Zdravilo</th>
-        <!-- headerji v tabeli -->
-      </tr>
+        <tr>
+          <th>Datum pregleda</th>
+          <th>Opombe</th>
+          <th>Zdravnik</th>
+          <th>Bolezni</th>
+          <th>Zdravilo</th>
+          <th>Dieta</th>
+          <th>Datum naslednjega pregleda</th>
+        </tr>
     </thead>
+
     <tbody>
-      <!-- v controllerju moreš met $scope.pregledi tabelo, kjer so noter vsi pregledi ko jih hočeš prikazat, torej moreš naredit Pregledi.ge().$promise.then() itd itd podobn ko pr men v nadzorni-->
-      <tr ng-repeat="pregled in pregledi">
-        <td>{{pregled.datum}}</td>
-        <td>{{pregled.zdarvnik}}</td>
-        <td>{{pregled.bolezen}}</td>
-        <td>{{pregled.zdravilo}}</td>
-        <!-- pač po istem kopitu prikazuješ naprej vse atribute ko jih rabiš prikazat, gor pa pač dodaš še naslove  -->
-      </tr>
-    </tbody>
+        <tr ng-repeat="pregled in pregledi">
+          <td ui-sref="#">{{pregled.datum | date:'dd-mm-yyyy HH:mm'}}</td>
+          <td>{{pregled.opombe}}</td>
+          <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
+          <td>
+            <span ng-show="pregled.bolezen.length > 0">{{pregled.bolezen}}</span>
+            <span ng-show="pregled.bolezen.length == 0">/</span>
+          </td>
+          <td>
+            <span ng-show="pregled.zdravilo.length > 0">{{pregled.zdravilo}}</span>
+            <span ng-show="pregled.zdravilo.length == 0">/</span>
+          </td>
+          <td>
+            <span ng-show="pregled.dieta.length > 0">{{pregled.dieta}}</span>
+            <span ng-show="pregled.dieta.length == 0">/</span>
+          </td>
+          <td>
+            <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega}}</span>
+            <span ng-show="pregled.datum_naslednjega.length == null">Ponoven pregled ni potreben!</span>
+          </td>
+        </tr>
+      </tbody>
   </table>
 </div>

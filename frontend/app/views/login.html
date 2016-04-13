@@ -1,0 +1,13 @@
+<div class="col-md-6">
+<form ng-class="{'has-error': red}" ng-submit="doLogin()">
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" class="form-control" id="email" placeholder="uporabnik@organizacija.domena" ng-model="uporabniki.email" required="required">
+  </div>
+  <div class="form-group">
+    <label for="password">Geslo</label>
+    <input type="password" class="form-control" id="password" placeholder="Geslo" ng-model="uporabniki.geslo" required="required">
+  </div>
+  <button type="submit" class="btn btn-default">Prijava</button>
+</form>
+</div>
