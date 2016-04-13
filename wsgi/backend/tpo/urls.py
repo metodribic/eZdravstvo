@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 
 from tpo.views import UporabnikiViewSet, PreglediViewSet, PostaViewSet, AmbulantaViewSet, UstanovaViewSet, ZdravnikViewSet, \
-    OsebjeViewSet, MeritevViewSet, DietaViewSet, BolezniViewSet, ZdraviloViewSet, RolesViewSet, login
+    OsebjeViewSet, MeritevViewSet, DietaViewSet, BolezniViewSet, ZdraviloViewSet, RolesViewSet, login, NavodiloDietaViewSet
 
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -18,6 +18,7 @@ router.register(r'diete', DietaViewSet)
 router.register(r'bolezni', BolezniViewSet)
 router.register(r'zdravila', ZdraviloViewSet)
 router.register(r'vloge', RolesViewSet)
+router.register(r'navodilo_dieta', NavodiloDietaViewSet)
 
 
 urlpatterns = [

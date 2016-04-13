@@ -10,7 +10,7 @@ angular.module('tpo.models', ['ngResource', 'config'])
 
 
 .factory('Pregled', function($resource, API_URL) {
-	return $resource('http://' + API_URL + '/pregledi/:pregeldId', { pregledId: '@pregledId' }, {
+	return $resource('http://' + API_URL + '/pregledi/:pregledId', { pregledId: '@pregledId' }, {
 		update: {
 			method: 'PUT'
 		}

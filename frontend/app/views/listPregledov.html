@@ -1,5 +1,5 @@
 <div class="col-12">
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
           <th>Datum pregleda</th>
@@ -14,7 +14,7 @@
 
     <tbody>
         <tr ng-repeat="pregled in pregledi">
-          <td ui-sref="#">{{pregled.datum | date:'dd-mm-yyyy HH:mm'}}</td>
+          <td ui-sref="pregledPodrobno">{{pregled.datum | date:'dd-mm-yyyy HH:mm'}}</td>
           <td>{{pregled.opombe}}</td>
           <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
           <td>
