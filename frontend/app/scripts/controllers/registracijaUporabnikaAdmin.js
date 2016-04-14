@@ -19,16 +19,26 @@ Administrator lahko kreira nov uporabniški račun za zdravnika ali medicinsko s
  */
 
 angular.module('tpo')
-    .controller('registracijaUporAdminCtrl', ['$scope','Uporabniki','$resource','RegistracijaUporAdmin', function ($scope, Uporabniki, $resource, RegistracijaUporAdmin ) {
-        // check if username already exists ?
-        // add uporabnik - ali auth_user ?
+    .controller('registracijaUporAdminCtrl', ['$scope', '$state', 'Uporabniki','$resource','$rootScope','AuthService','RegistracijaUporAdmin',
+        function ($scope, $state, Uporabniki, $resource, $rootScope, AuthService, RegistracijaUporAdmin ) {
+
+
+        /*GET USER FROM LOCAL STORAGE*/
+        $scope.uporabnik = AuthService.getCurrentUser();
+        /* če ni prijavlen ga dej na login*/
+        if(!$scope.uporabnik)
+            $state.go("login");
+
+        
+        if( ! $rootScope.uporabnik.is_superuser || angular.isUndefined($rootScope.uporabnik.is_superuser ) )
+            $state.go("nadzornaPlosca");
+
 
         // dropdown value
         $scope.mojSelect = 'Zdravnik'; // for example
         
         $scope.visibleAlertFail = false;
         $scope.visibleAlertSucc = false;
-
         $scope.red = false;
         $scope.besedZaUpor = "";
         $scope.extraInfo = "";
@@ -37,32 +47,32 @@ angular.module('tpo')
 
 
         $scope.showSelectValue = function(mojSelect) {
-            console.log(mojSelect);
+            //console.log(mojSelect);
         }
 
-        $scope.uporabnik = new Uporabniki();
+        $scope.uporabniki = new Uporabniki();
         $scope.shraniU = function (){
 
             $scope.besedZaUpor = "";
             $scope.extraInfo = "";
 
-            $scope.uporabnik.username = $scope.uporabnik.email;
-
-            console.log($scope.uporabnik.email);
-            console.log($scope.uporabnik.password);
+            $scope.uporabniki.username = $scope.uporabniki.email;
+        /*
+            console.log($scope.uporabniki.email);
+            console.log($scope.uporabniki.password);
             console.log($scope.mojSelect);
-            console.log($scope.uporabnik.ime);
-            console.log($scope.uporabnik.priimek);
-            console.log($scope.uporabnik.sifra);
-
+            console.log($scope.uporabniki.ime);
+            console.log($scope.uporabniki.priimek);
+            console.log($scope.uporabniki.sifra);
+        */
 
             var n = new RegistracijaUporAdmin();
-            n.email = $scope.uporabnik.email;
-            n.username = $scope.uporabnik.username;
-            n.password = $scope.uporabnik.password;
+            n.email = $scope.uporabniki.email;
+            n.username = $scope.uporabniki.username;
+            n.password = $scope.uporabniki.password;
             n.role = $scope.mojSelect;
 
-            n.ime = $scope.uporabnik.ime;
+            n.ime = $scope.uporabniki.ime;
 
             // check it?
             if( angular.isUndefined(n.ime) || n.ime == null){
@@ -74,7 +84,7 @@ angular.module('tpo')
                     $scope.extraInfo += "Ime lahko ima samo črke, vsaj 3, največ 21.\n";
                 }
             }
-            n.priimek = $scope.uporabnik.priimek;
+            n.priimek = $scope.uporabniki.priimek;
             if( angular.isUndefined(n.priimek) || n.priimek == null){
                 n.priimek = "";
             }else{
@@ -83,7 +93,7 @@ angular.module('tpo')
                     $scope.extraInfo += "Priimek lahko ima samo črke, vsaj 3, največ 21.\n";
                 }
             }
-            n.sifra = $scope.uporabnik.sifra;
+            n.sifra = $scope.uporabniki.sifra;
             if( angular.isUndefined(n.sifra) || n.sifra == null){
                 n.sifra = "";
             }else{
@@ -103,15 +113,15 @@ angular.module('tpo')
                         mojScope.visibleAlert = false;
                         //$scope.red = false;
                         // clear fields
-                        $scope.besedZaUpor = "Uporabnik "+$scope.uporabnik.username+" uspešno ustvarjen.";
+                        $scope.besedZaUpor = "Uporabnik "+$scope.uporabniki.username+" uspešno ustvarjen.";
 
-                        $scope.uporabnik.email="";
-                        $scope.uporabnik.username="";
-                        $scope.uporabnik.password="";
+                        $scope.uporabniki.email="";
+                        $scope.uporabniki.username="";
+                        $scope.uporabniki.password="";
                         $scope.mojSelect ="Zdravnik";
-                        $scope.uporabnik.ime = "";
-                        $scope.uporabnik.priimek = "";
-                        $scope.uporabnik.sifra = "";
+                        $scope.uporabniki.ime = "";
+                        $scope.uporabniki.priimek = "";
+                        $scope.uporabniki.sifra = "";
 
                         $scope.visibleAlertFail = false;
                         $scope.visibleAlertSucc = true;

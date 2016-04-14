@@ -105,6 +105,7 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     bolezni = BolezniSerializer(many=True)
     zdravnik = ZdravnikSerializer(many=True)
     dieta = DietaSerializer(many=True)
+    is_superuser = serializers.BooleanField()
     id = serializers.IntegerField()
 
     class Meta:
