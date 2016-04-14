@@ -49,7 +49,6 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
     ambulanta = AmbulantaSerializer()
     role = VlogaSerializer()
     medicinske_sestre = OsebjeSerializer()
-    # uporabnik = UporabnikSerializer(many=True)
     id = serializers.IntegerField()  #For some reason not included otherwise
 
     class Meta:
@@ -125,3 +124,12 @@ class LoginZdravnikSerializer(serializers.Serializer):
 
 class ErrorSerializer(serializers.Serializer):
     error = serializers.CharField(max_length=500)
+
+
+class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
+    pacienti = UporabnikSerializer(many=True)
+    id = serializers.IntegerField()  #For some reason not included otherwise
+
+    class Meta:
+        model = Zdravnik
+        exclude = ('pacienti', 'id',)

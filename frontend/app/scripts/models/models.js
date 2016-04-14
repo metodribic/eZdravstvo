@@ -44,6 +44,15 @@ angular.module('tpo.models', ['ngResource', 'config'])
 })
 
 
+.factory('ZdravnikoviPacienti', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/zdravnik_uporabniki', { pacientId: '@pacientId' }, {
+		update: {
+			method: 'PUT'
+		}
+	});
+})
+
+
 .factory('Diete', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/diete/:dietaId', { dietaId: '@dietaId' }, {
 		update: {
