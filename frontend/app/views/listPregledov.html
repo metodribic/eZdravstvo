@@ -18,7 +18,7 @@
           <td ui-sref="pregledPodrobno({id:pregled.id})"><i class="fa fa-search"></i></td>
           <td>{{pregled.datum | date:'dd-mm-yyyy HH:mm'}}</td>
           <td>{{pregled.opombe}}</td>
-          <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}} {{pregled.id}}</td>
+          <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
           <td>
             <span ng-show="pregled.bolezen.length > 0">{{pregled.bolezen}}</span>
             <span ng-show="pregled.bolezen.length == 0">/</span>

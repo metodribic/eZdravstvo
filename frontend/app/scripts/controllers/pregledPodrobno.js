@@ -6,8 +6,8 @@
 /* Controler za podrobni pogled pregleda*/
 
 angular.module('tpo')
-  .controller('PregledPodrobnoCtrl', ['$scope','Pregled', '$stateParams', function ($scope, Pregled, $stateParams) {
-    $scope.test = 'Pregled';
+  .controller('PregledPodrobnoCtrl', ['$scope','Pregled', '$stateParams', 'Uporabniki', 'AuthService', function ($scope, Pregled, $stateParams, Uporabniki, AuthService) {
+
     /* GET pregled */
 
       var pregledID = $stateParams.id;

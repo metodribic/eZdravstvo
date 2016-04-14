@@ -30,16 +30,14 @@
               </tr>
               <tr>
                 <td><b>Zdravnik:</b></td>
-                <td>
-                    <span ng-show="pregled.zdravnik.length > 0">{{pregled.zdravnik}}</span>
-                    <span ng-show="pregled.zdravnik.length == 0">/</span>
-                </td>
+                <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
               </tr>
               <tr>
                 <td><b>Meritve:</b></td>
+                  <td>{{pregled.meritve.tip}} {{pregled.meritve.vrednost_meritve}}</td>
                 <td>
-                    <span ng-show="pregled.meritev.length > 0">{{pregled.meritev}}</span>
-                    <span ng-show="pregled.meritev.length == 0">/</span>
+                    <span ng-show="pregled.meritve.length > 0">{{pregled.meritve}}</span>
+                    <span ng-show="pregled.meritve.length == 0">/</span>
                 </td>
               </tr>
               <tr>
@@ -52,8 +50,8 @@
               <tr>
                 <td><b>Alergije:</b></td>
                <td>
-                    <span ng-show="pregled.alergije.length > 0">{{pregled.alergije}}</span>
-                    <span ng-show="pregled.alergije.length == 0">/</span>
+                    <span ng-show="pregled.bolezen.alergija > 0">Da</span>
+                    <span ng-show="pregled.bolezen.alergija == 0">Ne</span>
                 </td>
               </tr>
               <tr>
@@ -66,7 +64,7 @@
               <tr>
                 <td><b>Dieta:</b></td>
                 <td>
-                    <span ng-show="pregled.dieta.length > 0">{{pregled.dieta}}</span>
+                    <span ng-show="pregled.dieta.length > 0">{{pregled.dieta.navodila}}</span>
                     <span ng-show="pregled.dieta.length == 0">/</span>
                 </td>
               </tr>
@@ -81,7 +79,7 @@
                 <td><b>Naslednji pregled:</b></td>
                 <td>
                 <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega}}</span>
-                <span ng-show="pregled.datum_naslednjega.length == null">Ponoven pregled ni potreben!</span>
+                <span ng-show="pregled.datum_naslednjega.length == null">Ponovni pregled ni potreben!</span>
               </td>
               </tr>
             </tbody>
