@@ -69,7 +69,8 @@ angular.module('tpo.services', ['ngResource', 'config'])
                 },
                 data: {"email": email, "password": pass}
             }).then(function successCallback(response) {
-                if(response.data.uporabnik) {
+                console.log(response);
+                if(response.data && response.data.uporabnik) {
                     $rootScope.uporabnik = response.data.uporabnik;
                     storeUser(response.data.token, response.data.uporabnik);
                 }
@@ -79,7 +80,11 @@ angular.module('tpo.services', ['ngResource', 'config'])
                 }
                 resolve('Login success.');
             }, function errorCallback(response) {
-                reject(response.data.error);
+                console.log(response);
+                var error = "Server failed to response";
+                if(response.data && response.data.error)
+                    error = response.data.error;
+                reject(error);
             });
         });
     };

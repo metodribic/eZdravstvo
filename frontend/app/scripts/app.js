@@ -38,6 +38,13 @@ angular
               controller: 'LoginCtrl'
           })
           
+          .state('logout', {
+              url: '/logout',
+              templateUrl: '../views/login.html',
+              controller: 'LoginCtrl'
+          })
+
+          
           .state('profile', {
               url: '/profile',
               templateUrl: '../views/profile.html',
