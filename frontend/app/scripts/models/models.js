@@ -15,14 +15,6 @@ angular.module('tpo.models', ['ngResource', 'config'])
 			method: 'PUT'
 		}
 	});
-
-	/*
-	return $resource('http://' + API_URL + '/pregledi/:pregledId', { pregledId: '@pregledId' }, {
-		update: {
-			method: 'GET'
-		}
-	});
-	*/
 })
 
 
