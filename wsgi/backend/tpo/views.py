@@ -13,14 +13,20 @@ from django.http import HttpResponse
 import traceback, datetime
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.contrib.auth.password_validation import validate_password
+
 
 # Create your views here.
-from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock
+from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock, \
+    NavodilaDieta
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
-    OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, LoginZdravnikSerializer
+    OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
+    LoginZdravnikSerializer, NavodilaDietaSerializer
 
 class JSONResponse(HttpResponse):
     """
@@ -64,6 +70,7 @@ class PostaViewSet(viewsets.ModelViewSet):
     queryset = Posta.objects.all()
     serializer_class = PostaSerializer
 
+
 # AMBULANTA
 class AmbulantaViewSet(viewsets.ModelViewSet):
     queryset = Ambulanta.objects.all()
@@ -86,6 +93,12 @@ class ZdravnikViewSet(viewsets.ModelViewSet):
 class OsebjeViewSet(viewsets.ModelViewSet):
     queryset = Osebje.objects.all()
     serializer_class = OsebjeSerializer
+
+
+# NAVODILO DIETA
+class NavodiloDietaViewSet(viewsets.ModelViewSet):
+    queryset = NavodilaDieta.objects.all()
+    serializer_class = NavodilaDietaSerializer
 
 
 # DIETA
@@ -181,7 +194,6 @@ def login(request, format=None):
         return response
 
 
-
 @api_view(['POST'])
 def registracijaAdmin(request, format=None):
     """
@@ -212,6 +224,7 @@ def registracijaAdmin(request, format=None):
                 respons.status_code = 400;  # Bad request
                 return respons
             else:
+                validate_password(password=passw)
                 zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
                     sifra=novaSifra,sprejema_paciente=1, role_id=2, ime=ime, priimek=priimek )
 
@@ -227,13 +240,17 @@ def registracijaAdmin(request, format=None):
                 return respons
             else:
                 #print "NURSE"
+                validate_password(password=passw)
                 medSest = Osebje.objects.create_user(username=mail, email=mail,
-                    sifra=novaSifra , stevilka=novaStev, password=passw, role_id=3, ime=ime, priimek=priimek )
+                    sifra=novaSifra, stevilka=novaStev, password=passw, role_id=3, ime=ime, priimek=priimek )
                 respons = JSONResponse({"success": "function : {'user created':'Medicinska sestra'}"})
 
                 respons.status_code = 201
                 return respons
-
+    except ValidationError as ve:
+        response = JSONResponse({"error": "WeakPassword"})
+        response.status_code = 400
+        return response
     except IntegrityError as e:
         #Exception raised when the relational integrity of the database
         #is affected, e.g. a foreign key check fails, duplicate key, etc.
@@ -247,5 +264,47 @@ def registracijaAdmin(request, format=None):
         traceback.print_exc()
         response = JSONResponse({"error" : "Usage: {'email':'someone@someplace', 'password':'password'}"})
         response.status_code = 400 # Bad request
+        return response
+
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def changePassword(request, format=None):
+    """
+    Change user's password
+    """
+    try: 
+        # check if email and password are received or return 400
+        oldpass = request.data['old_password']
+        newpass = request.data['new_password']
+        id = request.data['id']
+        try:
+            user = User.objects.get(id=id)
+            if user.check_password(oldpass):
+                try: 
+                    validate_password(newpass)
+                    user.set_password(newpass)
+                    user.save()
+                    response = Response()
+                    response.status_code = 200
+                    return response
+                except ValidationError as e:
+                    print(e)
+                    response = JSONResponse({"error": "Please choose better password. It should be at least 8 characters long and contain mixed letters and numbers. Also, it should not be too common (like 'test' etc)"})
+                    response.status_code = 400
+                    return response
+            else:
+                response = JSONResponse({"error": "Wrong password"})
+                response.status_code = 401
+                return response
+
+        except ObjectDoesNotExist:
+            response = JSONResponse({"error": "User does not exist"})
+            response.status_code = 400
+            return response
+    except Exception as ex:
+        traceback.print_exc()
+        response = JSONResponse({"error":"Unknown error"})
+        response.status_code = 500; # Bad request
         return response
 

@@ -54,7 +54,7 @@
       <!-- Header Navbar -->
       <nav class="navbar navbar-static-top" role="navigation">
         <!-- Sidebar toggle button-->
-        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <a target="_self" class="sidebar-toggle" data-toggle="offcanvas" role="button">
           <span class="sr-only">Toggle navigation</span>
         </a>
         <!-- Navbar Right Menu -->
@@ -64,17 +64,16 @@
             <!-- User Account Menu -->
             <li class="dropdown user user-menu">
               <!-- Menu Toggle Button -->
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <a target="_self" class="dropdown-toggle" data-toggle="dropdown">
                 <!-- The user image in the navbar-->
-                <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                <img src="dist/img/user4-128x128.jpg" class="user-image" alt="User Image">
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
                 <span class="hidden-xs">{{uporabnik.ime}} {{uporabnik.priimek}}</span>
               </a>
               <ul class="dropdown-menu">
                 <!-- The user image in the menu -->
                 <li class="user-header">
-                  <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-
+                  <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="user image">
                   <p>
                     {{uporabnik.ime}} {{uporabnik.priimek}} - {{uporabnik.role.naziv}}
                   </p>
@@ -82,10 +81,10 @@
                 <!-- Menu Footer-->
                 <li class="user-footer">
                   <div class="pull-left">
-                    <a href="#" class="btn btn-default btn-flat">Profile</a>
+                    <a ui-sref="profile" class="btn btn-default btn-flat">Profile</a>
                   </div>
                   <div class="pull-right">
-                    <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                    <a ui-sref="logout" class="btn btn-default btn-flat">Sign out</a>
                   </div>
                 </li>
               </ul>
@@ -103,12 +102,12 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel">
           <div class="pull-left image">
-            <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+            <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
           </div>
           <div class="pull-left info">
             <p>{{uporabnik.ime}} {{uporabnik.priimek}}</p>
             <!-- Status -->
-            <a href="#">{{uporabnik.role.naziv}}</a>
+            <a  target="_self">{{uporabnik.role.naziv}}</a>
           </div>
         </div>
 
@@ -135,7 +134,7 @@
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper" style="min-height: 1004px;">
+    <div class="content-wrapper" style="min-height: 1400px;">
       <!-- Content Header (Page header) -->
       <!-- <section class="content-header">
         <h1>
@@ -166,9 +165,7 @@
 
   <!-- build:js(frontend) scripts/vendor.js -->
   <!-- bower:js -->
-  <script src="../bower_components/jquery/dist/jquery.js"></script>
   <script src="../bower_components/angular/angular.js"></script>
-  <script src="../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
   <script src="../bower_components/angular-animate/angular-animate.js"></script>
   <script src="../bower_components/angular-cookies/angular-cookies.js"></script>
   <script src="../bower_components/angular-resource/angular-resource.js"></script>
@@ -185,6 +182,7 @@
   <script src="scripts/config.js"></script>
   <script src="scripts/controllers/nadzornaPlosca.js"></script>
   <script src="scripts/controllers/login.js"></script>
+  <script src="scripts/controllers/profile.js"></script>
   <script src="scripts/models/models.js"></script>
   <script src="scripts/controllers/registracijaUporabnikaAdmin.js"></script>
   <script src="scripts/services/services.js"></script>
@@ -192,5 +190,6 @@
 
   <script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
   <script src="bootstrap/js/bootstrap.min.js"></script>
+  <script src="dist/js/app.min.js"></script>
 
 </body></html>

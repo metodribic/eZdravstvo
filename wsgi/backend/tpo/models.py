@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext as _
 
 
 class Uporabnik(User):
@@ -17,7 +19,6 @@ class Uporabnik(User):
     krvna_skupina = models.CharField(max_length=3, blank=True, null=True)
     ambulanta = models.ForeignKey('Ambulanta', blank=True, null=True)
     zdravnik = models.ManyToManyField('Zdravnik', blank=True)
-    #meritev = models.ForeignKey('Meritev', blank=True, null=True)
     zdravila = models.ManyToManyField('Zdravilo', blank=True)
     bolezni = models.ManyToManyField('Bolezni', blank=True)
     dieta = models.ManyToManyField('Dieta', blank=True)
@@ -68,8 +69,12 @@ class Roles(models.Model):
 
 class Dieta(models.Model):
     naziv = models.CharField(max_length=100)
-    sifra = models.IntegerField()
-    url = models.CharField(max_length=500)
+    sifra = models.CharField(max_length=20)
+    navodila = models.ManyToManyField('NavodilaDieta', blank=True)
+
+
+class NavodilaDieta(models.Model):
+    url = models.CharField(max_length=512)
 
 
 class Zdravilo(models.Model):
@@ -90,8 +95,8 @@ class Pregled(models.Model):
 
 
 class Bolezni(models.Model):
-    mkb10 = models.CharField(max_length=45)
     naziv = models.CharField(max_length=45)
+    mkb10 = models.CharField(max_length=45)
     alergija = models.BooleanField()
     zdravilo = models.ManyToManyField('Zdravilo')
 
@@ -115,3 +120,25 @@ class IPLock(models.Model):
     ip = models.CharField(max_length=40)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     numOfTries = models.IntegerField(default=0)
+
+
+class IsAlphanumericPasswordValidator(object):
+    """
+    Validate whether the password is alphanumeric
+   """ 
+    def validate(self, password, user=None):
+        num = False
+        char = False
+        for c in password:
+            if c.isdigit():
+                num = True
+            elif c.isalpha():
+                char = True
+        if num != True or char != True:
+            raise ValidationError(
+                _("This password is not alphanumeric."),
+                code='password_not_alphanumeric',
+            )
+
+    def get_help_text(self):
+        return _("Your password must contain at least one number and at least one character")

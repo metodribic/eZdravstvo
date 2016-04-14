@@ -123,6 +123,9 @@ angular.module('tpo')
                         //alert("User already exists!");
                         $scope.besedZaUpor = "Uporabnik s tem email naslovom že obstaja!";
 
+                    }else if( err.data.error === "WeakPassword" ) {
+
+                        $scope.besedZaUpor = "Izberite boljše geslo! Geslo mora biti dolžine 8, vsaj 1 številko!";
                     }else{
                         // POPRAVI - GLEJ KAJ JE NAROBE, opazil samo pri duplicate entry
                         $scope.besedZaUpor = "Uporabnik s tem email naslovom že obstaja!";

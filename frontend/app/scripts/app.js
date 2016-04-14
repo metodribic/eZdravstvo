@@ -38,12 +38,29 @@ angular
               url: '/login',
               templateUrl: '../views/login.html',
               controller: 'LoginCtrl'
-          }).state('registracijaUporabnikaAdmin', {
-        url: '/registracijaAdmin',
-        templateUrl: '../views/registracijaUporabnikaAdmin.html',
-        controller: 'registracijaUporAdminCtrl'
-      });
 
+
+          })
+
+          .state('registracijaUporabnikaAdmin', {
+            url: '/registracijaAdmin',
+            templateUrl: '../views/registracijaUporabnikaAdmin.html',
+            controller: 'registracijaUporAdminCtrl'
+          })
+          
+          .state('logout', {
+              url: '/logout',
+              templateUrl: '../views/login.html',
+              controller: 'LoginCtrl'
+          })
+
+          
+          .state('profile', {
+              url: '/profile',
+              templateUrl: '../views/profile.html',
+              controller: 'ProfileCtrl'
+          });
+          
 
   }])
 
@@ -59,7 +76,6 @@ angular
         }
         if(AuthService.isAuthenticated() && !$rootScope.uporabnik) {
           $rootScope.uporabnik = AuthService.getCurrentUser();
-          console.log($rootScope.uporabnik);
-        } 
+        }
       });
   });
