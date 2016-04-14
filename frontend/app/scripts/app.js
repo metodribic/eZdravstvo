@@ -15,6 +15,7 @@ angular
     'ngCookies',
     'ngResource',
     'ngRoute',
+    'ui.select',
     'ngSanitize',
     'ngTouch',
     'ui.router',
@@ -60,10 +61,28 @@ angular
             url: '/register',
             templateUrl: '../views/register.html',
             controller: 'registerCtrl'
+          })
+
+          .state('logout', {
+              url: '/logout',
+              templateUrl: '../views/login.html',
+              controller: 'LoginCtrl'
+          })
+
+          .state('profile', {
+              url: '/profile',
+              templateUrl: '../views/profile.html',
+              controller: 'ProfileCtrl'
+          })
+
+          .state('dodajPregled', {
+              url: '/dodajpregled',
+              templateUrl: '../views/dodajPregled.html',
+              controller: 'DodajPregledCtrl'
           });
   }])
 
-  .run(function ($rootScope, $state, AuthService, Uporabniki) {
+      .run(function ($rootScope, $state, AuthService, Uporabniki) {
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
         // console.log('changing state');
         // console.log(AuthService.isAuthenticated());
