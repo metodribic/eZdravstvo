@@ -1,9 +1,10 @@
 from django.conf.urls import url, include
 from rest_framework import routers
 
-from tpo.views import UporabnikiViewSet, PreglediViewSet, PostaViewSet, AmbulantaViewSet, UstanovaViewSet, ZdravnikViewSet, \
+from tpo.views import UporabnikiViewSet, PreglediViewSet, PostaViewSet, AmbulantaViewSet, UstanovaViewSet, ZdravnikViewSet, \git
     OsebjeViewSet, MeritevViewSet, DietaViewSet, BolezniViewSet, ZdraviloViewSet, RolesViewSet, login, NavodiloDietaViewSet, changePassword, \
     ZdravnikUporabnikiViewSet
+
 
 
 router = routers.DefaultRouter(trailing_slash=False)

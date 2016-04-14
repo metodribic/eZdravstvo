@@ -7,7 +7,7 @@ angular.module('tpo')
     function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled, Meritve, Bolezni, Zdravila, Diete, ZdravnikoviPacienti) {
       var naziv = '';
       $scope.uporabnik_je_zdravnik = false;
-      console.log($rootScope.uporabnik);
+
 
       ZdravnikoviPacienti.query().$promise.then(function(response){
         $scope.pacienti = response;
