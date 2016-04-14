@@ -79,7 +79,7 @@ angular.module('tpo')
                 n.ime = "";
             }else{
                 // check if string
-                if( ! (/^[a-zA-Z]{3,21}$/.test(n.ime)) && n.ime != "" ){
+                if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.ime)) && n.ime != "" ){
                     // invalid name
                     $scope.extraInfo += "Ime lahko ima samo črke, vsaj 3, največ 21.\n";
                 }
@@ -88,7 +88,7 @@ angular.module('tpo')
             if( angular.isUndefined(n.priimek) || n.priimek == null){
                 n.priimek = "";
             }else{
-                 if( ! (/^[a-zA-Z]{3,21}$/.test(n.priimek)) && n.priimek != "" ){
+                 if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.priimek)) && n.priimek != "" ){
                     // invalid name
                     $scope.extraInfo += "Priimek lahko ima samo črke, vsaj 3, največ 21.\n";
                 }

@@ -14,6 +14,7 @@ angular
     'ngCookies',
     'ngResource',
     'ngRoute',
+    'ui.select',
     'ngSanitize',
     'ngTouch',
     'ui.router',
@@ -47,18 +48,23 @@ angular
             templateUrl: '../views/registracijaUporabnikaAdmin.html',
             controller: 'registracijaUporAdminCtrl'
           })
-          
+
           .state('logout', {
               url: '/logout',
               templateUrl: '../views/login.html',
               controller: 'LoginCtrl'
           })
 
-          
           .state('profile', {
               url: '/profile',
               templateUrl: '../views/profile.html',
               controller: 'ProfileCtrl'
+          })
+
+          .state('dodajPregled', {
+              url: '/dodajpregled',
+              templateUrl: '../views/dodajPregled.html',
+              controller: 'DodajPregledCtrl'
           });
           
 

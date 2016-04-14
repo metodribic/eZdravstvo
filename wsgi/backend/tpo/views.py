@@ -26,7 +26,7 @@ from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik,
     NavodilaDieta
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
-    LoginZdravnikSerializer, NavodilaDietaSerializer
+    LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer
 
 class JSONResponse(HttpResponse):
     """
@@ -84,9 +84,15 @@ class UstanovaViewSet(viewsets.ModelViewSet):
 
 
 # ZDRAVNIK
+@permission_classes((IsAuthenticated,))
 class ZdravnikViewSet(viewsets.ModelViewSet):
     queryset = Zdravnik.objects.all()
     serializer_class = ZdravnikSerializer
+
+
+class ZdravnikUporabnikiViewSet(viewsets.ModelViewSet):
+    queryset = Zdravnik.objects.all()
+    serializer_class = ZdravnikUporabnikiSerializer
 
 
 # OSEBJE
