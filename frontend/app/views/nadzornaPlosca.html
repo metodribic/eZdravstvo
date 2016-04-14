@@ -66,34 +66,34 @@
             <tbody>
               <tr>
                 <td><b>Ime:</b></td>
-                <td>{{osebniZdranik.ime}}</td>
+                <td>{{osebniZdravnik.ime}}</td>
               </tr>
               <tr>
                 <td><b>Priimek:</b></td>
-                <td>{{osebniZdranik.priimek}}</td>
+                <td>{{osebniZdravnik.priimek}}</td>
               </tr>
               <tr>
                 <td><b>Specializacija</b></td>
-                <td>{{osebniZdranik.naziv}}</td>
+                <td>{{osebniZdravnik.naziv}}</td>
               </tr>
               <tr>
                 <td><b>Ustanova</b></td>
-                <td>{{osebniZdranik.ambulanta.ustanova.naziv}}</td>
+                <td>{{osebniZdravnik.ambulanta.ustanova.naziv}}</td>
               </tr>
               <tr>
                 <td><b>Ambulanta</b></td>
-                <td>{{osebniZdranik.ambulanta}}</td>
+                <td>{{osebniZdravnik.ambulanta.naziv}}</td>
               </tr>
               <tr>
                 <td><b>Naslov:</b></td>
-                <td>{{osebniZdranik.ambulanta.ustanova.naslov}},&nbsp;
-                    {{osebniZdranik.ambulanta.posta.id}}&nbsp;
-                    {{osebniZdranik.ambulanta.posta.kraj}}
+                <td>{{osebniZdravnik.ambulanta.ustanova.naslov}},&nbsp;
+                    {{osebniZdravnik.ambulanta.posta.id}}&nbsp;
+                    {{osebniZdravnik.ambulanta.posta.kraj}}
                 </td>
               </tr>
               <tr>
                 <td><b>Osebje</b></td>
-                <td>{{osebniZdranik.osebje.toString()}}</td>
+                <td>{{osebniZdravnik.medicinske_sestre.ime}} {{osebniZdravnik.medicinske_sestre.priimek}}</td>
               </tr>
 
             </tbody>
@@ -130,7 +130,7 @@
               </tr>
               <tr>
                 <td><b>Ambulanta</b></td>
-                <td>{{osebniZobozdravnik.ambulanta}}</td>
+                <td>{{osebniZobozdravnik.ambulanta.naziv}}</td>
               </tr>
               <tr>
                 <td><b>Naslov:</b></td>
@@ -141,7 +141,7 @@
               </tr>
               <tr>
                 <td><b>Osebje</b></td>
-                <td>{{osebniZobozdravnik.osebje.toString()}}</td>
+                <td>{{osebniZobozdravnik.medicinske_sestre.ime}} {{osebniZobozdravnik.medicinske_sestre.priimek}}</td>
               </tr>
 
             </tbody>
@@ -160,6 +160,7 @@
           <thead>
             <tr>
               <th>Datum pregleda</th>
+              <th>Opombe</th>
               <th>Zdravnik</th>
               <th>Bolezni</th>
               <th>Zdravilo</th>
@@ -168,13 +169,26 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="pregled in uporabnik.pregledi">
-              <td ui-sref="#">{{pregled.datum date:'dd-mm-yyyy HH:mm'}}</td>
-              <td>{{pregled.zdravnik}}</td>
-              <td>{{pregled.bolezni}}</td>
-              <td>{{pregled.zdravilo}}</td>
-              <td>{{pregled.dieta}}</td>
-              <td>{{pregled.datum_nasledjega}}</td>
+            <tr ng-repeat="pregled in pregledi">
+              <td ui-sref="#">{{pregled.datum | date:'dd-mm-yyyy HH:mm'}}</td>
+              <td>{{pregled.opombe}}</td>
+              <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
+              <td>
+                <span ng-show="pregled.bolezen.length > 0">{{pregled.bolezen}}</span>
+                <span ng-show="pregled.bolezen.length == 0">/</span>
+              </td>
+              <td>
+                <span ng-show="pregled.zdravilo.length > 0">{{pregled.zdravilo}}</span>
+                <span ng-show="pregled.zdravilo.length == 0">/</span>
+              </td>
+              <td>
+                <span ng-show="pregled.dieta.length > 0">{{pregled.dieta}}</span>
+                <span ng-show="pregled.dieta.length == 0">/</span>
+              </td>
+              <td>
+                <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega}}</span>
+                <span ng-show="pregled.datum_naslednjega.length == null">Ponoven pregled ni potreben!</span>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -193,7 +207,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="meritev in uporabnik.meritev">
+            <tr ng-repeat="meritev in meritve">
               <td ui-sref="#">{{meritev.datum | date:'dd-mm-yyyy HH:mm'}}</td>
               <td>{{meritev.tip}}</td>
               <td>{{meritev.vrednost_meritve}}</td>
@@ -216,7 +230,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="bolezen in uporabnik.bolezni">
+            <tr ng-repeat="bolezen in bolezni">
               <td ui-sref="#">{{bolezen.naziv}}</td>
               <td>{{bolezen.mkb10}}</td>
               <td>
@@ -243,7 +257,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="zdravilo in uporabnik.zdravila">
+              <tr ng-repeat="zdravilo in zdravila">
                 <td>{{zdravilo.zdravilo}}</td>
                 <td>{{zdravilo.navodila}}</td>
               </tr>
@@ -261,7 +275,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="dieta in uporabnik.dieta">
+              <tr ng-repeat="dieta in diete">
                 <td>{{dieta.naziv}}</td>
                 <td>{{dieta.sifra}}</td>
                 <td ng-href="dieta.url">{{dieta.url}}</td>

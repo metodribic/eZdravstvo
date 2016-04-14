@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import user_passes_test
+from django.core.serializers import json
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -8,15 +10,17 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.authtoken.models import Token
 from django.core import serializers
 from django.http import HttpResponse
-import hashlib, traceback
+import traceback, datetime
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
+
 
 # Create your views here.
-from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles
+from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
-    OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer
+    OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, LoginZdravnikSerializer
 
 class JSONResponse(HttpResponse):
     """
@@ -40,6 +44,19 @@ class UporabnikiViewSet(viewsets.ModelViewSet):
 class PreglediViewSet(viewsets.ModelViewSet):
     queryset = Pregled.objects.all()
     serializer_class = PregledSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Pregled.objects.filter(uporabnik = user)
+
+# MERITVE
+class MeritevViewSet(viewsets.ModelViewSet):
+    queryset = Meritev.objects.all()
+    serializer_class = MeritevSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Meritev.objects.filter(uporabnik=user)
 
 
 # POSTA
@@ -71,34 +88,44 @@ class OsebjeViewSet(viewsets.ModelViewSet):
     serializer_class = OsebjeSerializer
 
 
-# MERITVE
-class MeritevViewSet(viewsets.ModelViewSet):
-    queryset = Meritev.objects.all()
-    serializer_class = MeritevSerializer
-
-
-# MERITVE
+# DIETA
+@permission_classes((IsAuthenticated,))
 class DietaViewSet(viewsets.ModelViewSet):
     queryset = Dieta.objects.all()
     serializer_class = DietaSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        return Dieta.objects.filter(uporabnik = user)
+
 
 # BOLEZNI
+@permission_classes((IsAuthenticated,))
 class BolezniViewSet(viewsets.ModelViewSet):
     queryset = Bolezni.objects.all()
     serializer_class = BolezniSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        return Bolezni.objects.filter(uporabnik = user)
 
+
+@permission_classes((IsAuthenticated,))
 # ZDRAVILO
 class ZdraviloViewSet(viewsets.ModelViewSet):
     queryset = Zdravilo.objects.all()
     serializer_class = ZdraviloSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        return Zdravilo.objects.filter(uporabnik=user)
 
-# ZDRAVILO
+
+# ROLES
 class RolesViewSet(viewsets.ModelViewSet):
     queryset = Roles.objects.all()
     serializer_class = VlogaSerializer
+
 
 @api_view(['POST'])
 def login(request, format=None):
@@ -109,18 +136,41 @@ def login(request, format=None):
         # check if email and password are received or return 400
         email = request.data['email']
         password = request.data['password']
+        clientIp = request.META['REMOTE_ADDR']
         user = authenticate(username=email, password=password) # Returns User or None
         if user is not None:
             if user.is_active:
                 token = Token.objects.get_or_create(user=user)
-                UporabnikInst = Uporabnik.objects.get(user_ptr_id = user.id) #Must add Zdravnik as well
-                login(request, user);
-                if(UporabnikInst):  #Can be Uporabnik or Zdravnik
+                try:
+                    ipLock = IPLock.objects.get(user=user, ip=clientIp)    #Remove IP Lock
+                    ipLock.delete()
+                except ObjectDoesNotExist:
+                    pass
+                user.last_login = datetime.datetime.now()
+                user.save()
+                try:
+                    UporabnikInst = Uporabnik.objects.get(user_ptr_id = user.id) 
                     return JSONResponse(LoginSerializer({'token':token[0], 'uporabnik':UporabnikInst}, context={'request': request}).data)
+                except ObjectDoesNotExist:
+                    ZdravnikInst = Zdravnik.objects.get(user_ptr_id = user.id) 
+                    return JSONResponse(LoginZdravnikSerializer({'token':token[0], 'zdravnik':ZdravnikInst}, context={'request': request}).data)
             else:
-                response = JSONResponse({"error": "Uporabnik se ni aktiviran"})
+                response = JSONResponse({"error": "Uporabnik se ni aktiviran ali pa je IP zaklenjen"})
                 response.status_code = 400
+                return response
         else:
+            try:
+                incUser = User.objects.get(email=email) #Find user trying to login
+                ipLock = IPLock.objects.get_or_create(user=incUser, ip=clientIp)[0]    #Create lock 
+                ipLock.numOfTries = ipLock.numOfTries + 1
+                ipLock.save();
+
+                if(ipLock.numOfTries >= 3):   #Disable user
+                    incUser.is_active = False
+                    incUser.save();
+
+            except ObjectDoesNotExist:
+                pass    #Doesn't exist, no one cares. Pass.
             response = JSONResponse({"error": "Invalid login"})
             response.status_code = 401
             return response
@@ -129,6 +179,7 @@ def login(request, format=None):
         response = JSONResponse({"error":"Usage: {'email':'someone@someplace', 'password':'password'}"})
         response.status_code = 400; # Bad request
         return response
+
 
 
 @api_view(['POST'])
@@ -141,8 +192,18 @@ def registracijaAdmin(request, format=None):
         mail = request.data['email']
         passw = request.data['password']
         rola = request.data['role']
+        ime = request.data['ime']
+        priimek = request.data['priimek']
 
-        print "check role"
+        # check if sifra == number
+        try:
+            novaSifra = int(request.data['sifra'])
+        except ValueError:
+            novaSifra = 15
+
+        novaStev = 15
+
+        #print "check role"
         if( rola == 'Zdravnik'):
             if (Zdravnik.objects.filter(email=mail).exists() ):
                 #print "already exists"
@@ -151,10 +212,8 @@ def registracijaAdmin(request, format=None):
                 respons.status_code = 400;  # Bad request
                 return respons
             else:
-                novaSifra = 15
-                novaStev = 15
                 zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
-                    sifra=novaSifra,sprejema_paciente=1, role_id=2)
+                    sifra=novaSifra,sprejema_paciente=1, role_id=2, ime=ime, priimek=priimek )
 
                 respons = JSONResponse({"success": "function : {'user created':'Zdravnik'}"})
                 respons.status_code = 201
@@ -167,21 +226,19 @@ def registracijaAdmin(request, format=None):
                 respons.status_code = 400;  # Bad request
                 return respons
             else:
-                print "NURSE"
-                novaSifra=15
-                novaStev=15
+                #print "NURSE"
                 medSest = Osebje.objects.create_user(username=mail, email=mail,
-                    sifra=novaSifra , stevilka=novaStev, password=passw, role_id=3 )
+                    sifra=novaSifra , stevilka=novaStev, password=passw, role_id=3, ime=ime, priimek=priimek )
                 respons = JSONResponse({"success": "function : {'user created':'Medicinska sestra'}"})
 
                 respons.status_code = 201
                 return respons
 
     except IntegrityError as e:
-        #Exception raised when the relational integrity of the database is affected, e.g. a foreign key check fails, duplicate key, etc.
+        #Exception raised when the relational integrity of the database
+        #is affected, e.g. a foreign key check fails, duplicate key, etc.
 
         traceback.print_exc()
-        respons = JSONResponse({"Integrity error"})
         respons = JSONResponse({"error": "{'type' : 'Integrity error'}"})
         respons.status_code = 422
         return respons

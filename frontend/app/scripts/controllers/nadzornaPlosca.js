@@ -17,30 +17,54 @@
 */
 
 angular.module('tpo')
-  .controller('NadzornaPloscaCtrl', ['$scope','Uporabniki','$rootScope', function ($scope, Uporabniki, $rootScope) {
+  .controller('NadzornaPloscaCtrl', ['$scope','$state','Uporabniki','$rootScope','AuthService','Pregled','Meritve','Bolezni','Zdravila','Diete', function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled, Meritve, Bolezni, Zdravila, Diete) {
 
-    /* GET user */
-    // Uporabniki.get({iduporabnik: $rootScope.uporabnik.id}).$promise.then(function(response){
-    //   /* shrani uporabnika v $scope, da lahk dostopaš v view do njega */
-    //   $scope.uporabnik = response;
-    //   console.log($scope.uporabnik);
-    // })
-    // .catch(function(errorCallback){
-    //   if (errorCallback.status == 404) {
-    //     console.log('User not found!');
-    //   }
-    // });
+    /*GET USER FROM LOCAL STORAGE*/
+    $scope.uporabnik = AuthService.getCurrentUser();
+    /* če ni prijavlen ga dej na login*/
+    if(!$scope.uporabnik)
+      $state.go("login");
 
-    $scope.osebniZdranik = {};
+    /* Loči zasebnega zdravnika ter zobozdravnika */
+    $scope.osebniZdravnik = {};
     $scope.osebniZobozdravnik = {};
-    // console.log($rootScope.uporabnik);
-    // for(var zdravnik in $rootScope.uporabnik.zdravnik){
-    //   if(zdravnik.tip == 'osebni'){
-    //     $scope.osebniZdranik = zdravnik;
-    //   }
-    //   if(zdravnik.tip == 'zobozdravnik') {
-    //     $scope.osebniZobozdravnik = zdravnik;
-    //   }
-    // }
+
+    for(var index in $scope.uporabnik.zdravnik){
+     var tmpZdravnik = $scope.uporabnik.zdravnik[index];
+     if(tmpZdravnik.tip == 'osebni'){
+       $scope.osebniZdravnik = tmpZdravnik;
+      }
+      if(tmpZdravnik.tip == 'zobozdravnik') {
+        $scope.osebniZobozdravnik = tmpZdravnik;
+      }
+    }
+
+    /* GET Uporabnik Pregledi */
+    Pregled.query().$promise.then(function(response){
+      $scope.pregledi = response;
+    });
+
+    /* GET Uporabnik Meritve*/
+    Meritve.query().$promise.then(function(response){
+      $scope.meritve = response;
+    });
+
+    /* GET Uporabnik Bolezni*/
+    Bolezni.query().$promise.then(function(response){
+      $scope.bolezni = response;
+    });
+
+    /* GET Uporabnik Zdravila*/
+    Zdravila.query().$promise.then(function(response){
+      $scope.zdravila = response;
+    });
+
+    /* GET Uporabnik Diete*/
+    Diete.query().$promise.then(function(response){
+      $scope.diete = response;
+    });
+
+
+
 
   }]);

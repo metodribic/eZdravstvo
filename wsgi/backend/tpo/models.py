@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.conf import settings
 
 
 class Uporabnik(User):
@@ -16,12 +17,12 @@ class Uporabnik(User):
     krvna_skupina = models.CharField(max_length=3, blank=True, null=True)
     ambulanta = models.ForeignKey('Ambulanta', blank=True, null=True)
     zdravnik = models.ManyToManyField('Zdravnik', blank=True)
-    meritev = models.ForeignKey('Meritev', blank=True, null=True)
+    #meritev = models.ForeignKey('Meritev', blank=True, null=True)
     zdravila = models.ManyToManyField('Zdravilo', blank=True)
     bolezni = models.ManyToManyField('Bolezni', blank=True)
-    pregledi = models.ForeignKey('Pregled', blank=True, null=True)
     dieta = models.ManyToManyField('Dieta', blank=True)
     role = models.ForeignKey('Roles')
+
 
 
 class Zdravnik(User):
@@ -84,7 +85,8 @@ class Pregled(models.Model):
     bolezen = models.ManyToManyField('Bolezni')
     zdravilo = models.ManyToManyField('Zdravilo')
     dieta = models.ManyToManyField('Dieta')
-    datum_naslednjega = models.DateField()
+    datum_naslednjega = models.DateField(blank=True, null=True)
+    uporabnik = models.ForeignKey('Uporabnik')
 
 
 class Bolezni(models.Model):
@@ -106,4 +108,10 @@ class Meritev(models.Model):
     cas_merjenja = models.CharField(max_length=100)
     vrednost_meritve = models.FloatField()
     datum = models.DateField()
+    uporabnik = models.ForeignKey('Uporabnik')
 
+
+class IPLock(models.Model):
+    ip = models.CharField(max_length=40)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    numOfTries = models.IntegerField(default=0)
