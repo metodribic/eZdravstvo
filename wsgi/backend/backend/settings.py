@@ -50,6 +50,24 @@ ROOT_URLCONF = 'backend.urls'
 # CORS settings
 CORS_ORIGIN_ALLOW_ALL = True
 
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },{
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
+    },{
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },{
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },{
+        'NAME': 'tpo.NumericPasswordValidator',
+    },
+
+]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -111,7 +129,7 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
-    ),
+        ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     )

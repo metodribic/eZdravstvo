@@ -13,7 +13,8 @@ from django.http import HttpResponse
 import traceback, datetime
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.contrib.auth.password_validation import validate_password
 
 # Create your views here.
 from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock
@@ -176,4 +177,45 @@ def login(request, format=None):
         traceback.print_exc()
         response = JSONResponse({"error":"Usage: {'email':'someone@someplace', 'password':'password'}"})
         response.status_code = 400; # Bad request
+        return response
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def changePassword(request, format=None):
+    """
+    Change user's password
+    """
+    try: 
+        # check if email and password are received or return 400
+        oldpass = request.data['old_password']
+        newpass = request.data['new_password']
+        id = request.data['id']
+        try:
+            user = User.objects.get(id=id)
+            if user.check_password(oldpass):
+                try: 
+                    validate_password(newpass)
+                    user.set_password(newpass)
+                    user.save()
+                    response = Response()
+                    response.status_code = 200
+                    return response
+                except ValidationError as e:
+                    print(e)
+                    response = JSONResponse({"error": "Please choose better password. It should be at least 8 characters long and contain mixed letters and numbers. Also, it should not be too common (like 'test' etc)"})
+                    response.status_code = 400
+                    return response
+            else:
+                response = JSONResponse({"error": "Wrong password"})
+                response.status_code = 401
+                return response
+
+        except ObjectDoesNotExist:
+            response = JSONResponse({"error": "User does not exist"})
+            response.status_code = 400
+            return response
+    except Exception as ex:
+        traceback.print_exc()
+        response = JSONResponse({"error":"Unknown error"})
+        response.status_code = 500; # Bad request
         return response

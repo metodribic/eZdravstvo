@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext as _
 
 
 class Uporabnik(User):
@@ -115,3 +117,25 @@ class IPLock(models.Model):
     ip = models.CharField(max_length=40)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     numOfTries = models.IntegerField(default=0)
+
+
+class IsAlphanumericPasswordValidator(object):
+    """
+    Validate whether the password is alphanumeric
+   """ 
+    def validate(self, password, user=None):
+        num = False
+        char = False
+        for c in password:
+            if c.isdigit():
+                num = True
+            elif c.isalpha():
+                char = True
+        if num != True or char != True:
+            raise ValidationError(
+                _("This password is not alphanumeric."),
+                code='password_not_alphanumeric',
+            )
+
+    def get_help_text(self):
+        return _("Your password must contain at least one number and at least one character")

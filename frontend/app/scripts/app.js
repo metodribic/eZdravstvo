@@ -36,7 +36,14 @@ angular
               url: '/login',
               templateUrl: '../views/login.html',
               controller: 'LoginCtrl'
+          })
+          
+          .state('profile', {
+              url: '/profile',
+              templateUrl: '../views/profile.html',
+              controller: 'ProfileCtrl'
           });
+
   }])
 
   .run(function ($rootScope, $state, AuthService, Uporabniki) {
