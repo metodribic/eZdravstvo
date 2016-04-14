@@ -223,21 +223,25 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>Naziv</th>
-              <th>mkb10 oznaka</th>
-              <th>Alergija</th>
-              <th>Zdravila</th>
+              <th class="col-4">mkb10</th>
+              <th class="col-2">Naziv</th>
+              <th class="col-2">Alergija</th>
+              <th class="col-4">Zdravila</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="bolezen in bolezni">
-              <td ui-sref="#">{{bolezen.naziv}}</td>
-              <td>{{bolezen.mkb10}}</td>
-              <td>
+            <tr ng-repeat="bolezen in bolezni" class="col-12">
+              <td class="col-4" >{{bolezen.mkb10}}</td>
+              <td class="col-2" ui-sref="#">{{bolezen.naziv}}</td>
+              <td class="col-2" >
                 <i ng-show="bolezen.alergija" class="fa fa-check"></i>
                 <i ng-show="!bolezen.alergija" class="fa fa-times"></i>
               </td>
-              <td>{{bolezen.zdravila}}</td>
+              <td class="col-4">
+                <span ng-repeat="zdravilo in bolezen.zdravilo">
+                  <span>{{zdravilo.zdravilo}}, </span>
+                </span>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -249,7 +253,7 @@
 
         <div class="col-md-6">
           <!-- TABLE: ZDRAVILA  -->
-          <table class="table table-stiped">
+          <table class="table table-striped">
             <thead>
               <tr>
                 <th>Zdravilo</th>
@@ -259,7 +263,7 @@
             <tbody>
               <tr ng-repeat="zdravilo in zdravila">
                 <td>{{zdravilo.zdravilo}}</td>
-                <td>{{zdravilo.navodila}}</td>
+                <td><a ng-href="{{zdravilo.navodila}}">{{okrajsaj(zdravilo.navodila)}}</a></td>
               </tr>
             </tbody>
           </table>
@@ -269,16 +273,21 @@
           <table class="table table-striped">
             <thead>
               <tr>
-                <th>Naziv</th>
-                <th>Sifra</th>
-                <th>url</th>
+                <th class="col-3">Naziv</th>
+                <th class="col-1">Šifra</th>
+                <th class="col-8">Navodilo</th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="dieta in diete">
-                <td>{{dieta.naziv}}</td>
-                <td>{{dieta.sifra}}</td>
-                <td ng-href="dieta.url">{{dieta.url}}</td>
+                <td class="col-3">{{dieta.naziv}}</td>
+                <td class="col-1">{{dieta.sifra}}</td>
+                <td class="col-8">
+                  <ul ng-repeat="navodilo in dieta.navodila" style="list-style-type:none">
+                    <li><a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url)}}</a></li>
+                  </ul>
+                </td>
+                <!-- <td ng-href="{{dieta.url}}">{{dieta.url}}</td> -->
               </tr>
             </tbody>
           </table>

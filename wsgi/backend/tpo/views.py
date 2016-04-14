@@ -17,9 +17,11 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.password_validation import validate_password
 
 # Create your views here.
-from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock
+from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock, \
+    NavodilaDieta
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
-    OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, LoginZdravnikSerializer
+    OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
+    LoginZdravnikSerializer, NavodilaDietaSerializer
 
 class JSONResponse(HttpResponse):
     """
@@ -63,6 +65,7 @@ class PostaViewSet(viewsets.ModelViewSet):
     queryset = Posta.objects.all()
     serializer_class = PostaSerializer
 
+
 # AMBULANTA
 class AmbulantaViewSet(viewsets.ModelViewSet):
     queryset = Ambulanta.objects.all()
@@ -85,6 +88,12 @@ class ZdravnikViewSet(viewsets.ModelViewSet):
 class OsebjeViewSet(viewsets.ModelViewSet):
     queryset = Osebje.objects.all()
     serializer_class = OsebjeSerializer
+
+
+# NAVODILO DIETA
+class NavodiloDietaViewSet(viewsets.ModelViewSet):
+    queryset = NavodilaDieta.objects.all()
+    serializer_class = NavodilaDietaSerializer
 
 
 # DIETA

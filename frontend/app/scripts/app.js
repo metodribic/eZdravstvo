@@ -57,7 +57,6 @@ angular
         }
         if(AuthService.isAuthenticated() && !$rootScope.uporabnik) {
           $rootScope.uporabnik = AuthService.getCurrentUser();
-          console.log($rootScope.uporabnik);
-        } 
+        }
       });
   });
