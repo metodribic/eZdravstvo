@@ -95,3 +95,6 @@ ENV/
 
 **/migrations/**
 !**/migrations/__init__.py
+
+# Config
+**/frontend/app/scripts/config.js

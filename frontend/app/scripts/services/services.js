@@ -39,6 +39,25 @@ angular.module('tpo.services', ['ngResource', 'config'])
   var getCurrentUser = function() {
    return JSON.parse(window.localStorage.getItem(LOCAL_USER_KEY));
   };
+
+    var changePassword = function(id, oldpass, newpass) {
+        return $q(function(resolve, reject) {
+            $http({
+                method: 'POST',
+                url: 'http://' + API_URL + '/change_password',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {"id": id, "old_password": oldpass, "new_password": newpass}
+            }).then(function successCallback(response) {
+                console.log(response);
+                resolve('Login success.');
+            }, function errorCallback(response) {
+                console.log(response.data.error);
+                reject(response.data.error);
+            });
+        });
+    };
  
     var login = function(email, pass) {
         return $q(function(resolve, reject) {
@@ -80,6 +99,7 @@ angular.module('tpo.services', ['ngResource', 'config'])
  
   return {
     login: login,
+    changePassword: changePassword,
     logout: logout,
     isAuthorized: isAuthorized,
     isAuthenticated: function() {return isAuthenticated;},

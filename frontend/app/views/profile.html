@@ -1,0 +1,15 @@
+<div class="col-md-6">
+    <div id="alertContainer"></div>
+    <h3>Change password</h3>
+    <form ng-submit="changePassword(user)">
+      <div class="form-group">
+        <label for="currentpass">Current password</label>
+        <input type="password" class="form-control" id="currentpass" ng-model="user.oldpass" required="required">
+        <label for="newpass">Novo Geslo</label>
+        <input type="password" class="form-control" ng-class="{'has-error': red}" id="newpass" ng-model="user.newpass" required="required">
+        <label for="newpass2">Ponovi Geslo</label>
+        <input type="password" class="form-control" ng-class="{'has-error': red}" id="newpass2" ng-model="user.newpass2" required="required">
+      </div>
+      <button type="submit" class="btn btn-default">Spremeni</button>
+    </form>
+</div>

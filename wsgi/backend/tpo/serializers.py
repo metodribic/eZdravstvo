@@ -49,6 +49,7 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
     ambulanta = AmbulantaSerializer()
     role = VlogaSerializer()
     medicinske_sestre = OsebjeSerializer()
+    # uporabnik = UporabnikSerializer(many=True)
     id = serializers.IntegerField()  #For some reason not included otherwise
 
     class Meta:
