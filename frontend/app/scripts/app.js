@@ -46,9 +46,20 @@ angular
           })
 
           .state('pregledPodrobno', {
-            url: '/pregledPodrobno',
+            url: '/pregledPodrobno/:id',
             templateUrl: '../views/pregledPodrobno.html',
-            controller: 'PregledPodrobnoCtrl'
+            controller: 'PregledPodrobnoCtrl',
+            resolve:   {
+                pregled: function($stateParams, Pregled) {
+                    return Pregled.Pre
+                }
+            }
+          })
+
+          .state('register', {
+            url: '/register',
+            templateUrl: '../views/register.html',
+            controller: 'registerCtrl'
           });
   }])
 

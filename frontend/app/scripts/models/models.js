@@ -15,7 +15,16 @@ angular.module('tpo.models', ['ngResource', 'config'])
 			method: 'PUT'
 		}
 	});
+
+	/*
+	return $resource('http://' + API_URL + '/pregledi/:pregledId', { pregledId: '@pregledId' }, {
+		update: {
+			method: 'GET'
+		}
+	});
+	*/
 })
+
 
 .factory('Meritve', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/meritve/:meritevId', { meritevId: '@meritevId' }, {
