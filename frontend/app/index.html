@@ -9,6 +9,7 @@
     <!-- build:css(frontend) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="../bower_components/ui-select/dist/select.css" />
+    <link rel="stylesheet" href="../bower_components/angular-ui-notification/dist/angular-ui-notification.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -20,7 +21,7 @@
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.1/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
@@ -119,9 +120,9 @@
           <!-- Optionally, you can add icons to the links -->
           <li><a ui-sref="nadzornaPlosca"><i class="fa fa-home"></i> <span>Nadzorna plošča</span></a></li>
           <li><a href="#"><i class="fa fa-heartbeat"></i> <span>Meritve</span></a></li>
-          <li><a href="#"><i class="fa fa-stethoscope"></i> <span>Pregledi</span></a></li>
+          <li><a ui-sref="dodajPregled"><i class="fa fa-file-text-o"></i> <span>Dodaj pregled</span></a></li>
 
-          <li ><a href="#/registracijaAdmin"><i class="fa fa-gear"></i> <span>Registracija</span></a></li>
+          <li ng-show="uporabnik.is_superuser"><a href="#/registracijaAdmin"><i class="fa fa-gear"></i> <span>Registracija osebja</span></a></li>
             <!--
             <div ng-show="isSuperU">
           <li ><a href="#/registracijaAdmin"><i class="fa fa-gear"></i> <span>Registracija</span></a></li>
@@ -130,13 +131,13 @@
 
           <li><a ui-sref="listPregledov"><i class="fa fa-stethoscope"></i> <span>Pregledi</span></a></li>
 
-          <li class="treeview">
-            <a href="#"><i class="fa fa-medkit"></i> <span>Zdravila</span> <i class="fa fa-angle-left pull-right"></i></a>
+          <!-- <li class="treeview">
+            <a href="#"><i class="fa fa-medkit"></i> <span>Šifranti</span> <i class="fa fa-angle-left pull-right"></i></a>
             <ul class="treeview-menu">
               <li><a href="#">Alergije</a></li>
               <li><a href="#">Ostalo</a></li>
             </ul>
-          </li>
+          </li> -->
 
 
 
@@ -187,6 +188,7 @@
   <script src="../bower_components/angular-touch/angular-touch.js"></script>
   <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
   <script src="../bower_components/ui-select/dist/select.js"></script>
+  <script src="../bower_components/angular-ui-notification/dist/angular-ui-notification.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 

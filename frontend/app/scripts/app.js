@@ -20,7 +20,8 @@ angular
     'ngTouch',
     'ui.router',
     'tpo.services',
-    'tpo.models'
+    'tpo.models',
+    'ui-notification'
   ])
   .config(['$resourceProvider','$stateProvider', '$urlRouterProvider',
       function($resourceProvider, $stateProvider, $urlRouterProvider)  {

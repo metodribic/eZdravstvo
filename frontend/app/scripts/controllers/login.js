@@ -4,6 +4,7 @@ angular.module('tpo')
   .controller('LoginCtrl', ['$scope','AuthService', '$state', '$rootScope', function ($scope, AuthService, $state, $rootScope) {
       $scope.red = false;
       $rootScope.logged_out = true;
+      
       //Logout
       if($state.current.name == "logout" && AuthService.isAuthenticated()) {
           AuthService.logout();
@@ -18,7 +19,7 @@ angular.module('tpo')
         var _$state = $state;
 
         AuthService.login(uporabniki.email, uporabniki.geslo).then(function(response){
-            // console.log(response);
+            // econsole.log(response);
             if(_this.uporabnik && !_this.uporabnik.ime)
                     alert('No profile set. Will redirect (if we will make profile page)');
             else{

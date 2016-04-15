@@ -12,7 +12,7 @@
     </div> -->
     <!-- /.box-header -->
     <div class="box-body">
-      <h3 class="bottom-border">Osebni podatki</h3>
+      <h3 class="bottom-border header">Osebni podatki</h3>
       <div class="row">
 
         <div class="col-md-4">
@@ -21,7 +21,7 @@
             <thead>
               <tr>
                 <td>
-                  <b class="medical-person"><i class="fa fa-user">&nbsp;</i>Moji podatki</b>
+                  <b><i class="fa fa-user">&nbsp;</i>Moji podatki</b>
                 </td>
               </tr>
             </thead>
@@ -59,7 +59,7 @@
             <thead>
               <tr>
                 <td>
-                  <b class="medical-person"><i class="fa fa-user-md">&nbsp;</i>Osebni zdravnik</b>
+                  <b><i class="fa fa-user-md">&nbsp;</i>Osebni zdravnik</b>
                 </td>
               </tr>
             </thead>
@@ -107,7 +107,7 @@
             <thead>
               <tr>
                 <td>
-                  <b class="medical-person"><i class="fa fa-user-md"></i>&nbsp;Osebni zobozdravnik</b>
+                  <b><i class="fa fa-user-md"></i>&nbsp;Osebni zobozdravnik</b>
                 </td>
               </tr>
             </thead>
@@ -154,7 +154,7 @@
 
       <!-- TABELA PREGLEDOV -->
       <div class="col-12">
-        <h3 class="bottom-border">Zadnji pregledi</h3>
+        <h3 class="bottom-border header">Zadnji pregledi</h3>
         <!-- TABLE: OSEBNI PODATKI -->
         <div class="center" ng-show="pregledi.length == 0">
           <h4>Na voljo ni nobenega pregleda!</h4>
@@ -173,7 +173,7 @@
           </thead>
           <tbody>
             <tr ng-repeat="pregled in pregledi">
-              <td ui-sref="#">{{pregled.datum | date:'dd-mm-yyyy HH:mm'}}</td>
+              <td ui-sref="#">{{pregled.datum | date:'dd.MM.yyyy, HH:mm'}}</td>
               <td>{{pregled.opombe}}</td>
               <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
               <td>
@@ -199,7 +199,7 @@
 
       <!-- TABELA MERITEV -->
       <div class="col-12">
-        <h3 class="bottom-border">Zadnje meritve</h3>
+        <h3 class="bottom-border header">Zadnje meritve</h3>
         <div class="center" ng-show="meritve.length == 0">
           <h4>Na voljo ni nobene meritve!</h4>
         </div>
@@ -214,7 +214,7 @@
           </thead>
           <tbody>
             <tr ng-repeat="meritev in meritve">
-              <td ui-sref="#">{{meritev.datum | date:'dd-mm-yyyy HH:mm'}}</td>
+              <td ui-sref="#">{{meritev.datum | date:'dd.MM.yyyy, HH:mm'}}</td>
               <td>{{meritev.tip}}</td>
               <td>{{meritev.vrednost_meritve}}</td>
             </tr>
@@ -224,7 +224,7 @@
 
       <!-- TABELA BOLEZNI IN ALERGIJE -->
       <div class="col-12">
-        <h3 class="bottom-border">Bolezni in alergije</h3>
+        <h3 class="bottom-border header">Bolezni in alergije</h3>
         <div class="center" ng-show="bolezni.length == 0">
           <h4>Na voljo ni nobene bolezni!</h4>
         </div>
@@ -257,7 +257,7 @@
       </div>
 
       <!-- TABELA: ZDRAVIL IN DIET -->
-      <h3 class="bottom-border">Zdravila in diete</h3>
+      <h3 class="bottom-border header">Zdravila in diete</h3>
       <div class="row">
 
         <div class="col-md-6">
