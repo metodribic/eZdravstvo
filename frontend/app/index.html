@@ -79,6 +79,9 @@
                   <p>
                     {{uporabnik.ime}} {{uporabnik.priimek}} - {{uporabnik.role.naziv}}
                   </p>
+                  <p>
+                      <span style="font-size:12px">Last login: {{uporabnik.last_login | date:'dd.MM.yy HH:mm:ss'}}</span>
+                  </p>
                 </li>
                 <!-- Menu Footer-->
                 <li class="user-footer">
