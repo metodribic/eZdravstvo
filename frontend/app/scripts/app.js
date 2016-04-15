@@ -1,3 +1,4 @@
+
 'use strict';
 
 /**
@@ -21,7 +22,9 @@ angular
     'tpo.services',
     'tpo.models'
   ])
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)  {
+  .config(['$resourceProvider','$stateProvider', '$urlRouterProvider',
+      function($resourceProvider, $stateProvider, $urlRouterProvider)  {
+
     /* Defaut route */
       $urlRouterProvider.otherwise('/domov');
 
@@ -37,6 +40,37 @@ angular
               url: '/login',
               templateUrl: '../views/login.html',
               controller: 'LoginCtrl'
+
+
+          })
+
+          .state('registracijaUporabnikaAdmin', {
+            url: '/registracijaAdmin',
+            templateUrl: '../views/registracijaUporabnikaAdmin.html',
+            controller: 'registracijaUporAdminCtrl'
+          })
+
+           .state('listPregledov', {
+            url: '/listPregledov',
+            templateUrl: '../views/listPregledov.html',
+            controller: 'ListPregledovCtrl'
+          })
+
+          .state('pregledPodrobno', {
+            url: '/pregledPodrobno/:id',
+            templateUrl: '../views/pregledPodrobno.html',
+            controller: 'PregledPodrobnoCtrl',
+            resolve:   {
+                pregled: function($stateParams, Pregled) {
+                    return Pregled.Pre
+                }
+            }
+          })
+
+          .state('register', {
+            url: '/register',
+            templateUrl: '../views/register.html',
+            controller: 'registerCtrl'
           })
 
           .state('logout', {
@@ -56,10 +90,9 @@ angular
               templateUrl: '../views/dodajPregled.html',
               controller: 'DodajPregledCtrl'
           });
-
   }])
 
-  .run(function ($rootScope, $state, AuthService, Uporabniki) {
+      .run(function ($rootScope, $state, AuthService, Uporabniki) {
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
         // console.log('changing state');
         // console.log(AuthService.isAuthenticated());
@@ -70,6 +103,8 @@ angular
         }
         if(AuthService.isAuthenticated() && !$rootScope.uporabnik) {
           $rootScope.uporabnik = AuthService.getCurrentUser();
+
+          //console.log($rootScope.uporabnik);
         }
       });
   });

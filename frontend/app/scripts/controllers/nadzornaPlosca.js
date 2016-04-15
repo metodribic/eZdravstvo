@@ -25,6 +25,15 @@ angular.module('tpo')
     if(!$scope.uporabnik)
       $state.go("login");
 
+  /*
+    if( ! $rootScope.uporabnik.is_superuser || angular.isUndefined($rootScope.uporabnik.is_superuser) ){
+        // not superuser -> dont show Registracija link
+        $scope.isSuperU = true;
+    }else{
+        $scope.isSuperU = true;
+    }
+      */
+
     /* limit for pagination*/
     var pagination_limit = 5;
 

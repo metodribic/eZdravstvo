@@ -17,10 +17,19 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
+
 .factory('Meritve', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/meritve/:meritevId', { meritevId: '@meritevId' }, {
 		update: {
 			method: 'PUT'
+		}
+	});
+})
+    
+.factory('RegistracijaUporAdmin', function($resource) {
+	return $resource('http://localhost:8000/registracijaAdmin', {
+		update: {
+			method: 'POST'
 		}
 	});
 })
@@ -60,3 +69,5 @@ angular.module('tpo.models', ['ngResource', 'config'])
 		}
 	});
 });
+
+

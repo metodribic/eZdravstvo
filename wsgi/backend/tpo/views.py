@@ -13,8 +13,13 @@ from django.http import HttpResponse
 import traceback, datetime
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+
+from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
+
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.password_validation import validate_password
+
 
 # Create your views here.
 from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock, \
@@ -194,6 +199,80 @@ def login(request, format=None):
         response.status_code = 400; # Bad request
         return response
 
+
+@api_view(['POST'])
+def registracijaAdmin(request, format=None):
+    """
+    Admin create new user
+    """
+    try:
+        # check if email and password are received or return 400
+        mail = request.data['email']
+        passw = request.data['password']
+        rola = request.data['role']
+        ime = request.data['ime']
+        priimek = request.data['priimek']
+
+        # check if sifra == number
+        try:
+            novaSifra = int(request.data['sifra'])
+        except ValueError:
+            novaSifra = 15
+
+        novaStev = 15
+
+        #print "check role"
+        if( rola == 'Zdravnik'):
+            if (Zdravnik.objects.filter(email=mail).exists() ):
+                #print "already exists"
+                #traceback.print_exc()
+                respons = JSONResponse({"error": "User with this email already exists"})
+                respons.status_code = 400;  # Bad request
+                return respons
+            else:
+                validate_password(password=passw)
+                zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
+                    sifra=novaSifra,sprejema_paciente=1, role_id=2, ime=ime, priimek=priimek )
+
+                respons = JSONResponse({"success": "function : {'user created':'Zdravnik'}"})
+                respons.status_code = 201
+                return respons
+
+        elif( rola == 'Medicinska sestra'):
+
+            if ( Osebje.objects.filter(email=mail).exists()):
+                respons = JSONResponse({"error": "User with this email already exists"})
+                respons.status_code = 400;  # Bad request
+                return respons
+            else:
+                #print "NURSE"
+                validate_password(password=passw)
+                medSest = Osebje.objects.create_user(username=mail, email=mail,
+                    sifra=novaSifra, stevilka=novaStev, password=passw, role_id=3, ime=ime, priimek=priimek )
+                respons = JSONResponse({"success": "function : {'user created':'Medicinska sestra'}"})
+
+                respons.status_code = 201
+                return respons
+    except ValidationError as ve:
+        response = JSONResponse({"error": "WeakPassword"})
+        response.status_code = 400
+        return response
+    except IntegrityError as e:
+        #Exception raised when the relational integrity of the database
+        #is affected, e.g. a foreign key check fails, duplicate key, etc.
+
+        traceback.print_exc()
+        respons = JSONResponse({"error": "{'type' : 'Integrity error'}"})
+        respons.status_code = 422
+        return respons
+
+    except Exception as ex:
+        traceback.print_exc()
+        response = JSONResponse({"error" : "Usage: {'email':'someone@someplace', 'password':'password'}"})
+        response.status_code = 400 # Bad request
+        return response
+
+
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def changePassword(request, format=None):
@@ -234,3 +313,4 @@ def changePassword(request, format=None):
         response = JSONResponse({"error":"Unknown error"})
         response.status_code = 500; # Bad request
         return response
+

@@ -1,0 +1,41 @@
+<div class="col-12">
+<table class="table table-hover">
+    <thead>
+        <tr>
+          <th></th>
+          <th>Datum pregleda</th>
+          <th>Opombe</th>
+          <th>Zdravnik</th>
+          <th>Bolezni</th>
+          <th>Zdravilo</th>
+          <th>Dieta</th>
+          <th>Datum naslednjega pregleda</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr ng-repeat="pregled in pregledi" >
+          <td ui-sref="pregledPodrobno({id:pregled.id})"><i class="fa fa-search" style="cursor:pointer"</i></td>
+          <td>{{pregled.datum | date:'dd-mm-yyyy HH:mm'}}</td>
+          <td>{{pregled.opombe}}</td>
+          <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
+          <td>
+            <span ng-show="pregled.bolezen.length > 0">{{pregled.bolezen}}</span>
+            <span ng-show="pregled.bolezen.length == 0">/</span>
+          </td>
+          <td>
+            <span ng-show="pregled.zdravilo.length > 0">{{pregled.zdravilo}}</span>
+            <span ng-show="pregled.zdravilo.length == 0">/</span>
+          </td>
+          <td>
+            <span ng-show="pregled.dieta.length > 0">{{pregled.dieta}}</span>
+            <span ng-show="pregled.dieta.length == 0">/</span>
+          </td>
+          <td>
+            <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega}}</span>
+            <span ng-show="pregled.datum_naslednjega.length == null">Ponoven pregled ni potreben!</span>
+          </td>
+        </tr>
+      </tbody>
+  </table>
+</div>
