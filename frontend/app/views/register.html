@@ -9,18 +9,16 @@
         </div>
         <div class="form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
             <label for="password">Geslo</label>
-            <input type="password" name="password" id="password" class="form-control" ng-model="user.geslo" required />
+            <input type="password" name="password" id="password" class="form-control" ng-model="user.geslo" required/>
             <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Obvezno polje</span>
         </div>
-        <div class="form-group" ng-class="{ 'has-error': form.firstName.$dirty && form.firstName.$error.required }">
+        <div class="form-group">
             <label for="username">Ime</label>
             <input type="text" name="firstName" id="firstName" class="form-control" ng-model="user.ime" required />
-            <span ng-show="form.firstName.$dirty && form.firstName.$error.required" class="help-block"></span>
         </div>
         <div class="form-group" ng-class="{ 'has-error': form.lastName.$dirty && form.lastName.$error.required }">
             <label for="username">Priimek</label>
             <input type="text" name="lastName" id="Text1" class="form-control" ng-model="user.priimer" required />
-            <span ng-show="form.lastName.$dirty && form.lastName.$error.required" class="help-block"></span>
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary" ng-click="dodajUporabnika(user)" style="background-color: #00a65a">Registracija </button>
