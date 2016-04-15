@@ -64,6 +64,7 @@ class MeritevSerializer(serializers.HyperlinkedModelSerializer):
 
 """ PREGELD """
 class PregledSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
     zdravnik = ZdravnikSerializer()
     meritve = MeritevSerializer()
     class Meta:

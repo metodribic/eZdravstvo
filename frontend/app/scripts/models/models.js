@@ -17,6 +17,7 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
+
 .factory('Meritve', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/meritve/:meritevId', { meritevId: '@meritevId' }, {
 		update: {
@@ -68,3 +69,5 @@ angular.module('tpo.models', ['ngResource', 'config'])
 		}
 	});
 });
+
+

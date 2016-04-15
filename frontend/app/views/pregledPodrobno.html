@@ -1,0 +1,95 @@
+<div class="col-md-10">
+  <!-- box: osebni podatki -->
+  <div class="box">
+    <div class="box-header with-border">
+      <h3 class="box-title">Podatki o pregledu</h3>
+
+      <!-- COLLAPSE -->
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+
+      </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- TABLE: PODATKI O PREGLEDU -->
+          <table class="table table-hover">
+            <thead>
+            </thead>
+            <tbody>
+              <!-- v controllerju moreš met $scope.pregledi tabelo, kjer so noter vsi pregledi ko jih hočeš prikazat, torej moreš naredit Pregledi.ge().$promise.then() itd itd podobn ko pr men v nadzorni-->
+              <tr>
+                <td><b>Datum:</b></td>
+                <td>
+                    <span ng-show="pregled.datum.length > 0">{{pregled.datum}}</span>
+                    <span ng-show="pregled.datum.length == 0">/</span>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Zdravnik:</b></td>
+                <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
+              </tr>
+              <tr>
+                <td><b>Meritve:</b></td>
+                  <td>{{pregled.meritve.tip}} {{pregled.meritve.vrednost_meritve}}</td>
+                <td>
+                    <span ng-show="pregled.meritve.length > 0">{{pregled.meritve}}</span>
+                    <span ng-show="pregled.meritve.length == 0">/</span>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Bolezni:</b></td>
+                <td>
+                    <span ng-show="pregled.bolezen.length > 0">{{pregled.bolezen}}</span>
+                    <span ng-show="pregled.bolezen.length == 0">/</span>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Alergije:</b></td>
+               <td>
+                    <span ng-show="pregled.bolezen.alergija > 0">Da</span>
+                    <span ng-show="pregled.bolezen.alergija == 0">Ne</span>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Zdravila:</b></td>
+                <td>
+                    <span ng-show="pregled.zdravilo.length > 0">{{pregled.zdravilo}}</span>
+                    <span ng-show="pregled.zdravilo.length == 0">/</span>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Dieta:</b></td>
+                <td>
+                    <span ng-show="pregled.dieta.length > 0">{{pregled.dieta.navodila}}</span>
+                    <span ng-show="pregled.dieta.length == 0">/</span>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Navodila:</b></td>
+                <td>
+                    <span ng-show="pregled.opombe.length > 0">{{pregled.opombe}}</span>
+                    <span ng-show="pregled.opombe.length == 0">/</span>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Naslednji pregled:</b></td>
+                <td>
+                <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega}}</span>
+                <span ng-show="pregled.datum_naslednjega.length == null">Ponovni pregled ni potreben!</span>
+              </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- ./box-body -->
+  </div>
+  <!-- /.box -->
+</div>
