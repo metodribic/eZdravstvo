@@ -24,30 +24,43 @@ angular.module('tpo')
   .controller('DodajPregledCtrl', ['$scope','$state','Uporabniki','$rootScope','AuthService','Pregled','Meritve','Bolezni','Zdravila','Diete','ZdravnikoviPacienti','Notification',
     function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled, Meritve, Bolezni, Zdravila, Diete, ZdravnikoviPacienti, Notification) {
       var naziv = '';
-      $scope.uporabnik_je_zdravnik = false;
+      var naslednji_pregled = null;
 
-
+      // Pridobi Zdravnikove paciente
       ZdravnikoviPacienti.query().$promise.then(function(response){
         $scope.pacienti = response;
+        console.log(response);
       });
+
 
       // preveri če je prijavljen uporabnik zdravnik
       if($rootScope.uporabnik.role.naziv == 'Zdravnik'){
-        $scope.uporabnik_je_zdravnik = true;
+        // če je strukturiraj njegov naziv, za lepiši izpis
         naziv = ', '+$rootScope.uporabnik.naziv;
       }
       // če ni ga reddirectaj na homepage
       else{
         $state.go('nadzornaPlosca');
-        Notification.error({message: 'Za to dejanje niste pooblaščeni!', title: '<b>Pozor!</b>'});
+        Notification.error({message: 'Za to dejanje niste pooblaščeni!', title: '<b>Napaka!</b>'});
       }
 
       // formatiraj string za prikaz trneutnega zdravnika
-      $scope.trenutniZdravnik = $rootScope.uporabnik.ime +' '+
-                                $rootScope.uporabnik.priimek + naziv;
-
+      $scope.trenutniZdravnik = $rootScope.uporabnik.ime +' '+$rootScope.uporabnik.priimek + naziv;
 
       // pridobi ustrezen datum
       var datum = new Date();
       $scope.datum = datum.getDay() +'.'+ datum.getMonth() +'.' +datum.getFullYear();
+
+      //
+      // $scope.naslednji_pregled = function(arg){
+      //   if(arg === null){
+      //     naslednji_pregled = null;
+      //   }
+      //   else if (arg == 'teden') {
+      //     naslednji_pregled = curr.getDate() - curr.getDay()+7;
+      //   }
+      //   else {
+      //     naslednji_pregled = arg;
+      //   }
+      // };
   }]);

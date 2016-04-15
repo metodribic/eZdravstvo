@@ -41,8 +41,6 @@ angular
               url: '/login',
               templateUrl: '../views/login.html',
               controller: 'LoginCtrl'
-
-
           })
 
           .state('registracijaUporabnikaAdmin', {

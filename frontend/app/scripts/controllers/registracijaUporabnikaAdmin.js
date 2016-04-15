@@ -19,8 +19,8 @@ Administrator lahko kreira nov uporabniški račun za zdravnika ali medicinsko s
  */
 
 angular.module('tpo')
-    .controller('registracijaUporAdminCtrl', ['$scope', '$state', 'Uporabniki','$resource','$rootScope','AuthService','RegistracijaUporAdmin',
-        function ($scope, $state, Uporabniki, $resource, $rootScope, AuthService, RegistracijaUporAdmin ) {
+    .controller('registracijaUporAdminCtrl', ['$scope', '$state', 'Uporabniki','$resource','$rootScope','AuthService','RegistracijaUporAdmin','Notification',
+        function ($scope, $state, Uporabniki, $resource, $rootScope, AuthService, RegistracijaUporAdmin, Notification ) {
 
 
         /*GET USER FROM LOCAL STORAGE*/
@@ -29,14 +29,17 @@ angular.module('tpo')
         if(!$scope.uporabnik)
             $state.go("login");
 
-        
-        if( ! $rootScope.uporabnik.is_superuser || angular.isUndefined($rootScope.uporabnik.is_superuser ) )
-            $state.go("nadzornaPlosca");
+
+        if( ! $rootScope.uporabnik.is_superuser || angular.isUndefined($rootScope.uporabnik.is_superuser ) ){
+          Notification.error({message: 'Za to dejanje niste pooblaščeni!', title: '<b>Napaka!</b>'});
+          $state.go("nadzornaPlosca");
+        }
+
 
 
         // dropdown value
         $scope.mojSelect = 'Zdravnik'; // for example
-        
+
         $scope.visibleAlertFail = false;
         $scope.visibleAlertSucc = false;
         $scope.red = false;
@@ -48,7 +51,7 @@ angular.module('tpo')
 
         $scope.showSelectValue = function(mojSelect) {
             //console.log(mojSelect);
-        }
+        };
 
         $scope.uporabniki = new Uporabniki();
         $scope.shraniU = function (){
@@ -159,5 +162,3 @@ angular.module('tpo')
         // catch server responses or we
 
     }]);
-
-

@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate
 from rest_framework.renderers import JSONRenderer
 from rest_framework.authtoken.models import Token
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, request
 import traceback, datetime
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -90,9 +90,14 @@ class ZdravnikViewSet(viewsets.ModelViewSet):
     serializer_class = ZdravnikSerializer
 
 
+# VSI PACIENTI ENEGA ZDRAVNIKA
+@permission_classes((IsAuthenticated,))
 class ZdravnikUporabnikiViewSet(viewsets.ModelViewSet):
-    queryset = Zdravnik.objects.all()
+    queryset = Uporabnik.objects.all()
     serializer_class = ZdravnikUporabnikiSerializer
+
+    def get_queryset(self):
+        return Uporabnik.objects.filter(zdravnik__id=self.request.user.id)
 
 
 # OSEBJE
