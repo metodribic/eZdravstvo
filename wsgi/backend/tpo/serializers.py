@@ -9,10 +9,6 @@ class PostaSerializer(serializers.HyperlinkedModelSerializer):
         model = Posta
         fields =('id', 'kraj')
 
-class VlogaSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Roles
-        fields = ('naziv',)
 
 """ VLOGA """
 class VlogaSerializer(serializers.HyperlinkedModelSerializer):
@@ -105,7 +101,7 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     bolezni = BolezniSerializer(many=True)
     zdravnik = ZdravnikSerializer(many=True)
     dieta = DietaSerializer(many=True)
-    is_superuser = serializers.BooleanField()
+    is_superuser = serializers.BooleanField()   # REMOVE LATER
     id = serializers.IntegerField()
 
     class Meta:
