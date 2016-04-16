@@ -23,7 +23,6 @@
 
         <div class="form-group">
             <label for="email">Poklic <b style="color:red" >*</b></label>
-
             <select class="form-control" id="dropdown" ng-model="mojSelect" ng-change="showSelectValue(mojSelect)" >
               <option value="Zdravnik">Zdravnik</option>
               <option value="Medicinska sestra">Medicinska sestra</option>
@@ -39,90 +38,155 @@
         </div>
 
         <!-- Optional fields -->
-    <div ng-hide="hiddenElements" >
+        <div ng-hide="hiddenElements" >
 
-        <div class="form-group">
-            <label for="ime">Ime</label>
-            <input type="text" class="form-control" id="ime" placeholder="Ime" ng-model="uporabniki.ime"  >
+            <!-- IME -->
+            <div class="form-group">
+                <label for="ime">Ime</label>
+                <input type="text" class="form-control" id="ime" placeholder="Janko" ng-model="uporabniki.ime"  >
+            </div>
+
+            <!-- PRIIMEK -->
+            <div class="form-group">
+                <label for="priimek">Priimek</label>
+                <input type="text" class="form-control" id="priimek" placeholder="Novak" ng-model="uporabniki.priimek" >
+            </div>
+
+            <!-- ZDRAVNIK -->
+            <div ng-hide="jeZdravnik" >
+
+                <!-- SPREJEMA PACIENTE BOOL -->
+                <div class="form-group">
+                    <label>Sprejema paciente?
+                        <div class="radio">
+                            <label for="radioSprejemaP1" >
+                                <input type="radio" name="radioSprejemaPaci" id="radioSprejemaP1" value="true" ng-model="uporabniki.sprejemaPacienteDa" >
+                                Da
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label for="radioSprejemaP2">
+                                <input type="radio" name="radioSprejemaPaci" id="radioSprejemaP2" value="false" ng-model="uporabniki.sprejemaPacienteNe">
+                                Ne
+                            </label>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- ŠIFRA -->
+                <div class="form-group">
+                    <label for="sifra">Sifra</label>
+                    <input type="text" class="form-control" id="sifra" placeholder="987654321" ng-model="uporabniki.sifra" >
+                </div>
+
+                <!-- NAZIV -->
+                <div class="form-group">
+                    <label for="naziv">Naziv</label>
+                    <input type="text" class="form-control" id="naziv" placeholder="Dr. Medicine" ng-model="uporabniki.naziv" >
+                </div>
+
+                <!-- TIP -->
+                <div class="form-group">
+                    <label for="tip">Tip</label>
+                    <select class="form-control" id="tip" ng-model="uporabniki.tip" ng-change="changedTip(uporabniki.tip)" >
+                        <option value="osebni">Zdravnik</option>
+                        <option value="zobozdravnik">Zobozdravnik</option>
+                    </select>
+                </div>
+
+                <!-- AMBULANTA -->
+                <div class="form-group">
+                    <label for="ambulantaId">Ambulanta</label>
+                    <select class="form-control" id="ambulantaId" ng-model="uporabniki.izbranaAmbulanta" ng-change="changedAmbulanta(uporabniki.izbranaAmbulanta)" >
+                      <option ng-repeat="a in ambulanta" value="{{ a.ustanova.url }}">{{a.ustanova.naziv}}, {{ a.ustanova.naslov }} </option>
+                    </select>
+                </div>
+
+                <!-- IZBIRA MEDICINSKE SESTRE -->
+                <div class="form-group">
+                    <label for="medSestre">Medicinske sestre</label>
+                    <select class="form-control" id="sifra" ng-model="uporabniki.izbranaSestra" ng-change="changedNurse(uporabniki.izbranaSestra)" >
+                      <option ng-repeat="o in osebje" value="{{ o.username }}" >{{o.ime}} {{ o.priimek }} ({{ o.username }})</option>
+                    </select>
+                </div>
+
+
+            </div>
+
+            <div ng-hide="! jeZdravnik" >
+                <div class="form-group">
+                    <label for="stevilka">Številka</label>
+                    <input type="text" class="form-control" id="stevilka" placeholder="12345" ng-model="uporabniki.stevilka" >
+                </div>
+            </div>
+
         </div>
-        <div class="form-group">
-            <label for="priimek">Priimek</label>
-            <input type="text" class="form-control" id="priimek" placeholder="Priimek" ng-model="uporabniki.priimek" >
-        </div>
 
-
-        <div class="form-group">
-            <label for="sifra">Sifra</label>
-            <input type="text" class="form-control" id="sifra" placeholder="Sifra-naredi dropdown al neki" ng-model="uporabniki.sifra"  >
-        </div>
-
-
-        <div>
-
-<!-- DATE PICKER - NOT WORKING -.-  -->
-<div class="box-body">
-  <!-- Date -->
-  <div class="form-group">
-    <label>Date:</label>
-
-    <div class="input-group date">
-      <div class="input-group-addon">
-        <i class="fa fa-calendar"></i>
-      </div>
-      <input type="text" class="form-control pull-right" id="datepicker">
-    </div>
-    <!-- /.input group -->
-  </div>
-
-</div>
-
-
-        <!-- -->
-
-        <div class="form-group">
-            <label for="datumRojstva">Datum rojstva</label>
-            <input type="text" class="form-control" id="datumRojstva" placeholder="datum rojstva"  >
-        </div>
-        <div class="form-group">
-            <label for="krajRojstva">Kraj rojstva</label>
-            <input type="text" class="form-control" id="krajRojstva"  >
-        </div>
-        <div class="form-group">
-            <label for="naslov">Naslov</label>
-            <input type="text" class="form-control" id="naslov" placeholder="Naslov" >
-        </div>
-        <div class="form-group">
-            <label for="stevZZZS">Številka ZZZS</label>
-            <input type="text" class="form-control" id="naslov"  >
-        </div>
-        <div class="form-group">
-            <label for="naslov">Izbira osebnega zdravnika</label>
-            <input type="text" class="form-control" id="naslov"  >
-        </div>
-        <div class="form-group">
-            <label for="naslov">Izbira zobozdravnika</label>
-            <input type="text" class="form-control" id="naslov"  >
-        </div>
-
-
-        <div class="form-group">
-            <label for="naslov">Spol</label>
-            <input type="text" class="form-control" id="naslov"  >
-        </div>
-
-        <div class="form-group">
-            <label for="naslov">Krvna skupina ??</label>
-            <input type="text" class="form-control" id="naslov"  >
-        </div>
-        <!-- End of optional fields -->
-
-        </div>
-
-
-    </div>
         <!-- hide eles - optional not linked fields -->
+
         <button type="submit" class="btn btn-default">Prijava</button>
     </form>
 
 </div>
+
+<!--
+radio buttons !
+
+        <div class="form-group">
+            <label>Sprejema paciente?
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="radioSprejemaPaci" id="radioSprejemaPaci1" value="option1" ng-model="uporabniki.spol" >
+                        Da
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="radioSprejemaPaci" id="radioSprejemaPaci2" value="option2" ng-model="uporabniki.spol">
+                        Ne
+                    </label>
+                </div>
+            </label>
+        </div>
+
+                <div class="form-group">
+<label>
+  <div class="icheckbox_flat-green checked" aria-checked="false" aria-disabled="false" style="position: relative;">
+      <input type="checkbox" class="flat-red" checked="" style="position: absolute; opacity: 0;">
+      <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div>
+</label>
+<label class="">
+  <div class="icheckbox_flat-green" aria-checked="false" aria-disabled="false" style="position: relative;"><input type="checkbox" class="flat-red" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div>
+</label>
+<label>
+  <div class="icheckbox_flat-green disabled" aria-checked="false" aria-disabled="true" style="position: relative;">
+      <input type="checkbox" class="flat-red" disabled="" style="position: absolute; opacity: 0;">
+      <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%;
+      margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div>
+  Flat green skin checkbox
+</label>
+</div>
+
+
+
+ -->
+
+
+<!--
+<div class="col-md-3">
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title">Neobvezna polja</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+        <div class="box-body" style="display: block;">
+
+                        <div class="form-group">
+                    <label>Sprejema paciente?</label><br>Da
+                    <input type="checkbox" name="zdravnik" value="yes" ng-model="uporabniki.sprejemaPaciente"/>
+                </div>
+-->
+            <!-- body -->
 

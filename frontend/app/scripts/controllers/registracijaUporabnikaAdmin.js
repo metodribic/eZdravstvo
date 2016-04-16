@@ -6,8 +6,9 @@
  */
 
 angular.module('tpo')
-    .controller('registracijaUporAdminCtrl', ['$scope', '$state', 'Uporabniki','$resource','$rootScope','AuthService','RegistracijaUporAdmin',
-        function ($scope, $state, Uporabniki, $resource, $rootScope, AuthService, RegistracijaUporAdmin ) {
+    .controller('registracijaUporAdminCtrl', ['$scope', '$state', 'Uporabniki','$resource',
+        '$rootScope','AuthService','RegistracijaUporAdmin', 'Osebje', 'Ambulanta',
+        function ($scope, $state, Uporabniki, $resource, $rootScope, AuthService, RegistracijaUporAdmin, Osebje, Ambulanta ) {
 
 
 
@@ -23,12 +24,12 @@ angular.module('tpo')
                 $state.go("nadzornaPlosca");
             }
 
+
             // onClick for details button (not yet done nicely)
             $scope.showHideExtras = function (){
-                console.log("butt pressed:D");
-                showHideExtraFields( $scope );
                 $scope.hiddenElements = !$scope.hiddenElements;
-            }
+            };
+
 
             $scope.hiddenElements = true;
 
@@ -36,6 +37,35 @@ angular.module('tpo')
             resetOptionalFields( $scope );
 
             $scope.uporabniki = new Uporabniki();
+
+            /*** osebje iz baze ***/
+            $scope.osebje = new Osebje();
+            Osebje.get({limit:  50}).$promise.then(function(response){
+                $scope.osebje = response.results;
+                //console.log($scope.osebje);
+            });
+            //console.log($scope.osebje);
+            /*** ambulante iz baze ***/
+            $scope.ambulanta = new Ambulanta();
+            Ambulanta.get({limit:  50}).$promise.then(function(response){
+                $scope.ambulanta = response.results;
+                //console.log($scope.ambulanta);
+            });
+            /***  ***/
+
+
+            /*** ***/
+            $scope.showSelectValue = function( val ){
+                if( val == "Zdravnik"){
+                    $scope.jeZdravnik = false;
+                }else{
+                    $scope.jeZdravnik = true;
+                }
+                //console.log(val);
+            }
+            $scope.changedNurse = function( val){
+                console.log(val);
+            }
 
             $scope.shraniU = function (){
 
@@ -50,7 +80,19 @@ angular.module('tpo')
                 n.password = $scope.uporabniki.password;
                 n.role = $scope.mojSelect;
                 n.ime = $scope.uporabniki.ime;
+                n.priimek = $scope.uporabniki.priimek;
+                n.sprejemaPacienteDa = $scope.uporabniki.sprejemaPacienteDa;
+                n.sprejemaPacienteNe = $scope.uporabniki.sprejemaPacienteNe;
+                n.sifra = $scope.uporabniki.sifra;
+                n.naziv = $scope.uporabniki.naziv;
+                n.tip = $scope.uporabniki.tip;
+                
+                n.izbranaAmbulanta = $scope.uporabniki.izbranaAmbulanta;
+                n.izbranaSestra = $scope.uporabniki.izbranaSestra;
+                // med sestra
+                n.stevilka = $scope.uporabniki.stevilka;
 
+                console.log(n);
 
                 // validation FE
                 validateFE( $scope, n );
@@ -93,13 +135,23 @@ angular.module('tpo')
             };
 
             function clearUporabnikFields( scope ){
+                scope.mojSelect ="Zdravnik";
                 scope.uporabniki.email="";
                 scope.uporabniki.username="";
                 scope.uporabniki.password="";
-                scope.mojSelect ="Zdravnik";
                 scope.uporabniki.ime = "";
                 scope.uporabniki.priimek = "";
+
+                //scope.uporabniki.sprejemaPacienteNe = "";
+                //scope.uporabniki.sprejemaPacienteNe = "";
+
                 scope.uporabniki.sifra = "";
+                scope.uporabniki.naziv = "";
+                scope.uporabniki.tip = "";
+                scope.uporabniki.izbranaAmbulanta = "";
+                scope.uporabniki.izbranaSestra = "";
+
+                scope.uporabniki.stevilka = "";
             };
 
             function userWasCreaterBool( servSucc ){
@@ -143,50 +195,94 @@ angular.module('tpo')
 
             /* Validation FE */
 
+            function isVarUndefinedOrEmptyStr( val ){
+
+                if( val == "" || angular.isUndefined(val) || val == null ){
+                    return true;
+                }
+                return false;
+            }
+
+            function validateJoinedFields( scope, n ){
+                // check ime
+                if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.ime)) || angular.isUndefined(n.ime) ){
+                    // invalid name
+                    scope.extraInfo += "Ime lahko ima samo črke, vsaj 3, največ 21.\n";
+                }
+                // check priimek
+
+                if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.priimek)) || angular.isUndefined(n.priimek) ){
+                    // invalid name
+                    scope.extraInfo += "Priimek lahko ima samo črke, vsaj 3, največ 21.\n";
+                }
+                return scope.extraInfo;
+            }
+
             function validateFE( scope, n ){
 
-                // IME
-                if( angular.isUndefined(n.ime) || n.ime == null){
-                    n.ime = "";
+                scope.extraInfo = "";
+                if( n.role == "Zdravnik"){
+                     if( isVarUndefinedOrEmptyStr(n.ime) && isVarUndefinedOrEmptyStr(n.priimek) &&
+                         isVarUndefinedOrEmptyStr(n.sifra) && isVarUndefinedOrEmptyStr(n.naziv) &&
+                         isVarUndefinedOrEmptyStr(n.izbranaAmbulanta) && isVarUndefinedOrEmptyStr(n.tip) &&
+                         isVarUndefinedOrEmptyStr(n.izbranaSestra) ){
+                         // isVarUndefinedOrEmptyStr(n.sprejemaPaciente) -> cant untick once its ticked
+                         // no optional field was selected
+                         scope.extraInfo = "";
+                    }else{
+
+                         // atleast one optional field was selected -> problems could accur
+                         // string IME & PRIIMEK
+                         scope.extraInfo += validateJoinedFields( scope, n);
+
+                         // bool SPREJEMA PACIENTA
+                         if( angular.isUndefined(n.sprejemaPacienteDa) &&  angular.isUndefined(n.sprejemaPacienteNe) ){
+                             //scope.sprejemaPaciente = false; // tried to send without submiting (if clears all)
+                             scope.extraInfo += "Označite če zdravnik sprejema paciente ali ne!";
+                         }
+
+                        // string SIFRA
+                         if( ! (/^[0-9]{5,13}$/.test(n.sifra)) || angular.isUndefined(n.sifra)  ){
+                            // not valid num
+                            scope.extraInfo += "Šifra lahko ima samo številke, vsaj 5, največ 13.";
+                         }
+                         // NAZIV
+                         if( angular.isUndefined(n.naziv) || scope.naziv == "" ){
+                            // not valid num
+                            scope.extraInfo += "Vnesite naziv.";
+                         }
+                         // TIP
+                         if( angular.isUndefined(n.tip) ){
+                            scope.extraInfo += "Izberite tip zdravnika.";
+                         }
+                         // AMBULANTA
+                         if( angular.isUndefined(n.izbranaAmbulanta) ){
+                            scope.extraInfo += "Izberite ambulanto.";
+                         }
+                         // AMBULANTA
+                         if( angular.isUndefined(n.izbranaSestra) ){
+                            scope.extraInfo += "Izberite medicinsko sestro zdravnika.";
+                         }
+                    }
                 }else{
-                    // check if string
-                    if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.ime)) && n.ime != "" ){
-                        // invalid name
-                        scope.extraInfo += "Ime lahko ima samo črke, vsaj 3, največ 21.\n";
+                    // NURSE
+
+                    if( isVarUndefinedOrEmptyStr(n.ime) && isVarUndefinedOrEmptyStr(n.priimek) &&
+                         isVarUndefinedOrEmptyStr(n.stevilka) ){
+                         // no optional field was selected
+                         scope.extraInfo = "";
+                    }else{
+                        // atleast one optional field was selected -> problems could accur
+                        // string IME & PRIIMEK
+                        scope.extraInfo += validateJoinedFields( scope, n);
+                        if( ! (/^[0-9]{4,9}$/.test(n.stevilka)) || angular.isUndefined(n.stevilka) ){
+                            scope.extraInfo += "Šifra lahko ima samo številke, vsaj 4, največ 9.";
+                        }
+
                     }
                 }
 
-                // PRIIMEK
-                n.priimek = scope.uporabniki.priimek;
-                if( angular.isUndefined(n.priimek) || n.priimek == null){
-                    n.priimek = "";
-                }else{
-                     if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.priimek)) && n.priimek != "" ){
-                        // invalid name
-                        scope.extraInfo += "Priimek lahko ima samo črke, vsaj 3, največ 21.\n";
-                    }
-                }
-
-                // SIFRA - NI OK
-                n.sifra = scope.uporabniki.sifra;
-                if( angular.isUndefined(n.sifra) || n.sifra == null){
-                    n.sifra = "";
-                }else{
-                    // check if string
-                    if( ! (/^[0-9]{5,11}$/.test(n.sifra)) && n.sifra != "" ){   //
-                        // not valid num
-                        scope.extraInfo += "Šifra lahko ima samo številke, vsaj 5, največ 11.\n";
-                    }
-                }
-
-                // ...
             }
-
-            function showHideExtraFields( scope ){
-
-
-            }
-
 
         }]);
 

@@ -206,20 +206,35 @@ def registracijaAdmin(request, format=None):
     Admin create new user
     """
     try:
+        #print(request.data)
         # check if email and password are received or return 400
         mail = request.data['email']
         passw = request.data['password']
         rola = request.data['role']
-        ime = request.data['ime']
-        priimek = request.data['priimek']
+        # get values or empty string if not there
+        ime = request.data.get('ime', "")
+        sifra = request.data.get('sifra', "")
+        sprejemaPac = request.data.get('sprejemaPaciente', 1)
+        novaStev = request.data.get('stevilka', 49)
+
+        if( ime != "" ):
+            prii = request.data.get('priimek', "")
+
+            if( rola == 'Zdravnik'):
+                naziv = request.data.get('naziv', "")
+                tip = request.data.get('tip', "")
+                ambulanta = request.data.get('izbranaAmbulanta', "")
+                medSestraUsermame = request.data.get('izbranaSestra', "")
+
+                ambul_id = ambulanta.split("/")[-1]
+                sestra_id = User.objects.get(username=medSestraUsermame).pk
+
 
         # check if sifra == number
         try:
-            novaSifra = int(request.data['sifra'])
+            novaSifra = int(sifra)
         except ValueError:
-            novaSifra = 15
-
-        novaStev = 15
+            novaSifra = 1337
 
         #print "check role"
         if( rola == 'Zdravnik'):
@@ -231,12 +246,19 @@ def registracijaAdmin(request, format=None):
                 return respons
             else:
                 validate_password(password=passw)
-                zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
-                    sifra=novaSifra,sprejema_paciente=1, role_id=2, ime=ime, priimek=priimek )
+                # check only ime - same as in login
+                if( ime != "" ):
+                    zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
+                            sifra=novaSifra,sprejema_paciente=sprejemaPac, role_id=2, ime=ime, priimek=prii,
+                            naziv=naziv, tip=tip, ambulanta_id=ambul_id, medicinske_sestre_id=sestra_id, is_staff=1)
+                else:
+                    zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
+                            sifra=novaSifra, sprejema_paciente=sprejemaPac, role_id=2, is_staff=1)
 
                 respons = JSONResponse({"success": "function : {'user created':'Zdravnik'}"})
                 respons.status_code = 201
                 return respons
+
 
         elif( rola == 'Medicinska sestra'):
 
@@ -247,8 +269,8 @@ def registracijaAdmin(request, format=None):
             else:
                 #print "NURSE"
                 validate_password(password=passw)
-                medSest = Osebje.objects.create_user(username=mail, email=mail,
-                    sifra=novaSifra, stevilka=novaStev, password=passw, role_id=3, ime=ime, priimek=priimek )
+                medSest = Osebje.objects.create_user(username=mail, email=mail, is_staff=1,
+                    sifra=novaSifra, stevilka=novaStev, password=passw, role_id=3 )
                 respons = JSONResponse({"success": "function : {'user created':'Medicinska sestra'}"})
 
                 respons.status_code = 201
