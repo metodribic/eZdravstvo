@@ -60,6 +60,7 @@ class MeritevSerializer(serializers.HyperlinkedModelSerializer):
 
 """ PREGELD """
 class PregledSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
     zdravnik = ZdravnikSerializer()
     meritve = MeritevSerializer()
     class Meta:
@@ -103,6 +104,7 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     dieta = DietaSerializer(many=True)
     is_superuser = serializers.BooleanField()   # REMOVE LATER
     id = serializers.IntegerField()
+    is_superuser = serializers.BooleanField()
 
     class Meta:
         model = Uporabnik

@@ -1,3 +1,4 @@
+
 'use strict';
 
 /**
@@ -49,6 +50,29 @@ angular
             controller: 'registracijaUporAdminCtrl'
           })
 
+           .state('listPregledov', {
+            url: '/listPregledov',
+            templateUrl: '../views/listPregledov.html',
+            controller: 'ListPregledovCtrl'
+          })
+
+          .state('pregledPodrobno', {
+            url: '/pregledPodrobno/:id',
+            templateUrl: '../views/pregledPodrobno.html',
+            controller: 'PregledPodrobnoCtrl',
+            resolve:   {
+                pregled: function($stateParams, Pregled) {
+                    return Pregled.Pre
+                }
+            }
+          })
+
+          .state('register', {
+            url: '/register',
+            templateUrl: '../views/register.html',
+            controller: 'registerCtrl'
+          })
+
           .state('logout', {
               url: '/logout',
               templateUrl: '../views/login.html',
@@ -66,12 +90,9 @@ angular
               templateUrl: '../views/dodajPregled.html',
               controller: 'DodajPregledCtrl'
           });
-          
-
   }])
 
-    
-  .run(function ($rootScope, $state, AuthService, Uporabniki) {
+      .run(function ($rootScope, $state, AuthService, Uporabniki) {
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
         // console.log('changing state');
         // console.log(AuthService.isAuthenticated());
@@ -82,6 +103,8 @@ angular
         }
         if(AuthService.isAuthenticated() && !$rootScope.uporabnik) {
           $rootScope.uporabnik = AuthService.getCurrentUser();
+
+          //console.log($rootScope.uporabnik);
         }
       });
   });
