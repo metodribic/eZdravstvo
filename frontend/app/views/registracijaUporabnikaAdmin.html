@@ -10,8 +10,15 @@
         {{extraInfo}}
     </div>
 
-    <form ng-class="{'has-error': visibleAlert}" ng-submit="shraniU()">
+    <form ng-class="{'has-error': redFields}" ng-submit="shraniU()">
 
+
+        <!-- optional fields without connections - create +/- button -->
+        <div class="form-group">
+            <button type="button" class="btn btn-default" ng-click="showHideExtras()">
+                Podrobnosti
+            </button>
+        </div>
         <!-- Required fields -->
 
         <div class="form-group">
@@ -32,6 +39,8 @@
         </div>
 
         <!-- Optional fields -->
+    <div ng-hide="hiddenElements" >
+
         <div class="form-group">
             <label for="ime">Ime</label>
             <input type="text" class="form-control" id="ime" placeholder="Ime" ng-model="uporabniki.ime"  >
@@ -46,7 +55,29 @@
             <label for="sifra">Sifra</label>
             <input type="text" class="form-control" id="sifra" placeholder="Sifra-naredi dropdown al neki" ng-model="uporabniki.sifra"  >
         </div>
-        <!-- optional fields without connections -->
+
+
+        <div>
+
+<!-- DATE PICKER - NOT WORKING -.-  -->
+<div class="box-body">
+  <!-- Date -->
+  <div class="form-group">
+    <label>Date:</label>
+
+    <div class="input-group date">
+      <div class="input-group-addon">
+        <i class="fa fa-calendar"></i>
+      </div>
+      <input type="text" class="form-control pull-right" id="datepicker">
+    </div>
+    <!-- /.input group -->
+  </div>
+
+</div>
+
+
+        <!-- -->
 
         <div class="form-group">
             <label for="datumRojstva">Datum rojstva</label>
@@ -85,6 +116,11 @@
         </div>
         <!-- End of optional fields -->
 
+        </div>
+
+
+    </div>
+        <!-- hide eles - optional not linked fields -->
         <button type="submit" class="btn btn-default">Prijava</button>
     </form>
 
