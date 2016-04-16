@@ -1,5 +1,8 @@
 
-<div class="col-md-6">
+<div class="col-md-6" xmlns="http://www.w3.org/1999/html">
+
+<div class="box">
+<div class="box-body">
 
     <div class="alert alert-danger alert-dismissible" ng-show="visibleAlertFail">
         {{besedZaUpor}}
@@ -12,13 +15,6 @@
 
     <form ng-class="{'has-error': redFields}" ng-submit="shraniU()">
 
-
-        <!-- optional fields without connections - create +/- button -->
-        <div class="form-group">
-            <button type="button" class="btn btn-default" ng-click="showHideExtras()">
-                Podrobnosti
-            </button>
-        </div>
         <!-- Required fields -->
 
         <div class="form-group">
@@ -122,32 +118,23 @@
 
         </div>
 
-        <!-- hide eles - optional not linked fields -->
+
+        <div class="form-group">
+            <button type="button" class="btn btn-default pull-right" ng-click="showHideExtras()">
+                Podrobnosti
+            </button>
+        </div>
 
         <button type="submit" class="btn btn-default">Prijava</button>
     </form>
 
+
+</div>
 </div>
 
-<!--
-radio buttons !
 
-        <div class="form-group">
-            <label>Sprejema paciente?
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="radioSprejemaPaci" id="radioSprejemaPaci1" value="option1" ng-model="uporabniki.spol" >
-                        Da
-                    </label>
-                </div>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="radioSprejemaPaci" id="radioSprejemaPaci2" value="option2" ng-model="uporabniki.spol">
-                        Ne
-                    </label>
-                </div>
-            </label>
-        </div>
+</div>
+<!--
 
                 <div class="form-group">
 <label>
@@ -183,10 +170,10 @@ radio buttons !
         </div>
         <div class="box-body" style="display: block;">
 
-                        <div class="form-group">
+
+                <div class="form-group">
                     <label>Sprejema paciente?</label><br>Da
                     <input type="checkbox" name="zdravnik" value="yes" ng-model="uporabniki.sprejemaPaciente"/>
                 </div>
 -->
-            <!-- body -->
 
