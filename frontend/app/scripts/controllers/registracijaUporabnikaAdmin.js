@@ -7,9 +7,9 @@
 
 angular.module('tpo')
     .controller('registracijaUporAdminCtrl', ['$scope', '$state', 'Uporabniki','$resource',
-        '$rootScope','AuthService','RegistracijaUporAdmin', 'Osebje', 'Ambulanta',
+        '$rootScope','AuthService','RegistracijaUporAdmin', 'Osebje', 'Ambulanta','Notification',
         function ($scope, $state, Uporabniki, $resource, $rootScope, AuthService,
-                  RegistracijaUporAdmin, Osebje, Ambulanta  ) {
+                  RegistracijaUporAdmin, Osebje, Ambulanta, Notification  ) {
 
 
 
@@ -284,6 +284,7 @@ angular.module('tpo')
 
             }
 
-        }]);
 
+
+        }]);
 

@@ -40,7 +40,7 @@ angular.module('tpo')
     /* Loči zasebnega zdravnika ter zobozdravnika */
     $scope.osebniZdravnik = {};
     $scope.osebniZobozdravnik = {};
-
+    console.log($rootScope.uporabnik);
     for(var index in $scope.uporabnik.zdravnik){
      var tmpZdravnik = $scope.uporabnik.zdravnik[index];
      if(tmpZdravnik.tip == 'osebni'){

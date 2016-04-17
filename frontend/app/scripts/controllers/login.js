@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('tpo')
-  .controller('LoginCtrl', ['$scope','AuthService', '$state', '$rootScope', function ($scope, AuthService, $state, $rootScope) {
+  .controller('LoginCtrl', ['$scope','AuthService', '$state', '$rootScope', 'Notification', function ($scope, AuthService, $state, $rootScope, Notification) {
       $scope.red = false;
       $rootScope.logged_out = true;
+      
       //Logout
       if($state.current.name == "logout" && AuthService.isAuthenticated()) {
           AuthService.logout();
@@ -18,16 +19,15 @@ angular.module('tpo')
         var _$state = $state;
 
         AuthService.login(uporabniki.email, uporabniki.geslo).then(function(response){
-            // console.log(response);
             if(_this.uporabnik && !_this.uporabnik.ime)
-                    alert('No profile set. Will redirect (if we will make profile page)');
+                  Notification.error({message: 'Your profile is empty, but edit profile story is not realized yet. So you get this nice popup :)'});
             else{
               $rootScope.logged_out = false;
               $state.go('nadzornaPlosca');    //GO home!
             }
 
         }, function(error) {
-            _this.red = true;
+            Notification.error({message: error});
         });
     };
   }]);

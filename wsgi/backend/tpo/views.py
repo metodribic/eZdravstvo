@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate
 from rest_framework.renderers import JSONRenderer
 from rest_framework.authtoken.models import Token
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, request
 import traceback, datetime
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -90,9 +90,14 @@ class ZdravnikViewSet(viewsets.ModelViewSet):
     serializer_class = ZdravnikSerializer
 
 
+# VSI PACIENTI ENEGA ZDRAVNIKA
+@permission_classes((IsAuthenticated,))
 class ZdravnikUporabnikiViewSet(viewsets.ModelViewSet):
-    queryset = Zdravnik.objects.all()
+    queryset = Uporabnik.objects.all()
     serializer_class = ZdravnikUporabnikiSerializer
+
+    def get_queryset(self):
+        return Uporabnik.objects.filter(zdravnik__id=self.request.user.id)
 
 
 # OSEBJE
@@ -218,12 +223,14 @@ def registracijaAdmin(request, format=None):
 
         # get values or empty string if not there
         ime = request.data.get('ime', "")
+        prii = request.data.get('priimek', "")
+
         sifra = request.data.get('sifra', "")
         sprejemaPac = request.data.get('sprejemaPaciente', 1)
         novaStev = request.data.get('stevilka', 49)
 
+
         if( ime != "" ):
-            prii = request.data.get('priimek', "")
 
             if( rola == 'Zdravnik'):
                 naziv = request.data.get('naziv', "")
@@ -278,8 +285,8 @@ def registracijaAdmin(request, format=None):
             else:
                 #print "NURSE"
                 validate_password(password=passw)
-                medSest = Osebje.objects.create_user(username=mail, email=mail, is_staff=1,
-                    sifra=novaSifra, stevilka=novaStev, password=passw, role_id=3 )
+                medSest = Osebje.objects.create_user(username=mail, email=mail, is_staff=1,ime=ime,
+                              priimek=prii, sifra=novaSifra, stevilka=novaStev, password=passw, role_id=3 )
                 respons = JSONResponse({"success": "function : {'user created':'Medicinska sestra'}"})
 
                 respons.status_code = 201

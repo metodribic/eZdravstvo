@@ -129,10 +129,9 @@ class ErrorSerializer(serializers.Serializer):
     error = serializers.CharField(max_length=500)
 
 
+""" ZDRAVNIK_UPORABNIKI """
 class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
-    pacienti = UporabnikSerializer(many=True)
-    id = serializers.IntegerField()  #For some reason not included otherwise
+    id = serializers.IntegerField()
 
     class Meta:
-        model = Zdravnik
-        exclude = ('pacienti', 'id',)
+        model = Uporabnik
