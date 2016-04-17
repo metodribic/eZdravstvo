@@ -26,7 +26,7 @@ from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik,
     NavodilaDieta
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
-    LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer
+    LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer
 
 class JSONResponse(HttpResponse):
     """
@@ -171,8 +171,12 @@ def login(request, format=None):
                     UporabnikInst = Uporabnik.objects.get(user_ptr_id = user.id) 
                     return JSONResponse(LoginSerializer({'token':token[0], 'uporabnik':UporabnikInst}, context={'request': request}).data)
                 except ObjectDoesNotExist:
-                    ZdravnikInst = Zdravnik.objects.get(user_ptr_id = user.id) 
-                    return JSONResponse(LoginZdravnikSerializer({'token':token[0], 'zdravnik':ZdravnikInst}, context={'request': request}).data)
+                    try:
+                        ZdravnikInst = Zdravnik.objects.get(user_ptr_id = user.id) 
+                        return JSONResponse(LoginZdravnikSerializer({'token':token[0], 'zdravnik':ZdravnikInst}, context={'request': request}).data)
+                    except ObjectDoesNotExist:
+                        OsebjeInst = Osebje.objects.get(user_ptr_id = user.id) 
+                        return JSONResponse(LoginOsebjeSerializer({'token':token[0], 'osebje':OsebjeInst}, context={'request': request}).data)
             else:
                 response = JSONResponse({"error": "Uporabnik se ni aktiviran ali pa je IP zaklenjen"})
                 response.status_code = 400
