@@ -1,0 +1,56 @@
+
+<div class="col-md-6">
+
+    <div class="alert alert-danger alert-dismissible" ng-show="visibleAlertFail">
+        {{besedZaUpor}}
+        {{extraInfo}}
+    </div>
+    <div class="alert alert-success alert-dismissible" ng-show="visibleAlertSucc">
+        {{besedZaUpor}}
+        {{extraInfo}}
+    </div>
+
+    <form ng-class="{'has-error': visibleAlert}" ng-submit="shraniU()">
+
+        <!-- Required fields -->
+
+        <div class="form-group">
+            <label for="email">Poklic <b style="color:red" >*</b></label>
+
+            <select class="form-control" id="dropdown" ng-model="mojSelect" ng-change="showSelectValue(mojSelect)" >
+              <option value="Zdravnik">Zdravnik</option>
+              <option value="Medicinska sestra">Medicinska sestra</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="email">Email <b style="color:red" >*</b></label>
+            <input type="email" class="form-control" id="email" placeholder="uporabnik@organizacija.domena" ng-model="uporabniki.email" required="required">
+        </div>
+        <div class="form-group">
+            <label for="password">Geslo <b style="color:red" >*</b></label>
+            <input type="password" class="form-control" id="password" placeholder="Geslo" ng-model="uporabniki.password" required="required">
+        </div>
+
+        <!-- Optional fields -->
+        <div class="form-group">
+            <label for="ime">Ime</label>
+            <input type="text" class="form-control" id="ime" placeholder="Ime" ng-model="uporabniki.ime"  >
+        </div>
+        <div class="form-group">
+            <label for="priimek">Priimek</label>
+            <input type="text" class="form-control" id="priimek" placeholder="Priimek" ng-model="uporabniki.priimek" >
+        </div>
+
+
+        <div class="form-group">
+            <label for="sifra">Sifra</label>
+            <input type="text" class="form-control" id="sifra" placeholder="Sifra" ng-model="uporabniki.sifra"  >
+        </div>
+
+        <!-- End of optional fields -->
+
+        <button type="submit" class="btn btn-default">Prijava</button>
+    </form>
+
+</div>
+

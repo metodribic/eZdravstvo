@@ -17,10 +17,19 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
+
 .factory('Meritve', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/meritve/:meritevId', { meritevId: '@meritevId' }, {
 		update: {
 			method: 'PUT'
+		}
+	});
+})
+    
+.factory('RegistracijaUporAdmin', function($resource) {
+	return $resource('http://localhost:8000/registracijaAdmin', {
+		update: {
+			method: 'POST'
 		}
 	});
 })
@@ -44,6 +53,15 @@ angular.module('tpo.models', ['ngResource', 'config'])
 })
 
 
+.factory('ZdravnikoviPacienti', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/zdravnik_uporabniki', { pacientId: '@pacientId' }, {
+		update: {
+			method: 'PUT'
+		}
+	});
+})
+
+
 .factory('Diete', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/diete/:dietaId', { dietaId: '@dietaId' }, {
 		update: {
@@ -51,3 +69,5 @@ angular.module('tpo.models', ['ngResource', 'config'])
 		}
 	});
 });
+
+

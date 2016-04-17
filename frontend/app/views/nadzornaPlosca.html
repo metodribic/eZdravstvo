@@ -12,7 +12,7 @@
     </div> -->
     <!-- /.box-header -->
     <div class="box-body">
-      <h3 class="bottom-border">Osebni podatki</h3>
+      <h3 class="bottom-border header">Osebni podatki</h3>
       <div class="row">
 
         <div class="col-md-4">
@@ -21,7 +21,7 @@
             <thead>
               <tr>
                 <td>
-                  <b class="medical-person"><i class="fa fa-user">&nbsp;</i>Moji podatki</b>
+                  <b><i class="fa fa-user">&nbsp;</i>Moji podatki</b>
                 </td>
               </tr>
             </thead>
@@ -44,7 +44,7 @@
               </tr>
               <tr>
                 <td><b>Naslov:</b></td>
-                <td>{{uporabnik.naslov}}, {{uporabnik.posta.id}} {{uporabnik.posta.kraj}}</td>
+                <td>{{uporabnik.naslov}}<br> {{uporabnik.posta.id}} {{uporabnik.posta.kraj}}</td>
               </tr>
               <tr>
                 <td><b>Številka ZZZS</b></td>
@@ -59,7 +59,7 @@
             <thead>
               <tr>
                 <td>
-                  <b class="medical-person"><i class="fa fa-user-md">&nbsp;</i>Osebni zdravnik</b>
+                  <b><i class="fa fa-user-md">&nbsp;</i>Osebni zdravnik</b>
                 </td>
               </tr>
             </thead>
@@ -86,7 +86,7 @@
               </tr>
               <tr>
                 <td><b>Naslov:</b></td>
-                <td>{{osebniZdravnik.ambulanta.ustanova.naslov}},&nbsp;
+                <td>{{osebniZdravnik.ambulanta.ustanova.naslov}}&nbsp;<br>
                     {{osebniZdravnik.ambulanta.posta.id}}&nbsp;
                     {{osebniZdravnik.ambulanta.posta.kraj}}
                 </td>
@@ -107,7 +107,7 @@
             <thead>
               <tr>
                 <td>
-                  <b class="medical-person"><i class="fa fa-user-md"></i>&nbsp;Osebni zobozdravnik</b>
+                  <b><i class="fa fa-user-md"></i>&nbsp;Osebni zobozdravnik</b>
                 </td>
               </tr>
             </thead>
@@ -134,7 +134,7 @@
               </tr>
               <tr>
                 <td><b>Naslov:</b></td>
-                <td>{{osebniZobozdravnik.ambulanta.ustanova.naslov}},&nbsp;
+                <td>{{osebniZobozdravnik.ambulanta.ustanova.naslov}}&nbsp;<br>
                     {{osebniZobozdravnik.ambulanta.posta.id}}&nbsp;
                     {{osebniZobozdravnik.ambulanta.posta.kraj}}
                 </td>
@@ -154,9 +154,12 @@
 
       <!-- TABELA PREGLEDOV -->
       <div class="col-12">
-        <h3 class="bottom-border">Zadnji pregledi</h3>
+        <h3 class="bottom-border header">Zadnji pregledi</h3>
         <!-- TABLE: OSEBNI PODATKI -->
-        <table class="table table-striped">
+        <div class="center" ng-show="pregledi.length == 0">
+          <h4>Na voljo ni nobenega pregleda!</h4>
+        </div>
+        <table class="table table-striped" ng-show="pregledi.length != 0">
           <thead>
             <tr>
               <th>Datum pregleda</th>
@@ -170,7 +173,7 @@
           </thead>
           <tbody>
             <tr ng-repeat="pregled in pregledi">
-              <td ui-sref="#">{{pregled.datum | date:'dd-mm-yyyy HH:mm'}}</td>
+              <td ui-sref="#">{{pregled.datum | date:'dd.MM.yyyy, HH:mm'}}</td>
               <td>{{pregled.opombe}}</td>
               <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
               <td>
@@ -196,9 +199,12 @@
 
       <!-- TABELA MERITEV -->
       <div class="col-12">
-        <h3 class="bottom-border">Zadnje meritve</h3>
+        <h3 class="bottom-border header">Zadnje meritve</h3>
+        <div class="center" ng-show="meritve.length == 0">
+          <h4>Na voljo ni nobene meritve!</h4>
+        </div>
         <!-- TABLE: OSEBNI PODATKI -->
-        <table class="table table-striped">
+        <table class="table table-striped" ng-show="meritve.length != 0">
           <thead>
             <tr>
               <th>Datum</th>
@@ -208,7 +214,7 @@
           </thead>
           <tbody>
             <tr ng-repeat="meritev in meritve">
-              <td ui-sref="#">{{meritev.datum | date:'dd-mm-yyyy HH:mm'}}</td>
+              <td ui-sref="#">{{meritev.datum | date:'dd.MM.yyyy, HH:mm'}}</td>
               <td>{{meritev.tip}}</td>
               <td>{{meritev.vrednost_meritve}}</td>
             </tr>
@@ -218,29 +224,32 @@
 
       <!-- TABELA BOLEZNI IN ALERGIJE -->
       <div class="col-12">
-        <h3 class="bottom-border">Bolezni in alergije</h3>
+        <h3 class="bottom-border header">Bolezni in alergije</h3>
+        <div class="center" ng-show="bolezni.length == 0">
+          <h4>Na voljo ni nobene bolezni!</h4>
+        </div>
         <!-- TABLE: OSEBNI PODATKI -->
-        <table class="table table-striped">
+        <table class="table table-striped" ng-show="bolezni.length != 0">
           <thead>
-            <tr>
-              <th class="col-4">mkb10</th>
-              <th class="col-2">Naziv</th>
-              <th class="col-2">Alergija</th>
-              <th class="col-4">Zdravila</th>
+            <tr class="col-12">
+              <th class="col-1">mkb10</th>
+              <th class="col-4">Naziv</th>
+              <th class="col-6">Zdravila</th>
+              <th class="col-1">Alergija</th>
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat="bolezen in bolezni" class="col-12">
-              <td class="col-4" >{{bolezen.mkb10}}</td>
-              <td class="col-2" ui-sref="#">{{bolezen.naziv}}</td>
-              <td class="col-2" >
-                <i ng-show="bolezen.alergija" class="fa fa-check"></i>
-                <i ng-show="!bolezen.alergija" class="fa fa-times"></i>
-              </td>
-              <td class="col-4">
+              <td class="col-1" >{{bolezen.mkb10}}</td>
+              <td class="col-4" ui-sref="#">{{bolezen.naziv}}</td>
+              <td class="col-6">
                 <span ng-repeat="zdravilo in bolezen.zdravilo">
                   <span>{{zdravilo.zdravilo}}, </span>
                 </span>
+              </td>
+              <td class="col-1" >
+                <i ng-show="bolezen.alergija" class="fa fa-check"></i>
+                <i ng-show="!bolezen.alergija" class="fa fa-times"></i>
               </td>
             </tr>
           </tbody>
@@ -248,12 +257,15 @@
       </div>
 
       <!-- TABELA: ZDRAVIL IN DIET -->
-      <h3 class="bottom-border">Zdravila in diete</h3>
+      <h3 class="bottom-border header">Zdravila in diete</h3>
       <div class="row">
 
         <div class="col-md-6">
+          <div class="center" ng-show="zdravila.length == 0">
+            <h4>Na voljo ni nobenega zdravila!</h4>
+          </div>
           <!-- TABLE: ZDRAVILA  -->
-          <table class="table table-striped">
+          <table class="table table-striped" ng-show="zdravila.length != 0">
             <thead>
               <tr>
                 <th>Zdravilo</th>
@@ -269,8 +281,11 @@
           </table>
         </div>
         <div class="col-md-6">
+          <div class="center" ng-show="diete.length == 0">
+            <h4>Na voljo ni nobene diete!</h4>
+          </div>
           <!-- TABLE: DIETA -->
-          <table class="table table-striped">
+          <table class="table table-striped" ng-show="diete.length != 0">
             <thead>
               <tr>
                 <th class="col-3">Naziv</th>

@@ -64,6 +64,7 @@ class MeritevSerializer(serializers.HyperlinkedModelSerializer):
 
 """ PREGELD """
 class PregledSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
     zdravnik = ZdravnikSerializer()
     meritve = MeritevSerializer()
     class Meta:
@@ -105,7 +106,9 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     bolezni = BolezniSerializer(many=True)
     zdravnik = ZdravnikSerializer(many=True)
     dieta = DietaSerializer(many=True)
+    is_superuser = serializers.BooleanField()
     id = serializers.IntegerField()
+    is_superuser = serializers.BooleanField()
 
     class Meta:
         model = Uporabnik
@@ -128,3 +131,11 @@ class LoginOsebjeSerializer(serializers.Serializer):
 
 class ErrorSerializer(serializers.Serializer):
     error = serializers.CharField(max_length=500)
+
+
+""" ZDRAVNIK_UPORABNIKI """
+class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = Uporabnik

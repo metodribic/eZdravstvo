@@ -1,6 +1,6 @@
 $default-green: #00A65A;
 
-.medical-person{
+.header{
   color: $default-green;
 }
 
@@ -8,4 +8,19 @@ $default-green: #00A65A;
   border-bottom: 1pt solid #D2D6DE;
   margin-bottom: 2%;
   padding-bottom: 1%;
+}
+
+.listTableRow:hover{
+  cursor: pointer;
+}
+
+.ui-select-backgorund{
+  background-color: #FFFFFF !important;
+}
+
+.center {
+    margin: auto;
+    width: 25%;
+    padding: 10px;
+    color: #CCCCCC;
 }
