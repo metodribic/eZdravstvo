@@ -34,7 +34,7 @@
               </tr>
               <tr>
                 <td><b>Meritve:</b></td>
-                  <td>{{pregled.meritve.tip}} {{pregled.meritve.vrednost_meritve}}</td>
+                  <td>{{pregled.meritve.tip}} {{pregled.meritve.vrednost_meritve}} {{pregled.bolezn}}</td>
                 <td>
                     <span ng-show="pregled.meritve.length > 0">{{pregled.meritve}}</span>
                     <span ng-show="pregled.meritve.length == 0">/</span>
@@ -43,7 +43,7 @@
               <tr>
                 <td><b>Bolezni:</b></td>
                 <td>
-                    <span ng-show="pregled.bolezen.length > 0">{{pregled.bolezen}}</span>
+                    <span ng-show="pregled.bolezen.length > 0">{{pregled.bolezni}}</span>
                     <span ng-show="pregled.bolezen.length == 0">/</span>
                 </td>
               </tr>

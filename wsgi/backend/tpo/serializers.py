@@ -58,11 +58,12 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
 
 """ MERITEV """
 class MeritevSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
     class Meta:
         model = Meritev
 
 
-""" PREGELD """
+""" PREGLED """
 class PregledSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     zdravnik = ZdravnikSerializer()
@@ -73,12 +74,14 @@ class PregledSerializer(serializers.HyperlinkedModelSerializer):
 
 """ ZDRAVILO """
 class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
     class Meta:
         model = Zdravilo
 
 
 """ BOLEZNI """
 class BolezniSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
     zdravilo = ZdraviloSerializer(many=True)
     class Meta:
         model = Bolezni
@@ -86,12 +89,14 @@ class BolezniSerializer(serializers.HyperlinkedModelSerializer):
 
 """ DIETA NAVODILA """
 class NavodilaDietaSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
     class Meta:
         model = NavodilaDieta
 
 
 """ DIETA """
 class DietaSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
     navodila = NavodilaDietaSerializer(many=True)
     class Meta:
         model = Dieta
