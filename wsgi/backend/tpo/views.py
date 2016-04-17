@@ -236,6 +236,10 @@ def registracijaAdmin(request, format=None):
             novaSifra = int(sifra)
         except ValueError:
             novaSifra = 1337
+        try:
+            novaStev = int(novaStev)
+        except:
+            novaStev = 113377
 
         #print "check role"
         if( rola == 'Zdravnik'):

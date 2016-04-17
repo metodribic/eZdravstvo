@@ -66,6 +66,9 @@ angular.module('tpo')
                 $scope.besedZaUpor = "";
                 $scope.extraInfo = "";
 
+                // to display name in msg
+                $scope.uporabniki.username = $scope.uporabniki.email;
+
                 var n = new RegistracijaUporAdmin();
                 n.email = $scope.uporabniki.email;
                 n.username = $scope.uporabniki.email;
@@ -125,7 +128,9 @@ angular.module('tpo')
             };
 
             function clearUporabnikFields( scope ){
-                scope.mojSelect ="Zdravnik";
+
+                //scope.mojSelect ="Zdravnik"; // only swaps dropdown, not also which fields to show
+
                 scope.uporabniki.email="";
                 scope.uporabniki.username="";
                 scope.uporabniki.password="";
