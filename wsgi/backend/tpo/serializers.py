@@ -120,6 +120,10 @@ class LoginSerializer(serializers.Serializer):
 class LoginZdravnikSerializer(serializers.Serializer):
     zdravnik = ZdravnikSerializer()
     token = serializers.CharField(max_length=50)
+    
+class LoginOsebjeSerializer(serializers.Serializer):
+    osebje = OsebjeSerializer()
+    token = serializers.CharField(max_length=50)
 
 
 class ErrorSerializer(serializers.Serializer):
