@@ -4,19 +4,6 @@
     <div class="box">
         <div class="box-body">
 
-            <div class="alert alert-danger alert-dismissible" ng-show="visibleAlertFail">
-                {{besedZaUpor}}
-                {{extraInfo}}
-            </div>
-            <div class="alert alert-success alert-dismissible" ng-show="visibleAlertSucc">
-                {{besedZaUpor}}
-                {{extraInfo}}
-            </div>
-
-            <!--
-            <form ng-class="{'has-error': redFields}" ng-submit="shraniU()">
-            -->
-
             <form ng-submit="shraniU()">
                 <!-- Required fields -->
 
@@ -30,10 +17,12 @@
                 <div class="form-group" >
                     <label for="email">Email <b style="color:red" >*</b></label>
                     <input type="email" class="form-control" id="email" placeholder="uporabnik@organizacija.domena" ng-model="uporabniki.email" required="required">
+                    <span style="color:red" ng-show="errEmail" >Uporabnik s tem email naslovom že obstaja!</span>
                 </div>
                 <div class="form-group" >
                     <label for="password">Geslo <b style="color:red" >*</b></label>
                     <input type="password" class="form-control" id="password" placeholder="Geslo" ng-model="uporabniki.password" required="required">
+                    <span style="color:red" ng-show="errPassw" >Izberite boljše geslo! Geslo mora biti dolžine 8, vsaj 1 številko!</span>
                 </div>
 
                 <!-- Optional fields -->
@@ -43,12 +32,14 @@
                     <div class="form-group">
                         <label for="ime">Ime</label>
                         <input type="text" class="form-control" id="ime" placeholder="Janko" ng-model="uporabniki.ime"  >
+                        <span style="color:red" ng-show="errIme" >Ime lahko ima samo črke, vsaj 3, največ 21.</span>
                     </div>
 
                     <!-- PRIIMEK -->
-                    <div class="form-group">
+                    <div class="form-group" >
                         <label for="priimek">Priimek</label>
                         <input type="text" class="form-control" id="priimek" placeholder="Novak" ng-model="uporabniki.priimek" >
+                        <span style="color:red" ng-show="errPrii" >Priimek lahko ima samo črke, vsaj 3, največ 21.</span>
                     </div>
 
                     <!-- ZDRAVNIK -->
@@ -69,19 +60,22 @@
                                         Ne
                                     </label>
                                 </div>
-                            </label>
+                            </label><br>
+                            <span style="color:red" ng-show="errSprejemaPac" >Označite če zdravnik sprejema paciente ali ne!</span>
                         </div>
 
                         <!-- ŠIFRA -->
                         <div class="form-group">
                             <label for="sifra">Sifra</label>
                             <input type="text" class="form-control" id="sifra" placeholder="987654321" ng-model="uporabniki.sifra" >
+                            <span style="color:red" ng-show="errSifra" >Šifra lahko ima samo številke, vsaj 5, največ 13.</span>
                         </div>
 
                         <!-- NAZIV -->
                         <div class="form-group">
                             <label for="naziv">Naziv</label>
                             <input type="text" class="form-control" id="naziv" placeholder="Dr. Medicine" ng-model="uporabniki.naziv" >
+                            <span style="color:red" ng-show="errNaziv" >Vnesite naziv.</span>
                         </div>
 
                         <!-- TIP -->
@@ -91,6 +85,7 @@
                                 <option value="osebni">Zdravnik</option>
                                 <option value="zobozdravnik">Zobozdravnik</option>
                             </select>
+                            <span style="color:red" ng-show="errTip" >Izberite tip zdravnika.</span>
                         </div>
 
                         <!-- AMBULANTA -->
@@ -99,6 +94,7 @@
                             <select class="form-control" id="ambulantaId" ng-model="uporabniki.izbranaAmbulanta" ng-change="changedAmbulanta(uporabniki.izbranaAmbulanta)" >
                               <option ng-repeat="a in ambulanta" value="{{ a.ustanova.url }}">{{a.ustanova.naziv}}, {{ a.ustanova.naslov }} </option>
                             </select>
+                            <span style="color:red" ng-show="errAmbulanta" >Izberite ambulanto.</span>
                         </div>
 
                         <!-- IZBIRA MEDICINSKE SESTRE -->
@@ -107,6 +103,7 @@
                             <select class="form-control" id="sifra" ng-model="uporabniki.izbranaSestra" ng-change="changedNurse(uporabniki.izbranaSestra)" >
                               <option ng-repeat="o in osebje" value="{{ o.username }}" >{{o.ime}} {{ o.priimek }} ({{ o.username }})</option>
                             </select>
+                            <span style="color:red" ng-show="errMedSes" >Izberite medicinsko sestro zdravnika.</span>
                         </div>
 
 
@@ -117,6 +114,7 @@
                             <label for="stevilka">Številka</label>
                             <input type="text" class="form-control" id="stevilka" placeholder="12345" ng-model="uporabniki.stevilka" >
                         </div>
+                        <span style="color:red" ng-show="errStevilka" >Šifra lahko ima samo številke, vsaj 4, največ 9.</span>
                     </div>
 
                 </div>
@@ -124,7 +122,7 @@
 
                 <div class="form-group">
                     <button type="button" class="btn btn-default pull-right" ng-click="showHideExtras()">
-                        Podrobnosti
+                        Dodatno
                     </button>
                 </div>
 

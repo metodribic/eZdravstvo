@@ -6,12 +6,15 @@
  */
 
 angular.module('tpo')
-    .controller('registracijaUporAdminCtrl', ['$scope', '$state', 'Uporabniki','$resource',
-        '$rootScope','AuthService','RegistracijaUporAdmin', 'Osebje', 'Ambulanta','Notification',
+    .controller('registracijaUporAdminCtrl', ['$scope', '$state', 'Uporabniki','$resource', '$rootScope',
+        'AuthService','RegistracijaUporAdmin', 'Osebje', 'Ambulanta','Notification',
         function ($scope, $state, Uporabniki, $resource, $rootScope, AuthService,
-                  RegistracijaUporAdmin, Osebje, Ambulanta, Notification  ) {
-
-            
+                  RegistracijaUporAdmin, Osebje, Ambulanta, Notification ) {
+/*
+            NotificationProvider.setOptions({
+                maxCount:3
+            });
+*/
             /*GET USER FROM LOCAL STORAGE*/
             $scope.uporabnik = AuthService.getCurrentUser();
             /* če ni prijavlen ga dej na login*/
@@ -30,7 +33,6 @@ angular.module('tpo')
             };
             // init to hide details
             $scope.hiddenElements = true;
-
 
             resetOptionalFields( $scope );
 
@@ -99,33 +101,27 @@ angular.module('tpo')
 
                             // clear fields
                             clearUporabnikFields($scope);
-                            showSuccAlert( $scope );
+                            // showSuccAlert( $scope );
+                            Notification.success({message: $scope.besedZaUpor });
                         }
 
                     }, function (err) {
                         responseFailedHandler ( $scope, err.data.error );
-                        showFailAlert( $scope );
+                        // showFailAlert( $scope );
+                        Notification.error({message: $scope.besedZaUpor });
                     });
                 }else{
                     // display error?
-                    showFailAlert( $scope );
+                    //showFailAlert( $scope );
+                    Notification.error({message: $scope.extraInfo });
+
                 }
 
             };
 
             /* FUNCTIONS */
 
-            function showFailAlert( scope ){
-                scope.redFields = true;
-                scope.visibleAlertFail = true;
-                scope.visibleAlertSucc = false;
-            };
 
-            function showSuccAlert( scope ){
-                scope.redFields = false;
-                scope.visibleAlertFail = false;
-                scope.visibleAlertSucc = true;
-            };
 
             function clearUporabnikFields( scope ){
 
@@ -148,6 +144,19 @@ angular.module('tpo')
                 scope.uporabniki.izbranaSestra = "";
 
                 scope.uporabniki.stevilka = "";
+
+                // all fields on false
+                scope.errEmail = false;
+                scope.errPassw = false;
+                scope.errIme = false;
+                scope.errPrii = false;
+                scope.errSprejemaPac = false;
+                scope.errSifra = false;
+                scope.errNaziv = false;
+                scope.errTip = false;
+                scope.errAmbulanta = false;
+                scope.errMedSes = false;
+                scope.errStevilka = false;
             };
 
             function userWasCreaterBool( servSucc ){
@@ -165,10 +174,12 @@ angular.module('tpo')
                 if( servFail === "User with this email already exists"){
 
                     scope.besedZaUpor = "Uporabnik s tem email naslovom že obstaja!";
+                    scope.errEmail = true;
 
                 }else if( servFail === "WeakPassword" ) {
 
                     scope.besedZaUpor = "Izberite boljše geslo! Geslo mora biti dolžine 8, vsaj 1 številko!";
+                    scope.errPassw = true;
 
                 }else{
                     // POPRAVI - GLEJ KAJ JE NAROBE, opazil samo pri duplicate entry
@@ -182,9 +193,9 @@ angular.module('tpo')
                 // dropdown value
                 scope.mojSelect = 'Zdravnik';
 
-                scope.visibleAlertFail = false;
-                scope.visibleAlertSucc = false;
-                scope.red = false;
+                //scope.visibleAlertFail = false;
+                //scope.visibleAlertSucc = false;
+                //scope.red = false;
                 scope.besedZaUpor = "";
                 scope.extraInfo = "";
             };
@@ -205,12 +216,18 @@ angular.module('tpo')
                 if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.ime)) || angular.isUndefined(n.ime) ){
                     // invalid name
                     scope.extraInfo += "Ime lahko ima samo črke, vsaj 3, največ 21.\n";
+                    scope.errIme = true;
+                }else{
+                    scope.errIme = false;
                 }
 
                 // check priimek
                 if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.priimek)) || angular.isUndefined(n.priimek) ){
                     // invalid name
                     scope.extraInfo += "Priimek lahko ima samo črke, vsaj 3, največ 21.\n";
+                    scope.errPrii = true;
+                }else{
+                    scope.errPrii = false;
                 }
                 return scope.extraInfo;
             }
@@ -235,30 +252,51 @@ angular.module('tpo')
                          // bool SPREJEMA PACIENTA
                          if( angular.isUndefined(n.sprejemaPacienteDa) &&  angular.isUndefined(n.sprejemaPacienteNe) ){
                              //scope.sprejemaPaciente = false; // tried to send without submiting (if clears all)
-                             scope.extraInfo += "Označite če zdravnik sprejema paciente ali ne!";
+                             scope.extraInfo += "Označite če zdravnik sprejema paciente ali ne!\n";
+                             scope.errSprejemaPac = true;
+                         }else{
+                             scope.errSprejemaPac = false;
                          }
 
                         // string SIFRA
                          if( ! (/^[0-9]{5,13}$/.test(n.sifra)) || angular.isUndefined(n.sifra)  ){
-                            // not valid num
-                            scope.extraInfo += "Šifra lahko ima samo številke, vsaj 5, največ 13.";
+                             // not valid num
+                             scope.extraInfo += "Šifra lahko ima samo številke, vsaj 5, največ 13.\n";
+                             scope.errSifra = true;
+                         }else{
+                             scope.errSifra = false;
                          }
+
                          // string NAZIV
                          if( angular.isUndefined(n.naziv) || scope.naziv == "" ){
-                            // not valid num
-                            scope.extraInfo += "Vnesite naziv.";
+                             // not valid num
+                             scope.extraInfo += "Vnesite naziv.\n";
+                             scope.errNaziv = true;
+                         }else{
+                             scope.errNaziv = false;
                          }
+
                          // dropdown TIP
                          if( angular.isUndefined(n.tip) ){
-                            scope.extraInfo += "Izberite tip zdravnika.";
+                             scope.extraInfo += "Izberite tip zdravnika.\n";
+                             scope.errTip = true;
+                         }else{
+                             scope.errTip = false;
                          }
+
                          // dropdown AMBULANTA
                          if( angular.isUndefined(n.izbranaAmbulanta) ){
-                            scope.extraInfo += "Izberite ambulanto.";
+                             scope.extraInfo += "Izberite ambulanto.\n";
+                             scope.errAmbulanta = true;
+                         }else{
+                             scope.errAmbulanta = false;
                          }
                          // dropdown AMBULANTA
                          if( angular.isUndefined(n.izbranaSestra) ){
-                            scope.extraInfo += "Izberite medicinsko sestro zdravnika.";
+                             scope.extraInfo += "Izberite medicinsko sestro zdravnika.\n";
+                             scope.errMedSes = true;
+                         }else{
+                             scope.errMedSes = false;
                          }
                     }
                 }else{
@@ -275,14 +313,16 @@ angular.module('tpo')
 
                         // int številka
                         if( ! (/^[0-9]{4,9}$/.test(n.stevilka)) || angular.isUndefined(n.stevilka) ){
-                            scope.extraInfo += "Šifra lahko ima samo številke, vsaj 4, največ 9.";
+                            scope.extraInfo += "Šifra lahko ima samo številke, vsaj 4, največ 9.\n";
+                            scope.errStevilka = true;
+                        }else{
+                            scope.errStevilka = false;
                         }
 
                     }
                 }
 
             }
-
 
 
         }]);
