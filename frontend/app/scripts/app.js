@@ -117,5 +117,11 @@ angular
 
           //console.log($rootScope.uporabnik);
         }
+        // check if admin and set link correctly
+        if( $rootScope.uporabnik.role.naziv !== "Admin" ){
+          $rootScope.isSuperU = true;
+        }else{
+            $rootScope.isSuperU = false;
+        }
       });
   });

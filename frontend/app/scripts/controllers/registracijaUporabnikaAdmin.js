@@ -11,8 +11,7 @@ angular.module('tpo')
         function ($scope, $state, Uporabniki, $resource, $rootScope, AuthService,
                   RegistracijaUporAdmin, Osebje, Ambulanta, Notification  ) {
 
-
-
+            
             /*GET USER FROM LOCAL STORAGE*/
             $scope.uporabnik = AuthService.getCurrentUser();
             /* če ni prijavlen ga dej na login*/
