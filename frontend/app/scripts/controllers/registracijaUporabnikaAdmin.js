@@ -19,18 +19,16 @@ angular.module('tpo')
                 $state.go("login");
             }
 
-            // Redirect everyone that isnt an Admin
+            // Redirect everyone that isn't an Admin
             if( $scope.uporabnik.role.naziv !== "Admin" ){
                 $state.go("nadzornaPlosca");
             }
 
-
-            // onClick for details button (not yet done nicely)
+            // onClick for details button
             $scope.showHideExtras = function (){
                 $scope.hiddenElements = !$scope.hiddenElements;
             };
-
-
+            // init to hide details
             $scope.hiddenElements = true;
 
 
@@ -38,33 +36,29 @@ angular.module('tpo')
 
             $scope.uporabniki = new Uporabniki();
 
-            /*** osebje iz baze ***/
+            /*** Osebje iz baze ***/
             $scope.osebje = new Osebje();
             Osebje.get({limit:  50}).$promise.then(function(response){
                 $scope.osebje = response.results;
-                //console.log($scope.osebje);
             });
-            //console.log($scope.osebje);
-            /*** ambulante iz baze ***/
+
+            /*** Ambulante iz baze ***/
             $scope.ambulanta = new Ambulanta();
             Ambulanta.get({limit:  50}).$promise.then(function(response){
                 $scope.ambulanta = response.results;
-                //console.log($scope.ambulanta);
             });
-            /***  ***/
 
-
-            /*** ***/
+            /*** Show fields ***/
             $scope.showSelectValue = function( val ){
                 if( val == "Zdravnik"){
                     $scope.jeZdravnik = false;
                 }else{
                     $scope.jeZdravnik = true;
                 }
-                //console.log(val);
             }
+
             $scope.changedNurse = function( val){
-                console.log(val);
+                //console.log(val);
             }
 
             $scope.shraniU = function (){
@@ -72,11 +66,9 @@ angular.module('tpo')
                 $scope.besedZaUpor = "";
                 $scope.extraInfo = "";
 
-                $scope.uporabniki.username = $scope.uporabniki.email;
-
                 var n = new RegistracijaUporAdmin();
                 n.email = $scope.uporabniki.email;
-                n.username = $scope.uporabniki.username;
+                n.username = $scope.uporabniki.email;
                 n.password = $scope.uporabniki.password;
                 n.role = $scope.mojSelect;
                 n.ime = $scope.uporabniki.ime;
@@ -91,8 +83,6 @@ angular.module('tpo')
                 n.izbranaSestra = $scope.uporabniki.izbranaSestra;
                 // med sestra
                 n.stevilka = $scope.uporabniki.stevilka;
-
-                console.log(n);
 
                 // validation FE
                 validateFE( $scope, n );
@@ -142,6 +132,7 @@ angular.module('tpo')
                 scope.uporabniki.ime = "";
                 scope.uporabniki.priimek = "";
 
+                // radio buttons -> no point to change it
                 //scope.uporabniki.sprejemaPacienteNe = "";
                 //scope.uporabniki.sprejemaPacienteNe = "";
 
@@ -184,7 +175,7 @@ angular.module('tpo')
 
             function resetOptionalFields( scope ) {
                 // dropdown value
-                scope.mojSelect = 'Zdravnik'; // for example
+                scope.mojSelect = 'Zdravnik';
 
                 scope.visibleAlertFail = false;
                 scope.visibleAlertSucc = false;
@@ -204,13 +195,14 @@ angular.module('tpo')
             }
 
             function validateJoinedFields( scope, n ){
+
                 // check ime
                 if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.ime)) || angular.isUndefined(n.ime) ){
                     // invalid name
                     scope.extraInfo += "Ime lahko ima samo črke, vsaj 3, največ 21.\n";
                 }
-                // check priimek
 
+                // check priimek
                 if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.priimek)) || angular.isUndefined(n.priimek) ){
                     // invalid name
                     scope.extraInfo += "Priimek lahko ima samo črke, vsaj 3, največ 21.\n";
@@ -246,20 +238,20 @@ angular.module('tpo')
                             // not valid num
                             scope.extraInfo += "Šifra lahko ima samo številke, vsaj 5, največ 13.";
                          }
-                         // NAZIV
+                         // string NAZIV
                          if( angular.isUndefined(n.naziv) || scope.naziv == "" ){
                             // not valid num
                             scope.extraInfo += "Vnesite naziv.";
                          }
-                         // TIP
+                         // dropdown TIP
                          if( angular.isUndefined(n.tip) ){
                             scope.extraInfo += "Izberite tip zdravnika.";
                          }
-                         // AMBULANTA
+                         // dropdown AMBULANTA
                          if( angular.isUndefined(n.izbranaAmbulanta) ){
                             scope.extraInfo += "Izberite ambulanto.";
                          }
-                         // AMBULANTA
+                         // dropdown AMBULANTA
                          if( angular.isUndefined(n.izbranaSestra) ){
                             scope.extraInfo += "Izberite medicinsko sestro zdravnika.";
                          }
@@ -275,6 +267,8 @@ angular.module('tpo')
                         // atleast one optional field was selected -> problems could accur
                         // string IME & PRIIMEK
                         scope.extraInfo += validateJoinedFields( scope, n);
+
+                        // int številka
                         if( ! (/^[0-9]{4,9}$/.test(n.stevilka)) || angular.isUndefined(n.stevilka) ){
                             scope.extraInfo += "Šifra lahko ima samo številke, vsaj 4, največ 9.";
                         }

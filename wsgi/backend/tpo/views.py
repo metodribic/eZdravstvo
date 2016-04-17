@@ -211,6 +211,7 @@ def registracijaAdmin(request, format=None):
         mail = request.data['email']
         passw = request.data['password']
         rola = request.data['role']
+
         # get values or empty string if not there
         ime = request.data.get('ime', "")
         sifra = request.data.get('sifra', "")
