@@ -8,7 +8,8 @@
 angular.module('tpo')
     .controller('registracijaUporAdminCtrl', ['$scope', '$state', 'Uporabniki','$resource',
         '$rootScope','AuthService','RegistracijaUporAdmin', 'Osebje', 'Ambulanta',
-        function ($scope, $state, Uporabniki, $resource, $rootScope, AuthService, RegistracijaUporAdmin, Osebje, Ambulanta ) {
+        function ($scope, $state, Uporabniki, $resource, $rootScope, AuthService,
+                  RegistracijaUporAdmin, Osebje, Ambulanta  ) {
 
 
 
