@@ -1,7 +1,12 @@
-'use strict';
+'use strict()';
 
 angular.module('tpo')
   .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope', function ($scope, AuthService, $state, $rootScope) {
+
+    $scope.shrani_spremembe = function(){
+      console.log($rootScope.uporabnik);
+    };
+
 
     $scope.changePassword = function(user) {
         /* Do login */
@@ -13,6 +18,7 @@ angular.module('tpo')
         var newpass = user.newpass;
         var newpass2 = user.newpass2;
         var id = $rootScope.uporabnik.id;
+
         if(newpass2 !== newpass) {
             addAlert("Passwords do not match", "warning");
             return;
@@ -33,7 +39,7 @@ angular.module('tpo')
         container.empty();
         container.append(
             '<div class="fade in alert alert-dismissible alert-' + state + '" role="alert"> ' +
-        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' + 
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
             '<span aria-hidden="false">&times;</span></button>' + msg + '</div>');
     }
   }]);

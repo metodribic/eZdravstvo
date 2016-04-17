@@ -1,10 +1,10 @@
-'use strict';
+'use strict()';
 
 angular.module('tpo')
   .controller('LoginCtrl', ['$scope','AuthService', '$state', '$rootScope', function ($scope, AuthService, $state, $rootScope) {
       $scope.red = false;
       $rootScope.logged_out = true;
-      
+
       //Logout
       if($state.current.name == "logout" && AuthService.isAuthenticated()) {
           AuthService.logout();
