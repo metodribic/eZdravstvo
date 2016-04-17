@@ -16,7 +16,6 @@ angular.module('tpo')
         var _$state = $state;
 
         AuthService.login(uporabniki.email, uporabniki.geslo).then(function(response){
-            console.log(response);
             if(_this.uporabnik && !_this.uporabnik.ime)
                     alert('No profile set. Will redirect (if we will make profile page)');
             else
