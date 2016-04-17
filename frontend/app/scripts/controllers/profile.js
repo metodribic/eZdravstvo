@@ -1,10 +1,44 @@
 'use strict()';
-
 angular.module('tpo')
-  .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope', function ($scope, AuthService, $state, $rootScope) {
-
+  .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik', function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik) {
+    var trenutniUporabnik = $rootScope.uporabnik;
     $scope.shrani_spremembe = function(){
-      console.log($rootScope.uporabnik);
+      // model, ki se uporabi za POST
+      var updatedUporabnik = {};
+
+      // preveri če je prijavljen uporabnik zdravnik
+      if(trenutniUporabnik.role.naziv == 'Zdravnik'){
+        Zdravnik.get({zdravnikId: trenutniUporabnik.id}).$promise.then(function(response){
+          console.log(response);
+          // delete response.medicinske_sestre
+          // delete response.role
+          // delete response.ambulanta
+          response.ime = trenutniUporabnik.ime;
+          response.priimek = trenutniUporabnik.priimek;
+          response.$update();
+
+        });
+      }
+      //  če ni zdravnik preveri če je pacient ali admin
+      else if( trenutniUporabnik.role.naziv == 'Pacient' || trenutniUporabnik.role.naziv == 'Admin' ){
+
+        Uporabniki.get({iduporabnik: trenutniUporabnik.id}).$promise.then(function(response){
+          updatedUporabnik = response;
+          // update Uporabnik
+          response.ime = 'TestPUT';
+          response.$update({iduporabnik: trenutniUporabnik.id});
+        });
+      }
+
+
+
+
+    };
+
+    $scope.pridobi_ime_poste = function(){
+      Posta.get({postaId: $scope.uporabnik.posta.id}).$promise.then(function(response){
+        $rootScope.uporabnik.posta.kraj = response.kraj;
+      });
     };
 
 

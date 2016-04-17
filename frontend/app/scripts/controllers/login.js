@@ -1,7 +1,7 @@
 'use strict()';
 
 angular.module('tpo')
-  .controller('LoginCtrl', ['$scope','AuthService', '$state', '$rootScope', function ($scope, AuthService, $state, $rootScope) {
+  .controller('LoginCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta', function ($scope, AuthService, $state, $rootScope, Posta) {
       $scope.red = false;
       $rootScope.logged_out = true;
 

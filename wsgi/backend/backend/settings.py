@@ -49,6 +49,14 @@ ROOT_URLCONF = 'backend.urls'
 
 # CORS settings
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_METHODS = (
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS'
+)
 
 AUTH_PASSWORD_VALIDATORS = [
     {

@@ -9,16 +9,14 @@ class PostaSerializer(serializers.HyperlinkedModelSerializer):
         model = Posta
         fields =('id', 'kraj')
 
-class VlogaSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Roles
-        fields = ('naziv',)
 
 """ VLOGA """
 class VlogaSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField()
     class Meta:
         model = Roles
-        fields = ('naziv',)
+        fields = ('id', 'naziv')
+
 
 """ USTANOVA """
 class UstanovaSerializer(serializers.HyperlinkedModelSerializer):
@@ -113,6 +111,9 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Uporabnik
         exclude = ('password','first_name', 'last_name', 'is_superuser', 'is_staff')
+
+    def put(self, request):
+        print(request)
 
 
 class LoginSerializer(serializers.Serializer):

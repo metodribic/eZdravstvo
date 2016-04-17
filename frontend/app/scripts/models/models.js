@@ -12,7 +12,16 @@ angular.module('tpo.models', ['ngResource', 'config'])
 .factory('Pregled', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/pregledi/:pregledId', { pregledId: '@pregledId' }, {
 		update: {
-			method: 'PUT'
+			method: 'UPDATE'
+		}
+	});
+})
+
+
+.factory('Posta', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/posta/:postaId', { postaId: '@postaId' }, {
+		update: {
+			method: 'UPDATE'
 		}
 	});
 })
@@ -21,11 +30,11 @@ angular.module('tpo.models', ['ngResource', 'config'])
 .factory('Meritve', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/meritve/:meritevId', { meritevId: '@meritevId' }, {
 		update: {
-			method: 'PUT'
+			method: 'UPDATE'
 		}
 	});
 })
-    
+
 .factory('RegistracijaUporAdmin', function($resource) {
 	return $resource('http://localhost:8000/registracijaAdmin', {
 		update: {
@@ -38,7 +47,7 @@ angular.module('tpo.models', ['ngResource', 'config'])
 .factory('Bolezni', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/bolezni/:bolezenId', { bolezenId: '@bolezenId' }, {
 		update: {
-			method: 'PUT'
+			method: 'UPDATE'
 		}
 	});
 })
@@ -47,7 +56,16 @@ angular.module('tpo.models', ['ngResource', 'config'])
 .factory('Zdravila', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/zdravila/:zdraviloId', { zdraviloId: '@zdraviloId' }, {
 		update: {
-			method: 'PUT'
+			method: 'UPDATE'
+		}
+	});
+})
+
+
+.factory('Zdravnik', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/zdravnik/:zdravnikId', { zdravnikId: '@zdravnikId' }, {
+		update: {
+			method: 'UPDATE'
 		}
 	});
 })
@@ -56,7 +74,7 @@ angular.module('tpo.models', ['ngResource', 'config'])
 .factory('ZdravnikoviPacienti', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/zdravnik_uporabniki', { pacientId: '@pacientId' }, {
 		update: {
-			method: 'PUT'
+			method: 'UPDATE'
 		}
 	});
 })
@@ -65,9 +83,7 @@ angular.module('tpo.models', ['ngResource', 'config'])
 .factory('Diete', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/diete/:dietaId', { dietaId: '@dietaId' }, {
 		update: {
-			method: 'PUT'
+			method: 'UPDATE'
 		}
 	});
 });
-
-
