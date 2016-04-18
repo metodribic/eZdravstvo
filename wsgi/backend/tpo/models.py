@@ -7,6 +7,8 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext as _
 
 
+
+
 class Uporabnik(User):
     ime = models.CharField(max_length=100, blank=True)
     priimek = models.CharField(max_length=100, blank=True)
@@ -68,16 +70,19 @@ class Roles(models.Model):
 
 
 class Dieta(models.Model):
+    id = models.IntegerField(primary_key=True)
     naziv = models.CharField(max_length=100)
     sifra = models.CharField(max_length=20)
     navodila = models.ManyToManyField('NavodilaDieta', blank=True)
 
 
 class NavodilaDieta(models.Model):
+    id = models.IntegerField(primary_key=True)
     url = models.CharField(max_length=512)
 
 
 class Zdravilo(models.Model):
+    id = models.IntegerField(primary_key=True)
     zdravilo = models.CharField(max_length=100)
     navodila = models.CharField(max_length=1024)
 
@@ -96,6 +101,7 @@ class Pregled(models.Model):
 
 
 class Bolezni(models.Model):
+    id = models.IntegerField(primary_key=True)
     naziv = models.CharField(max_length=45)
     mkb10 = models.CharField(max_length=45)
     alergija = models.BooleanField()
@@ -103,6 +109,7 @@ class Bolezni(models.Model):
 
 
 class Meritev(models.Model):
+    id = models.IntegerField(primary_key=True)
     tip = models.CharField(max_length=50)
     enota = models.CharField(max_length=50)
     normalno_min = models.FloatField()

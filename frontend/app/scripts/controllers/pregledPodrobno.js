@@ -13,9 +13,10 @@ angular.module('tpo')
       var pregledID = $stateParams.id;
       Pregled.get({pregledId:pregledID}).$promise.then(function(response){
       /* shrani pregled v $scope, da lahk dostopaš v view do njega */
-        console.log(response);
+        //console.log(response);
 
         $scope.pregled = response;
+          console.log($scope.pregled);
 
     });
   }]);

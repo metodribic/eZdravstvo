@@ -27,6 +27,8 @@ ALLOWED_HOSTS = [
     #'www.example.com', # Second DNS alias (set up in the app)
 ]
 
+API_URL = 'http://tpo-yoyosan.rhcloud.com'
+
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
