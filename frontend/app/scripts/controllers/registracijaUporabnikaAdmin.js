@@ -3,161 +3,287 @@
 /**
  * Created by Mrak on 5.4.2016.
  * Contorller za registracijo uporabnika, ki jo opravi admin
- *
- * NAVODILA:
- * #1 Kreiranje uporabniškega računa za zdravnika ali medicinsko sestro
-Administrator lahko kreira nov uporabniški račun za zdravnika ali medicinsko sestro.
- Za kreiranje uporabniškega računa mora vnesti email naslov (ki potem služi kot uporabniško ime)
- in geslo. Lahko pa vnese tudi osebne podatke (kreira uporabniški profil zdravnika oziroma medicinske sestre).
-# Preveri strukturo email naslova.
-# Preveri ustreznost gesla (najmanj 8 znakov, vsaj en numeričen)
-# Preveri kreiranje uporabniškega računa za zdravnika brez kreiranja uporabniškega profila.
-# Preveri kreiranje uporabniškega računa za zdravnika s kreiranjem uporabniškega profila (obstajati mora vsaj nastavek za kreiranje uporabniškega profila).
-# Preveri kreiranje uporabniškega računa za medicinsko sestro brez kreiranja uporabniškega profila.
-# Preveri kreiranje uporabniškega računa za medicinsko sestro s kreiranjem uporabniškega profila (obstajati mora vsaj nastavek za kreiranje uporabniškega profila).
-
  */
 
 angular.module('tpo')
-    .controller('registracijaUporAdminCtrl', ['$scope', '$state', 'Uporabniki','$resource','$rootScope','AuthService','RegistracijaUporAdmin',
-        function ($scope, $state, Uporabniki, $resource, $rootScope, AuthService, RegistracijaUporAdmin ) {
+    .controller('registracijaUporAdminCtrl', ['$scope', '$state', 'Uporabniki','$resource',
+        '$rootScope','AuthService','RegistracijaUporAdmin', 'Osebje', 'Ambulanta','Notification',
+        function ($scope, $state, Uporabniki, $resource, $rootScope, AuthService,
+                  RegistracijaUporAdmin, Osebje, Ambulanta, Notification  ) {
+
+            
+            /*GET USER FROM LOCAL STORAGE*/
+            $scope.uporabnik = AuthService.getCurrentUser();
+            /* če ni prijavlen ga dej na login*/
+            if(!$scope.uporabnik){
+                $state.go("login");
+            }
+
+            // Redirect everyone that isn't an Admin
+            if( $scope.uporabnik.role.naziv !== "Admin" ){
+                $state.go("nadzornaPlosca");
+            }
+
+            // onClick for details button
+            $scope.showHideExtras = function (){
+                $scope.hiddenElements = !$scope.hiddenElements;
+            };
+            // init to hide details
+            $scope.hiddenElements = true;
 
 
-        /*GET USER FROM LOCAL STORAGE*/
-        $scope.uporabnik = AuthService.getCurrentUser();
-        /* če ni prijavlen ga dej na login*/
-        if(!$scope.uporabnik)
-            $state.go("login");
+            resetOptionalFields( $scope );
 
-        
-        if( ! $rootScope.uporabnik.is_superuser || angular.isUndefined($rootScope.uporabnik.is_superuser ) )
-            $state.go("nadzornaPlosca");
+            $scope.uporabniki = new Uporabniki();
 
+            /*** Osebje iz baze ***/
+            $scope.osebje = new Osebje();
+            Osebje.get({limit:  50}).$promise.then(function(response){
+                $scope.osebje = response.results;
+            });
 
-        // dropdown value
-        $scope.mojSelect = 'Zdravnik'; // for example
-        
-        $scope.visibleAlertFail = false;
-        $scope.visibleAlertSucc = false;
-        $scope.red = false;
-        $scope.besedZaUpor = "";
-        $scope.extraInfo = "";
+            /*** Ambulante iz baze ***/
+            $scope.ambulanta = new Ambulanta();
+            Ambulanta.get({limit:  50}).$promise.then(function(response){
+                $scope.ambulanta = response.results;
+            });
 
-        var mojScope = $scope;
+            /*** Show fields ***/
+            $scope.showSelectValue = function( val ){
+                if( val == "Zdravnik"){
+                    $scope.jeZdravnik = false;
+                }else{
+                    $scope.jeZdravnik = true;
+                }
+            }
 
+            $scope.changedNurse = function( val){
+                //console.log(val);
+            }
 
-        $scope.showSelectValue = function(mojSelect) {
-            //console.log(mojSelect);
-        }
+            $scope.shraniU = function (){
 
-        $scope.uporabniki = new Uporabniki();
-        $scope.shraniU = function (){
+                $scope.besedZaUpor = "";
+                $scope.extraInfo = "";
 
-            $scope.besedZaUpor = "";
-            $scope.extraInfo = "";
+                // to display name in msg
+                $scope.uporabniki.username = $scope.uporabniki.email;
 
-            $scope.uporabniki.username = $scope.uporabniki.email;
-        /*
-            console.log($scope.uporabniki.email);
-            console.log($scope.uporabniki.password);
-            console.log($scope.mojSelect);
-            console.log($scope.uporabniki.ime);
-            console.log($scope.uporabniki.priimek);
-            console.log($scope.uporabniki.sifra);
-        */
+                var n = new RegistracijaUporAdmin();
+                n.email = $scope.uporabniki.email;
+                n.username = $scope.uporabniki.email;
+                n.password = $scope.uporabniki.password;
+                n.role = $scope.mojSelect;
+                n.ime = $scope.uporabniki.ime;
+                n.priimek = $scope.uporabniki.priimek;
+                n.sprejemaPacienteDa = $scope.uporabniki.sprejemaPacienteDa;
+                n.sprejemaPacienteNe = $scope.uporabniki.sprejemaPacienteNe;
+                n.sifra = $scope.uporabniki.sifra;
+                n.naziv = $scope.uporabniki.naziv;
+                n.tip = $scope.uporabniki.tip;
+                
+                n.izbranaAmbulanta = $scope.uporabniki.izbranaAmbulanta;
+                n.izbranaSestra = $scope.uporabniki.izbranaSestra;
+                // med sestra
+                n.stevilka = $scope.uporabniki.stevilka;
 
-            var n = new RegistracijaUporAdmin();
-            n.email = $scope.uporabniki.email;
-            n.username = $scope.uporabniki.username;
-            n.password = $scope.uporabniki.password;
-            n.role = $scope.mojSelect;
+                // validation FE
+                validateFE( $scope, n );
 
-            n.ime = $scope.uporabniki.ime;
+                if( $scope.extraInfo === "" ){
+                    // save user & wait for response
+                    n.$save( function(succ){ // could check succ.success
 
-            // check it?
-            if( angular.isUndefined(n.ime) || n.ime == null){
-                n.ime = "";
-            }else{
-                // check if string
-                if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.ime)) && n.ime != "" ){
+                        if( userWasCreaterBool( succ.success ) ){
+                            $scope.besedZaUpor = "Uporabnik "+ $scope.uporabniki.username+" uspešno ustvarjen.";
+
+                            // clear fields
+                            clearUporabnikFields($scope);
+                            showSuccAlert( $scope );
+                        }
+
+                    }, function (err) {
+                        responseFailedHandler ( $scope, err.data.error );
+                        showFailAlert( $scope );
+                    });
+                }else{
+                    // display error?
+                    showFailAlert( $scope );
+                }
+
+            };
+
+            /* FUNCTIONS */
+
+            function showFailAlert( scope ){
+                scope.redFields = true;
+                scope.visibleAlertFail = true;
+                scope.visibleAlertSucc = false;
+            };
+
+            function showSuccAlert( scope ){
+                scope.redFields = false;
+                scope.visibleAlertFail = false;
+                scope.visibleAlertSucc = true;
+            };
+
+            function clearUporabnikFields( scope ){
+
+                //scope.mojSelect ="Zdravnik"; // only swaps dropdown, not also which fields to show
+
+                scope.uporabniki.email="";
+                scope.uporabniki.username="";
+                scope.uporabniki.password="";
+                scope.uporabniki.ime = "";
+                scope.uporabniki.priimek = "";
+
+                // radio buttons -> no point to change it
+                //scope.uporabniki.sprejemaPacienteNe = "";
+                //scope.uporabniki.sprejemaPacienteNe = "";
+
+                scope.uporabniki.sifra = "";
+                scope.uporabniki.naziv = "";
+                scope.uporabniki.tip = "";
+                scope.uporabniki.izbranaAmbulanta = "";
+                scope.uporabniki.izbranaSestra = "";
+
+                scope.uporabniki.stevilka = "";
+            };
+
+            function userWasCreaterBool( servSucc ){
+                if( servSucc === "function : {'user created':'Zdravnik'}"
+                    ||servSucc=== "function : {'user created':'Medicinska sestra'}" ){
+                    return true;
+                }
+                return false;
+            };
+
+            function responseFailedHandler ( scope, servFail ){
+
+                console.log(servFail);
+
+                if( servFail === "User with this email already exists"){
+
+                    scope.besedZaUpor = "Uporabnik s tem email naslovom že obstaja!";
+
+                }else if( servFail === "WeakPassword" ) {
+
+                    scope.besedZaUpor = "Izberite boljše geslo! Geslo mora biti dolžine 8, vsaj 1 številko!";
+
+                }else{
+                    // POPRAVI - GLEJ KAJ JE NAROBE, opazil samo pri duplicate entry
+                    scope.besedZaUpor = "Uporabnik s tem email naslovom že obstaja!";
+                    //$scope.besedZaUpor = "Prišlo je do napake, ponovno preglejte vnosna polja.";
+                }
+
+            };
+
+            function resetOptionalFields( scope ) {
+                // dropdown value
+                scope.mojSelect = 'Zdravnik';
+
+                scope.visibleAlertFail = false;
+                scope.visibleAlertSucc = false;
+                scope.red = false;
+                scope.besedZaUpor = "";
+                scope.extraInfo = "";
+            };
+
+            /* Validation FE */
+
+            function isVarUndefinedOrEmptyStr( val ){
+
+                if( val == "" || angular.isUndefined(val) || val == null ){
+                    return true;
+                }
+                return false;
+            }
+
+            function validateJoinedFields( scope, n ){
+
+                // check ime
+                if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.ime)) || angular.isUndefined(n.ime) ){
                     // invalid name
-                    $scope.extraInfo += "Ime lahko ima samo črke, vsaj 3, največ 21.\n";
+                    scope.extraInfo += "Ime lahko ima samo črke, vsaj 3, največ 21.\n";
                 }
-            }
-            n.priimek = $scope.uporabniki.priimek;
-            if( angular.isUndefined(n.priimek) || n.priimek == null){
-                n.priimek = "";
-            }else{
-                 if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.priimek)) && n.priimek != "" ){
+
+                // check priimek
+                if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.priimek)) || angular.isUndefined(n.priimek) ){
                     // invalid name
-                    $scope.extraInfo += "Priimek lahko ima samo črke, vsaj 3, največ 21.\n";
+                    scope.extraInfo += "Priimek lahko ima samo črke, vsaj 3, največ 21.\n";
                 }
+                return scope.extraInfo;
             }
-            n.sifra = $scope.uporabniki.sifra;
-            if( angular.isUndefined(n.sifra) || n.sifra == null){
-                n.sifra = "";
-            }else{
-                // check if string
-                if( ! (/^[0-9]{5,11}$/.test(n.sifra)) && n.sifra != "" ){   //
-                    // not valid num
-                    $scope.extraInfo += "Šifra lahko ima samo številke, vsaj 5, največ 11.\n";
-                }
-            }
-            if( $scope.extraInfo === "" ){
-                // save user & wait for response
-                n.$save( function(succ){
-                    if( succ.success === "function : {'user created':'Zdravnik'}"
-                        || succ.success === "function : {'user created':'Medicinska sestra'}" ){
-                        //alert("USER CREATED!");
 
-                        mojScope.visibleAlert = false;
-                        //$scope.red = false;
-                        // clear fields
-                        $scope.besedZaUpor = "Uporabnik "+$scope.uporabniki.username+" uspešno ustvarjen.";
+            function validateFE( scope, n ){
 
-                        $scope.uporabniki.email="";
-                        $scope.uporabniki.username="";
-                        $scope.uporabniki.password="";
-                        $scope.mojSelect ="Zdravnik";
-                        $scope.uporabniki.ime = "";
-                        $scope.uporabniki.priimek = "";
-                        $scope.uporabniki.sifra = "";
-
-                        $scope.visibleAlertFail = false;
-                        $scope.visibleAlertSucc = true;
-                    }
-
-                }, function (err) {
-                    console.log(err.data.error);
-                    if(err.data.error === "User with this email already exists"){
-                        //alert("User already exists!");
-                        $scope.besedZaUpor = "Uporabnik s tem email naslovom že obstaja!";
-
-                    }else if( err.data.error === "WeakPassword" ) {
-
-                        $scope.besedZaUpor = "Izberite boljše geslo! Geslo mora biti dolžine 8, vsaj 1 številko!";
+                scope.extraInfo = "";
+                if( n.role == "Zdravnik"){
+                     if( isVarUndefinedOrEmptyStr(n.ime) && isVarUndefinedOrEmptyStr(n.priimek) &&
+                         isVarUndefinedOrEmptyStr(n.sifra) && isVarUndefinedOrEmptyStr(n.naziv) &&
+                         isVarUndefinedOrEmptyStr(n.izbranaAmbulanta) && isVarUndefinedOrEmptyStr(n.tip) &&
+                         isVarUndefinedOrEmptyStr(n.izbranaSestra) ){
+                         // isVarUndefinedOrEmptyStr(n.sprejemaPaciente) -> cant untick once its ticked
+                         // no optional field was selected
+                         scope.extraInfo = "";
                     }else{
-                        // POPRAVI - GLEJ KAJ JE NAROBE, opazil samo pri duplicate entry
-                        $scope.besedZaUpor = "Uporabnik s tem email naslovom že obstaja!";
-                        //$scope.besedZaUpor = "Prišlo je do napake, ponovno preglejte vnosna polja.";
-                    }
-                    mojScope.visibleAlert = true;
-                    $scope.visibleAlertFail = true;
-                    $scope.visibleAlertSucc = false;
-                });
-            }else{
-                // display error?
-                mojScope.visibleAlert = true;
 
-                $scope.visibleAlertFail = true;
-                $scope.visibleAlertSucc = false;
+                         // atleast one optional field was selected -> problems could accur
+                         // string IME & PRIIMEK
+                         scope.extraInfo += validateJoinedFields( scope, n);
+
+                         // bool SPREJEMA PACIENTA
+                         if( angular.isUndefined(n.sprejemaPacienteDa) &&  angular.isUndefined(n.sprejemaPacienteNe) ){
+                             //scope.sprejemaPaciente = false; // tried to send without submiting (if clears all)
+                             scope.extraInfo += "Označite če zdravnik sprejema paciente ali ne!";
+                         }
+
+                        // string SIFRA
+                         if( ! (/^[0-9]{5,13}$/.test(n.sifra)) || angular.isUndefined(n.sifra)  ){
+                            // not valid num
+                            scope.extraInfo += "Šifra lahko ima samo številke, vsaj 5, največ 13.";
+                         }
+                         // string NAZIV
+                         if( angular.isUndefined(n.naziv) || scope.naziv == "" ){
+                            // not valid num
+                            scope.extraInfo += "Vnesite naziv.";
+                         }
+                         // dropdown TIP
+                         if( angular.isUndefined(n.tip) ){
+                            scope.extraInfo += "Izberite tip zdravnika.";
+                         }
+                         // dropdown AMBULANTA
+                         if( angular.isUndefined(n.izbranaAmbulanta) ){
+                            scope.extraInfo += "Izberite ambulanto.";
+                         }
+                         // dropdown AMBULANTA
+                         if( angular.isUndefined(n.izbranaSestra) ){
+                            scope.extraInfo += "Izberite medicinsko sestro zdravnika.";
+                         }
+                    }
+                }else{
+                    // NURSE
+
+                    if( isVarUndefinedOrEmptyStr(n.ime) && isVarUndefinedOrEmptyStr(n.priimek) &&
+                         isVarUndefinedOrEmptyStr(n.stevilka) ){
+                         // no optional field was selected
+                         scope.extraInfo = "";
+                    }else{
+                        // atleast one optional field was selected -> problems could accur
+                        // string IME & PRIIMEK
+                        scope.extraInfo += validateJoinedFields( scope, n);
+
+                        // int številka
+                        if( ! (/^[0-9]{4,9}$/.test(n.stevilka)) || angular.isUndefined(n.stevilka) ){
+                            scope.extraInfo += "Šifra lahko ima samo številke, vsaj 4, največ 9.";
+                        }
+
+                    }
+                }
+
             }
 
-        };
 
 
-        // catch server responses or we
-
-    }]);
-
+        }]);
 

@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate
 from rest_framework.renderers import JSONRenderer
 from rest_framework.authtoken.models import Token
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, request
 import traceback, datetime
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -26,7 +26,7 @@ from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik,
     NavodilaDieta
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
-    LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer
+    LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer
 
 class JSONResponse(HttpResponse):
     """
@@ -90,9 +90,14 @@ class ZdravnikViewSet(viewsets.ModelViewSet):
     serializer_class = ZdravnikSerializer
 
 
+# VSI PACIENTI ENEGA ZDRAVNIKA
+@permission_classes((IsAuthenticated,))
 class ZdravnikUporabnikiViewSet(viewsets.ModelViewSet):
-    queryset = Zdravnik.objects.all()
+    queryset = Uporabnik.objects.all()
     serializer_class = ZdravnikUporabnikiSerializer
+
+    def get_queryset(self):
+        return Uporabnik.objects.filter(zdravnik__id=self.request.user.id)
 
 
 # OSEBJE
@@ -171,8 +176,12 @@ def login(request, format=None):
                     UporabnikInst = Uporabnik.objects.get(user_ptr_id = user.id) 
                     return JSONResponse(LoginSerializer({'token':token[0], 'uporabnik':UporabnikInst}, context={'request': request}).data)
                 except ObjectDoesNotExist:
-                    ZdravnikInst = Zdravnik.objects.get(user_ptr_id = user.id) 
-                    return JSONResponse(LoginZdravnikSerializer({'token':token[0], 'zdravnik':ZdravnikInst}, context={'request': request}).data)
+                    try:
+                        ZdravnikInst = Zdravnik.objects.get(user_ptr_id = user.id) 
+                        return JSONResponse(LoginZdravnikSerializer({'token':token[0], 'zdravnik':ZdravnikInst}, context={'request': request}).data)
+                    except ObjectDoesNotExist:
+                        OsebjeInst = Osebje.objects.get(user_ptr_id = user.id) 
+                        return JSONResponse(LoginOsebjeSerializer({'token':token[0], 'osebje':OsebjeInst}, context={'request': request}).data)
             else:
                 response = JSONResponse({"error": "Uporabnik se ni aktiviran ali pa je IP zaklenjen"})
                 response.status_code = 400
@@ -206,20 +215,42 @@ def registracijaAdmin(request, format=None):
     Admin create new user
     """
     try:
+        #print(request.data)
         # check if email and password are received or return 400
         mail = request.data['email']
         passw = request.data['password']
         rola = request.data['role']
-        ime = request.data['ime']
-        priimek = request.data['priimek']
+
+        # get values or empty string if not there
+        ime = request.data.get('ime', "")
+        prii = request.data.get('priimek', "")
+
+        sifra = request.data.get('sifra', "")
+        sprejemaPac = request.data.get('sprejemaPaciente', 1)
+        novaStev = request.data.get('stevilka', 49)
+
+
+        if( ime != "" ):
+
+            if( rola == 'Zdravnik'):
+                naziv = request.data.get('naziv', "")
+                tip = request.data.get('tip', "")
+                ambulanta = request.data.get('izbranaAmbulanta', "")
+                medSestraUsermame = request.data.get('izbranaSestra', "")
+
+                ambul_id = ambulanta.split("/")[-1]
+                sestra_id = User.objects.get(username=medSestraUsermame).pk
+
 
         # check if sifra == number
         try:
-            novaSifra = int(request.data['sifra'])
+            novaSifra = int(sifra)
         except ValueError:
-            novaSifra = 15
-
-        novaStev = 15
+            novaSifra = 1337
+        try:
+            novaStev = int(novaStev)
+        except:
+            novaStev = 113377
 
         #print "check role"
         if( rola == 'Zdravnik'):
@@ -231,12 +262,19 @@ def registracijaAdmin(request, format=None):
                 return respons
             else:
                 validate_password(password=passw)
-                zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
-                    sifra=novaSifra,sprejema_paciente=1, role_id=2, ime=ime, priimek=priimek )
+                # check only ime - same as in login
+                if( ime != "" ):
+                    zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
+                            sifra=novaSifra,sprejema_paciente=sprejemaPac, role_id=2, ime=ime, priimek=prii,
+                            naziv=naziv, tip=tip, ambulanta_id=ambul_id, medicinske_sestre_id=sestra_id, is_staff=1)
+                else:
+                    zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
+                            sifra=novaSifra, sprejema_paciente=sprejemaPac, role_id=2, is_staff=1)
 
                 respons = JSONResponse({"success": "function : {'user created':'Zdravnik'}"})
                 respons.status_code = 201
                 return respons
+
 
         elif( rola == 'Medicinska sestra'):
 
@@ -247,8 +285,8 @@ def registracijaAdmin(request, format=None):
             else:
                 #print "NURSE"
                 validate_password(password=passw)
-                medSest = Osebje.objects.create_user(username=mail, email=mail,
-                    sifra=novaSifra, stevilka=novaStev, password=passw, role_id=3, ime=ime, priimek=priimek )
+                medSest = Osebje.objects.create_user(username=mail, email=mail, is_staff=1,ime=ime,
+                              priimek=prii, sifra=novaSifra, stevilka=novaStev, password=passw, role_id=3 )
                 respons = JSONResponse({"success": "function : {'user created':'Medicinska sestra'}"})
 
                 respons.status_code = 201

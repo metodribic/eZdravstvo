@@ -1,56 +1,139 @@
 
-<div class="col-md-6">
+<div class="col-md-6" xmlns="http://www.w3.org/1999/html">
 
-    <div class="alert alert-danger alert-dismissible" ng-show="visibleAlertFail">
-        {{besedZaUpor}}
-        {{extraInfo}}
+    <div class="box">
+        <div class="box-body">
+
+            <div class="alert alert-danger alert-dismissible" ng-show="visibleAlertFail">
+                {{besedZaUpor}}
+                {{extraInfo}}
+            </div>
+            <div class="alert alert-success alert-dismissible" ng-show="visibleAlertSucc">
+                {{besedZaUpor}}
+                {{extraInfo}}
+            </div>
+
+            <!--
+            <form ng-class="{'has-error': redFields}" ng-submit="shraniU()">
+            -->
+
+            <form ng-submit="shraniU()">
+                <!-- Required fields -->
+
+                <div class="form-group">
+                    <label for="email">Poklic <b style="color:red" >*</b></label>
+                    <select class="form-control" id="dropdown" ng-model="mojSelect" ng-change="showSelectValue(mojSelect)" >
+                      <option value="Zdravnik">Zdravnik</option>
+                      <option value="Medicinska sestra">Medicinska sestra</option>
+                    </select>
+                </div>
+                <div class="form-group" >
+                    <label for="email">Email <b style="color:red" >*</b></label>
+                    <input type="email" class="form-control" id="email" placeholder="uporabnik@organizacija.domena" ng-model="uporabniki.email" required="required">
+                </div>
+                <div class="form-group" >
+                    <label for="password">Geslo <b style="color:red" >*</b></label>
+                    <input type="password" class="form-control" id="password" placeholder="Geslo" ng-model="uporabniki.password" required="required">
+                </div>
+
+                <!-- Optional fields -->
+                <div ng-hide="hiddenElements" >
+
+                    <!-- IME -->
+                    <div class="form-group">
+                        <label for="ime">Ime</label>
+                        <input type="text" class="form-control" id="ime" placeholder="Janko" ng-model="uporabniki.ime"  >
+                    </div>
+
+                    <!-- PRIIMEK -->
+                    <div class="form-group">
+                        <label for="priimek">Priimek</label>
+                        <input type="text" class="form-control" id="priimek" placeholder="Novak" ng-model="uporabniki.priimek" >
+                    </div>
+
+                    <!-- ZDRAVNIK -->
+                    <div ng-hide="jeZdravnik" >
+
+                        <!-- SPREJEMA PACIENTE BOOL -->
+                        <div class="form-group">
+                            <label>Sprejema paciente?
+                                <div class="radio">
+                                    <label for="radioSprejemaP1" >
+                                        <input type="radio" name="radioSprejemaPaci" id="radioSprejemaP1" value="true" ng-model="uporabniki.sprejemaPacienteDa" >
+                                        Da
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label for="radioSprejemaP2">
+                                        <input type="radio" name="radioSprejemaPaci" id="radioSprejemaP2" value="false" ng-model="uporabniki.sprejemaPacienteNe">
+                                        Ne
+                                    </label>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- ŠIFRA -->
+                        <div class="form-group">
+                            <label for="sifra">Sifra</label>
+                            <input type="text" class="form-control" id="sifra" placeholder="987654321" ng-model="uporabniki.sifra" >
+                        </div>
+
+                        <!-- NAZIV -->
+                        <div class="form-group">
+                            <label for="naziv">Naziv</label>
+                            <input type="text" class="form-control" id="naziv" placeholder="Dr. Medicine" ng-model="uporabniki.naziv" >
+                        </div>
+
+                        <!-- TIP -->
+                        <div class="form-group">
+                            <label for="tip">Tip</label>
+                            <select class="form-control" id="tip" ng-model="uporabniki.tip" ng-change="changedTip(uporabniki.tip)" >
+                                <option value="osebni">Zdravnik</option>
+                                <option value="zobozdravnik">Zobozdravnik</option>
+                            </select>
+                        </div>
+
+                        <!-- AMBULANTA -->
+                        <div class="form-group">
+                            <label for="ambulantaId">Ambulanta</label>
+                            <select class="form-control" id="ambulantaId" ng-model="uporabniki.izbranaAmbulanta" ng-change="changedAmbulanta(uporabniki.izbranaAmbulanta)" >
+                              <option ng-repeat="a in ambulanta" value="{{ a.ustanova.url }}">{{a.ustanova.naziv}}, {{ a.ustanova.naslov }} </option>
+                            </select>
+                        </div>
+
+                        <!-- IZBIRA MEDICINSKE SESTRE -->
+                        <div class="form-group">
+                            <label for="medSestre">Medicinske sestre</label>
+                            <select class="form-control" id="sifra" ng-model="uporabniki.izbranaSestra" ng-change="changedNurse(uporabniki.izbranaSestra)" >
+                              <option ng-repeat="o in osebje" value="{{ o.username }}" >{{o.ime}} {{ o.priimek }} ({{ o.username }})</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+
+                    <div ng-hide="! jeZdravnik" >
+                        <div class="form-group">
+                            <label for="stevilka">Številka</label>
+                            <input type="text" class="form-control" id="stevilka" placeholder="12345" ng-model="uporabniki.stevilka" >
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-default pull-right" ng-click="showHideExtras()">
+                        Podrobnosti
+                    </button>
+                </div>
+
+                <button type="submit" class="btn btn-default">Prijava</button>
+            </form>
+
+
+        </div>
     </div>
-    <div class="alert alert-success alert-dismissible" ng-show="visibleAlertSucc">
-        {{besedZaUpor}}
-        {{extraInfo}}
-    </div>
-
-    <form ng-class="{'has-error': visibleAlert}" ng-submit="shraniU()">
-
-        <!-- Required fields -->
-
-        <div class="form-group">
-            <label for="email">Poklic <b style="color:red" >*</b></label>
-
-            <select class="form-control" id="dropdown" ng-model="mojSelect" ng-change="showSelectValue(mojSelect)" >
-              <option value="Zdravnik">Zdravnik</option>
-              <option value="Medicinska sestra">Medicinska sestra</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="email">Email <b style="color:red" >*</b></label>
-            <input type="email" class="form-control" id="email" placeholder="uporabnik@organizacija.domena" ng-model="uporabniki.email" required="required">
-        </div>
-        <div class="form-group">
-            <label for="password">Geslo <b style="color:red" >*</b></label>
-            <input type="password" class="form-control" id="password" placeholder="Geslo" ng-model="uporabniki.password" required="required">
-        </div>
-
-        <!-- Optional fields -->
-        <div class="form-group">
-            <label for="ime">Ime</label>
-            <input type="text" class="form-control" id="ime" placeholder="Ime" ng-model="uporabniki.ime"  >
-        </div>
-        <div class="form-group">
-            <label for="priimek">Priimek</label>
-            <input type="text" class="form-control" id="priimek" placeholder="Priimek" ng-model="uporabniki.priimek" >
-        </div>
-
-
-        <div class="form-group">
-            <label for="sifra">Sifra</label>
-            <input type="text" class="form-control" id="sifra" placeholder="Sifra" ng-model="uporabniki.sifra"  >
-        </div>
-
-        <!-- End of optional fields -->
-
-        <button type="submit" class="btn btn-default">Prijava</button>
-    </form>
 
 </div>
 

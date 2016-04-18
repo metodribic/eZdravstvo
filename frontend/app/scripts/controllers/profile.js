@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('tpo')
-  .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope', function ($scope, AuthService, $state, $rootScope) {
+  .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope', 'Notification', function ($scope, AuthService, $state, $rootScope, Notification) {
 
     $scope.changePassword = function(user) {
         /* Do login */
@@ -14,7 +14,7 @@ angular.module('tpo')
         var newpass2 = user.newpass2;
         var id = $rootScope.uporabnik.id;
         if(newpass2 !== newpass) {
-            addAlert("Passwords do not match", "warning");
+            addAlert("Passwords do not match", "error");
             return;
         }
 
@@ -24,16 +24,11 @@ angular.module('tpo')
         AuthService.changePassword(id, oldpass, newpass).then(function(response){
             addAlert("Password changed", "success");
         }, function(error) {
-            addAlert(error, "danger");
+            addAlert(error, "error");
         });
     };
 
     function addAlert(msg, state) {
-        var container = angular.element(document.querySelector('#alertContainer'));
-        container.empty();
-        container.append(
-            '<div class="fade in alert alert-dismissible alert-' + state + '" role="alert"> ' +
-        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' + 
-            '<span aria-hidden="false">&times;</span></button>' + msg + '</div>');
+        Notification({message: msg}, state);
     }
   }]);

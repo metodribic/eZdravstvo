@@ -9,10 +9,6 @@ class PostaSerializer(serializers.HyperlinkedModelSerializer):
         model = Posta
         fields =('id', 'kraj')
 
-class VlogaSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Roles
-        fields = ('naziv',)
 
 """ VLOGA """
 class VlogaSerializer(serializers.HyperlinkedModelSerializer):
@@ -111,7 +107,7 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     bolezni = BolezniSerializer(many=True)
     zdravnik = ZdravnikSerializer(many=True)
     dieta = DietaSerializer(many=True)
-    is_superuser = serializers.BooleanField()
+    is_superuser = serializers.BooleanField()   # REMOVE LATER
     id = serializers.IntegerField()
     is_superuser = serializers.BooleanField()
 
@@ -128,16 +124,19 @@ class LoginSerializer(serializers.Serializer):
 class LoginZdravnikSerializer(serializers.Serializer):
     zdravnik = ZdravnikSerializer()
     token = serializers.CharField(max_length=50)
+    
+class LoginOsebjeSerializer(serializers.Serializer):
+    osebje = OsebjeSerializer()
+    token = serializers.CharField(max_length=50)
 
 
 class ErrorSerializer(serializers.Serializer):
     error = serializers.CharField(max_length=500)
 
 
+""" ZDRAVNIK_UPORABNIKI """
 class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
-    pacienti = UporabnikSerializer(many=True)
-    id = serializers.IntegerField()  #For some reason not included otherwise
+    id = serializers.IntegerField()
 
     class Meta:
-        model = Zdravnik
-        exclude = ('pacienti', 'id',)
+        model = Uporabnik

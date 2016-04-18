@@ -20,7 +20,8 @@ angular
     'ngTouch',
     'ui.router',
     'tpo.services',
-    'tpo.models'
+    'tpo.models',
+    'ui-notification'
   ])
   .config(['$resourceProvider','$stateProvider', '$urlRouterProvider',
       function($resourceProvider, $stateProvider, $urlRouterProvider)  {
@@ -40,8 +41,6 @@ angular
               url: '/login',
               templateUrl: '../views/login.html',
               controller: 'LoginCtrl'
-
-
           })
 
           .state('registracijaUporabnikaAdmin', {
@@ -92,6 +91,18 @@ angular
           });
   }])
 
+    .config(function(NotificationProvider) {
+        NotificationProvider.setOptions({
+            delay: 10000,
+            startTop: 10,
+            startRight: 10,
+            verticalSpacing: 10,
+            horizontalSpacing: 10,
+            positionX: 'center',
+            positionY: 'top'
+        });
+    })
+
       .run(function ($rootScope, $state, AuthService, Uporabniki) {
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
         // console.log('changing state');
@@ -105,6 +116,14 @@ angular
           $rootScope.uporabnik = AuthService.getCurrentUser();
 
           //console.log($rootScope.uporabnik);
+
+            // check if admin and set link correctly
+            if( $rootScope.uporabnik.role.naziv !== "Admin" ){
+              $rootScope.isSuperU = true;
+            }else{
+                $rootScope.isSuperU = false;
+            }
         }
+
       });
   });

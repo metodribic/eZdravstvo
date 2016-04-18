@@ -26,10 +26,26 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
     
-.factory('RegistracijaUporAdmin', function($resource) {
-	return $resource('http://localhost:8000/registracijaAdmin', {
+.factory('RegistracijaUporAdmin', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/registracijaAdmin', {
 		update: {
-			method: 'POST'
+			method: 'PUT'
+		}
+	});
+})
+
+.factory('Osebje', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/osebje/:osebjeId',{ osebjeId: '@osebjeId'}, {
+		update: {
+			method: 'PUT'
+		}
+	});
+})
+
+.factory('Ambulanta', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/ambulanta/:ambulantaId',{ ambulantaId: '@ambulantaId'}, {
+		update: {
+			method: 'PUT'
 		}
 	});
 })

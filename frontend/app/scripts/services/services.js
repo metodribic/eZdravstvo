@@ -78,6 +78,10 @@ angular.module('tpo.services', ['ngResource', 'config'])
                     $rootScope.uporabnik = response.data.zdravnik;
                     storeUser(response.data.token, response.data.zdravnik);
                 }
+                else if(response.data.osebje) {
+                    $rootScope.uporabnik = response.data.osebje;
+                    storeUser(response.data.token, response.data.osebje);
+                }
                 resolve('Login success.');
             }, function errorCallback(response) {
                 console.log(response);
