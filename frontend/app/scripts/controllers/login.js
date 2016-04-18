@@ -1,7 +1,7 @@
 'use strict()';
 
 angular.module('tpo')
-  .controller('LoginCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta', function ($scope, AuthService, $state, $rootScope, Posta) {
+  .controller('LoginCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Notification', function ($scope, AuthService, $state, $rootScope, Posta, Notification) {
       $scope.red = false;
       $rootScope.logged_out = true;
 
@@ -19,11 +19,12 @@ angular.module('tpo')
         var _$state = $state;
 
         AuthService.login(uporabniki.email, uporabniki.geslo).then(function(response){
-            // econsole.log(response);
-            if(_this.uporabnik && !_this.uporabnik.ime)
-                    alert('No profile set. Will redirect (if we will make profile page)');
+            $rootScope.logged_out = false;
+            if(_this.uporabnik && !_this.uporabnik.ime){
+              Notification.warning({message: 'Za nadaljevanje izpolnite profil!', title: '<b>Opozorilo!</b>'});
+              $state.go('profile');
+            }
             else{
-              $rootScope.logged_out = false;
               $state.go('nadzornaPlosca');    //GO home!
             }
 

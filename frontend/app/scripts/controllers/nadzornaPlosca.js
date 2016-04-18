@@ -20,7 +20,7 @@ angular.module('tpo')
   .controller('NadzornaPloscaCtrl', ['$scope','$state','Uporabniki','$rootScope','AuthService','Pregled','Meritve','Bolezni','Zdravila','Diete', function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled, Meritve, Bolezni, Zdravila, Diete) {
 
     /*GET USER FROM LOCAL STORAGE*/
-    $scope.uporabnik = AuthService.getCurrentUser();
+    // $scope.uporabnik = AuthService.getCurrentUser();
     /* če ni prijavlen ga dej na login*/
     if(!$scope.uporabnik)
       $state.go("login");
@@ -40,7 +40,6 @@ angular.module('tpo')
     /* Loči zasebnega zdravnika ter zobozdravnika */
     $scope.osebniZdravnik = {};
     $scope.osebniZobozdravnik = {};
-    console.log($rootScope.uporabnik);
     for(var index in $scope.uporabnik.zdravnik){
      var tmpZdravnik = $scope.uporabnik.zdravnik[index];
      if(tmpZdravnik.tip == 'osebni'){

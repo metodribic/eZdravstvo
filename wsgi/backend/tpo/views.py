@@ -301,7 +301,8 @@ def changePassword(request, format=None):
                     return response
                 except ValidationError as e:
                     print(e)
-                    response = JSONResponse({"error": "Please choose better password. It should be at least 8 characters long and contain mixed letters and numbers. Also, it should not be too common (like 'test' etc)"})
+                    response = JSONResponse({"error": "Please choose better password. It should be at least 8 characters long and contain mixed letters and numbers. "
+                                                      "Also, it should not be too common (like 'test' etc)"})
                     response.status_code = 400
                     return response
             else:

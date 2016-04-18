@@ -99,11 +99,11 @@ class DietaSerializer(serializers.HyperlinkedModelSerializer):
 class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     role = VlogaSerializer()
     posta = PostaSerializer()
-    ambulanta = AmbulantaSerializer()
-    zdravila = ZdraviloSerializer(many=True)
-    bolezni = BolezniSerializer(many=True)
-    zdravnik = ZdravnikSerializer(many=True)
-    dieta = DietaSerializer(many=True)
+    ambulanta = AmbulantaSerializer(read_only=True, partial=True)
+    zdravila = ZdraviloSerializer(many=True, partial=True)
+    bolezni = BolezniSerializer(many=True, partial=True)
+    zdravnik = ZdravnikSerializer(many=True, partial=True)
+    dieta = DietaSerializer(many=True, partial=True)
     is_superuser = serializers.BooleanField()
     id = serializers.IntegerField()
     is_superuser = serializers.BooleanField()
@@ -111,9 +111,6 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Uporabnik
         exclude = ('password','first_name', 'last_name', 'is_superuser', 'is_staff')
-
-    def put(self, request):
-        print(request)
 
 
 class LoginSerializer(serializers.Serializer):

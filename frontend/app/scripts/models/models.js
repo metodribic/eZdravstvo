@@ -3,7 +3,7 @@ angular.module('tpo.models', ['ngResource', 'config'])
 .factory('Uporabniki', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/uporabniki/:iduporabnik', { iduporabnik: '@iduporabnik' }, {
 		update: {
-			method: 'PUT'
+			method: 'PATCH'
 		}
 	});
 })
