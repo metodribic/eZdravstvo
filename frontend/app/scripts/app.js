@@ -58,12 +58,7 @@ angular
           .state('pregledPodrobno', {
             url: '/pregledPodrobno/:id',
             templateUrl: '../views/pregledPodrobno.html',
-            controller: 'PregledPodrobnoCtrl',
-            resolve:   {
-                pregled: function($stateParams, Pregled) {
-                    return Pregled.Pre
-                }
-            }
+            controller: 'PregledPodrobnoCtrl'
           })
 
           .state('register', {

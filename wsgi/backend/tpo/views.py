@@ -19,6 +19,10 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.password_validation import validate_password
+from django.core.mail import send_mail
+from django.conf import settings
+
+
 
 
 # Create your views here.
@@ -309,6 +313,140 @@ def registracijaAdmin(request, format=None):
         response = JSONResponse({"error" : "Usage: {'email':'someone@someplace', 'password':'password'}"})
         response.status_code = 400 # Bad request
         return response
+
+@api_view(['POST'])
+def registracijaPacient(request, format=None):
+    """
+    Create new user
+    """
+
+
+    try:
+        print(request.data)
+        # check if email and password are received or return 400
+        mail = request.data['email']
+        password = request.data['password']
+
+
+        print mail + "******"
+
+        #opcijska polja
+        ime = request.data.get('ime', "")
+        priimek = request.data.get('priimek', "")
+        st_zzzs = request.data.get('st_zzzs', "")
+        spol = request.data.get('spol', "")
+        krvnaSkupina = request.data.get('krvnaSkupina', "")
+        datum_rojstva = request.data.get('datum_rojstva', "")
+        kraj_rojstva = request.data.get('kraj_rojstva', "")
+        naslov = request.data.get('naslov', "")
+
+
+
+
+        if (Uporabnik.objects.filter(email=mail).exists() ):
+
+
+            respons = JSONResponse({"error": "User with this email already exists"})
+            respons.status_code = 400;  # Bad request
+            return respons
+        else:
+            validate_password(password=password)
+            # check only ime - same as in login
+            if( ime != "" ):
+                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, ime=ime, priimek=priimek, st_zzzs=st_zzzs, spol=spol, krvna_skupina=krvnaSkupina, datum_rojstva=datum_rojstva, kraj_rojstva=kraj_rojstva, naslov=naslov)
+            else:
+                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, datum_rojstva="2000-04-03", role_id="4")
+
+            #posljes mail za aktivacijo
+            send_mail('Aktivacija eZdravstvo', settings.API_URL+'/activate/?email='+mail, 'ezdravstvo.tpo7@gmail.com', [mail], fail_silently=False)
+
+            respons = JSONResponse({"success": "function : {'user created':'Pacient'}"})
+            respons.status_code = 201
+            return respons
+
+
+        respons = JSONResponse({"success": "function : {'user created':'Pacient'}"})
+        respons.status_code = 201
+        return respons
+
+    except ValidationError as ve:
+        print ve
+        response = JSONResponse({"error": "WeakPassword"})
+        response.status_code = 400
+        return response
+    except IntegrityError as e:
+        #Exception raised when the relational integrity of the database
+        #is affected, e.g. a foreign key check fails, duplicate key, etc.
+
+        traceback.print_exc()
+        respons = JSONResponse({"error": "{'type' : 'Integrity error'}"})
+        respons.status_code = 422
+        return respons
+
+    except Exception as ex:
+        traceback.print_exc()
+        response = JSONResponse({"error" : "Usage: {'email':'someone@someplace', 'password':'password'}"})
+        response.status_code = 400 # Bad request
+        return response
+
+
+
+@api_view(['GET'])
+def aktivacija(request, format=None):
+    """
+    Create new user
+    """
+
+
+    try:
+        print(request.data)
+        # check if email and password are received or return 400
+        mail = request.data['email']
+
+        uporabniki = Uporabnik.objects.get(email=mail)
+
+
+        if(uporabniki != None):
+            uporabniki.is_active = True
+            uporabniki.save()
+
+        else:
+            validate_password(password=password)
+            # check only ime - same as in login
+            if( ime != "" ):
+                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, ime=ime, priimek=priimek, st_zzzs=st_zzzs, spol=spol, krvna_skupina=krvnaSkupina, datum_rojstva=datum_rojstva, kraj_rojstva=kraj_rojstva, naslov=naslov)
+            else:
+                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, datum_rojstva="2000-04-03", role_id="4")
+
+            respons = JSONResponse({"success": "function : {'user created':'Uporabnik'}"})
+            respons.status_code = 201
+            return respons
+
+
+        respons = JSONResponse({"success": "function : {'user created':'Zdravnik'}"})
+        respons.status_code = 201
+        return respons
+
+    except ValidationError as ve:
+        print ve
+        response = JSONResponse({"error": "WeakPassword"})
+        response.status_code = 400
+        return response
+    except IntegrityError as e:
+        #Exception raised when the relational integrity of the database
+        #is affected, e.g. a foreign key check fails, duplicate key, etc.
+
+        traceback.print_exc()
+        respons = JSONResponse({"error": "{'type' : 'Integrity error'}"})
+        respons.status_code = 422
+        return respons
+
+    except Exception as ex:
+        traceback.print_exc()
+        response = JSONResponse({"error" : "Usage: {'email':'someone@someplace', 'password':'password'}"})
+        response.status_code = 400 # Bad request
+        return response
+
 
 
 @api_view(['POST'])

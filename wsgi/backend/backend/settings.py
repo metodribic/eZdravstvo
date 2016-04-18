@@ -143,3 +143,9 @@ else:
     from backend.settings_dev import *
     
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ezdravstvo.tpo7@gmail.com'
+EMAIL_HOST_PASSWORD = 'ezdravstvo7'
+DEFAULT_FROM_EMAIL = 'ezdravstvo.tpo7@gmail.com'

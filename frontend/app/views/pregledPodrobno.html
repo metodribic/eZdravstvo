@@ -43,36 +43,37 @@
               <tr>
                 <td><b>Bolezni:</b></td>
                 <td>
-                    <span ng-show="pregled.bolezen.length > 0">{{pregled.bolezni}}</span>
+                    <span ng-repeat="bolezen in pregled.bolezen">
+                        {{bolezen.mkb10}} <span ng-show="bolezen.alergija"><i>(Alergija)</i></span>
+                    </span>
                     <span ng-show="pregled.bolezen.length == 0">/</span>
-                </td>
-              </tr>
-              <tr>
-                <td><b>Alergije:</b></td>
-               <td>
-                    <span ng-show="pregled.bolezen.alergija > 0">Da</span>
-                    <span ng-show="pregled.bolezen.alergija == 0">Ne</span>
                 </td>
               </tr>
               <tr>
                 <td><b>Zdravila:</b></td>
                 <td>
-                    <span ng-show="pregled.zdravilo.length > 0">{{pregled.zdravilo}}</span>
+                    <span ng-repeat="zdravilo in pregled.zdravilo">
+                        {{zdravilo.zdravilo}}
+                    </span>
                     <span ng-show="pregled.zdravilo.length == 0">/</span>
                 </td>
               </tr>
               <tr>
                 <td><b>Dieta:</b></td>
                 <td>
-                    <span ng-show="pregled.dieta.length > 0">{{pregled.dieta.navodila}}</span>
+                    <span ng-repeat="dieta in pregled.dieta">
+                        {{dieta.naziv}} <br>
+                    </span>
                     <span ng-show="pregled.dieta.length == 0">/</span>
                 </td>
               </tr>
               <tr>
                 <td><b>Navodila:</b></td>
                 <td>
-                    <span ng-show="pregled.opombe.length > 0">{{pregled.opombe}}</span>
-                    <span ng-show="pregled.opombe.length == 0">/</span>
+                    <span ng-repeat="zdravilo in pregled.zdravilo">
+                        <a ng-href="{{zdravilo.navodila}}">{{zdravilo.navodila}} <br></a>
+                    </span>
+                    <span ng-show="pregled.zdravilo.length == 0">/</span>
                 </td>
               </tr>
               <tr>

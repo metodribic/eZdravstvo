@@ -7,6 +7,8 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext as _
 
 
+
+
 class Uporabnik(User):
     ime = models.CharField(max_length=100, blank=True)
     priimek = models.CharField(max_length=100, blank=True)
