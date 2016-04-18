@@ -123,7 +123,7 @@
           <!-- Optionally, you can add icons to the links -->
           <li><a ui-sref="nadzornaPlosca"><i class="fa fa-home"></i> <span>Nadzorna plošča</span></a></li>
           <li><a href="#"><i class="fa fa-heartbeat"></i> <span>Meritve</span></a></li>
-          <li><a ui-sref="dodajPregled"><i class="fa fa-file-text-o"></i> <span>Dodaj pregled</span></a></li>
+          <li><a ui-sref="dodajPregled" ng-show="isDoctor"><i class="fa fa-file-text-o"></i> <span>Dodaj pregled</span></a></li>
 
           <li ng-show="isSuperU"><a href="#/registracijaAdmin"><i class="fa fa-gear"></i> <span>Registracija osebja</span></a></li>
             <!--

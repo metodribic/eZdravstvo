@@ -102,7 +102,7 @@ angular
 
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
 
-        if (toState.url !== '/login' && toState.url !== '/forgotPassword' && !AuthService.isAuthenticated()){
+        if (toState.url !== '/login' && toState.url !== '/forgotPassword' && toState.url !== '/register' && !AuthService.isAuthenticated()){
           // User isn’t authenticated
           $state.go("login");
           event.preventDefault();
@@ -122,6 +122,11 @@ angular
             $rootScope.isSuperU = true;
           }else{
             $rootScope.isSuperU = false;
+          }
+          if( $rootScope.uporabnik.role.naziv === "Zdravnik"  ){
+            $rootScope.isDoctor = true;
+          }else{
+            $rootScope.isDoctor = false;
           }
         }
       });

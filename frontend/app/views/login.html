@@ -1,14 +1,19 @@
-<div class="col-md-6">
-<form ng-class="{'has-error': red}" ng-submit="doLogin()">
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input type="email" class="form-control" id="email" placeholder="uporabnik@organizacija.domena" ng-model="uporabniki.email" required="required">
-  </div>
-  <div class="form-group">
-    <label for="password">Geslo</label>
-    <input type="password" class="form-control" id="password" placeholder="Geslo" ng-model="uporabniki.geslo" required="required">
-  </div>
-  <button type="submit" class="btn btn-default">Prijava</button>
-  <a ui-sref="register" style="cursor:pointer; color: #00a65a" class="pull-right" >Registracija</a>
-</form>
+<div class="col-md-6 col-md-offset-3">
+    <h2 class="naslovRegister">Vpis</h2>
+    <div class="box">
+        <div class="box-body">
+          <form ng-class="{'has-error': red}" ng-submit="doLogin()">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" placeholder="uporabnik@organizacija.domena" ng-model="uporabniki.email" required="required">
+            </div>
+            <div class="form-group">
+              <label for="password">Geslo</label>
+              <input type="password" class="form-control" id="password" placeholder="Geslo" ng-model="uporabniki.geslo" required="required">
+            </div>
+            <button type="submit" class="btn btn-default">Prijava</button>
+            <a ui-sref="register" style="cursor:pointer; color: #00a65a" class="pull-right" >Registracija</a>
+          </form>
+        </div>
+      </div>
 </div>

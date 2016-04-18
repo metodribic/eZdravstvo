@@ -55,7 +55,6 @@ angular.module('tpo')
     /* GET Uporabnik Bolezni*/
     Bolezni.get({limit: pagination_limit}).$promise.then(function(response){
       $scope.bolezni = response.results;
-      console.log(response.results);
     });
 
     /* GET Uporabnik Zdravila*/
