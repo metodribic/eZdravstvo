@@ -70,8 +70,17 @@ Database access: https://tpo-yoyosan.rhcloud.com/phpmyadmin/
 
 Database: *tpo*
 
-User: adminZPytHQu
+User: admin8fE6BsS
 
-Password: Jz4hnAtrZzAI 
+Password: FZ8f7A5_cLhZ 
 
-We will use slavnik.fri.uni-lj.si as production server. More info soon.
+Production server is located at 
+http://be-tpo1.rhcloud.com and http://fe-tpo1.rhcloud.com
+
+Database access: https://be-tpo1.rhcloud.com/phpmyadmin/
+
+Database: *tpo*
+
+User: adminpxiUIfV
+
+Password:  dAh2A2W8h1_q 

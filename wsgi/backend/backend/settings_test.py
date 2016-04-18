@@ -36,8 +36,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tpo',
-        'USER': 'adminZPytHQu',
-        'PASSWORD': 'Jz4hnAtrZzAI',
+        'USER': 'admin8fE6BsS',
+        'PASSWORD': 'FZ8f7A5_cLhZ',
         'HOST': os.environ.get('OPENSHIFT_MYSQL_DB_HOST'),
         'PORT': os.environ.get('OPENSHIFT_MYSQL_DB_PORT'),
     }
