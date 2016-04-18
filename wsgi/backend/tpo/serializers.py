@@ -12,9 +12,11 @@ class PostaSerializer(serializers.HyperlinkedModelSerializer):
 
 """ VLOGA """
 class VlogaSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField()
     class Meta:
         model = Roles
-        fields = ('naziv',)
+        fields = ('id', 'naziv')
+
 
 """ USTANOVA """
 class UstanovaSerializer(serializers.HyperlinkedModelSerializer):
@@ -97,12 +99,12 @@ class DietaSerializer(serializers.HyperlinkedModelSerializer):
 class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     role = VlogaSerializer()
     posta = PostaSerializer()
-    ambulanta = AmbulantaSerializer()
-    zdravila = ZdraviloSerializer(many=True)
-    bolezni = BolezniSerializer(many=True)
-    zdravnik = ZdravnikSerializer(many=True)
-    dieta = DietaSerializer(many=True)
-    is_superuser = serializers.BooleanField()   # REMOVE LATER
+    ambulanta = AmbulantaSerializer(read_only=True, partial=True)
+    zdravila = ZdraviloSerializer(many=True, partial=True)
+    bolezni = BolezniSerializer(many=True, partial=True)
+    zdravnik = ZdravnikSerializer(many=True, partial=True)
+    dieta = DietaSerializer(many=True, partial=True)
+    is_superuser = serializers.BooleanField()
     id = serializers.IntegerField()
     is_superuser = serializers.BooleanField()
 

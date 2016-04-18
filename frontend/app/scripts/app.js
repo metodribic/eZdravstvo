@@ -1,5 +1,4 @@
-
-'use strict';
+'use strict()';
 
 /**
  * @ngdoc overview
@@ -91,6 +90,7 @@ angular
           });
   }])
 
+
     .config(function(NotificationProvider) {
         NotificationProvider.setOptions({
             delay: 10000,
@@ -98,32 +98,37 @@ angular
             startRight: 10,
             verticalSpacing: 10,
             horizontalSpacing: 10,
-            positionX: 'center',
+            // positionX: 'center',
             positionY: 'top'
         });
     })
 
-      .run(function ($rootScope, $state, AuthService, Uporabniki) {
+  .run(function ($rootScope, $state, AuthService, Uporabniki, Notification) {
+
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-        // console.log('changing state');
-        // console.log(AuthService.isAuthenticated());
+
         if (toState.url !== '/login' && toState.url !== '/forgotPassword' && !AuthService.isAuthenticated()){
           // User isn’t authenticated
           $state.go("login");
           event.preventDefault();
         }
-        if(AuthService.isAuthenticated() && !$rootScope.uporabnik) {
-          $rootScope.uporabnik = AuthService.getCurrentUser();
 
-          //console.log($rootScope.uporabnik);
-
-            // check if admin and set link correctly
-            if( $rootScope.uporabnik.role.naziv !== "Admin" ){
-              $rootScope.isSuperU = true;
-            }else{
-                $rootScope.isSuperU = false;
-            }
+        if(fromState.url === '/profile' && toState.url !== '/logout'){
+          if(!$rootScope.uporabnik.ime || !$rootScope.uporabnik.priimek){
+            Notification.warning({message: 'Za nadaljevanje izpolnite profil!', title: '<b>Opozorilo!</b>'});
+            event.preventDefault();
+          }
         }
 
+        if(AuthService.isAuthenticated()) {
+          $rootScope.uporabnik = AuthService.getCurrentUser();
+          // check if admin and set link correctly
+          if( $rootScope.uporabnik.role.naziv === "Admin" ){
+            $rootScope.isSuperU = true;
+          }else{
+            $rootScope.isSuperU = false;
+          }
+        }
       });
+
   });
