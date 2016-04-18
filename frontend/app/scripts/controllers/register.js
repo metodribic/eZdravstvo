@@ -1,14 +1,14 @@
 /**
  * Created by jk on 06/04/2016.
  */
-'use strict';
+'use strict()';
 
 /* Controller za podrobni pogled pregleda*/
 
 
 
 angular.module('tpo')
-  .controller('registerCtrl', ['$scope', 'RegistracijaPacient', function ($scope, RegistracijaPacient) {
+  .controller('registerCtrl', ['$scope', 'RegistracijaPacient','Notification', function ($scope, RegistracijaPacient, Notification) {
 
 
     $scope.dodajUporabnika=function (user) {
@@ -36,24 +36,22 @@ angular.module('tpo')
         n.krajRojstva = $scope.user.kraj_rojstva;
         n.naslov = $scope.user.naslov;
 
-         console.log(n);
 
          // save user & wait for response
-         n.$save( function(succ){ // could check succ.success
-
-             if( userWasCreaterBool( succ.success ) ){
-                 $scope.besedZaUpor = "Uporabnik "+ $scope.user.username+" uspešno ustvarjen.";
-
-                 /*
-                 //
-                 //POSLJI EMAIL ZA AKTIVACIJO UPORABNISKEGA RACUNA
-                 //
-                 */
-
-                 // clear fields
-                 clearUporabnikFields($scope);
-                 //showSuccAlert( $scope );
-             }
+        n.$save( function(succ){ // could check succ.success
+           if( userWasCreaterBool( succ.success ) ){
+               $scope.besedZaUpor = "Uporabnik "+ $scope.user.username+" uspešno ustvarjen.";
+               console.log('test notification');
+               /*
+               //
+               //POSLJI EMAIL ZA AKTIVACIJO UPORABNISKEGA RACUNA
+               //
+               */
+               Notification.success("Registracija uspešna, v poštnem predalu vas čaka aktivacijsko sporočilo.");
+               // clear fields
+               clearUporabnikFields($scope);
+               //showSuccAlert( $scope );
+           }
 
          }, function (err) {
              responseFailedHandler ( $scope, err.data.error );
@@ -79,14 +77,14 @@ angular.module('tpo')
                 scope.user.kraj_rojstva = "";
                 scope.user.naslov = "";
                 scope.user.st_zzzs = "";
-        };
+        }
 
         function userWasCreaterBool( servSucc ){
             if( servSucc === "function : {'user created':'Pacient'}"){
                 return true;
             }
             return false;
-        };
+        }
 
         function responseFailedHandler ( scope, servFail ){
 
@@ -106,13 +104,13 @@ angular.module('tpo')
                 //$scope.besedZaUpor = "Prišlo je do napake, ponovno preglejte vnosna polja.";
             }
 
-        };
+        }
 
         function showFailAlert( scope ){
             scope.redFields = true;
             scope.visibleAlertFail = true;
             scope.visibleAlertSucc = false;
-        };
+        }
 
         function validateFE( scope, n ){
 
@@ -154,5 +152,5 @@ angular.module('tpo')
             }
             return scope.extraInfo;
         }
-    }
+    };
   }]);

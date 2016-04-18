@@ -314,6 +314,7 @@ def registracijaAdmin(request, format=None):
         response.status_code = 400 # Bad request
         return response
 
+
 @api_view(['POST'])
 def registracijaPacient(request, format=None):
     """
@@ -324,7 +325,7 @@ def registracijaPacient(request, format=None):
     try:
         print(request.data)
         # check if email and password are received or return 400
-        mail = request.data['email']
+        mail = request._data['email']
         password = request.data['password']
 
 
@@ -355,10 +356,10 @@ def registracijaPacient(request, format=None):
             if( ime != "" ):
                 pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, ime=ime, priimek=priimek, st_zzzs=st_zzzs, spol=spol, krvna_skupina=krvnaSkupina, datum_rojstva=datum_rojstva, kraj_rojstva=kraj_rojstva, naslov=naslov)
             else:
-                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, datum_rojstva="2000-04-03", role_id="4")
+                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, datum_rojstva="2000-04-03", role_id="4", is_active=False)
 
             #posljes mail za aktivacijo
-            send_mail('Aktivacija eZdravstvo', settings.API_URL+'/activate/?email='+mail, 'ezdravstvo.tpo7@gmail.com', [mail], fail_silently=False)
+            send_mail('Aktivacija eZdravstvo', '<a href='+settings.API_URL+'/activate/?email='+mail+'>'+'Kliknite na povezavo</a>', 'ezdravstvo.tpo7@gmail.com', [mail], fail_silently=False)
 
             respons = JSONResponse({"success": "function : {'user created':'Pacient'}"})
             respons.status_code = 201
@@ -399,11 +400,16 @@ def aktivacija(request, format=None):
 
 
     try:
-        print(request.data)
-        # check if email and password are received or return 400
-        mail = request.data['email']
+        print(request)
 
-        uporabniki = Uporabnik.objects.get(email=mail)
+        # check if email and password are received or return 400
+        mail = request._request.GET['email']
+        print(mail)
+        try:
+            uporabniki = Uporabnik.objects.get(email=mail)
+        except Exception as e1:
+           print(e1)
+        print(uporabniki)
 
 
         if(uporabniki != None):
@@ -411,6 +417,7 @@ def aktivacija(request, format=None):
             uporabniki.save()
 
         else:
+            print("test")
             validate_password(password=password)
             # check only ime - same as in login
             if( ime != "" ):

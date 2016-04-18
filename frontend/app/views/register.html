@@ -16,7 +16,8 @@
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary" ng-click="dodajUporabnika(user)" style="background-color: #00a65a">Registracija </button>
-                    <a href="#/login" class="btn btn-link">Prekliči</a>
+                    <a ui-sref="login" style="cursor:pointer; color: #00a65a" class="pull-right" >Nazaj</a>
+
                 </div>
 
                 <hr>
@@ -42,7 +43,7 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Krvna skupina</label>
-                    <select class="form-control" id="dropdown" ng-model="user.krvnaSkupina" ng-change="showSelectValue(user.krvnaSkupina)">
+                    <select class="form-control" id="dropdown1" ng-model="user.krvnaSkupina" ng-change="showSelectValue(user.krvnaSkupina)">
                           <option value="0+">0+</option>
                           <option value="A+">A+</option>
                           <option value="B+">B+</option>
