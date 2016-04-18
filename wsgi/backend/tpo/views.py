@@ -341,9 +341,6 @@ def registracijaPacient(request, format=None):
         kraj_rojstva = request.data.get('kraj_rojstva', "")
         naslov = request.data.get('naslov', "")
 
-
-
-
         if (Uporabnik.objects.filter(email=mail).exists() ):
 
 
@@ -430,7 +427,7 @@ def aktivacija(request, format=None):
             return respons
 
 
-        respons = JSONResponse({"success": "function : {'user created':'Zdravnik'}"})
+        respons = JSONResponse({"success": "function : {'user created':'Pacient'}"})
         respons.status_code = 201
         return respons
 
