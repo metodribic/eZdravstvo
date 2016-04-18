@@ -24,7 +24,7 @@ angular.module('tpo')
     /* če ni prijavlen ga dej na login*/
     if(!$scope.uporabnik)
       $state.go("login");
-      
+
 
     /* limit for pagination*/
     var pagination_limit = 5;
@@ -55,6 +55,7 @@ angular.module('tpo')
     /* GET Uporabnik Bolezni*/
     Bolezni.get({limit: pagination_limit}).$promise.then(function(response){
       $scope.bolezni = response.results;
+      console.log(response.results);
     });
 
     /* GET Uporabnik Zdravila*/

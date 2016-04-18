@@ -172,20 +172,26 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="pregled in pregledi">
-              <td ui-sref="#">{{pregled.datum | date:'dd.MM.yyyy, HH:mm'}}</td>
+            <tr ng-repeat="pregled in pregledi" >
+              <td>{{pregled.datum | date:'dd-mm-yyyy HH:mm'}}</td>
               <td>{{pregled.opombe}}</td>
               <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
               <td>
-                <span ng-show="pregled.bolezen.length > 0">{{pregled.bolezen}}</span>
+                <span ng-repeat="bolezen in pregled.bolezen">
+                    {{bolezen.mkb10}} <span ng-show="bolezen.alergija"><i>(Alergija)</i></span>
+                </span>
                 <span ng-show="pregled.bolezen.length == 0">/</span>
               </td>
               <td>
-                <span ng-show="pregled.zdravilo.length > 0">{{pregled.zdravilo}}</span>
+                <span ng-repeat="zdravilo in pregled.zdravilo">
+                    {{zdravilo.zdravilo}}
+                </span>
                 <span ng-show="pregled.zdravilo.length == 0">/</span>
               </td>
               <td>
-                <span ng-show="pregled.dieta.length > 0">{{pregled.dieta}}</span>
+                <span ng-repeat="dieta in pregled.dieta">
+                    {{dieta.naziv}} <br>
+                </span>
                 <span ng-show="pregled.dieta.length == 0">/</span>
               </td>
               <td>
