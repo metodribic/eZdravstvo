@@ -24,27 +24,36 @@
               <tr>
                 <td><b>Datum:</b></td>
                 <td>
-                    <span ng-show="pregled.datum.length > 0">{{pregled.datum}}</span>
+                    <span ng-show="pregled.datum.length > 0">{{pregled.datum | date:'dd.MM.yyyy'}}</span>
                     <span ng-show="pregled.datum.length == 0">/</span>
                 </td>
               </tr>
               <tr>
                 <td><b>Zdravnik:</b></td>
-                <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
+                <td>{{pregled.zdravnik.naziv}} {{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
               </tr>
               <tr>
                 <td><b>Meritve:</b></td>
-                  <td>{{pregled.meritve.tip}} {{pregled.meritve.vrednost_meritve}} {{pregled.bolezn}}</td>
-                <td>
-                    <span ng-show="pregled.meritve.length > 0">{{pregled.meritve}}</span>
-                    <span ng-show="pregled.meritve.length == 0">/</span>
-                </td>
+                  <td>
+                      {{pregled.meritve.tip}}: <b>{{pregled.meritve.vrednost_meritve}}</b> -
+                      <span ng-show="pregled.meritve.tip ==='Glukoza'">G1</span>
+                      <span ng-show="pregled.meritve.tip=='Krvni pritisk'">K2</span>
+                      <span ng-show="pregled.meritve.tip=='Srčni utrip'">S3</span>
+                      <span ng-show="pregled.meritve.tip=='Telesna temperatura'">T4</span>
+                      <span ng-show="pregled.meritve.tip=='Teža'">BMI</span>
+                  </td>
+                  <span ng-show="pregled.meritve.length == 0">/</span>
               </tr>
               <tr>
                 <td><b>Bolezni:</b></td>
                 <td>
                     <span ng-repeat="bolezen in pregled.bolezen">
-                        {{bolezen.mkb10}} <span ng-show="bolezen.alergija"><i>(Alergija)</i></span>
+                        {{bolezen.naziv}} <span ng-show="bolezen.alergija"><i>(Alergija)</i></span> - {{bolezen.mkb10}}
+                        <!--
+                        <ul>
+                            <a ng-href="{{bolezen.navodila}}"><i>{{bolezen.navodila}}</i></a>
+                        </ul>
+                        -->
                     </span>
                     <span ng-show="pregled.bolezen.length == 0">/</span>
                 </td>
@@ -53,7 +62,10 @@
                 <td><b>Zdravila:</b></td>
                 <td>
                     <span ng-repeat="zdravilo in pregled.zdravilo">
-                        {{zdravilo.zdravilo}}
+                        {{zdravilo.zdravilo}} :
+                        <ul>
+                            <a ng-href="{{zdravilo.navodila}}"><i>{{zdravilo.navodila}}</i></a>
+                        </ul>
                     </span>
                     <span ng-show="pregled.zdravilo.length == 0">/</span>
                 </td>
@@ -62,7 +74,10 @@
                 <td><b>Dieta:</b></td>
                 <td>
                     <span ng-repeat="dieta in pregled.dieta">
-                        {{dieta.naziv}} <br>
+                        {{dieta.naziv}} :
+                        <ul ng-repeat="navodilo in dieta.navodila" style="list-style-type:none">
+                            <li><a ng-href="{{navodilo.url}}"><i>{{navodilo.url}}</i></a></li>
+                        </ul>
                     </span>
                     <span ng-show="pregled.dieta.length == 0">/</span>
                 </td>
@@ -70,16 +85,14 @@
               <tr>
                 <td><b>Navodila:</b></td>
                 <td>
-                    <span ng-repeat="zdravilo in pregled.zdravilo">
-                        <a ng-href="{{zdravilo.navodila}}">{{zdravilo.navodila}} <br></a>
-                    </span>
+                    <span ng-repeat="zdravilo in pregled.zdravilo">/</span>
                     <span ng-show="pregled.zdravilo.length == 0">/</span>
                 </td>
               </tr>
               <tr>
                 <td><b>Naslednji pregled:</b></td>
                 <td>
-                <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega}}</span>
+                <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega | date:'dd.MM.yyyy'}}</span>
                 <span ng-show="pregled.datum_naslednjega.length == null">Ponovni pregled ni potreben!</span>
               </td>
               </tr>

@@ -16,7 +16,7 @@ angular.module('tpo')
         //console.log(response);
 
         $scope.pregled = response;
-          console.log($scope.pregled);
+          //console.log($scope.pregled);
 
     });
   }]);

@@ -162,6 +162,7 @@
         <table class="table table-striped" ng-show="pregledi.length != 0">
           <thead>
             <tr>
+              <th></th>
               <th>Datum pregleda</th>
               <th>Opombe</th>
               <th>Zdravnik</th>
@@ -173,6 +174,7 @@
           </thead>
           <tbody>
             <tr ng-repeat="pregled in pregledi" >
+              <td ui-sref="pregledPodrobno({id:pregled.id})"><i class="fa fa-search" style="cursor:pointer"></i></td>
               <td>{{pregled.datum | date:'dd.MM.yyyy'}}</td>
               <td>{{pregled.opombe}}</td>
               <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
