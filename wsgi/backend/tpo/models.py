@@ -31,7 +31,7 @@ class Uporabnik(User):
 class Zdravnik(User):
     ime = models.CharField(max_length=100, blank=True)
     priimek = models.CharField(max_length=100, blank=True)
-    sifra = models.IntegerField(blank=True)               # SIFRA USTANOVE
+    sifra = models.IntegerField(blank=True)               #SIFRA ZDR, SIFRA USTANOVE - naredi FK
     naziv = models.CharField(max_length=50, blank=True)
     ambulanta = models.ForeignKey('Ambulanta', blank=True, null=True)
     tip = models.CharField(max_length=50, blank=True)       # ZDRAVNIK ALI ZOBOZDRAVNIK
@@ -43,7 +43,7 @@ class Zdravnik(User):
 class Osebje(User):
     ime = models.CharField(max_length=100)
     priimek = models.CharField(max_length=100)
-    sifra = models.IntegerField()               # SIFRA USTANOVE
+    sifra = models.IntegerField()               #SIFRA SESTRE, SIFRA USTANOVE - naredi FK
     stevilka = models.IntegerField()            # STEVILKA MEDICINSKE SESTRE
     role = models.ForeignKey('Roles')
 

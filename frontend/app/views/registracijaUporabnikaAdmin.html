@@ -14,6 +14,27 @@
                       <option value="Medicinska sestra">Medicinska sestra</option>
                     </select>
                 </div>
+
+                <div ng-hide="! jeZdravnik" >
+                    <div class="form-group">
+                            <label for="medSestre">Šifra</label>
+                            <select class="form-control" id="sifra" ng-model="uporabniki.sifraSestra" >
+                              <option ng-repeat="o in osebje" value="{{ o.sifra }}" >{{o.ime}} {{ o.priimek }} {{ o.sifra }}</option>
+                            </select>
+                            <span style="color:red" ng-show="errSifraSestra" >Izberite šifro.</span>
+                    </div>
+                </div>
+
+                <div ng-hide="jeZdravnik" >
+                    <div class="form-group">
+                        <label for="medSestre">Šifra</label>
+                        <select class="form-control" id="sifra" ng-model="uporabniki.sifraZdravnik" >
+                          <option ng-repeat="z in zdravniki" value="{{ z.sifra }}" >{{z.ime}} {{ z.priimek }} {{ z.sifra }}</option>
+                        </select>
+                        <span style="color:red" ng-show="errSifraZdravnik" >Izberite šifro.</span>
+                    </div>
+                </div>
+
                 <div class="form-group" >
                     <label for="email">Email <b style="color:red" >*</b></label>
                     <input type="email" class="form-control" id="email" placeholder="uporabnik@organizacija.domena" ng-model="uporabniki.email" required="required">
@@ -64,11 +85,11 @@
                             <span style="color:red" ng-show="errSprejemaPac" >Označite če zdravnik sprejema paciente ali ne!</span>
                         </div>
 
-                        <!-- ŠIFRA -->
+                        <!-- ŠTEVILKA -->
                         <div class="form-group">
-                            <label for="sifra">Sifra</label>
-                            <input type="text" class="form-control" id="sifra" placeholder="987654321" ng-model="uporabniki.sifra" >
-                            <span style="color:red" ng-show="errSifra" >Šifra lahko ima samo številke, vsaj 5, največ 13.</span>
+                            <label for="stevilka">Številka</label>
+                            <input type="text" class="form-control" id="stevilka" placeholder="12345" ng-model="uporabniki.stevilka" >
+                            <span style="color:red" ng-show="errStevilka" >Številka lahko ima samo številke, vsaj 4, največ 9.</span>
                         </div>
 
                         <!-- NAZIV -->
@@ -107,14 +128,6 @@
                         </div>
 
 
-                    </div>
-
-                    <div ng-hide="! jeZdravnik" >
-                        <div class="form-group">
-                            <label for="stevilka">Številka</label>
-                            <input type="text" class="form-control" id="stevilka" placeholder="12345" ng-model="uporabniki.stevilka" >
-                        </div>
-                        <span style="color:red" ng-show="errStevilka" >Šifra lahko ima samo številke, vsaj 4, največ 9.</span>
                     </div>
 
                 </div>

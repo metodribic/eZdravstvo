@@ -229,10 +229,15 @@ def registracijaAdmin(request, format=None):
         ime = request.data.get('ime', "")
         prii = request.data.get('priimek', "")
 
-        sifra = request.data.get('sifra', "")
         sprejemaPac = request.data.get('sprejemaPaciente', 1)
         novaStev = request.data.get('stevilka', 49)
 
+        if( rola == 'Zdravnik'):
+            sifra = request.data.get('sifraZdr', "")
+            novMail = Zdravnik.objects.filter(sifra=sifra).delete()
+        else:
+            sifra = request.data.get('sifraSes', "")
+            novMail = Osebje.objects.filter(sifra=sifra).delete()
 
         if( ime != "" ):
 
@@ -244,7 +249,6 @@ def registracijaAdmin(request, format=None):
 
                 ambul_id = ambulanta.split("/")[-1]
                 sestra_id = User.objects.get(username=medSestraUsermame).pk
-
 
         # check if sifra == number
         try:
@@ -268,11 +272,11 @@ def registracijaAdmin(request, format=None):
                 validate_password(password=passw)
                 # check only ime - same as in login
                 if( ime != "" ):
-                    zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
+                    zdr = Zdravnik.objects.get_or_create(username=mail, email=mail, password=passw,
                             sifra=novaSifra,sprejema_paciente=sprejemaPac, role_id=2, ime=ime, priimek=prii,
                             naziv=naziv, tip=tip, ambulanta_id=ambul_id, medicinske_sestre_id=sestra_id, is_staff=1)
                 else:
-                    zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
+                    zdr = Zdravnik.objects.get_or_create(username=mail, email=mail, password=passw,
                             sifra=novaSifra, sprejema_paciente=sprejemaPac, role_id=2, is_staff=1)
 
                 respons = JSONResponse({"success": "function : {'user created':'Zdravnik'}"})
