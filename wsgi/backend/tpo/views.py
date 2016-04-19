@@ -21,6 +21,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.core.mail import send_mail
 from django.conf import settings
+import datetime
 
 
 
@@ -355,12 +356,12 @@ def registracijaPacient(request, format=None):
             validate_password(password=password)
             # check only ime - same as in login
             if( ime != "" ):
-                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, ime=ime, priimek=priimek, st_zzzs=st_zzzs, spol=spol, krvna_skupina=krvnaSkupina, datum_rojstva=datum_rojstva, kraj_rojstva=kraj_rojstva, naslov=naslov)
+                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, ime=ime, priimek=priimek, st_zzzs=st_zzzs, spol=spol, krvna_skupina=krvnaSkupina, datum_rojstva=datetime.date(2008, 3, 12), kraj_rojstva=kraj_rojstva, naslov=naslov)
             else:
-                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, datum_rojstva="2000-04-03", role_id="4", is_active=False)
+                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, datum_rojstva=datetime.date(2008, 3, 12), role_id="4", is_active=False)
 
             #posljes mail za aktivacijo
-            send_mail('Aktivacija eZdravstvo', settings.API_URL+'/activate/?email='+mail, 'ezdravstvo.tpo7@gmail.com', [mail], fail_silently=False)
+            send_mail('Aktivacija eZdravstvo', 'Uspesno ste se registrirali na portal eZdravstvo. Za aktivacijo profila, kliknite na spodnji naslov: \n\n\n' + settings.API_URL+'/activate/?email='+mail, 'ezdravstvo.tpo7@gmail.com', [mail], fail_silently=False)
 
             respons = JSONResponse({"success": "function : {'user created':'Pacient'}"})
             respons.status_code = 201
@@ -418,18 +419,7 @@ def aktivacija(request, format=None):
             uporabniki.save()
 
         else:
-            print("test")
-            validate_password(password=password)
-            # check only ime - same as in login
-            if( ime != "" ):
-                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, ime=ime, priimek=priimek, st_zzzs=st_zzzs, spol=spol, krvna_skupina=krvnaSkupina, datum_rojstva=datum_rojstva, kraj_rojstva=kraj_rojstva, naslov=naslov)
-            else:
-                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, datum_rojstva="2000-04-03", role_id="4")
-
-            respons = JSONResponse({"success": "function : {'user created':'Uporabnik'}"})
-            respons.status_code = 201
-            return respons
-
+            print("Prislo je do napake!")
 
         respons = JSONResponse({"success": "function : {'user created':'Pacient'}"})
         respons.status_code = 201
@@ -452,7 +442,7 @@ def aktivacija(request, format=None):
     except Exception as ex:
         traceback.print_exc()
         response = JSONResponse({"error" : "Usage: {'email':'someone@someplace', 'password':'password'}"})
-        response.status_code = 400 # Bad request
+        response.status_code = 400 #Bad request
         return response
 
 
