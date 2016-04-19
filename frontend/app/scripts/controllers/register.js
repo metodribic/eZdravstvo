@@ -53,6 +53,9 @@ angular.module('tpo')
            }
 
          }, function (err) {
+            if(err.data.error == "WeakPassword"){
+              Notification.error("Geslo mora vsebovati najman 8 znakov, od tega vsaj eno številko!");
+            }
              responseFailedHandler ( $scope, err.data.error );
              showFailAlert( $scope );
          });

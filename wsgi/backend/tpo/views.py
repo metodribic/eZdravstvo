@@ -21,7 +21,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.core.mail import send_mail
 from django.conf import settings
-
+import datetime
 
 
 
@@ -351,9 +351,10 @@ def registracijaPacient(request, format=None):
             validate_password(password=password)
             # check only ime - same as in login
             if( ime != "" ):
+                print(datum_rojstva)
                 pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, ime=ime, priimek=priimek, st_zzzs=st_zzzs, spol=spol, krvna_skupina=krvnaSkupina, datum_rojstva=datum_rojstva, kraj_rojstva=kraj_rojstva, naslov=naslov)
             else:
-                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, datum_rojstva="2000-04-03", role_id="4", is_active=False)
+                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, datum_rojstva=datetime.date(2000,04,03), role_id="4", is_active=False)
 
             #posljes mail za aktivacijo
             send_mail('Aktivacija eZdravstvo', settings.API_URL+'/activate/?email='+mail, 'ezdravstvo.tpo7@gmail.com', [mail], fail_silently=False)
