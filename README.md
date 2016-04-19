@@ -70,9 +70,9 @@ Database access: https://tpo-yoyosan.rhcloud.com/phpmyadmin/
 
 Database: *tpo*
 
-User: admin8fE6BsS
+User: admin7iEtgSY
 
-Password: FZ8f7A5_cLhZ 
+Password: kEnCDtdvmySi
 
 Production server is located at 
 http://be-tpo1.rhcloud.com and http://fe-tpo1.rhcloud.com
