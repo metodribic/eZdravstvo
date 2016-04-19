@@ -414,18 +414,7 @@ def aktivacija(request, format=None):
             uporabniki.save()
 
         else:
-            print("test")
-            validate_password(password=password)
-            # check only ime - same as in login
-            if( ime != "" ):
-                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, ime=ime, priimek=priimek, st_zzzs=st_zzzs, spol=spol, krvna_skupina=krvnaSkupina, datum_rojstva=datum_rojstva, kraj_rojstva=kraj_rojstva, naslov=naslov)
-            else:
-                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, datum_rojstva="2000-04-03", role_id="4")
-
-            respons = JSONResponse({"success": "function : {'user created':'Uporabnik'}"})
-            respons.status_code = 201
-            return respons
-
+            print("Prislo je do napake!")
 
         respons = JSONResponse({"success": "function : {'user created':'Pacient'}"})
         respons.status_code = 201
