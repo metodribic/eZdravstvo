@@ -8,7 +8,7 @@
 
 
 angular.module('tpo')
-  .controller('registerCtrl', ['$scope', 'RegistracijaPacient','Notification', function ($scope, RegistracijaPacient, Notification) {
+  .controller('registerCtrl', ['$scope', 'RegistracijaPacient','Notification', '$state', function ($scope, RegistracijaPacient, Notification, $state) {
 
 
     $scope.dodajUporabnika=function (user) {
@@ -41,15 +41,16 @@ angular.module('tpo')
         n.$save( function(succ){ // could check succ.success
            if( userWasCreaterBool( succ.success ) ){
                $scope.besedZaUpor = "Uporabnik "+ $scope.user.username+" uspešno ustvarjen.";
-               console.log('test notification');
+               //console.log('test notification');
                /*
                //
                //POSLJI EMAIL ZA AKTIVACIJO UPORABNISKEGA RACUNA
                //
                */
                Notification.success("Registracija uspešna, v poštnem predalu vas čaka aktivacijsko sporočilo.");
+               $state.go("login");
                // clear fields
-               clearUporabnikFields($scope);
+               //clearUporabnikFields($scope);
                //showSuccAlert( $scope );
            }
 
