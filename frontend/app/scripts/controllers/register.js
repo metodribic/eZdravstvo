@@ -8,7 +8,7 @@
 
 
 angular.module('tpo')
-  .controller('registerCtrl', ['$scope', 'RegistracijaPacient','Notification', function ($scope, RegistracijaPacient, Notification) {
+  .controller('registerCtrl', ['$scope', 'RegistracijaPacient','Notification', '$state', function ($scope, RegistracijaPacient, Notification, $state) {
 
 
     $scope.dodajUporabnika=function (user) {
@@ -47,8 +47,9 @@ angular.module('tpo')
                //
                */
                Notification.success("Registracija uspešna, v poštnem predalu vas čaka aktivacijsko sporočilo.");
+               $state.go("login");
                // clear fields
-               clearUporabnikFields($scope);
+               //clearUporabnikFields($scope);
                //showSuccAlert( $scope );
            }
 
