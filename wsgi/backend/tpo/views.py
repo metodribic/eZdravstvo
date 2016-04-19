@@ -272,11 +272,11 @@ def registracijaAdmin(request, format=None):
                 validate_password(password=passw)
                 # check only ime - same as in login
                 if( ime != "" ):
-                    zdr = Zdravnik.objects.get_or_create(username=mail, email=mail, password=passw,
+                    zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
                             sifra=novaSifra,sprejema_paciente=sprejemaPac, role_id=2, ime=ime, priimek=prii,
                             naziv=naziv, tip=tip, ambulanta_id=ambul_id, medicinske_sestre_id=sestra_id, is_staff=1)
                 else:
-                    zdr = Zdravnik.objects.get_or_create(username=mail, email=mail, password=passw,
+                    zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
                             sifra=novaSifra, sprejema_paciente=sprejemaPac, role_id=2, is_staff=1)
 
                 respons = JSONResponse({"success": "function : {'user created':'Zdravnik'}"})
