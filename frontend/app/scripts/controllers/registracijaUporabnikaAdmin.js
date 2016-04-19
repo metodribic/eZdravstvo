@@ -7,9 +7,9 @@
 
 angular.module('tpo')
     .controller('registracijaUporAdminCtrl', ['$scope', '$state', 'Uporabniki','$resource', '$rootScope',
-        'AuthService','RegistracijaUporAdmin', 'Osebje', 'Ambulanta','Notification',
+        'AuthService','RegistracijaUporAdmin', 'Osebje', 'Ambulanta', 'Zdravnik', 'Notification',
         function ($scope, $state, Uporabniki, $resource, $rootScope, AuthService,
-                  RegistracijaUporAdmin, Osebje, Ambulanta, Notification ) {
+                  RegistracijaUporAdmin, Osebje, Ambulanta, Zdravnik, Notification ) {
 /*
             NotificationProvider.setOptions({
                 maxCount:3
@@ -42,6 +42,12 @@ angular.module('tpo')
             $scope.osebje = new Osebje();
             Osebje.get({limit:  50}).$promise.then(function(response){
                 $scope.osebje = response.results;
+            });
+
+            /*** Zdravniki iz baze ***/
+            $scope.zdravniki = new Zdravnik();
+            Zdravnik.get({limit:  50}).$promise.then(function(response){
+                $scope.zdravniki = response.results;
             });
 
             /*** Ambulante iz baze ***/
@@ -80,7 +86,8 @@ angular.module('tpo')
                 n.priimek = $scope.uporabniki.priimek;
                 n.sprejemaPacienteDa = $scope.uporabniki.sprejemaPacienteDa;
                 n.sprejemaPacienteNe = $scope.uporabniki.sprejemaPacienteNe;
-                n.sifra = $scope.uporabniki.sifra;
+                n.sifraZdr = $scope.uporabniki.sifraZdravnik;
+                n.sifraSes = $scope.uporabniki.sifraSestra;
                 n.naziv = $scope.uporabniki.naziv;
                 n.tip = $scope.uporabniki.tip;
                 
@@ -89,6 +96,7 @@ angular.module('tpo')
                 // med sestra
                 n.stevilka = $scope.uporabniki.stevilka;
 
+                console.log(n);
                 // validation FE
                 validateFE( $scope, n );
 
@@ -151,7 +159,7 @@ angular.module('tpo')
                 scope.errIme = false;
                 scope.errPrii = false;
                 scope.errSprejemaPac = false;
-                scope.errSifra = false;
+                //scope.errSifra = false;
                 scope.errNaziv = false;
                 scope.errTip = false;
                 scope.errAmbulanta = false;
@@ -237,12 +245,15 @@ angular.module('tpo')
                 scope.extraInfo = "";
                 if( n.role == "Zdravnik"){
                      if( isVarUndefinedOrEmptyStr(n.ime) && isVarUndefinedOrEmptyStr(n.priimek) &&
-                         isVarUndefinedOrEmptyStr(n.sifra) && isVarUndefinedOrEmptyStr(n.naziv) &&
+                         ! isVarUndefinedOrEmptyStr(n.sifraZdr) &&
+                         isVarUndefinedOrEmptyStr(n.naziv) &&
                          isVarUndefinedOrEmptyStr(n.izbranaAmbulanta) && isVarUndefinedOrEmptyStr(n.tip) &&
                          isVarUndefinedOrEmptyStr(n.izbranaSestra) ){
                          // isVarUndefinedOrEmptyStr(n.sprejemaPaciente) -> cant untick once its ticked
                          // no optional field was selected
+
                          scope.extraInfo = "";
+
                     }else{
 
                          // atleast one optional field was selected -> problems could accur
@@ -259,13 +270,14 @@ angular.module('tpo')
                          }
 
                         // string SIFRA
+                         /*
                          if( ! (/^[0-9]{5,13}$/.test(n.sifra)) || angular.isUndefined(n.sifra)  ){
                              // not valid num
                              scope.extraInfo += "Šifra lahko ima samo številke, vsaj 5, največ 13.\n";
                              scope.errSifra = true;
                          }else{
                              scope.errSifra = false;
-                         }
+                         }*/
 
                          // string NAZIV
                          if( angular.isUndefined(n.naziv) || scope.naziv == "" ){
@@ -303,9 +315,11 @@ angular.module('tpo')
                     // NURSE
 
                     if( isVarUndefinedOrEmptyStr(n.ime) && isVarUndefinedOrEmptyStr(n.priimek) &&
-                         isVarUndefinedOrEmptyStr(n.stevilka) ){
+                         isVarUndefinedOrEmptyStr(n.stevilka) && ! isVarUndefinedOrEmptyStr(n.sifraSes) ){
                          // no optional field was selected
+
                          scope.extraInfo = "";
+
                     }else{
                         // atleast one optional field was selected -> problems could accur
                         // string IME & PRIIMEK

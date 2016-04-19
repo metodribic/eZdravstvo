@@ -41,7 +41,6 @@ angular.module('tpo')
         n.$save( function(succ){ // could check succ.success
            if( userWasCreaterBool( succ.success ) ){
                $scope.besedZaUpor = "Uporabnik "+ $scope.user.username+" uspešno ustvarjen.";
-               console.log('test notification');
                /*
                //
                //POSLJI EMAIL ZA AKTIVACIJO UPORABNISKEGA RACUNA
