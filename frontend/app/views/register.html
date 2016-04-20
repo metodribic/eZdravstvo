@@ -32,13 +32,13 @@
                 </div>
                 <div class="form-group">
                     <label for="username">Številka zdravstvenega zavarovanja</label>
-                    <input type="text" name="st_zzzs" id="st_zzzs" class="form-control" ng-model="user.st_zzzs"/>
+                    <input type="number" name="st_zzzs" id="st_zzzs" class="form-control" ng-model="user.st_zzzs"/>
                 </div>
                  <div class="form-group">
                     <label for="email">Spol</label>
                     <select class="form-control" id="dropdown" ng-model="user.spol" ng-change="showSelectValue(user.spol)">
-                          <option value="Moški">Moški</option>
-                          <option value="Ženska">Ženska</option>
+                          <option value="M">Moški</option>
+                          <option value="Ž">Ženska</option>
                     </select>
                 </div>
                 <div class="form-group">

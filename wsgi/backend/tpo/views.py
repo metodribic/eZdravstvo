@@ -21,7 +21,6 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.core.mail import send_mail
 from django.conf import settings
-import datetime
 
 
 
@@ -324,30 +323,33 @@ def registracijaPacient(request, format=None):
     """
     Create new user
     """
-
-
     try:
-        print(request.data)
+        #print(request.data)
         # check if email and password are received or return 400
         mail = request._data['email']
         password = request.data['password']
 
-
-        print mail + "******"
-
-        #opcijska polja
+         #opcijska polja
         ime = request.data.get('ime', "")
         priimek = request.data.get('priimek', "")
-        st_zzzs = request.data.get('st_zzzs', "")
+        st_zzzs = request.data.get('zdravstvenaSt', 0000)
         spol = request.data.get('spol', "")
         krvnaSkupina = request.data.get('krvnaSkupina', "")
-        datum_rojstva = request.data.get('datum_rojstva', "")
-        kraj_rojstva = request.data.get('kraj_rojstva', "")
+        kraj_rojstva = request.data.get('krajRojstva', "")
         naslov = request.data.get('naslov', "")
 
+        try:
+            [y,m,d] = ((request.data.get('datumRojstva', [2000, 20, 12])).split("T")[0]).split("-")
+            tmpD = int(d)
+            tmpD = tmpD + 1
+            # dan pride 10, na fieldu pa je 11 (zacne z 0 al neki)
+            datum_rojstva = datetime.date(int(y), int(m), int(tmpD) )
+            print datum_rojstva
+        except ValueError as date_ve:
+            datum_rojstva = datetime.date(2000, 20, 12)
+
+
         if (Uporabnik.objects.filter(email=mail).exists() ):
-
-
             respons = JSONResponse({"error": "User with this email already exists"})
             respons.status_code = 400;  # Bad request
             return respons
@@ -355,9 +357,12 @@ def registracijaPacient(request, format=None):
             validate_password(password=password)
             # check only ime - same as in login
             if( ime != "" ):
-                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, ime=ime, priimek=priimek, st_zzzs=st_zzzs, spol=spol, krvna_skupina=krvnaSkupina, datum_rojstva=datetime.date(2008, 3, 12), kraj_rojstva=kraj_rojstva, naslov=naslov)
+                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, role_id="4", is_active=False,
+                            ime=ime, priimek=priimek, st_zzzs=st_zzzs, spol=spol, krvna_skupina=krvnaSkupina,
+                            datum_rojstva=datum_rojstva, kraj_rojstva=kraj_rojstva, naslov=naslov)
             else:
-                pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, datum_rojstva=datetime.date(2008, 3, 12), role_id="4", is_active=False)
+                pacient = Uporabnik.objects.create_user(username=mail, email=mail,
+                            password=password, datum_rojstva=datetime.date(2008, 3, 12), role_id="4", is_active=False)
 
 
             #posljes mail za aktivacijo

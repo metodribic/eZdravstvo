@@ -12,14 +12,10 @@ angular.module('tpo')
 
 
     $scope.dodajUporabnika=function (user) {
-        //console.log(user);
 
         $scope.besedZaUpor = "";
 
         var n = new RegistracijaPacient();
-
-        //console.log(n);
-        //console.log("*********!!!*");
 
         //obvezna polja
         n.email  = $scope.user.upIme;
