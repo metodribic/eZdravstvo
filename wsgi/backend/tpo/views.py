@@ -26,12 +26,12 @@ from django.conf import settings
 
 # Create your views here.
 from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock, \
-    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba
+    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, Oskrbovanec
 
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
     LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer, SifrantRegistriranihSerializer, \
-    VrednostiMeritevSerializer, KontaktnaOsebaSerializer
+    VrednostiMeritevSerializer, KontaktnaOsebaSerializer, OskrbovanecSerializer
 
 
 
@@ -515,3 +515,8 @@ class VrednostiMeritevViewSet(viewsets.ModelViewSet):
 class KontaktnaOsebaViewSet(viewsets.ModelViewSet):
     queryset = KontaktnaOseba.objects.all()
     serializer_class = KontaktnaOsebaSerializer
+
+
+class OskrbovanecViewSet(viewsets.ModelViewSet):
+    queryset = Oskrbovanec.objects.all()
+    serializer_class = OskrbovanecSerializer

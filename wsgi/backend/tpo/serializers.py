@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni, Dieta, \
-    Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba
+    Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, Oskrbovanec
 
 """ POSTA """
 class PostaSerializer(serializers.HyperlinkedModelSerializer):
@@ -49,7 +49,6 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
     role = VlogaSerializer()
     medicinske_sestre = OsebjeSerializer(many=True)
     id = serializers.IntegerField()
-
     class Meta:
         model = Zdravnik
         exclude = ('password', 'first_name', 'last_name', 'is_superuser', 'is_staff')
@@ -102,14 +101,27 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     bolezni = BolezniSerializer(many=True, partial=True)
     zdravnik = ZdravnikSerializer(many=True, partial=True)
     dieta = DietaSerializer(many=True, partial=True)
-    is_superuser = serializers.BooleanField()
     id = serializers.IntegerField()
     is_superuser = serializers.BooleanField()
     kontaktna_oseba = KontaktnaOsebaSerializer()
-
     class Meta:
         model = Uporabnik
         exclude = ('password','first_name', 'last_name', 'is_superuser', 'is_staff')
+
+
+""" OSKRBOVANEC """
+class OskrbovanecSerializer(serializers.HyperlinkedModelSerializer):
+    role = VlogaSerializer()
+    posta = PostaSerializer()
+    ambulanta = AmbulantaSerializer(read_only=True, partial=True)
+    zdravila = ZdraviloSerializer(many=True, partial=True)
+    bolezni = BolezniSerializer(many=True, partial=True)
+    zdravnik = ZdravnikSerializer(many=True, partial=True)
+    dieta = DietaSerializer(many=True, partial=True)
+    id = serializers.IntegerField()
+    kontaktna_oseba = KontaktnaOsebaSerializer()
+    class Meta:
+        model = Oskrbovanec
 
 
 """ VREDNOSTI MERITEV """
@@ -171,6 +183,5 @@ class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
 """ SIFRANT REGISTRIRANIH """
 class SifrantRegistriranihSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField()
-
     class Meta:
         model = SifrantRegistriranih
