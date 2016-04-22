@@ -26,11 +26,15 @@ from django.conf import settings
 
 # Create your views here.
 from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock, \
-    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev
+    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba
+
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
     LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer, SifrantRegistriranihSerializer, \
-    VrednostiMeritevSerializer
+    VrednostiMeritevSerializer, KontaktnaOsebaSerializer
+
+
+
 
 class JSONResponse(HttpResponse):
     """
@@ -367,7 +371,8 @@ def registracijaPacient(request, format=None):
 
 
             #posljes mail za aktivacijo
-            send_mail('Aktivacija eZdravstvo', 'Uspesno ste se registrirali na portal eZdravstvo. Za aktivacijo profila, kliknite na spodnji naslov: \n\n\n' + settings.API_URL+'/activate/?email='+mail, 'ezdravstvo.tpo7@gmail.com', [mail], fail_silently=False)
+            send_mail('Aktivacija eZdravstvo', 'Uspesno ste se registrirali na portal eZdravstvo. Za aktivacijo profila, kliknite na spodnji naslov: \n\n\n' +
+                      settings.API_URL+'/activate/?email='+mail, 'ezdravstvo.tpo7@gmail.com', [mail], fail_silently=False)
 
             respons = JSONResponse({"success": "function : {'user created':'Pacient'}"})
             respons.status_code = 201
@@ -505,3 +510,8 @@ class SifrantRegistriranihViewSet(viewsets.ModelViewSet):
 class VrednostiMeritevViewSet(viewsets.ModelViewSet):
     queryset = VrednostiMeritev.objects.all()
     serializer_class = VrednostiMeritevSerializer
+
+
+class KontaktnaOsebaViewSet(viewsets.ModelViewSet):
+    queryset = KontaktnaOseba.objects.all()
+    serializer_class = KontaktnaOsebaSerializer

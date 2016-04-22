@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni, Dieta, \
-    Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev
+    Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba
 
 """ POSTA """
 class PostaSerializer(serializers.HyperlinkedModelSerializer):
@@ -47,13 +47,12 @@ class OsebjeSerializer(serializers.HyperlinkedModelSerializer):
 class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
     ambulanta = AmbulantaSerializer()
     role = VlogaSerializer()
-    medicinske_sestre = OsebjeSerializer()
-    id = serializers.IntegerField()  #For some reason not included otherwise
+    medicinske_sestre = OsebjeSerializer(many=True)
+    id = serializers.IntegerField()
 
     class Meta:
         model = Zdravnik
         exclude = ('password', 'first_name', 'last_name', 'is_superuser', 'is_staff')
-
 
 
 """ ZDRAVILO """
@@ -86,6 +85,14 @@ class DietaSerializer(serializers.HyperlinkedModelSerializer):
         model = Dieta
 
 
+""" Kontaktna oseba """
+class KontaktnaOsebaSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField()
+    posta = PostaSerializer()
+    class Meta:
+        model = KontaktnaOseba
+
+
 """ UPORABNIK """
 class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     role = VlogaSerializer()
@@ -98,6 +105,7 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     is_superuser = serializers.BooleanField()
     id = serializers.IntegerField()
     is_superuser = serializers.BooleanField()
+    kontaktna_oseba = KontaktnaOsebaSerializer()
 
     class Meta:
         model = Uporabnik
@@ -166,4 +174,3 @@ class SifrantRegistriranihSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = SifrantRegistriranih
-

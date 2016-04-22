@@ -44,7 +44,11 @@
               </tr>
               <tr>
                 <td><b>Naslov:</b></td>
-                <td>{{uporabnik.naslov}}<br> {{uporabnik.posta.id}} {{uporabnik.posta.kraj}}</td>
+                <td>
+                  {{uporabnik.naslov}}<br>&nbsp;
+                  {{uporabnik.posta.id}}&nbsp;
+                  {{uporabnik.posta.kraj}}
+                </td>
               </tr>
               <tr>
                 <td><b>Številka ZZZS</b></td>
@@ -93,7 +97,13 @@
               </tr>
               <tr>
                 <td><b>Osebje</b></td>
-                <td>{{osebniZdravnik.medicinske_sestre.ime}} {{osebniZdravnik.medicinske_sestre.priimek}}</td>
+                <td>
+                  <span ng-repeat = "sestra in osebniZdravnik.medicinske_sestre">
+                    {{sestra.ime}}&nbsp;
+                    {{sestra.priimek}}
+                    <br>
+                  </span>
+                </td>
               </tr>
 
             </tbody>
@@ -141,7 +151,13 @@
               </tr>
               <tr>
                 <td><b>Osebje</b></td>
-                <td>{{osebniZobozdravnik.medicinske_sestre.ime}} {{osebniZobozdravnik.medicinske_sestre.priimek}}</td>
+                <td>
+                  <span ng-repeat = "sestra in osebniZobozdravnik.medicinske_sestre">
+                    {{sestra.ime}}&nbsp;
+                    {{sestra.priimek}}
+                    <br>
+                  </span>
+                </td>
               </tr>
 
             </tbody>
@@ -226,7 +242,10 @@
               <td ui-sref="#">{{meritev.datum | date:'dd.MM.yyyy, HH:mm'}}</td>
               <td>{{meritev.tip_meritve.tip}}</td>
               <td>{{meritev.tip_meritve.sifra}}</td>
-              <td><b>{{meritev.vrednost_meritve}}</b> <i>(Normalno med: {{meritev.tip_meritve.normalno_min}} in {{meritev.tip_meritve.normalno_max}})</i></td>
+              <td>
+                <b>{{meritev.vrednost_meritve}}</b>&nbsp;
+                <i>(Normalno med: {{meritev.tip_meritve.normalno_min}} in {{meritev.tip_meritve.normalno_max}})</i>
+              </td>
             </tr>
           </tbody>
         </table>

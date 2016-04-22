@@ -24,6 +24,8 @@ class Uporabnik(User):
     dieta = models.ManyToManyField('Dieta', blank=True)
     role = models.ForeignKey('Roles')
     is_deleted = models.BooleanField(default=False)
+    telefon = models.CharField(max_length=100, blank=True, null=True)
+    kontaktna_oseba = models.ForeignKey('KontaktnaOseba', blank=True, null=True)
 
 
 class Zdravnik(User):
@@ -33,20 +35,22 @@ class Zdravnik(User):
     naziv = models.CharField(max_length=50, blank=True)
     ambulanta = models.ForeignKey('Ambulanta', blank=True, null=True)
     tip = models.CharField(max_length=50, blank=True)       # ZDRAVNIK ALI ZOBOZDRAVNIK
-    medicinske_sestre = models.ForeignKey('Osebje', blank=True, null=True)
+    medicinske_sestre = models.ManyToManyField('Osebje', blank=True)
     role = models.ForeignKey('Roles')
     sprejema_paciente = models.BooleanField(default=True)
     prosta_mesta = models.IntegerField(default=10)
     ustanova = models.ForeignKey('Ustanova', blank=True, null=True)
+    telefon = models.CharField(max_length=100, blank=True, null=True)
 
 
 class Osebje(User):
     ime = models.CharField(max_length=100)
     priimek = models.CharField(max_length=100)
     sifra = models.ForeignKey('SifrantRegistriranih')
-    stevilka = models.IntegerField()
+    stevilka = models.IntegerField()  # metod: nimam pojma kaj bi naj bla ta stevilka ?
     role = models.ForeignKey('Roles')
     ustanova = models.ForeignKey('Ustanova')
+    telefon = models.CharField(max_length=100, blank=True, null=True)
 
 
 class SifrantRegistriranih(models.Model):
@@ -162,3 +166,11 @@ class IsAlphanumericPasswordValidator(object):
 
     def get_help_text(self):
         return _("Your password must contain at least one number and at least one character")
+
+
+class KontaktnaOseba(models.Model):
+    ime = models.CharField(max_length=100)
+    priimek = models.CharField(max_length=100)
+    naslov = models.CharField(max_length=100)
+    posta = models.ForeignKey('Posta')
+    sorodstveno_razmerje = models.CharField(max_length=100)
