@@ -1,9 +1,34 @@
 'use strict()';
+
+/*
+Uporabniški profil obsega:
+  številko kartice zdravstvenega zavarovanja, 👍
+  priimek in ime, 👍
+  naslov, 👍
+  telefon, 👍
+  datum rojstva,
+  spol,👍
+  podatke o kontaktni osebi: 👍
+    priimek in ime, 👍
+    naslov, 👍
+    telefon, 👍
+    sorodstveno razmerje 👍
+*/
+
 angular.module('tpo')
   .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik','Notification', function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik, Notification) {
     var trenutniUporabnik = $rootScope.uporabnik;
+
+    // Preveri ali je prijavljena oseba zravnik ali pacient
+    $scope.tipUporabnika = 'Pacient';
+    if(trenutniUporabnik.role.naziv == 'Pacient')
+      $scope.tipUporabnika = 'Pacient';
+    else if(trenutniUporabnik.role.naziv == 'Zdravnik')
+      $scope.tipUporabnika = 'Zdravnik'
+      
+
+    // model, ki se uporabi za posodabljanje profila
     $scope.shrani_spremembe = function(){
-      // model, ki se uporabi za POST
       var updatedUporabnik = {};
 
       // preveri če je prijavljen uporabnik zdravnik
@@ -12,11 +37,13 @@ angular.module('tpo')
           response.ime = trenutniUporabnik.ime;
           response.priimek = trenutniUporabnik.priimek;
           response.$update();
-
         });
       }
       //  če ni zdravnik preveri če je pacient ali admin
       else if( trenutniUporabnik.role.naziv == 'Pacient' || trenutniUporabnik.role.naziv == 'Admin' ){
+
+        // TODO: Preveri če je oskrbovanec
+
         var updated_user = new Uporabniki();
         updated_user.id = trenutniUporabnik.id;
         updated_user.ime = $rootScope.uporabnik.ime;
@@ -24,15 +51,23 @@ angular.module('tpo')
         updated_user.kraj_rojstva = $rootScope.uporabnik.kraj_rojstva;
         updated_user.st_zzzs = $rootScope.uporabnik.st_zzzs;
         updated_user.$update({iduporabnik: trenutniUporabnik.id});
-        Notification.success('Profile updated!')
+        Notification.success('Profile updated!');
       }
 
     };
 
-    $scope.pridobi_ime_poste = function(){
-      Posta.get({postaId: $scope.uporabnik.posta.id}).$promise.then(function(response){
-        $rootScope.uporabnik.posta.kraj = response.kraj;
-      });
+    $scope.pridobi_ime_poste = function(oseba){
+      if(oseba == 'pacient')
+        Posta.get({postaId: $scope.uporabnik.posta.id}).$promise.then(function(response){
+          $rootScope.uporabnik.posta.kraj = response.kraj;
+        });
+      else if(oseba == 'sorodnik'){
+
+        Posta.get({postaId: $scope.uporabnik.kontaktna_oseba.posta.id}).$promise.then(function(response){
+          $rootScope.uporabnik.kontaktna_oseba.posta.kraj = response.kraj;
+        });
+      }
+
     };
 
 
@@ -66,4 +101,5 @@ angular.module('tpo')
         Notification({message: msg}, state);
 
     }
+
   }]);
