@@ -7,8 +7,6 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext as _
 
 
-
-
 class Uporabnik(User):
     ime = models.CharField(max_length=100, blank=True)
     priimek = models.CharField(max_length=100, blank=True)
@@ -25,27 +23,34 @@ class Uporabnik(User):
     bolezni = models.ManyToManyField('Bolezni', blank=True)
     dieta = models.ManyToManyField('Dieta', blank=True)
     role = models.ForeignKey('Roles')
-
+    is_deleted = models.BooleanField(default=False)
 
 
 class Zdravnik(User):
     ime = models.CharField(max_length=100, blank=True)
     priimek = models.CharField(max_length=100, blank=True)
-    sifra = models.IntegerField(blank=True)               #SIFRA ZDR, SIFRA USTANOVE - naredi FK
+    sifra = models.ForeignKey('SifrantRegistriranih')
     naziv = models.CharField(max_length=50, blank=True)
     ambulanta = models.ForeignKey('Ambulanta', blank=True, null=True)
     tip = models.CharField(max_length=50, blank=True)       # ZDRAVNIK ALI ZOBOZDRAVNIK
     medicinske_sestre = models.ForeignKey('Osebje', blank=True, null=True)
     role = models.ForeignKey('Roles')
-    sprejema_paciente = models.BooleanField()
+    sprejema_paciente = models.BooleanField(default=True)
+    prosta_mesta = models.IntegerField(default=10)
+    ustanova = models.ForeignKey('Ustanova', blank=True, null=True)
 
 
 class Osebje(User):
     ime = models.CharField(max_length=100)
     priimek = models.CharField(max_length=100)
-    sifra = models.IntegerField()               #SIFRA SESTRE, SIFRA USTANOVE - naredi FK
-    stevilka = models.IntegerField()            # STEVILKA MEDICINSKE SESTRE
+    sifra = models.ForeignKey('SifrantRegistriranih')
+    stevilka = models.IntegerField()
     role = models.ForeignKey('Roles')
+    ustanova = models.ForeignKey('Ustanova')
+
+
+class SifrantRegistriranih(models.Model):
+    sifra = models.IntegerField()
 
 
 class Ustanova(models.Model):
@@ -108,18 +113,25 @@ class Bolezni(models.Model):
     zdravilo = models.ManyToManyField('Zdravilo')
 
 
-class Meritev(models.Model):
+# Dovoljene(max,min,nemogoce) vrednosti za doloceno meritev
+class VrednostiMeritev(models.Model):
     id = models.IntegerField(primary_key=True)
     tip = models.CharField(max_length=50)
     enota = models.CharField(max_length=50)
-    normalno_min = models.FloatField()
-    normalno_max = models.FloatField()
-    nenormalno_min = models.FloatField()
-    nenormalno_max = models.FloatField()
-    nemogoce_min = models.FloatField()
-    nemogoce_max = models.FloatField()
-    cas_merjenja = models.CharField(max_length=100)
-    vrednost_meritve = models.FloatField()
+    normalno_min = models.CharField(max_length=50)
+    normalno_max = models.CharField(max_length=50)
+    nenormalno_min = models.CharField(max_length=50)
+    nenormalno_max = models.CharField(max_length=50)
+    nemogoce_min = models.CharField(max_length=50)
+    nemogoce_max = models.CharField(max_length=50)
+    sifra = models.CharField(max_length=10)
+    kdaj_se_meri=models.CharField(max_length=100)
+
+
+class Meritev(models.Model):
+    id = models.IntegerField(primary_key=True)
+    tip_meritve = models.ForeignKey('VrednostiMeritev')
+    vrednost_meritve = models.CharField(max_length=100)
     datum = models.DateField()
     uporabnik = models.ForeignKey('Uporabnik')
 

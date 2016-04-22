@@ -32,15 +32,11 @@
                 <td>{{pregled.zdravnik.naziv}} {{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
               <tr>
                 <td><b>Meritve:</b></td>
-                  <td>
-                      {{pregled.meritve.tip}}: <b>{{pregled.meritve.vrednost_meritve}}</b> -
-                      <span ng-show="pregled.meritve.tip ==='Glukoza'">G1</span>
-                      <span ng-show="pregled.meritve.tip=='Krvni pritisk'">K2</span>
-                      <span ng-show="pregled.meritve.tip=='Srčni utrip'">S3</span>
-                      <span ng-show="pregled.meritve.tip=='Telesna temperatura'">T4</span>
-                      <span ng-show="pregled.meritve.tip=='Teža'">BMI</span>
+                  <td ng-hide = "pregled.meritve.length == 0">
+                      {{pregled.meritve.tip_meritve.tip}}&nbsp;<i>(šifra: {{pregled.meritve.tip_meritve.sifra}})</i>: <b>{{pregled.meritve.vrednost_meritve}}</b>
+                      <!-- <i>(Normalno med: {{pregled.meritve.tip_meritve.normalno_min}} in {{pregled.meritve.tip_meritve.normalno_max}})</i> -->
                   </td>
-                  <span ng-show="pregled.meritve.length == 0">/</span>
+                  <span ng-show = "pregled.meritve.length == 0">/</span>
               </tr>
               <tr>
                 <td><b>Bolezni:</b></td>

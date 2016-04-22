@@ -217,14 +217,16 @@
             <tr>
               <th>Datum</th>
               <th>Tip meritve</th>
+              <th>Šifra meritve</th>
               <th>Vrednost meritve</th>
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat="meritev in meritve">
               <td ui-sref="#">{{meritev.datum | date:'dd.MM.yyyy, HH:mm'}}</td>
-              <td>{{meritev.tip}}</td>
-              <td>{{meritev.vrednost_meritve}}</td>
+              <td>{{meritev.tip_meritve.tip}}</td>
+              <td>{{meritev.tip_meritve.sifra}}</td>
+              <td><b>{{meritev.vrednost_meritve}}</b> <i>(Normalno med: {{meritev.tip_meritve.normalno_min}} in {{meritev.tip_meritve.normalno_max}})</i></td>
             </tr>
           </tbody>
         </table>
@@ -306,9 +308,14 @@
                 <td class="col-3">{{dieta.naziv}}</td>
                 <td class="col-1">{{dieta.sifra}}</td>
                 <td class="col-8">
-                  <ul ng-repeat="navodilo in dieta.navodila" style="list-style-type:none">
+                  <span ng-repeat="navodilo in dieta.navodila">
+                    <a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url)}}</a>
+                    <br>
+                  </span>
+
+                  <!-- <ul ng-repeat="navodilo in dieta.navodila" style="list-style-type:none">
                     <li><a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url)}}</a></li>
-                  </ul>
+                  </ul> -->
                 </td>
                 <!-- <td ng-href="{{dieta.url}}">{{dieta.url}}</td> -->
               </tr>

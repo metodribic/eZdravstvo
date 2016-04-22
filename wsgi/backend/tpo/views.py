@@ -26,10 +26,11 @@ from django.conf import settings
 
 # Create your views here.
 from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock, \
-    NavodilaDieta
+    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
-    LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer
+    LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer, SifrantRegistriranihSerializer, \
+    VrednostiMeritevSerializer
 
 class JSONResponse(HttpResponse):
     """
@@ -494,3 +495,13 @@ def changePassword(request, format=None):
         response.status_code = 500; # Bad request
         return response
 
+
+# Sifranti registriranih zdravnikov/med. sester
+class SifrantRegistriranihViewSet(viewsets.ModelViewSet):
+    queryset = SifrantRegistriranih.objects.all()
+    serializer_class = SifrantRegistriranihSerializer
+
+
+class VrednostiMeritevViewSet(viewsets.ModelViewSet):
+    queryset = VrednostiMeritev.objects.all()
+    serializer_class = VrednostiMeritevSerializer

@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni, Dieta, Ustanova, Osebje, NavodilaDieta
+from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni, Dieta, \
+    Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev
 
 """ POSTA """
 class PostaSerializer(serializers.HyperlinkedModelSerializer):
@@ -54,14 +55,6 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
         exclude = ('password', 'first_name', 'last_name', 'is_superuser', 'is_staff')
 
 
-""" MERITEV """
-class MeritevSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField()
-    class Meta:
-        model = Meritev
-
-
-
 
 """ ZDRAVILO """
 class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
@@ -93,18 +86,6 @@ class DietaSerializer(serializers.HyperlinkedModelSerializer):
         model = Dieta
 
 
-""" PREGLED """
-class PregledSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField()
-    zdravnik = ZdravnikSerializer()
-    meritve = MeritevSerializer()
-    bolezen = BolezniSerializer(many=True)
-    dieta = DietaSerializer(many=True)
-    zdravilo = ZdraviloSerializer(many=True)
-    class Meta:
-        model = Pregled
-
-
 """ UPORABNIK """
 class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     role = VlogaSerializer()
@@ -121,6 +102,36 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Uporabnik
         exclude = ('password','first_name', 'last_name', 'is_superuser', 'is_staff')
+
+
+""" VREDNOSTI MERITEV """
+class VrednostiMeritevSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = VrednostiMeritev
+
+
+""" MERITEV """
+class MeritevSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
+    tip_meritve = VrednostiMeritevSerializer()
+    uporabnik = UporabnikSerializer()
+
+    class Meta:
+        model = Meritev
+
+
+""" PREGLED """
+class PregledSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
+    zdravnik = ZdravnikSerializer()
+    meritve = MeritevSerializer()
+    bolezen = BolezniSerializer(many=True)
+    dieta = DietaSerializer(many=True)
+    zdravilo = ZdraviloSerializer(many=True)
+    class Meta:
+        model = Pregled
 
 
 class LoginSerializer(serializers.Serializer):
@@ -147,3 +158,12 @@ class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Uporabnik
+
+
+""" SIFRANT REGISTRIRANIH """
+class SifrantRegistriranihSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = SifrantRegistriranih
+
