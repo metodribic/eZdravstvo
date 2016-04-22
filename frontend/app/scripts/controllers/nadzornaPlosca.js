@@ -24,7 +24,6 @@ angular.module('tpo')
     /* če ni prijavlen ga dej na login*/
     if(!$scope.uporabnik)
       $state.go("login");
-      console.log($rootScope.uporabnik);
     /* limit for pagination*/
     var pagination_limit = 5;
 
