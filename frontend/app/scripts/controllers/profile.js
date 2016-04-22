@@ -13,19 +13,27 @@ Uporabniški profil obsega:
     naslov, 👍
     telefon, 👍
     sorodstveno razmerje 👍
+
+------ ZDRAVNIK -----
+številko zdravnika, 👍
+priimek in ime, 👍
+šifro izvajalca zdravstvene dejavnosti (npr. zdravstvenega doma),👍
+telefon,👍
+e-mail,👍
+število pacientov, ki jih lahko sprejme). 👍
 */
 
 angular.module('tpo')
-  .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik','Notification', function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik, Notification) {
+  .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik','Notification', 'Ustanova', function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik, Notification, Ustanova) {
     var trenutniUporabnik = $rootScope.uporabnik;
-
+    console.log($rootScope.uporabnik);
     // Preveri ali je prijavljena oseba zravnik ali pacient
     $scope.tipUporabnika = 'Pacient';
     if(trenutniUporabnik.role.naziv == 'Pacient')
       $scope.tipUporabnika = 'Pacient';
     else if(trenutniUporabnik.role.naziv == 'Zdravnik')
       $scope.tipUporabnika = 'Zdravnik'
-      
+
 
     // model, ki se uporabi za posodabljanje profila
     $scope.shrani_spremembe = function(){
@@ -68,6 +76,13 @@ angular.module('tpo')
         });
       }
 
+    };
+
+    $scope.pridobi_ustanovo = function () {
+      Ustanova.get({ustanovaId: $rootScope.uporabnik.ustanova.id}).$promise.then(function(response){
+        $rootScope.uporabnik.ustanova = response;
+        console.log(response);
+      });
     };
 
 

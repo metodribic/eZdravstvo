@@ -22,6 +22,7 @@ class VlogaSerializer(serializers.HyperlinkedModelSerializer):
 """ USTANOVA """
 class UstanovaSerializer(serializers.HyperlinkedModelSerializer):
     posta = PostaSerializer()
+    id = serializers.IntegerField()
 
     class Meta:
         model = Ustanova
@@ -43,12 +44,21 @@ class OsebjeSerializer(serializers.HyperlinkedModelSerializer):
         exclude = ('password', 'first_name', 'last_name', 'is_superuser', 'is_staff')
 
 
+""" SIFRANT REGISTRIRANIH """
+class SifrantRegistriranihSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField()
+    class Meta:
+        model = SifrantRegistriranih
+
+
 """ ZDRAVNIK """
 class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
     ambulanta = AmbulantaSerializer()
     role = VlogaSerializer()
     medicinske_sestre = OsebjeSerializer(many=True)
     id = serializers.IntegerField()
+    sifra = SifrantRegistriranihSerializer()
+    ustanova = UstanovaSerializer()
     class Meta:
         model = Zdravnik
         exclude = ('password', 'first_name', 'last_name', 'is_superuser', 'is_staff')
@@ -178,10 +188,3 @@ class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Uporabnik
-
-
-""" SIFRANT REGISTRIRANIH """
-class SifrantRegistriranihSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.IntegerField()
-    class Meta:
-        model = SifrantRegistriranih
