@@ -118,6 +118,20 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
         model = Uporabnik
         exclude = ('password','first_name', 'last_name', 'is_superuser', 'is_staff')
 
+    def update(self, instance, validated_data):
+        # posta extra cudna zadeva, ni cela v validated data...
+        instance.posta_id = self._kwargs['data']['posta']['id']
+        instance.ime = validated_data['ime']
+        instance.priimek = validated_data['priimek']
+        instance.kraj_rojstva = validated_data['kraj_rojstva']
+        instance.naslov = validated_data['naslov']
+        instance.spol = validated_data['spol']
+        instance.st_zzzs = validated_data['st_zzzs']
+        instance.telefon = validated_data['telefon']
+        instance.save()
+
+        return instance
+
 
 """ OSKRBOVANEC """
 class OskrbovanecSerializer(serializers.HyperlinkedModelSerializer):
