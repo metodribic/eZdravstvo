@@ -144,8 +144,20 @@ class OskrbovanecSerializer(serializers.HyperlinkedModelSerializer):
     dieta = DietaSerializer(many=True, partial=True)
     id = serializers.IntegerField()
     kontaktna_oseba = KontaktnaOsebaSerializer()
+
     class Meta:
         model = Oskrbovanec
+
+    def update(self, instance, validated_data):
+        # posta extra cudna zadeva, ni cela v validated data...
+        instance.posta_id = self._kwargs['data']['posta']['id']
+        instance.ime = validated_data['ime']
+        instance.priimek = validated_data['priimek']
+        instance.naslov = validated_data['naslov']
+        instance.telefon = validated_data['telefon']
+        instance.save()
+
+        return instance
 
 
 """ VREDNOSTI MERITEV """

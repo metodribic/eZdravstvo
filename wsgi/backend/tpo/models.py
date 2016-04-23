@@ -174,6 +174,7 @@ class KontaktnaOseba(models.Model):
     naslov = models.CharField(max_length=100)
     posta = models.ForeignKey('Posta')
     sorodstveno_razmerje = models.CharField(max_length=100)
+    telefon = models.CharField(max_length=100)
 
 
 

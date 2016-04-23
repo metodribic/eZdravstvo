@@ -24,7 +24,8 @@ e-mail,👍
 */
 
 angular.module('tpo')
-  .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik','Notification', 'Ustanova', function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik, Notification, Ustanova) {
+  .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik','Notification', 'Ustanova', 'KontaktnaOseba',
+  function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik, Notification, Ustanova, KontaktnaOseba) {
     var trenutniUporabnik = $rootScope.uporabnik;
 
     // console.log($rootScope.uporabnik);
@@ -67,14 +68,15 @@ angular.module('tpo')
           kraj: $rootScope.uporabnik.posta.kraj
         };
 
-        // console.log(updated_user.posta);
-        // updated_user.datum_rojstva = $rootScope.uporabnik.datum_rojstva;
-
         updated_user.$update({iduporabnik: trenutniUporabnik.id});
         Notification.success('Profile updated!');
       }
-
     };
+
+    $scope.shrani_oskrbovanca = function(){
+      console.log($rootScope.uporabnik.kontaktna_oseba);
+    };
+
     // PRIDOBIVANJE POSTE GLEDE NA ID
     $scope.pridobi_ime_poste = function(oseba){
 
