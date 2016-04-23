@@ -114,7 +114,17 @@
             <a  target="_self">{{uporabnik.role.naziv}}</a>
           </div>
         </div>
-
+        <div class="izbiraOskrbovanca">
+            <p>Izbrani uporabnik</p>
+            <ui-select ng-model="selected.value" on-select="changeUser($item, $model)">
+                <ui-select-match>
+                    <span ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="oskrbovanec in (profili | filter: $select.search)">
+                    <span>{{oskrbovanec.ime}} {{oskrbovanec.priimek}}</span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
         <!-- /.search form -->
 
         <!-- Sidebar Menu -->
