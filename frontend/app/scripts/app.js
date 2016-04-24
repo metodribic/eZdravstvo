@@ -136,6 +136,8 @@ angular
           }else{
             $rootScope.isDoctor = false;
           }
+        } else {
+            delete $rootScope.profili;
         }
       });
 
@@ -148,6 +150,6 @@ angular
         }
         $http.defaults.headers.common.pacient = id;
         $rootScope.selected = { value: item.ime + " " + item.priimek };
-        $route.reload();
+        $state.go($state.current, {}, {reload: true});
     };
   });

@@ -7,7 +7,6 @@
 
 angular.module('tpo')
   .controller('ListPregledovCtrl', ['$scope','Pregled', function ($scope, Pregled) {
-
        /* GET Uporabnik Pregledi */
     Pregled.query().$promise.then(function(response){
       $scope.pregledi = response;
