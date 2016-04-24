@@ -236,6 +236,7 @@ def registracijaAdmin(request, format=None):
         sprejemaPac = request.data.get('sprejemaPaciente', 1)
         novaStev = request.data.get('stevilka', 49)
 
+        # deletes user with sifraZdr -> not cool
         if( rola == 'Zdravnik'):
             sifra = request.data.get('sifraZdr', "")
             novMail = Zdravnik.objects.filter(sifra=sifra).delete()
