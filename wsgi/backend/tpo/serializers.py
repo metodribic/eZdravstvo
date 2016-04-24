@@ -101,6 +101,18 @@ class KontaktnaOsebaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = KontaktnaOseba
 
+    def update(self, instance, validated_data):
+        # posta extra cudna zadeva, ni cela v validated data...
+        instance.posta_id = self._kwargs['data']['posta']['id']
+        instance.ime = validated_data['ime']
+        instance.priimek = validated_data['priimek']
+        instance.naslov = validated_data['naslov']
+        instance.telefon = validated_data['telefon']
+        instance.sorodstveno_razmerje = validated_data['sorodstveno_razmerje']
+        instance.save()
+
+        return instance
+
 
 """ UPORABNIK """
 class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
@@ -147,17 +159,6 @@ class OskrbovanecSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Oskrbovanec
-
-    def update(self, instance, validated_data):
-        # posta extra cudna zadeva, ni cela v validated data...
-        instance.posta_id = self._kwargs['data']['posta']['id']
-        instance.ime = validated_data['ime']
-        instance.priimek = validated_data['priimek']
-        instance.naslov = validated_data['naslov']
-        instance.telefon = validated_data['telefon']
-        instance.save()
-
-        return instance
 
 
 """ VREDNOSTI MERITEV """

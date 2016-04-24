@@ -116,7 +116,7 @@ angular.module('tpo.models', ['ngResource', 'config'])
 .factory('KontaktnaOseba', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/kontaktna_oseba/:kontaktnaId', { kontaktnaId: '@kontaktnaId' }, {
 		update: {
-			method: 'UPDATE'
+			method: 'PATCH'
 		}
 	});
 })

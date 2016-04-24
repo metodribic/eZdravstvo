@@ -6,13 +6,13 @@
       <h3 class="bottom-border header">Uporabniški profil</h3>
       <div class="row">
         <div class="col-md-12">
-          <form class="form-horizontal" role="form">
+          <form class="form-horizontal" role="form" ng-submit="shrani_spremembe()">
 
             <!-- Ime uporabnika -->
             <div class="form-group">
               <label class="control-label col-sm-2">Ime:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model = "uporabnik.ime">
+                <input type="text" class="form-control" ng-model = "uporabnik.ime" required>
               </div>
             </div>
 
@@ -20,28 +20,25 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Priimek:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model = "uporabnik.priimek">
+                <input type="text" class="form-control" ng-model = "uporabnik.priimek" required>
               </div>
             </div>
 
             <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
                 <label class="control-label col-sm-2">Spol</label>
                 <div class="col-sm-10">
-                  <select class="form-control col-10" id="dropdownSpol" ng-model = "uporabnik.spol">
+                  <select class="form-control col-10" id="dropdownSpol" ng-model = "uporabnik.spol" required>
                     <option value="Moški">Moški</option>
                     <option value="Ženski">Ženski</option>
                   </select>
-
-
                 </div>
-
             </div>
 
             <!-- Datum rojstva uporabnika -->
             <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
               <label class="control-label col-sm-2">Datum rojstva:</label>
               <div class="col-sm-10">
-                <input type="date" data-date="" data-date-format="DD.MM.YYYY" class="form-control" ng-model="uporabnik.datum_rojstva">
+                <input type="date" data-date="" data-date-format="DD.MM.YYYY" class="form-control" ng-model="uporabnik.datum_rojstva" required>
               </div>
             </div>
 
@@ -49,7 +46,7 @@
             <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
               <label class="control-label col-sm-2">Kraj rojstva:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model = "uporabnik.kraj_rojstva">
+                <input type="text" class="form-control" ng-model = "uporabnik.kraj_rojstva" required>
               </div>
             </div>
 
@@ -57,7 +54,7 @@
             <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
               <label class="control-label col-sm-2">Naslov prebivališča:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model = "uporabnik.naslov">
+                <input type="text" class="form-control" ng-model = "uporabnik.naslov" required>
               </div>
             </div>
 
@@ -65,7 +62,7 @@
             <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
               <label class="control-label col-sm-2">Poštna številka:</label>
               <div class="col-sm-5">
-                <input type="number" class="form-control" ng-blur="pridobi_ime_poste('pacient')" ng-model="uporabnik.posta.id" >
+                <input type="number" class="form-control" ng-blur="pridobi_ime_poste('pacient')" ng-model="uporabnik.posta.id" required>
               </div>
               <div class="col-sm-5">
                 <input type="text" disabled class="form-control" ng-model = "uporabnik.posta.kraj">
@@ -76,7 +73,7 @@
             <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
               <label class="control-label col-sm-2">ZZZS številka:</label>
               <div class="col-sm-10">
-                <input type="number" class="form-control" ng-model = "uporabnik.st_zzzs">
+                <input type="number" class="form-control" ng-model = "uporabnik.st_zzzs" required>
               </div>
             </div>
 
@@ -84,7 +81,7 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Telefonska številka:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model = "uporabnik.telefon">
+                <input type="text" class="form-control" ng-model = "uporabnik.telefon" required>
               </div>
             </div>
 
@@ -94,7 +91,7 @@
             <div class="form-group" ng-show="tipUporabnika=='Zdravnik'">
               <label class="control-label col-sm-2">Email:</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control" ng-model = "uporabnik.email" >
+                <input type="email" class="form-control" ng-model = "uporabnik.email" required>
               </div>
             </div>
 
@@ -110,7 +107,7 @@
             <div class="form-group" ng-show="tipUporabnika=='Zdravnik'">
               <label class="control-label col-sm-2">Prosta mesta:</label>
               <div class="col-sm-10">
-                <input type="number" class="form-control" ng-model = "uporabnik.prosta_mesta">
+                <input type="number" class="form-control" ng-model = "uporabnik.prosta_mesta" required>
               </div>
             </div>
 
@@ -118,14 +115,14 @@
             <div class="form-group" ng-show="tipUporabnika=='Zdravnik'">
               <label class="control-label col-sm-2">Šifra ustanove:</label>
               <div class="col-sm-5">
-                <input type="number" class="form-control" ng-blur="pridobi_ustanovo()" ng-model="uporabnik.ustanova.id" >
+                <input type="number" class="form-control" ng-blur="pridobi_ustanovo()" ng-model="uporabnik.ustanova.id" required>
               </div>
               <div class="col-sm-5">
-                <input type="text" disabled class="form-control" ng-model = "uporabnik.ustanova.naziv">
+                <input type="text" disabled class="form-control" ng-model = "uporabnik.ustanova.naziv" required>
               </div>
             </div>
 
-            <button class="btn btn-default pull-right" ng-click = "shrani_spremembe()">Shrani spremembe</button>
+            <button class="btn btn-default pull-right">Shrani spremembe</button>
           </form>
 
           <br>
@@ -146,7 +143,7 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Ime:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.ime">
+                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.ime" required>
               </div>
             </div>
 
@@ -154,7 +151,7 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Priimek:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.priimek">
+                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.priimek" required>
               </div>
             </div>
 
@@ -162,7 +159,7 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Naslov:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.naslov">
+                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.naslov" required>
               </div>
             </div>
 
@@ -170,7 +167,7 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Poštna številka:</label>
               <div class="col-sm-5">
-                <input type="number" class="form-control" ng-blur="pridobi_ime_poste('sorodnik')" ng-model="uporabnik.kontaktna_oseba.posta.id" >
+                <input type="number" class="form-control" ng-blur="pridobi_ime_poste('sorodnik')" ng-model="uporabnik.kontaktna_oseba.posta.id" required>
               </div>
               <div class="col-sm-5">
                 <input type="text" disabled class="form-control" ng-model = "uporabnik.kontaktna_oseba.posta.kraj">
@@ -181,7 +178,7 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Sorodstveno razmerje:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.sorodstveno_razmerje">
+                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.sorodstveno_razmerje" required>
               </div>
             </div>
 
@@ -189,7 +186,7 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Telefon:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.telefon">
+                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.telefon" required>
               </div>
             </div>
 

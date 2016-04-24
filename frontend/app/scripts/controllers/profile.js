@@ -34,10 +34,10 @@ angular.module('tpo')
     if(trenutniUporabnik.role.naziv == 'Pacient')
       $scope.tipUporabnika = 'Pacient';
     else if(trenutniUporabnik.role.naziv == 'Zdravnik')
-      $scope.tipUporabnika = 'Zdravnik'
+      $scope.tipUporabnika = 'Zdravnik';
 
 
-    // model, ki se uporabi za posodabljanje profila
+    // POSODOBI PRFIL
     $scope.shrani_spremembe = function(){
       var updatedUporabnik = {};
 
@@ -69,12 +69,28 @@ angular.module('tpo')
         };
 
         updated_user.$update({iduporabnik: trenutniUporabnik.id});
-        Notification.success('Profile updated!');
+        Notification.success('Profile uspešno posodobljen!');
       }
     };
 
+    // POSODOBI KONTAKTNO OSEBO!
     $scope.shrani_oskrbovanca = function(){
       console.log($rootScope.uporabnik.kontaktna_oseba);
+      var updated_kontaktna = new KontaktnaOseba();
+      updated_kontaktna.id = $rootScope.uporabnik.kontaktna_oseba.id;
+      updated_kontaktna.ime = $rootScope.uporabnik.kontaktna_oseba.ime;
+      updated_kontaktna.priimek = $rootScope.uporabnik.kontaktna_oseba.priimek;
+      updated_kontaktna.naslov = $rootScope.uporabnik.kontaktna_oseba.naslov;
+      updated_kontaktna.posta = {
+        id: $rootScope.uporabnik.kontaktna_oseba.posta.id,
+        kraj: $rootScope.uporabnik.kontaktna_oseba.posta.kraj
+      };
+      updated_kontaktna.sorodstveno_razmerje = $rootScope.uporabnik.kontaktna_oseba.sorodstveno_razmerje;
+      updated_kontaktna.telefon = $rootScope.uporabnik.kontaktna_oseba.telefon;
+
+
+      updated_kontaktna.$update({kontaktnaId: $rootScope.uporabnik.kontaktna_oseba.id});
+      Notification.success('Kontaktna oseba uspešno posodobljen!!');
     };
 
     // PRIDOBIVANJE POSTE GLEDE NA ID
@@ -101,8 +117,9 @@ angular.module('tpo')
         // če pošta ne obstaja, obveti uporabnika, ter povrni številko na prvotno pošto
         .catch(function(err){
           if( err.status == 404 )
+          console.log($rootScope.uporabnik);
             Notification.error({message: 'Pošte s podano številko ni bilo mogoče najti!', title: '<b>Napaka!</b>'});
-            $rootScope.uporabnik.posta = AuthService.getCurrentUser().posta;
+            $rootScope.uporabnik.kontaktna_oseba.posta = AuthService.getCurrentUser().kontaktna_oseba.posta;
         });
     };
 
