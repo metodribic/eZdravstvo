@@ -51,10 +51,10 @@ angular.module('tpo.services', ['ngResource', 'config'])
                 },
                 data: {"id": id, "old_password": oldpass, "new_password": newpass}
             }).then(function successCallback(response) {
-                console.log(response);
+                // console.log(response);
                 resolve('Login success.');
             }, function errorCallback(response) {
-                console.log(response.data.error);
+                // console.log(response.data.error);
                 reject(response.data.error);
             });
         });
@@ -84,7 +84,7 @@ angular.module('tpo.services', ['ngResource', 'config'])
                 }
                 resolve('Login success.');
             }, function errorCallback(response) {
-                console.log(response);
+                // console.log(response);
                 var error = "Server failed to response";
                 if(response.data && response.data.error)
                     error = response.data.error;

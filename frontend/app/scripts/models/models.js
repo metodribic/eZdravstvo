@@ -35,6 +35,16 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
+
+.factory('Ustanova', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/ustanova/:ustanovaId', { ustanovaId: '@ustanovaId' }, {
+		update: {
+			method: 'UPDATE'
+		}
+	});
+})
+
+
 .factory('RegistracijaUporAdmin', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/registracijaAdmin', {
 		update: {
@@ -99,6 +109,14 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	return $resource('http://' + API_URL + '/zdravnik_uporabniki', { pacientId: '@pacientId' }, {
 		update: {
 			method: 'UPDATE'
+		}
+	});
+})
+
+.factory('KontaktnaOseba', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/kontaktna_oseba/:kontaktnaId', { kontaktnaId: '@kontaktnaId' }, {
+		update: {
+			method: 'PATCH'
 		}
 	});
 })

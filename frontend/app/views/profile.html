@@ -1,17 +1,18 @@
 <div class="col-md-12">
-  <!-- box: osebni podatki -->
+
+  <!-- OSEBNI PODATKI -->
   <div class="box">
     <div class="box-body">
       <h3 class="bottom-border header">Uporabniški profil</h3>
       <div class="row">
         <div class="col-md-12">
-          <form class="form-horizontal" role="form">
+          <form class="form-horizontal" role="form" ng-submit="shrani_spremembe()">
 
             <!-- Ime uporabnika -->
             <div class="form-group">
               <label class="control-label col-sm-2">Ime:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model="uporabnik.ime">
+                <input type="text" class="form-control" ng-model = "uporabnik.ime" required>
               </div>
             </div>
 
@@ -19,31 +20,146 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Priimek:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model="uporabnik.priimek">
+                <input type="text" class="form-control" ng-model = "uporabnik.priimek" required>
               </div>
             </div>
 
-            <!-- Datum rojstba uporabnika -->
-            <div class="form-group">
+            <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
+                <label class="control-label col-sm-2">Spol</label>
+                <div class="col-sm-10">
+                  <select class="form-control col-10" id="dropdownSpol" ng-model = "uporabnik.spol" required>
+                    <option value="Moški">Moški</option>
+                    <option value="Ženski">Ženski</option>
+                  </select>
+                </div>
+            </div>
+
+            <!-- Datum rojstva uporabnika -->
+            <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
               <label class="control-label col-sm-2">Datum rojstva:</label>
               <div class="col-sm-10">
-                <input type="date" class="form-control">
+                <input type="date" data-date="" data-date-format="DD.MM.YYYY" class="form-control" ng-model="uporabnik.datum_rojstva" required>
               </div>
             </div>
 
-            <!-- Datum rojstba uporabnika -->
-            <div class="form-group">
+            <!-- Kraj rojstba uporabnika -->
+            <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
               <label class="control-label col-sm-2">Kraj rojstva:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model="uporabnik.kraj_rojstva">
+                <input type="text" class="form-control" ng-model = "uporabnik.kraj_rojstva" required>
               </div>
             </div>
 
             <!-- Naslov uporabnika -->
-            <div class="form-group">
+            <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
               <label class="control-label col-sm-2">Naslov prebivališča:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model="uporabnik.naslov">
+                <input type="text" class="form-control" ng-model = "uporabnik.naslov" required>
+              </div>
+            </div>
+
+            <!-- Poštna številka uporabnika -->
+            <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
+              <label class="control-label col-sm-2">Poštna številka:</label>
+              <div class="col-sm-5">
+                <input type="number" class="form-control" ng-blur="pridobi_ime_poste('pacient')" ng-model="uporabnik.posta.id" required>
+              </div>
+              <div class="col-sm-5">
+                <input type="text" disabled class="form-control" ng-model = "uporabnik.posta.kraj">
+              </div>
+            </div>
+
+            <!-- ZZZS št. uporabnika -->
+            <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
+              <label class="control-label col-sm-2">ZZZS številka:</label>
+              <div class="col-sm-10">
+                <input type="number" class="form-control" ng-model = "uporabnik.st_zzzs" required>
+              </div>
+            </div>
+
+            <!-- Telefonska številka uporabnika -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Telefonska številka:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model = "uporabnik.telefon" required>
+              </div>
+            </div>
+
+            <!-- ZDRAVNIKOVI FIELDI -->
+
+            <!-- email -->
+            <div class="form-group" ng-show="tipUporabnika=='Zdravnik'">
+              <label class="control-label col-sm-2">Email:</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" ng-model = "uporabnik.email" required>
+              </div>
+            </div>
+
+            <!-- sifra -->
+            <div class="form-group" ng-show="tipUporabnika=='Zdravnik'">
+              <label class="control-label col-sm-2">Šifra:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model = "uporabnik.sifra.sifra" disabled>
+              </div>
+            </div>
+
+            <!-- stevilo pacientov -->
+            <div class="form-group" ng-show="tipUporabnika=='Zdravnik'">
+              <label class="control-label col-sm-2">Prosta mesta:</label>
+              <div class="col-sm-10">
+                <input type="number" class="form-control" ng-model = "uporabnik.prosta_mesta" required>
+              </div>
+            </div>
+
+            <!-- Ustanova -->
+            <div class="form-group" ng-show="tipUporabnika=='Zdravnik'">
+              <label class="control-label col-sm-2">Šifra ustanove:</label>
+              <div class="col-sm-5">
+                <input type="number" class="form-control" ng-blur="pridobi_ustanovo()" ng-model="uporabnik.ustanova.id" required>
+              </div>
+              <div class="col-sm-5">
+                <input type="text" disabled class="form-control" ng-model = "uporabnik.ustanova.naziv" required>
+              </div>
+            </div>
+
+            <button class="btn btn-default pull-right">Shrani spremembe</button>
+          </form>
+
+          <br>
+        </div> <!-- end col-md-12 -->
+      </div> <!-- end row -->
+    </div> <!-- end box  body-->
+  </div> <!-- end box -->
+
+  <!-- PODATKI O KONTAKTNI OSEBI -->
+  <div class="box" ng-hide="tipUporabnika=='Zdravnik'">
+    <div class="box-body">
+      <h3 class="bottom-border header">Podatki o kontaktni osebi</h3>
+      <div class="row">
+        <div class="col-md-12">
+          <form class="form-horizontal" role="form" ng-submit="shrani_oskrbovanca()">
+
+            <!-- Ime uporabnika -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Ime:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.ime" required>
+              </div>
+            </div>
+
+            <!-- Priimek uporabnika -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Priimek:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.priimek" required>
+              </div>
+            </div>
+
+            <!-- Naslov -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Naslov:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.naslov" required>
               </div>
             </div>
 
@@ -51,41 +167,72 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Poštna številka:</label>
               <div class="col-sm-5">
-                <input type="number" class="form-control" ng-blur="pridobi_ime_poste()" ng-model="uporabnik.posta.id" >
+                <input type="number" class="form-control" ng-blur="pridobi_ime_poste('sorodnik')" ng-model="uporabnik.kontaktna_oseba.posta.id" required>
               </div>
               <div class="col-sm-5">
-                <input type="text" disabled class="form-control" ng-model="uporabnik.posta.kraj">
+                <input type="text" disabled class="form-control" ng-model = "uporabnik.kontaktna_oseba.posta.kraj">
               </div>
             </div>
 
-            <!-- ZZZS št. uporabnika -->
+            <!-- Priimek uporabnika -->
             <div class="form-group">
-              <label class="control-label col-sm-2">ZZZS številka:</label>
+              <label class="control-label col-sm-2">Sorodstveno razmerje:</label>
               <div class="col-sm-10">
-                <input type="number" class="form-control" ng-model="uporabnik.st_zzzs">
+                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.sorodstveno_razmerje" required>
               </div>
             </div>
 
-            <button class="btn btn-default pull-right" ng-click="shrani_spremembe()">Shrani spremembe</button>
-          </form>
-
-          <br>
-          
-          <!-- <div id="alertContainer"></div> -->
-          <h3>Spremeni geslo</h3>
-          <form ng-submit="changePassword(user)">
+            <!-- Priimek uporabnika -->
             <div class="form-group">
-              <label for="currentpass">Trenutno geslo</label>
-              <input type="password" class="form-control" id="currentpass" ng-model="user.oldpass" required="required">
-              <label for="newpass">Novo Geslo</label>
-              <input type="password" class="form-control" ng-class="{'has-error': red}" id="newpass" ng-model="user.newpass" required="required">
-              <label for="newpass2">Ponovi Geslo</label>
-              <input type="password" class="form-control" ng-class="{'has-error': red}" id="newpass2" ng-model="user.newpass2" required="required">
+              <label class="control-label col-sm-2">Telefon:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model = "uporabnik.kontaktna_oseba.telefon" required>
+              </div>
             </div>
-            <button type="submit" class="btn btn-default">Spremeni geslo</button>
+
+            <button class="btn btn-default pull-right">Shrani spremembe</button>
           </form>
-        </div>
-      </div>
-    </div>
-  </div>
+        </div> <!-- end col-md-12 -->
+      </div> <!-- end row -->
+    </div> <!-- end box body -->
+  </div> <!-- end box -->
+
+
+  <!-- SPREMENI GESLO -->
+  <div class="box">
+    <div class="box-body">
+      <h3 class="bottom-border header">Spremeni geslo</h3>
+      <div class="row">
+        <div class="col-md-12">
+          <form class="form-horizontal" role="form" ng-submit="changePassword(user)">
+
+            <!-- Trenutno geslo -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Trenutno geslo:</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" id="currentpass" ng-model="user.oldpass" required="required">
+              </div>
+            </div>
+
+            <!-- Novo geslo -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Novo geslo:</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" ng-class = "{'has-error': red}" id="newpass" ng-model="user.newpass" required="required">
+              </div>
+            </div>
+
+            <!-- Povnovi geslo -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Ponovite geslo:</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" ng-class = "{'has-error': red}" id="newpass2" ng-model="user.newpass2" required="required">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-default pull-right">Spremeni geslo</button>
+          </form>
+        </div> <!-- end col-md-12 -->
+      </div> <!-- end row -->
+    </div> <!-- end box body -->
+  </div> <!-- end box -->
 </div>

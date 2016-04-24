@@ -15,7 +15,7 @@ class Uporabnik(User):
     naslov = models.CharField(max_length=100, blank=True)
     posta = models.ForeignKey('Posta', blank=True, null=True)
     st_zzzs = models.IntegerField(blank=True, null=True)
-    spol = models.CharField(max_length=1, blank=True)
+    spol = models.CharField(max_length=6, blank=True)
     krvna_skupina = models.CharField(max_length=3, blank=True, null=True)
     ambulanta = models.ForeignKey('Ambulanta', blank=True, null=True)
     zdravnik = models.ManyToManyField('Zdravnik', blank=True)
@@ -55,6 +55,7 @@ class Osebje(User):
 
 class SifrantRegistriranih(models.Model):
     sifra = models.IntegerField()
+    is_used = models.BooleanField(default=False)
 
 
 class Ustanova(models.Model):
@@ -174,6 +175,7 @@ class KontaktnaOseba(models.Model):
     naslov = models.CharField(max_length=100)
     posta = models.ForeignKey('Posta')
     sorodstveno_razmerje = models.CharField(max_length=100)
+    telefon = models.CharField(max_length=100)
 
 
 

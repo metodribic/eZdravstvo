@@ -22,6 +22,7 @@ class VlogaSerializer(serializers.HyperlinkedModelSerializer):
 """ USTANOVA """
 class UstanovaSerializer(serializers.HyperlinkedModelSerializer):
     posta = PostaSerializer()
+    id = serializers.IntegerField()
 
     class Meta:
         model = Ustanova
@@ -43,15 +44,37 @@ class OsebjeSerializer(serializers.HyperlinkedModelSerializer):
         exclude = ('password', 'first_name', 'last_name', 'is_superuser', 'is_staff')
 
 
+""" SIFRANT REGISTRIRANIH """
+class SifrantRegistriranihSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField()
+    class Meta:
+        model = SifrantRegistriranih
+
+
 """ ZDRAVNIK """
 class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
     ambulanta = AmbulantaSerializer()
     role = VlogaSerializer()
     medicinske_sestre = OsebjeSerializer(many=True)
     id = serializers.IntegerField()
+    sifra = SifrantRegistriranihSerializer()
+    ustanova = UstanovaSerializer()
     class Meta:
         model = Zdravnik
         exclude = ('password', 'first_name', 'last_name', 'is_superuser', 'is_staff')
+
+    def update(self, instance, validated_data):
+        # posta extra cudna zadeva, ni cela v validated data...
+        print('test')
+        instance.posta_id = self._kwargs['data']['posta']['id']
+        instance.ime = validated_data['ime']
+        instance.priimek = validated_data['priimek']
+        instance.naslov = validated_data['naslov']
+        instance.telefon = validated_data['telefon']
+        instance.sorodstveno_razmerje = validated_data['sorodstveno_razmerje']
+        instance.save()
+
+        return instance
 
 
 """ ZDRAVILO """
@@ -91,6 +114,18 @@ class KontaktnaOsebaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = KontaktnaOseba
 
+    def update(self, instance, validated_data):
+        # posta extra cudna zadeva, ni cela v validated data...
+        instance.posta_id = self._kwargs['data']['posta']['id']
+        instance.ime = validated_data['ime']
+        instance.priimek = validated_data['priimek']
+        instance.naslov = validated_data['naslov']
+        instance.telefon = validated_data['telefon']
+        instance.sorodstveno_razmerje = validated_data['sorodstveno_razmerje']
+        instance.save()
+
+        return instance
+
 
 """ UPORABNIK """
 class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
@@ -108,6 +143,20 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
         model = Uporabnik
         exclude = ('password','first_name', 'last_name', 'is_superuser', 'is_staff')
 
+    def update(self, instance, validated_data):
+        # posta extra cudna zadeva, ni cela v validated data...
+        instance.posta_id = self._kwargs['data']['posta']['id']
+        instance.ime = validated_data['ime']
+        instance.priimek = validated_data['priimek']
+        instance.kraj_rojstva = validated_data['kraj_rojstva']
+        instance.naslov = validated_data['naslov']
+        instance.spol = validated_data['spol']
+        instance.st_zzzs = validated_data['st_zzzs']
+        instance.telefon = validated_data['telefon']
+        instance.save()
+
+        return instance
+
 
 """ OSKRBOVANEC """
 class OskrbovanecSerializer(serializers.HyperlinkedModelSerializer):
@@ -120,6 +169,7 @@ class OskrbovanecSerializer(serializers.HyperlinkedModelSerializer):
     dieta = DietaSerializer(many=True, partial=True)
     id = serializers.IntegerField()
     kontaktna_oseba = KontaktnaOsebaSerializer()
+
     class Meta:
         model = Oskrbovanec
 
@@ -178,10 +228,3 @@ class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Uporabnik
-
-
-""" SIFRANT REGISTRIRANIH """
-class SifrantRegistriranihSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.IntegerField()
-    class Meta:
-        model = SifrantRegistriranih
