@@ -63,6 +63,19 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
         model = Zdravnik
         exclude = ('password', 'first_name', 'last_name', 'is_superuser', 'is_staff')
 
+    def update(self, instance, validated_data):
+        # posta extra cudna zadeva, ni cela v validated data...
+        print('test')
+        instance.posta_id = self._kwargs['data']['posta']['id']
+        instance.ime = validated_data['ime']
+        instance.priimek = validated_data['priimek']
+        instance.naslov = validated_data['naslov']
+        instance.telefon = validated_data['telefon']
+        instance.sorodstveno_razmerje = validated_data['sorodstveno_razmerje']
+        instance.save()
+
+        return instance
+
 
 """ ZDRAVILO """
 class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):

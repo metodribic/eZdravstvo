@@ -55,6 +55,7 @@ class Osebje(User):
 
 class SifrantRegistriranih(models.Model):
     sifra = models.IntegerField()
+    is_used = models.BooleanField(default=False)
 
 
 class Ustanova(models.Model):
