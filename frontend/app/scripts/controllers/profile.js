@@ -37,7 +37,12 @@ angular.module('tpo')
     else if(trenutniUporabnik.role.naziv == 'Zdravnik')
       $scope.tipUporabnika = 'Zdravnik';
 
-
+    function UpdateCurrentUser(){
+      Uporabniki.get({iduporabnik: $rootScope.uporabnik.id}).$promise.then(function(response){
+        $rootScope.uporabnik = response;
+        console.log(response);
+      });
+    }
 
     $scope.shrani_spremembe_zdravnik = function(){
       // preveri če je prijavljen uporabnik zdravnik
@@ -85,14 +90,17 @@ angular.module('tpo')
         };
 
         // preveri če je datum vnesen
-        if($rootScope.uporabnik.datum_rojstva != null){
+        if($rootScope.uporabnik.datum_rojstva !== null){
           updated_user.datum_rojstva = new Date($rootScope.uporabnik.datum_rojstva).toISOString();
         }
         else {
           updated_user.datum_rojstva = null;
         }
-        // console.log(updated_user);
-        updated_user.$update({iduporabnik: trenutniUporabnik.id});
+        updated_user.$update({iduporabnik: trenutniUporabnik.id}, function(response){
+          $rootScope.uporabnik = response;
+          window.localStorage.setItem('user', JSON.stringify(response));
+        });
+        //UpdateCurrentUser();
         Notification.success('Profil uspešno posodobljen!');
       }
     };
