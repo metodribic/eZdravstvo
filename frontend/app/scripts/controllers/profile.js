@@ -34,15 +34,11 @@ angular.module('tpo')
     // Preveri ali je prijavljena oseba zravnik ali pacient
     if(trenutniUporabnik.role.naziv == 'Pacient')
       $scope.tipUporabnika = 'Pacient';
-    else if(trenutniUporabnik.role.naziv == 'Zdravnik')
+    else if(trenutniUporabnik.role.naziv == 'Zdravnik'){
       $scope.tipUporabnika = 'Zdravnik';
-
-    function UpdateCurrentUser(){
-      Uporabniki.get({iduporabnik: $rootScope.uporabnik.id}).$promise.then(function(response){
-        $rootScope.uporabnik = response;
-        console.log(response);
-      });
     }
+
+
 
     $scope.shrani_spremembe_zdravnik = function(){
       // preveri če je prijavljen uporabnik zdravnik
@@ -63,8 +59,20 @@ angular.module('tpo')
         else if(radioBtn2.checked)
           zdravnik.sprejema_paciente = false;
 
-        zdravnik.$update({zdravnikId: trenutniUporabnik.id});
+        zdravnik.$update({zdravnikId: trenutniUporabnik.id}, function(response){
+          $rootScope.uporabnik = response;
+          window.localStorage.setItem('user', JSON.stringify(response));
+        });
         Notification.success('Profil uspešno posodobljen!');
+      }
+    };
+
+    $scope.hideNumber = function(arg){
+      if(arg){
+        prostaMesta.disabled = true;
+      }
+      else if(!arg){
+        prostaMesta.disabled = false;
       }
     };
 
@@ -104,7 +112,6 @@ angular.module('tpo')
         Notification.success('Profil uspešno posodobljen!');
       }
     };
-
 
     // POSODOBI KONTAKTNO OSEBO!
     $scope.shrani_oskrbovanca = function(){

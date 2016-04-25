@@ -136,18 +136,18 @@
               <label class="control-label col-sm-2">Sprejema paciente:</label>
               <div class="col-sm-2">
                 <label class="radio-inline">
-                  <input type="radio" name="inlineRadioOptions" id="radioBtn1" value="true" ng-checked="uporabnik.sprejema_paciente"> Da
+                  <input type="radio" name="inlineRadioOptions" id="radioBtn1" value="true" ng-checked="uporabnik.sprejema_paciente" ng-click="hideNumber(false)"> Da
                 </label>
 
                 <label class="radio-inline">
-                  <input type="radio" name="inlineRadioOptions" id="radioBtn2" value="false" ng-checked="!uporabnik.sprejema_paciente"> Ne
+                  <input type="radio" name="inlineRadioOptions" id="radioBtn2" value="false" ng-checked="!uporabnik.sprejema_paciente" ng-click="hideNumber(true)"> Ne
                 </label>
               </div>
 
               <div class="col-sm-8">
                 <label class="control-label col-sm-3">Prosta mesta:</label>
                 <div class="col-sm-9" style="padding-right: 0">
-                  <input type="number" class="form-control" ng-model = "uporabnik.prosta_mesta" required>
+                  <input type="number" id="prostaMesta" class="form-control" ng-model = "uporabnik.prosta_mesta" required>
                 </div>
               </div>
             </div>
@@ -282,3 +282,11 @@
     </div> <!-- end box body -->
   </div> <!-- end box -->
 </div>
+
+<!-- ONEMOGOČI VNAŠANJE ŠTEVILA PACIENTOV KI JIH ŠE LAHKO SPREJEM ZDARVNIK, ČE JIH SPLOH NE SPREJEMA! -->
+<!-- TUKAJ ZATO KER SE MORE PRAVO ZDRENDERIRAT ZADEVA -->
+<script>
+  (function() {
+      prostaMesta.disabled = true;
+  })();
+</script>
