@@ -49,7 +49,7 @@ class Osebje(User):
     sifra = models.ForeignKey('SifrantRegistriranih')
     stevilka = models.IntegerField()  # metod: nimam pojma kaj bi naj bla ta stevilka ?
     role = models.ForeignKey('Roles')
-    ustanova = models.ForeignKey('Ustanova')
+    ustanova = models.ForeignKey('Ustanova', blank=True, null=True)
     telefon = models.CharField(max_length=100, blank=True, null=True)
 
 

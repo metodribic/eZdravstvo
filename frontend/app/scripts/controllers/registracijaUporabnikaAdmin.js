@@ -7,9 +7,9 @@
 
 angular.module('tpo')
     .controller('registracijaUporAdminCtrl', ['$scope', '$state', 'Uporabniki','$resource', '$rootScope',
-        'AuthService','RegistracijaUporAdmin', 'Osebje', 'Ambulanta', 'Zdravnik', 'Notification',
+        'AuthService','RegistracijaUporAdmin', 'Osebje', 'Ambulanta', 'Ustanova', 'Notification', 'SifrantRegistriranih',
         function ($scope, $state, Uporabniki, $resource, $rootScope, AuthService,
-                  RegistracijaUporAdmin, Osebje, Ambulanta, Zdravnik, Notification ) {
+                  RegistracijaUporAdmin, Osebje, Ambulanta, Ustanova, Notification, SifrantRegistriranih ) {
 /*
             NotificationProvider.setOptions({
                 maxCount:3
@@ -38,23 +38,7 @@ angular.module('tpo')
 
             $scope.uporabniki = new Uporabniki();
 
-            /*** Osebje iz baze ***/
-            $scope.osebje = new Osebje();
-            Osebje.get({limit:  50}).$promise.then(function(response){
-                $scope.osebje = response.results;
-            });
-
-            /*** Zdravniki iz baze ***/
-            $scope.zdravniki = new Zdravnik();
-            Zdravnik.get({limit:  50}).$promise.then(function(response){
-                $scope.zdravniki = response.results;
-            });
-
-            /*** Ambulante iz baze ***/
-            $scope.ambulanta = new Ambulanta();
-            Ambulanta.get({limit:  50}).$promise.then(function(response){
-                $scope.ambulanta = response.results;
-            });
+            getDataFromModels();
 
             /*** Show fields ***/
             $scope.showSelectValue = function( val ){
@@ -84,17 +68,19 @@ angular.module('tpo')
                 n.role = $scope.mojSelect;
                 n.ime = $scope.uporabniki.ime;
                 n.priimek = $scope.uporabniki.priimek;
-                n.sprejemaPacienteDa = $scope.uporabniki.sprejemaPacienteDa;
-                n.sprejemaPacienteNe = $scope.uporabniki.sprejemaPacienteNe;
-                n.sifraZdr = $scope.uporabniki.sifraZdravnik;
-                n.sifraSes = $scope.uporabniki.sifraSestra;
+                n.sprejemaPaciente = $scope.uporabniki.sprejemaPaciente;
+                n.sif = $scope.uporabniki.sif;
+                //n.sifraZdr = $scope.uporabniki.sifraZdravnik;
+                //n.sifraSes = $scope.uporabniki.sifraSestra;
                 n.naziv = $scope.uporabniki.naziv;
                 n.tip = $scope.uporabniki.tip;
                 
                 n.izbranaAmbulanta = $scope.uporabniki.izbranaAmbulanta;
+                n.izbranaUstanova = $scope.uporabniki.izbranaUstanova;
                 n.izbranaSestra = $scope.uporabniki.izbranaSestra;
                 // med sestra
                 n.stevilka = $scope.uporabniki.stevilka;
+                n.prostaMesta = $scope.uporabniki.prostaMesta;
 
                 console.log(n);
                 // validation FE
@@ -141,17 +127,15 @@ angular.module('tpo')
                 scope.uporabniki.ime = "";
                 scope.uporabniki.priimek = "";
 
-                // radio buttons -> no point to change it
-                //scope.uporabniki.sprejemaPacienteNe = "";
-                //scope.uporabniki.sprejemaPacienteNe = "";
-
-                scope.uporabniki.sifra = "";
+                scope.uporabniki.sif = "";
                 scope.uporabniki.naziv = "";
                 scope.uporabniki.tip = "";
                 scope.uporabniki.izbranaAmbulanta = "";
+                scope.uporabniki.izbranaUstanova = "";
                 scope.uporabniki.izbranaSestra = "";
 
                 scope.uporabniki.stevilka = "";
+                scope.uporabniki.prostaMesta = "";
 
                 // all fields on false
                 scope.errEmail = false;
@@ -163,8 +147,15 @@ angular.module('tpo')
                 scope.errNaziv = false;
                 scope.errTip = false;
                 scope.errAmbulanta = false;
+                scope.errUstanova = false;
                 scope.errMedSes = false;
                 scope.errStevilka = false;
+
+                scope.errProstaMesta = false;
+
+                //
+                getDataFromModels();
+
             };
 
             function userWasCreaterBool( servSucc ){
@@ -237,6 +228,15 @@ angular.module('tpo')
                 }else{
                     scope.errPrii = false;
                 }
+
+                // int številka
+                if( ! (/^[0-9]{9,15}$/.test(n.stevilka)) || angular.isUndefined(n.stevilka) ){
+                    scope.extraInfo += "Telefonska številka lahko ima samo številke, vsaj 9, največ 15.\n";
+                    scope.errStevilka = true;
+                }else{
+                    scope.errStevilka = false;
+                }
+
                 return scope.extraInfo;
             }
 
@@ -245,10 +245,10 @@ angular.module('tpo')
                 scope.extraInfo = "";
                 if( n.role == "Zdravnik"){
                      if( isVarUndefinedOrEmptyStr(n.ime) && isVarUndefinedOrEmptyStr(n.priimek) &&
-                         ! isVarUndefinedOrEmptyStr(n.sifraZdr) &&
-                         isVarUndefinedOrEmptyStr(n.naziv) &&
+                         //! isVarUndefinedOrEmptyStr(n.sif) &&
+                         isVarUndefinedOrEmptyStr(n.naziv) && isVarUndefinedOrEmptyStr(n.stevilka) &&
                          isVarUndefinedOrEmptyStr(n.izbranaAmbulanta) && isVarUndefinedOrEmptyStr(n.tip) &&
-                         isVarUndefinedOrEmptyStr(n.izbranaSestra) ){
+                         isVarUndefinedOrEmptyStr(n.izbranaSestra) && isVarUndefinedOrEmptyStr(n.izbranaUstanova)  ){
                          // isVarUndefinedOrEmptyStr(n.sprejemaPaciente) -> cant untick once its ticked
                          // no optional field was selected
 
@@ -261,23 +261,34 @@ angular.module('tpo')
                          scope.extraInfo += validateJoinedFields( scope, n);
 
                          // bool SPREJEMA PACIENTA
-                         if( angular.isUndefined(n.sprejemaPacienteDa) &&  angular.isUndefined(n.sprejemaPacienteNe) ){
-                             //scope.sprejemaPaciente = false; // tried to send without submiting (if clears all)
+                         if( angular.isUndefined(n.sprejemaPaciente) ){
                              scope.extraInfo += "Označite če zdravnik sprejema paciente ali ne!\n";
                              scope.errSprejemaPac = true;
                          }else{
                              scope.errSprejemaPac = false;
                          }
 
-                        // string SIFRA
-                         /*
-                         if( ! (/^[0-9]{5,13}$/.test(n.sifra)) || angular.isUndefined(n.sifra)  ){
+                         // number STEVILO PACIENTOV -> ce jih sprejema
+                         if( n.sprejemaPaciente == 1  ){
+                             if( ! (/^[0-9]{1,5}$/.test(n.prostaMesta)) || angular.isUndefined(n.prostaMesta) ){
+                                 scope.errProstaMesta = true;
+                                 scope.extraInfo += "Vnesite koliko pacientov sprejme\n";
+                             }else{
+                                 scope.errProstaMesta = false;
+                             }
+                         }else{
+                             scope.errProstaMesta = false;
+                         }
+
+                         // string SIFRA
+                         /*scope.extraInfo += "Šifra lahko ima samo številke, vsaj 5, največ 13.\n"; */
+                         // ! (/^[0-9]{5,13}$/.test(n.sif)) ||
+                         if( angular.isUndefined(n.sif)  ){
                              // not valid num
-                             scope.extraInfo += "Šifra lahko ima samo številke, vsaj 5, največ 13.\n";
                              scope.errSifra = true;
                          }else{
                              scope.errSifra = false;
-                         }*/
+                         }
 
                          // string NAZIV
                          if( angular.isUndefined(n.naziv) || scope.naziv == "" ){
@@ -303,6 +314,13 @@ angular.module('tpo')
                          }else{
                              scope.errAmbulanta = false;
                          }
+                         // USTANOVA
+                         if( angular.isUndefined(n.izbranaUstanova) ){
+                             scope.extraInfo += "Izberite ambulanto.\n";
+                             scope.errUstanova = true;
+                         }else{
+                             scope.errUstanova = false;
+                         }
                          // dropdown AMBULANTA
                          if( angular.isUndefined(n.izbranaSestra) ){
                              scope.extraInfo += "Izberite medicinsko sestro zdravnika.\n";
@@ -315,26 +333,48 @@ angular.module('tpo')
                     // NURSE
 
                     if( isVarUndefinedOrEmptyStr(n.ime) && isVarUndefinedOrEmptyStr(n.priimek) &&
-                         isVarUndefinedOrEmptyStr(n.stevilka) && ! isVarUndefinedOrEmptyStr(n.sifraSes) ){
+                         isVarUndefinedOrEmptyStr(n.stevilka) // && ! isVarUndefinedOrEmptyStr(n.sifra)
+                    ){
                          // no optional field was selected
 
                          scope.extraInfo = "";
 
                     }else{
                         // atleast one optional field was selected -> problems could accur
-                        // string IME & PRIIMEK
+                        // string IME & PRIIMEK & number stevilka
                         scope.extraInfo += validateJoinedFields( scope, n);
 
-                        // int številka
-                        if( ! (/^[0-9]{4,9}$/.test(n.stevilka)) || angular.isUndefined(n.stevilka) ){
-                            scope.extraInfo += "Šifra lahko ima samo številke, vsaj 4, največ 9.\n";
-                            scope.errStevilka = true;
-                        }else{
-                            scope.errStevilka = false;
-                        }
 
                     }
                 }
+
+            }
+
+            function getDataFromModels(){
+
+                /*** Osebje iz baze ***/
+                $scope.osebje = new Osebje();
+                Osebje.get({limit:  150}).$promise.then(function(response){
+                    $scope.osebje = response.results;
+                });
+
+                /*** Ambulante iz baze ***/
+                $scope.ambulanta = new Ambulanta();
+                Ambulanta.get({limit:  150}).$promise.then(function(response){
+                    $scope.ambulanta = response.results;
+                });
+
+                /*** Ustanova iz baze ***/
+                $scope.ustanova = new Ustanova();
+                Ustanova.get({limit:  150}).$promise.then(function(response){
+                    $scope.ustanova = response.results;
+                });
+
+                /*** Sifranti iz baze ***/
+                $scope.sifrantReg = new SifrantRegistriranih();
+                SifrantRegistriranih.get({limit:  150}).$promise.then(function(response){
+                    $scope.sifrantReg = response.results;
+                });
 
             }
 

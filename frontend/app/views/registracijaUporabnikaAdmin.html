@@ -15,24 +15,14 @@
                     </select>
                 </div>
 
-                <div ng-hide="! jeZdravnik" >
-                    <div class="form-group">
-                            <label for="medSestre">Šifra</label>
-                            <select class="form-control" id="sifra" ng-model="uporabniki.sifraSestra" >
-                              <option ng-repeat="o in osebje" value="{{ o.sifra }}" >{{o.ime}} {{ o.priimek }} {{ o.sifra }}</option>
-                            </select>
-                            <span style="color:red" ng-show="errSifraSestra" >Izberite šifro.</span>
-                    </div>
-                </div>
-
-                <div ng-hide="jeZdravnik" >
-                    <div class="form-group">
-                        <label for="medSestre">Šifra</label>
-                        <select class="form-control" id="sifra" ng-model="uporabniki.sifraZdravnik" >
-                          <option ng-repeat="z in zdravniki" value="{{ z.sifra }}" >{{z.ime}} {{ z.priimek }} {{ z.sifra }}</option>
-                        </select>
-                        <span style="color:red" ng-show="errSifraZdravnik" >Izberite šifro.</span>
-                    </div>
+                <!-- SIFRA IZ SIFRANTOV -->
+                <div class="form-group"  >
+                    <label for="sifra">Šifra <b style="color:red" >*</b></label>
+                    <select required class="form-control" id="sifra" ng-model="uporabniki.sif" >
+                        <option value="">Izberite šifro</option>
+                        <option  required="required" ng-repeat="sif in sifrantReg | filter:{is_used:false}" value="{{ sif.sifra }}" >{{sif.sifra}}</option>
+                    </select>
+                    <span style="color:red" ng-show="errSifraZdravnik" >Izberite šifro.</span>
                 </div>
 
                 <div class="form-group" >
@@ -63,6 +53,13 @@
                         <span style="color:red" ng-show="errPrii" >Priimek lahko ima samo črke, vsaj 3, največ 21.</span>
                     </div>
 
+                    <!-- TELEFONSKA ŠTEVILKA -->
+                    <div class="form-group">
+                        <label for="stevilka">Telefonska številka</label>
+                        <input type="text" class="form-control" id="stevilka" placeholder="031654321" ng-model="uporabniki.stevilka" >
+                        <span style="color:red" ng-show="errStevilka" >Številka lahko ima samo številke, vsaj 9, največ 15.</span>
+                    </div>
+
                     <!-- ZDRAVNIK -->
                     <div ng-hide="jeZdravnik" >
 
@@ -71,13 +68,13 @@
                             <label>Sprejema paciente?
                                 <div class="radio">
                                     <label for="radioSprejemaP1" >
-                                        <input type="radio" name="radioSprejemaPaci" id="radioSprejemaP1" value="true" ng-model="uporabniki.sprejemaPacienteDa" >
+                                        <input type="radio" name="radioSprejemaPaci" id="radioSprejemaP1" value="1" ng-model="uporabniki.sprejemaPaciente" >
                                         Da
                                     </label>
                                 </div>
                                 <div class="radio">
                                     <label for="radioSprejemaP2">
-                                        <input type="radio" name="radioSprejemaPaci" id="radioSprejemaP2" value="false" ng-model="uporabniki.sprejemaPacienteNe">
+                                        <input type="radio" name="radioSprejemaPaci" id="radioSprejemaP2" value="0" ng-model="uporabniki.sprejemaPaciente" >
                                         Ne
                                     </label>
                                 </div>
@@ -85,11 +82,11 @@
                             <span style="color:red" ng-show="errSprejemaPac" >Označite če zdravnik sprejema paciente ali ne!</span>
                         </div>
 
-                        <!-- ŠTEVILKA -->
-                        <div class="form-group">
-                            <label for="stevilka">Številka</label>
-                            <input type="text" class="form-control" id="stevilka" placeholder="12345" ng-model="uporabniki.stevilka" >
-                            <span style="color:red" ng-show="errStevilka" >Številka lahko ima samo številke, vsaj 4, največ 9.</span>
+                        <!-- ŠTEVILO PACIENTOV, KI JIH SPREJME  ng-show="uporabniki.sprejemaPaciente" -->
+                        <div class="form-group" >
+                            <label for="prostaMesta">Število pacientov, ki jih sprejema</label>
+                            <input type="number" class="form-control" id="prostaMesta" placeholder="10" ng-model="uporabniki.prostaMesta" >
+                            <span style="color:red" ng-show="errProstaMesta" >Vnesite število prostih mest.</span>
                         </div>
 
                         <!-- NAZIV -->
@@ -113,7 +110,7 @@
                         <div class="form-group">
                             <label for="ambulantaId">Ambulanta</label>
                             <select class="form-control" id="ambulantaId" ng-model="uporabniki.izbranaAmbulanta" ng-change="changedAmbulanta(uporabniki.izbranaAmbulanta)" >
-                              <option ng-repeat="a in ambulanta" value="{{ a.ustanova.url }}">{{a.ustanova.naziv}}, {{ a.ustanova.naslov }} </option>
+                              <option ng-repeat="a in ambulanta" value="{{ a.url }}">{{a.naziv}}, {{ a.naslov }} </option>
                             </select>
                             <span style="color:red" ng-show="errAmbulanta" >Izberite ambulanto.</span>
                         </div>
@@ -121,7 +118,7 @@
                         <!-- IZBIRA MEDICINSKE SESTRE -->
                         <div class="form-group">
                             <label for="medSestre">Medicinske sestre</label>
-                            <select class="form-control" id="sifra" ng-model="uporabniki.izbranaSestra" ng-change="changedNurse(uporabniki.izbranaSestra)" >
+                            <select class="form-control" id="medSestre" ng-model="uporabniki.izbranaSestra" ng-change="changedNurse(uporabniki.izbranaSestra)" >
                               <option ng-repeat="o in osebje" value="{{ o.username }}" >{{o.ime}} {{ o.priimek }} ({{ o.username }})</option>
                             </select>
                             <span style="color:red" ng-show="errMedSes" >Izberite medicinsko sestro zdravnika.</span>
@@ -129,6 +126,17 @@
 
 
                     </div>
+
+
+                    <!-- USTANOVA -->
+                    <div class="form-group">
+                        <label for="ustanovaId">Ustanova</label>
+                        <select class="form-control" id="ustanovaId" ng-model="uporabniki.izbranaUstanova"  >
+                          <option ng-repeat="u in ustanova" value="{{ u.url }}">{{u.naziv}}, {{ u.naslov }} </option>
+                        </select>
+                        <span style="color:red" ng-show="errUstanova" >Izberite Ustanovo.</span>
+                    </div>
+
 
                 </div>
 

@@ -122,6 +122,15 @@ angular.module('tpo.models', ['ngResource', 'config'])
 })
 
 
+.factory('SifrantRegistriranih', function($resource, API_URL) {
+    return $resource('http://' + API_URL + '/sifrant_registriranih/:sifraId', { sifraId: '@sifraId' }, {
+        update: {
+            method: 'PATCH'
+        }
+    });
+})
+
+
 .factory('Diete', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/diete/:dietaId', { dietaId: '@dietaId' }, {
 		update: {
