@@ -147,7 +147,7 @@
               <div class="col-sm-8">
                 <label class="control-label col-sm-3">Prosta mesta:</label>
                 <div class="col-sm-9" style="padding-right: 0">
-                  <input type="number" id="prostaMesta" class="form-control" ng-model = "uporabnik.prosta_mesta" required>
+                  <input type="number" id="prostaMesta" class="form-control" ng-model = "uporabnik.prosta_mesta" ng-disabled="!uporabnik.sprejema_paciente" required>
                 </div>
               </div>
             </div>
@@ -282,11 +282,3 @@
     </div> <!-- end box body -->
   </div> <!-- end box -->
 </div>
-
-<!-- ONEMOGOČI VNAŠANJE ŠTEVILA PACIENTOV KI JIH ŠE LAHKO SPREJEM ZDARVNIK, ČE JIH SPLOH NE SPREJEMA! -->
-<!-- TUKAJ ZATO KER SE MORE PRAVO ZDRENDERIRAT ZADEVA -->
-<script>
-  (function() {
-      prostaMesta.disabled = true;
-  })();
-</script>

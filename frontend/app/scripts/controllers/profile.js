@@ -38,6 +38,9 @@ angular.module('tpo')
       $scope.tipUporabnika = 'Zdravnik';
     }
 
+    // (function() {
+    //     prostaMesta.disabled = true;
+    // })();
 
 
     $scope.shrani_spremembe_zdravnik = function(){
