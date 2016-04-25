@@ -39,7 +39,9 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Datum rojstva:</label>
               <div class="col-sm-10">
-                <input type="date" data-date="" data-date-format="DD.MM.YYYY" class="form-control" ng-model="uporabnik.datum_rojstva">
+                <!-- <input type="date" data-date="" data-date-format="DD.MM.YYYY" class="form-control" ng-model="uporabnik.datum_rojstva"> -->
+                <ng-datepicker ng-model="uporabnik.datum_rojstva" locale="sl" format="DD.MM.YYYY" view-format="DD.MM.YYYY" required></ng-datepicker>
+                <!-- <input date-range-picker class="form-control date-picker" type="text" ng-model="datePicker.date" /> -->
               </div>
             </div>
 

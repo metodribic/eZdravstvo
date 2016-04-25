@@ -44,12 +44,11 @@ class Zdravnik(User):
 
 
 class Osebje(User):
-    ime = models.CharField(max_length=100)
-    priimek = models.CharField(max_length=100)
+    ime = models.CharField(max_length=100, blank=True, null=True)
+    priimek = models.CharField(max_length=100, blank=True, null=True)
     sifra = models.ForeignKey('SifrantRegistriranih')
-    stevilka = models.IntegerField()  # metod: nimam pojma kaj bi naj bla ta stevilka ?
     role = models.ForeignKey('Roles')
-    ustanova = models.ForeignKey('Ustanova')
+    ustanova = models.ForeignKey('Ustanova', blank=True, null=True)
     telefon = models.CharField(max_length=100, blank=True, null=True)
 
 

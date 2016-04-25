@@ -26,15 +26,19 @@ e-mail,👍
 angular.module('tpo')
   .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik','Notification', 'Ustanova', 'KontaktnaOseba',
   function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik, Notification, Ustanova, KontaktnaOseba) {
+    // $scope.datePicker.date = {startDate: null, endDate: null};
+
     var trenutniUporabnik = $rootScope.uporabnik;
     $scope.sprejema = true;
-    console.log($rootScope.uporabnik);
+
 
     // Preveri ali je prijavljena oseba zravnik ali pacient
     if(trenutniUporabnik.role.naziv == 'Pacient')
       $scope.tipUporabnika = 'Pacient';
     else if(trenutniUporabnik.role.naziv == 'Zdravnik')
       $scope.tipUporabnika = 'Zdravnik';
+
+
 
     $scope.shrani_spremembe_zdravnik = function(){
       // preveri če je prijavljen uporabnik zdravnik
