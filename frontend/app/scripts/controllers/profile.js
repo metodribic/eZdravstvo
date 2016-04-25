@@ -27,31 +27,44 @@ angular.module('tpo')
   .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik','Notification', 'Ustanova', 'KontaktnaOseba',
   function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik, Notification, Ustanova, KontaktnaOseba) {
     var trenutniUporabnik = $rootScope.uporabnik;
+    $scope.sprejema = true;
+    console.log($rootScope.uporabnik);
 
-    // console.log($rootScope.uporabnik);
     // Preveri ali je prijavljena oseba zravnik ali pacient
-    $scope.tipUporabnika = 'Pacient';
     if(trenutniUporabnik.role.naziv == 'Pacient')
       $scope.tipUporabnika = 'Pacient';
     else if(trenutniUporabnik.role.naziv == 'Zdravnik')
       $scope.tipUporabnika = 'Zdravnik';
 
-
-    // POSODOBI PRFIL
-    $scope.shrani_spremembe = function(){
-      var updatedUporabnik = {};
-
+    $scope.shrani_spremembe_zdravnik = function(){
       // preveri če je prijavljen uporabnik zdravnik
       if(trenutniUporabnik.role.naziv == 'Zdravnik'){
-        Zdravnik.get({zdravnikId: trenutniUporabnik.id}).$promise.then(function(response){
-          response.ime = trenutniUporabnik.ime;
-          response.priimek = trenutniUporabnik.priimek;
-          response.$update();
-        });
-      }
-      //  če ni zdravnik preveri če je pacient ali admin
-      else if( trenutniUporabnik.role.naziv == 'Pacient' || trenutniUporabnik.role.naziv == 'Admin' ){
+        var zdravnik = new Zdravnik();
+        zdravnik.id = $rootScope.uporabnik.id;
+        zdravnik.ime = $rootScope.uporabnik.ime;
+        zdravnik.priimek = $rootScope.uporabnik.priimek;
+        zdravnik.telefon = $rootScope.uporabnik.telefon;
+        zdravnik.email = $rootScope.uporabnik.email;
+        zdravnik.prosta_mesta = $rootScope.uporabnik.prosta_mesta;
+        zdravnik.ustanova = {
+          id: $rootScope.uporabnik.ustanova.id
+        };
 
+        if(radioBtn1.checked)
+          zdravnik.sprejema_paciente = true;
+        else if(radioBtn2.checked)
+          zdravnik.sprejema_paciente = false;
+
+        zdravnik.$update({zdravnikId: trenutniUporabnik.id});
+        Notification.success('Profil uspešno posodobljen!');
+      }
+    };
+
+
+    // POSODOBI PRFIL
+    $scope.shrani_spremembe_pacient = function(){
+      // če je pacient ali admin
+      if( trenutniUporabnik.role.naziv == 'Pacient' || trenutniUporabnik.role.naziv == 'Admin' ){
         // TODO: Preveri če je oskrbovanec
 
         var updated_user = new Uporabniki();
@@ -63,19 +76,20 @@ angular.module('tpo')
         updated_user.telefon = $rootScope.uporabnik.telefon;
         updated_user.naslov = $rootScope.uporabnik.naslov;
         updated_user.spol = $rootScope.uporabnik.spol;
+        updated_user.prosta_mesta = $rootScope.uporabnik.prosta_mesta;
         updated_user.posta = {
           id: $rootScope.uporabnik.posta.id,
           kraj: $rootScope.uporabnik.posta.kraj
         };
 
         updated_user.$update({iduporabnik: trenutniUporabnik.id});
-        Notification.success('Profile uspešno posodobljen!');
+        Notification.success('Profil uspešno posodobljen!');
       }
     };
 
+
     // POSODOBI KONTAKTNO OSEBO!
     $scope.shrani_oskrbovanca = function(){
-      console.log($rootScope.uporabnik.kontaktna_oseba);
       var updated_kontaktna = new KontaktnaOseba();
       updated_kontaktna.id = $rootScope.uporabnik.kontaktna_oseba.id;
       updated_kontaktna.ime = $rootScope.uporabnik.kontaktna_oseba.ime;
