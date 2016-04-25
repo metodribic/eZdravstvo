@@ -10,7 +10,7 @@ from django.utils.translation import ugettext as _
 class Uporabnik(User):
     ime = models.CharField(max_length=100, blank=True)
     priimek = models.CharField(max_length=100, blank=True)
-    datum_rojstva = models.DateField(blank=True)
+    datum_rojstva = models.DateTimeField(blank=True, null=True)
     kraj_rojstva = models.CharField(max_length=50, blank=True)
     naslov = models.CharField(max_length=100, blank=True)
     posta = models.ForeignKey('Posta', blank=True, null=True)

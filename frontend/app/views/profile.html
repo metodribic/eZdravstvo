@@ -54,7 +54,7 @@
             </div>
 
             <!-- Naslov uporabnika -->
-            <div class="form-group" ng-if="tipUporabnika !='Zdravnik'">
+            <div class="form-group">
               <label class="control-label col-sm-2">Naslov prebivališča:</label>
               <div class="col-sm-10">
                 <input type="text" class="form-control" ng-model = "uporabnik.naslov" required>
@@ -62,7 +62,7 @@
             </div>
 
             <!-- Poštna številka uporabnika -->
-            <div class="form-group" ng-if="tipUporabnika !='Zdravnik'">
+            <div class="form-group">
               <label class="control-label col-sm-2">Poštna številka:</label>
               <div class="col-sm-5">
                 <input type="number" class="form-control" ng-blur="pridobi_ime_poste('pacient')" ng-model="uporabnik.posta.id" required>
@@ -73,7 +73,7 @@
             </div>
 
             <!-- ZZZS št. uporabnika -->
-            <div class="form-group" ng-if="tipUporabnika !='Zdravnik'">
+            <div class="form-group">
               <label class="control-label col-sm-2">ZZZS številka:</label>
               <div class="col-sm-10">
                 <input type="number" class="form-control" ng-model = "uporabnik.st_zzzs" required>

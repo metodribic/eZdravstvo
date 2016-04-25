@@ -31,7 +31,6 @@ angular.module('tpo')
     var trenutniUporabnik = $rootScope.uporabnik;
     $scope.sprejema = true;
 
-
     // Preveri ali je prijavljena oseba zravnik ali pacient
     if(trenutniUporabnik.role.naziv == 'Pacient')
       $scope.tipUporabnika = 'Pacient';
@@ -80,12 +79,19 @@ angular.module('tpo')
         updated_user.telefon = $rootScope.uporabnik.telefon;
         updated_user.naslov = $rootScope.uporabnik.naslov;
         updated_user.spol = $rootScope.uporabnik.spol;
-        updated_user.prosta_mesta = $rootScope.uporabnik.prosta_mesta;
         updated_user.posta = {
           id: $rootScope.uporabnik.posta.id,
           kraj: $rootScope.uporabnik.posta.kraj
         };
 
+        // preveri če je datum vnesen
+        if($rootScope.uporabnik.datum_rojstva != null){
+          updated_user.datum_rojstva = new Date($rootScope.uporabnik.datum_rojstva).toISOString();
+        }
+        else {
+          updated_user.datum_rojstva = null;
+        }
+        // console.log(updated_user);
         updated_user.$update({iduporabnik: trenutniUporabnik.id});
         Notification.success('Profil uspešno posodobljen!');
       }
