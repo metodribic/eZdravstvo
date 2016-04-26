@@ -346,6 +346,13 @@ angular.module('tpo')
                         // string IME & PRIIMEK & number stevilka
                         scope.extraInfo += validateJoinedFields( scope, n);
 
+                         // USTANOVA
+                         if( angular.isUndefined(n.izbranaUstanova) || n.izbranaUstanova=="" ){
+                             scope.extraInfo += "Izberite ambulanto.\n";
+                             scope.errUstanova = true;
+                         }else{
+                             scope.errUstanova = false;
+                         }
 
                     }
                 }
