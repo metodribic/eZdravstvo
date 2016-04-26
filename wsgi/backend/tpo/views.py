@@ -300,12 +300,10 @@ def registracijaAdmin(request, format=None):
                 if ime != "":
                     medSest = Osebje.objects.create_user(username=mail, email=mail, is_staff=1, ime=ime,
                               priimek=prii, sifra_id=sifrantReg.pk, telefon=stev, password=passw, role_id=3,
-                              ustanova_id=ustan_id
-                                                         , stevilka=0 )
+                              ustanova_id=ustan_id )
                 else:
                     medSest = Osebje.objects.create_user(username=mail, email=mail, is_staff=1, password=passw,
-                                sifra_id=sifrantReg.pk, role_id=3
-                                                         , stevilka=0, ustanova_id=1 )
+                                sifra_id=sifrantReg.pk, role_id=3 )
 
                 #  set sifra to is_used
                 sifrantReg.is_used = True
