@@ -10,7 +10,7 @@ from django.utils.translation import ugettext as _
 class Uporabnik(User):
     ime = models.CharField(max_length=100, blank=True)
     priimek = models.CharField(max_length=100, blank=True)
-    datum_rojstva = models.DateField(blank=True)
+    datum_rojstva = models.DateTimeField(blank=True, null=True)
     kraj_rojstva = models.CharField(max_length=50, blank=True)
     naslov = models.CharField(max_length=100, blank=True)
     posta = models.ForeignKey('Posta', blank=True, null=True)
@@ -44,10 +44,9 @@ class Zdravnik(User):
 
 
 class Osebje(User):
-    ime = models.CharField(max_length=100)
-    priimek = models.CharField(max_length=100)
+    ime = models.CharField(max_length=100, blank=True, null=True)
+    priimek = models.CharField(max_length=100, blank=True, null=True)
     sifra = models.ForeignKey('SifrantRegistriranih')
-    stevilka = models.IntegerField()  # metod: nimam pojma kaj bi naj bla ta stevilka ?
     role = models.ForeignKey('Roles')
     ustanova = models.ForeignKey('Ustanova', blank=True, null=True)
     telefon = models.CharField(max_length=100, blank=True, null=True)

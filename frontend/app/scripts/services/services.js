@@ -1,5 +1,6 @@
 angular.module('tpo.services', ['ngResource', 'config'])
 
+
 .service('AuthService', function($q, $http, $rootScope, Uporabniki, API_URL) {
   var LOCAL_TOKEN_KEY = 'token';
   var LOCAL_USER_KEY = 'user';
@@ -40,6 +41,7 @@ angular.module('tpo.services', ['ngResource', 'config'])
   var getCurrentUser = function() {
    return JSON.parse(window.localStorage.getItem(LOCAL_USER_KEY));
   };
+
 
     var changePassword = function(id, oldpass, newpass) {
         return $q(function(resolve, reject) {

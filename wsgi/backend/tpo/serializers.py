@@ -64,15 +64,16 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
         exclude = ('password', 'first_name', 'last_name', 'is_superuser', 'is_staff')
 
     def update(self, instance, validated_data):
-        # posta extra cudna zadeva, ni cela v validated data...
-        print('test')
-        instance.posta_id = self._kwargs['data']['posta']['id']
         instance.ime = validated_data['ime']
         instance.priimek = validated_data['priimek']
-        instance.naslov = validated_data['naslov']
+        instance.email = validated_data['email']
         instance.telefon = validated_data['telefon']
-        instance.sorodstveno_razmerje = validated_data['sorodstveno_razmerje']
+        instance.sprejema_paciente = validated_data['sprejema_paciente']
+        instance.prosta_mesta = validated_data['prosta_mesta']
+        instance.ustanova_id = validated_data['ustanova']['id']
         instance.save()
+        #Zdravnik.objects.filter(email=mail).exists()
+
 
         return instance
 
@@ -147,6 +148,7 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
         # posta extra cudna zadeva, ni cela v validated data...
         instance.posta_id = self._kwargs['data']['posta']['id']
         instance.ime = validated_data['ime']
+        instance.datum_rojstva = validated_data['datum_rojstva']
         instance.priimek = validated_data['priimek']
         instance.kraj_rojstva = validated_data['kraj_rojstva']
         instance.naslov = validated_data['naslov']

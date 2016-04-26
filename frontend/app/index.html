@@ -10,6 +10,8 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="../bower_components/ui-select/dist/select.css" />
     <link rel="stylesheet" href="../bower_components/angular-ui-notification/dist/angular-ui-notification.css" />
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="../bower_components/bootstrap-daterangepicker/daterangepicker.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -31,6 +33,9 @@
           apply the skin class to the body tag so the changes take effect.
     -->
     <link rel="stylesheet" href="dist/css/skins/skin-green.min.css">
+
+    <!-- datepicker -->
+    <link rel="stylesheet" href="../bower_components/ngDatepicker/src/css/ngDatepicker.css">
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -182,6 +187,7 @@
 
   <!-- build:js(frontend) scripts/vendor.js -->
   <!-- bower:js -->
+  <script src="../bower_components/jquery/dist/jquery.js"></script>
   <script src="../bower_components/angular/angular.js"></script>
   <script src="../bower_components/angular-animate/angular-animate.js"></script>
   <script src="../bower_components/angular-cookies/angular-cookies.js"></script>
@@ -192,6 +198,11 @@
   <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
   <script src="../bower_components/ui-select/dist/select.js"></script>
   <script src="../bower_components/angular-ui-notification/dist/angular-ui-notification.js"></script>
+  <script src="../bower_components/moment/moment.js"></script>
+  <script src="../bower_components/ngDatepicker/src/js/ngDatepicker.js"></script>
+  <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+  <script src="../bower_components/angular-daterangepicker/js/angular-daterangepicker.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 
@@ -211,8 +222,7 @@
   <script src="scripts/controllers/dodajPregled.js"></script>
   <!-- endbuild -->
 
-  <script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
-  <script src="bootstrap/js/bootstrap.min.js"></script>
+
   <script src="dist/js/app.min.js"></script>
 
 </body></html>

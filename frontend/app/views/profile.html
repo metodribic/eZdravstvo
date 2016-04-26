@@ -6,7 +6,7 @@
       <h3 class="bottom-border header">Uporabniški profil</h3>
       <div class="row">
         <div class="col-md-12">
-          <form class="form-horizontal" role="form" ng-submit="shrani_spremembe()">
+          <form class="form-horizontal" role="form" ng-submit="shrani_spremembe_pacient()" ng-if="tipUporabnika !='Zdravnik'">
 
             <!-- Ime uporabnika -->
             <div class="form-group">
@@ -24,7 +24,8 @@
               </div>
             </div>
 
-            <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
+            <!-- Spol -->
+            <div class="form-group">
                 <label class="control-label col-sm-2">Spol</label>
                 <div class="col-sm-10">
                   <select class="form-control col-10" id="dropdownSpol" ng-model = "uporabnik.spol" required>
@@ -35,15 +36,17 @@
             </div>
 
             <!-- Datum rojstva uporabnika -->
-            <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
+            <div class="form-group">
               <label class="control-label col-sm-2">Datum rojstva:</label>
               <div class="col-sm-10">
-                <input type="date" data-date="" data-date-format="DD.MM.YYYY" class="form-control" ng-model="uporabnik.datum_rojstva" required>
+                <!-- <input type="date" data-date="" data-date-format="DD.MM.YYYY" class="form-control" ng-model="uporabnik.datum_rojstva"> -->
+                <ng-datepicker ng-model="uporabnik.datum_rojstva" locale="sl" format="DD.MM.YYYY" view-format="DD.MM.YYYY" required></ng-datepicker>
+                <!-- <input date-range-picker class="form-control date-picker" type="text" ng-model="datePicker.date" /> -->
               </div>
             </div>
 
             <!-- Kraj rojstba uporabnika -->
-            <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
+            <div class="form-group">
               <label class="control-label col-sm-2">Kraj rojstva:</label>
               <div class="col-sm-10">
                 <input type="text" class="form-control" ng-model = "uporabnik.kraj_rojstva" required>
@@ -51,7 +54,7 @@
             </div>
 
             <!-- Naslov uporabnika -->
-            <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
+            <div class="form-group">
               <label class="control-label col-sm-2">Naslov prebivališča:</label>
               <div class="col-sm-10">
                 <input type="text" class="form-control" ng-model = "uporabnik.naslov" required>
@@ -59,7 +62,7 @@
             </div>
 
             <!-- Poštna številka uporabnika -->
-            <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
+            <div class="form-group">
               <label class="control-label col-sm-2">Poštna številka:</label>
               <div class="col-sm-5">
                 <input type="number" class="form-control" ng-blur="pridobi_ime_poste('pacient')" ng-model="uporabnik.posta.id" required>
@@ -70,7 +73,7 @@
             </div>
 
             <!-- ZZZS št. uporabnika -->
-            <div class="form-group" ng-hide="tipUporabnika=='Zdravnik'">
+            <div class="form-group">
               <label class="control-label col-sm-2">ZZZS številka:</label>
               <div class="col-sm-10">
                 <input type="number" class="form-control" ng-model = "uporabnik.st_zzzs" required>
@@ -85,10 +88,43 @@
               </div>
             </div>
 
+
+            <button class="btn btn-default pull-right">Shrani spremembe</button>
+          </form>
+
+          <!-- ############################################### ZDRAVNIK ########################################################################## -->
+
+          <form class="form-horizontal" role="form" ng-submit="shrani_spremembe_zdravnik()" ng-if="tipUporabnika=='Zdravnik'">
+
+            <!-- Ime uporabnika -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Ime:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model = "uporabnik.ime" required>
+              </div>
+            </div>
+
+            <!-- Priimek uporabnika -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Priimek:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model = "uporabnik.priimek" required>
+              </div>
+            </div>
+
+
+            <!-- Telefonska številka uporabnika -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Telefonska številka:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model = "uporabnik.telefon" required>
+              </div>
+            </div>
+
             <!-- ZDRAVNIKOVI FIELDI -->
 
             <!-- email -->
-            <div class="form-group" ng-show="tipUporabnika=='Zdravnik'">
+            <div class="form-group" ng->
               <label class="control-label col-sm-2">Email:</label>
               <div class="col-sm-10">
                 <input type="email" class="form-control" ng-model = "uporabnik.email" required>
@@ -96,20 +132,26 @@
             </div>
 
             <!-- sifra -->
-            <div class="form-group" ng-show="tipUporabnika=='Zdravnik'">
-              <label class="control-label col-sm-2">Šifra:</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model = "uporabnik.sifra.sifra" disabled>
+            <div class="form-group" ng->
+              <label class="control-label col-sm-2">Sprejema paciente:</label>
+              <div class="col-sm-2">
+                <label class="radio-inline">
+                  <input type="radio" name="inlineRadioOptions" id="radioBtn1" value="true" ng-checked="uporabnik.sprejema_paciente" ng-click="hideNumber(false)"> Da
+                </label>
+
+                <label class="radio-inline">
+                  <input type="radio" name="inlineRadioOptions" id="radioBtn2" value="false" ng-checked="!uporabnik.sprejema_paciente" ng-click="hideNumber(true)"> Ne
+                </label>
+              </div>
+
+              <div class="col-sm-8">
+                <label class="control-label col-sm-3">Prosta mesta:</label>
+                <div class="col-sm-9" style="padding-right: 0">
+                  <input type="number" id="prostaMesta" class="form-control" ng-model = "uporabnik.prosta_mesta" ng-disabled="!uporabnik.sprejema_paciente" required>
+                </div>
               </div>
             </div>
 
-            <!-- stevilo pacientov -->
-            <div class="form-group" ng-show="tipUporabnika=='Zdravnik'">
-              <label class="control-label col-sm-2">Prosta mesta:</label>
-              <div class="col-sm-10">
-                <input type="number" class="form-control" ng-model = "uporabnik.prosta_mesta" required>
-              </div>
-            </div>
 
             <!-- Ustanova -->
             <div class="form-group" ng-show="tipUporabnika=='Zdravnik'">
@@ -121,9 +163,13 @@
                 <input type="text" disabled class="form-control" ng-model = "uporabnik.ustanova.naziv" required>
               </div>
             </div>
-
             <button class="btn btn-default pull-right">Shrani spremembe</button>
           </form>
+
+
+
+
+
 
           <br>
         </div> <!-- end col-md-12 -->
@@ -132,7 +178,7 @@
   </div> <!-- end box -->
 
   <!-- PODATKI O KONTAKTNI OSEBI -->
-  <div class="box" ng-hide="tipUporabnika=='Zdravnik'">
+  <div class="box" ng-if="tipUporabnika!='Zdravnik'">
     <div class="box-body">
       <h3 class="bottom-border header">Podatki o kontaktni osebi</h3>
       <div class="row">

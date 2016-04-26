@@ -20,7 +20,10 @@ angular
     'ui.router',
     'tpo.services',
     'tpo.models',
-    'ui-notification'
+    'ui-notification',
+    'jkuri.datepicker',
+    'daterangepicker'
+
   ])
   .config(['$resourceProvider','$stateProvider', '$urlRouterProvider',
       function($resourceProvider, $stateProvider, $urlRouterProvider)  {
