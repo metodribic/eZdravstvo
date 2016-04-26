@@ -258,8 +258,11 @@ def registracijaAdmin(request, format=None):
         ambul_id = ambulanta.split("/")[-1]
         ustan_id = ustanova.split("/")[-1]
 
+        # izbrane sestre
+        sestreUsernames = request.data.get('izbranaSestra', "")
 
-        #print "check role"
+        print sestreUsernames
+
         if( rola == 'Zdravnik'):
             if (Zdravnik.objects.filter(email=mail).exists() ):
                 #print "already exists"
@@ -282,6 +285,11 @@ def registracijaAdmin(request, format=None):
                 #  set sifra to is_used
                 sifrantReg.is_used = True
                 sifrantReg.save()
+                # zdravnik with sifra created -> add it's nurses to it
+                if sestreUsernames != "":
+                    for nurse in sestreUsernames:
+                        # dob ID sestre, dodaj TEMU dohtarju
+                        zdr.medicinske_sestre.add(Osebje.objects.get(email=nurse))
 
                 respons = JSONResponse({"success": "function : {'user created':'Zdravnik'}"})
                 respons.status_code = 201

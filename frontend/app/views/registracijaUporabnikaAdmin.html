@@ -116,12 +116,12 @@
                         </div>
 
                         <!-- IZBIRA MEDICINSKE SESTRE -->
-                        <div class="form-group">
+                        <div class="form-group" >
                             <label for="medSestre">Medicinske sestre</label>
-                            <select class="form-control" id="medSestre" ng-model="uporabniki.izbranaSestra" ng-change="changedNurse(uporabniki.izbranaSestra)" >
+                            <select multiple class="form-control" id="medSestre" ng-model="uporabniki.izbranaSestra" ng-change="changedNurse(uporabniki.izbranaSestra)" >
                               <option ng-repeat="o in osebje" value="{{ o.username }}" >{{o.ime}} {{ o.priimek }} ({{ o.username }})</option>
                             </select>
-                            <span style="color:red" ng-show="errMedSes" >Izberite medicinsko sestro zdravnika.</span>
+                            <span style="color:red" ng-show="errMedSes" >Izberite medicinske sestre zdravnika.</span>
                         </div>
 
 
