@@ -82,7 +82,7 @@ angular.module('tpo')
                 n.stevilka = $scope.uporabniki.stevilka;
                 n.prostaMesta = $scope.uporabniki.prostaMesta;
 
-                console.log(n);
+                //console.log(n);
                 // validation FE
                 validateFE( $scope, n );
 
@@ -168,7 +168,7 @@ angular.module('tpo')
 
             function responseFailedHandler ( scope, servFail ){
 
-                console.log(servFail);
+                //console.log(servFail);
 
                 if( servFail === "User with this email already exists"){
 
@@ -212,7 +212,7 @@ angular.module('tpo')
             function validateJoinedFields( scope, n ){
 
                 // check ime
-                if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.ime)) || angular.isUndefined(n.ime) ){
+                if( ! (/^[a-zA-ZčšžČŠŽćĆđĐ]{3,21}$/.test(n.ime)) || angular.isUndefined(n.ime) ){
                     // invalid name
                     scope.extraInfo += "Ime lahko ima samo črke, vsaj 3, največ 21.\n";
                     scope.errIme = true;
@@ -221,7 +221,7 @@ angular.module('tpo')
                 }
 
                 // check priimek
-                if( ! (/^[a-zA-ZčšžČŠŽ]{3,21}$/.test(n.priimek)) || angular.isUndefined(n.priimek) ){
+                if( ! (/^[a-zA-ZčšžČŠŽćĆđĐ]{3,21}$/.test(n.priimek)) || angular.isUndefined(n.priimek) ){
                     // invalid name
                     scope.extraInfo += "Priimek lahko ima samo črke, vsaj 3, največ 21.\n";
                     scope.errPrii = true;
@@ -300,7 +300,7 @@ angular.module('tpo')
                          }
 
                          // dropdown TIP
-                         if( angular.isUndefined(n.tip) ){
+                         if( angular.isUndefined(n.tip) || n.tip =="" ){
                              scope.extraInfo += "Izberite tip zdravnika.\n";
                              scope.errTip = true;
                          }else{
@@ -308,26 +308,28 @@ angular.module('tpo')
                          }
 
                          // dropdown AMBULANTA
-                         if( angular.isUndefined(n.izbranaAmbulanta) ){
+                         if( angular.isUndefined(n.izbranaAmbulanta) || n.izbranaAmbulanta=="" ){
                              scope.extraInfo += "Izberite ambulanto.\n";
                              scope.errAmbulanta = true;
                          }else{
                              scope.errAmbulanta = false;
                          }
                          // USTANOVA
-                         if( angular.isUndefined(n.izbranaUstanova) ){
+                         if( angular.isUndefined(n.izbranaUstanova) || n.izbranaUstanova=="" ){
                              scope.extraInfo += "Izberite ambulanto.\n";
                              scope.errUstanova = true;
                          }else{
                              scope.errUstanova = false;
                          }
-                         // dropdown AMBULANTA
+                         // dropdown SESTRA
+                         /*
                          if( angular.isUndefined(n.izbranaSestra) ){
                              scope.extraInfo += "Izberite medicinsko sestro zdravnika.\n";
                              scope.errMedSes = true;
                          }else{
                              scope.errMedSes = false;
                          }
+                         */
                     }
                 }else{
                     // NURSE

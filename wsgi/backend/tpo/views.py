@@ -223,7 +223,7 @@ def registracijaAdmin(request, format=None):
     Admin create new user
     """
     try:
-        print(request.data)
+        #print(request.data)
         # check if email and password are received or return 400
         mail = request.data['email']
         passw = request.data['password']
@@ -286,10 +286,8 @@ def registracijaAdmin(request, format=None):
                 sifrantReg.is_used = True
                 sifrantReg.save()
                 # zdravnik with sifra created -> add it's nurses to it
-                if sestreUsernames != "":
-                    for nurse in sestreUsernames:
-                        # dob ID sestre, dodaj TEMU dohtarju
-                        zdr.medicinske_sestre.add(Osebje.objects.get(email=nurse))
+                for nurse in sestreUsernames:
+                    zdr.medicinske_sestre.add(Osebje.objects.get(email=nurse['username']))
 
                 respons = JSONResponse({"success": "function : {'user created':'Zdravnik'}"})
                 respons.status_code = 201
