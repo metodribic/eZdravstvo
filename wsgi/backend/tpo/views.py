@@ -346,7 +346,7 @@ def registracijaPacient(request, format=None):
     try:
         #print(request.data)
         # check if email and password are received or return 400
-        mail = request._data['email']
+        mail = request.data['email']
         password = request.data['password']
 
          #opcijska polja
@@ -358,15 +358,16 @@ def registracijaPacient(request, format=None):
         kraj_rojstva = request.data.get('krajRojstva', "")
         naslov = request.data.get('naslov', "")
 
-        try:
-            [y,m,d] = ((request.data.get('datumRojstva', [2000, 20, 12])).split("T")[0]).split("-")
-            tmpD = int(d)
-            tmpD = tmpD + 1
-            # dan pride 10, na fieldu pa je 11 (zacne z 0 al neki)
-            datum_rojstva = datetime.date(int(y), int(m), int(tmpD) )
-            print datum_rojstva
-        except ValueError as date_ve:
-            datum_rojstva = datetime.date(2000, 20, 12)
+        if ime != "":
+            try:
+                [y,m,d] = ((request.data.get('datumRojstva', [2000, 20, 12])).split("T")[0]).split("-")
+                tmpD = int(d)
+                tmpD = tmpD + 1
+                # dan pride 10, na fieldu pa je 11 (zacne z 0 al neki)
+                datum_rojstva = datetime.date(int(y), int(m), int(tmpD) )
+                print datum_rojstva
+            except ValueError as date_ve:
+                datum_rojstva = datetime.date(2000, 20, 12)
 
 
         if (Uporabnik.objects.filter(email=mail).exists() ):
