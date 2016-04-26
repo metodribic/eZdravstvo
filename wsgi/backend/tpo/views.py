@@ -223,7 +223,7 @@ def registracijaAdmin(request, format=None):
     Admin create new user
     """
     try:
-        #print(request.data)
+        print(request.data)
         # check if email and password are received or return 400
         mail = request.data['email']
         passw = request.data['password']
@@ -234,35 +234,30 @@ def registracijaAdmin(request, format=None):
         prii = request.data.get('priimek', "")
 
         sprejemaPac = request.data.get('sprejemaPaciente', 1)
-        novaStev = request.data.get('stevilka', 49)
 
-        if( rola == 'Zdravnik'):
-            sifra = request.data.get('sifraZdr', "")
-            novMail = Zdravnik.objects.filter(sifra=sifra).delete()
-        else:
-            sifra = request.data.get('sifraSes', "")
-            novMail = Osebje.objects.filter(sifra=sifra).delete()
+        naziv = request.data.get('naziv', "")
+        tip = request.data.get('tip', "")
+        ambulanta = request.data.get('izbranaAmbulanta', "")
+        ustanova = request.data.get('izbranaUstanova', "")
 
-        if( ime != "" ):
-
-            if( rola == 'Zdravnik'):
-                naziv = request.data.get('naziv', "")
-                tip = request.data.get('tip', "")
-                ambulanta = request.data.get('izbranaAmbulanta', "")
-                medSestraUsermame = request.data.get('izbranaSestra', "")
-
-                ambul_id = ambulanta.split("/")[-1]
-                sestra_id = User.objects.get(username=medSestraUsermame).pk
-
-        # check if sifra == number
+        sifra = request.data.get('sif', 000001)
+        sifrantReg = SifrantRegistriranih.objects.get(sifra=sifra)
         try:
-            novaSifra = int(sifra)
-        except ValueError:
-            novaSifra = 1337
-        try:
-            novaStev = int(novaStev)
+            sprejemaPac = (int)(sprejemaPac)
         except:
-            novaStev = 113377
+            sprejemaPac = 1
+
+        if sprejemaPac == 1 :
+            prostaMesta = request.data.get('prostaMesta', 10)
+        else:
+            prostaMesta = 0
+
+
+        stev = request.data.get('stevilka', -1)
+
+        ambul_id = ambulanta.split("/")[-1]
+        ustan_id = ustanova.split("/")[-1]
+
 
         #print "check role"
         if( rola == 'Zdravnik'):
@@ -276,12 +271,17 @@ def registracijaAdmin(request, format=None):
                 validate_password(password=passw)
                 # check only ime - same as in login
                 if( ime != "" ):
-                    zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
-                            sifra=novaSifra,sprejema_paciente=sprejemaPac, role_id=2, ime=ime, priimek=prii,
-                            naziv=naziv, tip=tip, ambulanta_id=ambul_id, medicinske_sestre_id=sestra_id, is_staff=1)
+                    zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw, prosta_mesta=prostaMesta,
+                            sifra_id=sifrantReg.pk, sprejema_paciente=sprejemaPac, ambulanta_id=ambul_id, role_id=2, is_staff=1,
+                            ime=ime, priimek=prii,naziv=naziv, tip=tip, ustanova_id=ustan_id, telefon=stev )
+                    # medicinske_sestre=sestra_id,
                 else:
-                    zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw,
-                            sifra=novaSifra, sprejema_paciente=sprejemaPac, role_id=2, is_staff=1)
+                    zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw, prosta_mesta=10,
+                        sifra_id=sifrantReg.pk, sprejema_paciente=1, ambulanta_id=ambul_id, role_id=2, is_staff=1 )
+
+                #  set sifra to is_used
+                sifrantReg.is_used = True
+                sifrantReg.save()
 
                 respons = JSONResponse({"success": "function : {'user created':'Zdravnik'}"})
                 respons.status_code = 201
@@ -297,10 +297,21 @@ def registracijaAdmin(request, format=None):
             else:
                 #print "NURSE"
                 validate_password(password=passw)
-                medSest = Osebje.objects.create_user(username=mail, email=mail, is_staff=1,ime=ime,
-                              priimek=prii, sifra=novaSifra, stevilka=novaStev, password=passw, role_id=3 )
-                respons = JSONResponse({"success": "function : {'user created':'Medicinska sestra'}"})
+                if ime != "":
+                    medSest = Osebje.objects.create_user(username=mail, email=mail, is_staff=1, ime=ime,
+                              priimek=prii, sifra_id=sifrantReg.pk, telefon=stev, password=passw, role_id=3,
+                              ustanova_id=ustan_id
+                                                         , stevilka=0 )
+                else:
+                    medSest = Osebje.objects.create_user(username=mail, email=mail, is_staff=1, password=passw,
+                                sifra_id=sifrantReg.pk, role_id=3
+                                                         , stevilka=0, ustanova_id=1 )
 
+                #  set sifra to is_used
+                sifrantReg.is_used = True
+                sifrantReg.save()
+
+                respons = JSONResponse({"success": "function : {'user created':'Medicinska sestra'}"})
                 respons.status_code = 201
                 return respons
     except ValidationError as ve:
