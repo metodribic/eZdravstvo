@@ -32,30 +32,35 @@ angular.module('tpo')
         n.krajRojstva = $scope.user.kraj_rojstva;
         n.naslov = $scope.user.naslov;
 
+        validateFE( $scope, n );
 
-         // save user & wait for response
-        n.$save( function(succ){ // could check succ.success
-           if( userWasCreaterBool( succ.success ) ){
-               $scope.besedZaUpor = "Uporabnik "+ $scope.user.username+" uspešno ustvarjen.";
-               /*
-               //
-               //POSLJI EMAIL ZA AKTIVACIJO UPORABNISKEGA RACUNA
-               //
-               */
-               Notification.success("Registracija uspešna, v poštnem predalu vas čaka aktivacijsko sporočilo.");
-               $state.go("login");
-               // clear fields
-               //clearUporabnikFields($scope);
-               //showSuccAlert( $scope );
-           }
 
-         }, function (err) {
-            if(err.data.error == "WeakPassword"){
-              Notification.error("Geslo mora vsebovati najman 8 znakov, od tega vsaj eno številko!");
-            }
-             responseFailedHandler ( $scope, err.data.error );
-             showFailAlert( $scope );
-         });
+        if( $scope.extraInfo === "" ) {
+            // save user & wait for response
+            n.$save(function (succ) { // could check succ.success
+                if (userWasCreaterBool(succ.success)) {
+                    $scope.besedZaUpor = "Uporabnik " + $scope.user.username + " uspešno ustvarjen.";
+                    /*
+                     //
+                     //POSLJI EMAIL ZA AKTIVACIJO UPORABNISKEGA RACUNA
+                     //
+                     */
+                    Notification.success("Registracija uspešna, v poštnem predalu vas čaka aktivacijsko sporočilo.");
+                    $state.go("login");
+                    // clear fields
+                    //clearUporabnikFields($scope);
+                    //showSuccAlert( $scope );
+                }
+
+            }, function (err) {
+                responseFailedHandler($scope, err.data.error);
+                showFailAlert($scope);
+            });
+
+        }else{
+            // display err
+            Notification.error({message: $scope.extraInfo });
+        }
 
         /*****FUNCTIONS*****/
 
@@ -91,15 +96,18 @@ angular.module('tpo')
 
             if( servFail === "User with this email already exists"){
 
+                Notification.error("Uporabnik s tem email naslovom že obstaja!");
                 scope.besedZaUpor = "Uporabnik s tem email naslovom že obstaja!";
 
             }else if( servFail === "WeakPassword" ) {
 
+                Notification.error("Geslo mora vsebovati najman 8 znakov, od tega vsaj eno številko!");
                 scope.besedZaUpor = "Izberite boljše geslo! Geslo mora biti dolžine 8, vsaj 1 številko!";
 
             }else{
                 // POPRAVI - GLEJ KAJ JE NAROBE, opazil samo pri duplicate entry
                 scope.besedZaUpor = "Uporabnik s tem email naslovom že obstaja!";
+                Notification.error("Uporabnik s tem email naslovom že obstaja!");
                 //$scope.besedZaUpor = "Prišlo je do napake, ponovno preglejte vnosna polja.";
             }
 
@@ -151,5 +159,13 @@ angular.module('tpo')
             }
             return scope.extraInfo;
         }
+
+        function isVarUndefinedOrEmptyStr( val ){
+
+                if( val == "" || angular.isUndefined(val) || val == null ){
+                    return true;
+                }
+                return false;
+            }
     };
   }]);

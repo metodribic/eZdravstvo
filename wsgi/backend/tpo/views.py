@@ -263,7 +263,7 @@ def registracijaAdmin(request, format=None):
     Admin create new user
     """
     try:
-        print(request.data)
+        #print(request.data)
         # check if email and password are received or return 400
         mail = request.data['email']
         passw = request.data['password']
@@ -298,8 +298,11 @@ def registracijaAdmin(request, format=None):
         ambul_id = ambulanta.split("/")[-1]
         ustan_id = ustanova.split("/")[-1]
 
+        # izbrane sestre
+        sestreUsernames = request.data.get('izbranaSestra', "")
 
-        #print "check role"
+        print sestreUsernames
+
         if( rola == 'Zdravnik'):
             if (Zdravnik.objects.filter(email=mail).exists() ):
                 #print "already exists"
@@ -322,6 +325,9 @@ def registracijaAdmin(request, format=None):
                 #  set sifra to is_used
                 sifrantReg.is_used = True
                 sifrantReg.save()
+                # zdravnik with sifra created -> add it's nurses to it
+                for nurse in sestreUsernames:
+                    zdr.medicinske_sestre.add(Osebje.objects.get(email=nurse['username']))
 
                 respons = JSONResponse({"success": "function : {'user created':'Zdravnik'}"})
                 respons.status_code = 201
@@ -380,7 +386,7 @@ def registracijaPacient(request, format=None):
     try:
         #print(request.data)
         # check if email and password are received or return 400
-        mail = request._data['email']
+        mail = request.data['email']
         password = request.data['password']
 
          #opcijska polja
@@ -392,15 +398,16 @@ def registracijaPacient(request, format=None):
         kraj_rojstva = request.data.get('krajRojstva', "")
         naslov = request.data.get('naslov', "")
 
-        try:
-            [y,m,d] = ((request.data.get('datumRojstva', [2000, 20, 12])).split("T")[0]).split("-")
-            tmpD = int(d)
-            tmpD = tmpD + 1
-            # dan pride 10, na fieldu pa je 11 (zacne z 0 al neki)
-            datum_rojstva = datetime.date(int(y), int(m), int(tmpD) )
-            print datum_rojstva
-        except ValueError as date_ve:
-            datum_rojstva = datetime.date(2000, 20, 12)
+        if ime != "":
+            try:
+                [y,m,d] = ((request.data.get('datumRojstva', [2000, 20, 12])).split("T")[0]).split("-")
+                tmpD = int(d)
+                tmpD = tmpD + 1
+                # dan pride 10, na fieldu pa je 11 (zacne z 0 al neki)
+                datum_rojstva = datetime.date(int(y), int(m), int(tmpD) )
+                print datum_rojstva
+            except ValueError as date_ve:
+                datum_rojstva = datetime.date(2000, 20, 12)
 
 
         if (Uporabnik.objects.filter(email=mail).exists() ):

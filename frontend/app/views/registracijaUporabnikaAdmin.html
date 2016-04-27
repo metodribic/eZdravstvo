@@ -115,15 +115,15 @@
                             <span style="color:red" ng-show="errAmbulanta" >Izberite ambulanto.</span>
                         </div>
 
-                        <!-- IZBIRA MEDICINSKE SESTRE -->
-                        <div class="form-group">
+                        <div class="form-group" >
                             <label for="medSestre">Medicinske sestre</label>
-                            <select class="form-control" id="medSestre" ng-model="uporabniki.izbranaSestra" ng-change="changedNurse(uporabniki.izbranaSestra)" >
-                              <option ng-repeat="o in osebje" value="{{ o.username }}" >{{o.ime}} {{ o.priimek }} ({{ o.username }})</option>
-                            </select>
-                            <span style="color:red" ng-show="errMedSes" >Izberite medicinsko sestro zdravnika.</span>
+                            <ui-select multiple  class="form-control" id="medSestre" ng-model="uporabniki.izbranaSestra" ng-disabled="disabled" >
+                                <ui-select-match placeholder="Izberite medicinske sestre..." >{{$item.email}}</ui-select-match>
+                                <ui-select-choices repeat="o in osebje | filter:$select.search">
+                                    {{ o.ime }} {{ o.priimek }} ({{o.email}})
+                                </ui-select-choices>
+                            </ui-select>
                         </div>
-
 
                     </div>
 
