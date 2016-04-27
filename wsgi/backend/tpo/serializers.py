@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni, Dieta, \
-    Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, Oskrbovanec
+    Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba
 
 """ POSTA """
 class PostaSerializer(serializers.HyperlinkedModelSerializer):
@@ -116,23 +116,16 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     kontaktna_oseba = KontaktnaOsebaSerializer()
     class Meta:
         model = Uporabnik
+        depth=2
         exclude = ('password','first_name', 'last_name', 'is_superuser', 'is_staff')
 
 
-""" OSKRBOVANEC """
-class OskrbovanecSerializer(serializers.HyperlinkedModelSerializer):
-    role = VlogaSerializer()
-    posta = PostaSerializer()
-    ambulanta = AmbulantaSerializer(read_only=True, partial=True)
-    zdravila = ZdraviloSerializer(many=True, partial=True)
-    bolezni = BolezniSerializer(many=True, partial=True)
-    zdravnik = ZdravnikSerializer(many=True, partial=True)
-    dieta = DietaSerializer(many=True, partial=True)
-    id = serializers.IntegerField()
-    kontaktna_oseba = KontaktnaOsebaSerializer()
+class UporabnikZdravnik(serializers.HyperlinkedModelSerializer):
+    uporabnik = UporabnikSerializer()
+    zdravnik = ZdravnikSerializer()
+    
     class Meta:
-        model = Oskrbovanec
-
+        db_table = "tpo_uporabnik_zdravnik"
 
 """ VREDNOSTI MERITEV """
 class VrednostiMeritevSerializer(serializers.HyperlinkedModelSerializer):

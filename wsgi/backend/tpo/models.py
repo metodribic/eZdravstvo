@@ -26,7 +26,7 @@ class Uporabnik(User):
     is_deleted = models.BooleanField(default=False)
     telefon = models.CharField(max_length=100, blank=True, null=True)
     kontaktna_oseba = models.ForeignKey('KontaktnaOseba', blank=True, null=True)
-
+    oskrbovanci = models.ManyToManyField('self')
 
 class Zdravnik(User):
     ime = models.CharField(max_length=100, blank=True)
@@ -42,6 +42,13 @@ class Zdravnik(User):
     ustanova = models.ForeignKey('Ustanova', blank=True, null=True)
     telefon = models.CharField(max_length=100, blank=True, null=True)
 
+
+class UporabnikZdravnik(models.Model):
+    zdravnik = models.ForeignKey('Zdravnik')
+    uporabnik = models.ForeignKey('Uporabnik')
+    
+    class Meta:
+        db_table = 'tpo_uporabnik_zdravnik'
 
 class Osebje(User):
     ime = models.CharField(max_length=100)
@@ -175,25 +182,3 @@ class KontaktnaOseba(models.Model):
     posta = models.ForeignKey('Posta')
     sorodstveno_razmerje = models.CharField(max_length=100)
 
-
-
-class Oskrbovanec(models.Model):
-    ime = models.CharField(max_length=100, blank=True)
-    priimek = models.CharField(max_length=100, blank=True)
-    datum_rojstva = models.DateField(blank=True)
-    kraj_rojstva = models.CharField(max_length=50, blank=True)
-    naslov = models.CharField(max_length=100, blank=True)
-    posta = models.ForeignKey('Posta', blank=True, null=True)
-    st_zzzs = models.IntegerField(blank=True, null=True)
-    spol = models.CharField(max_length=1, blank=True)
-    krvna_skupina = models.CharField(max_length=3, blank=True, null=True)
-    ambulanta = models.ForeignKey('Ambulanta', blank=True, null=True)
-    zdravnik = models.ManyToManyField('Zdravnik', blank=True)
-    zdravila = models.ManyToManyField('Zdravilo', blank=True)
-    bolezni = models.ManyToManyField('Bolezni', blank=True)
-    dieta = models.ManyToManyField('Dieta', blank=True)
-    role = models.ForeignKey('Roles')
-    is_deleted = models.BooleanField(default=False)
-    telefon = models.CharField(max_length=100, blank=True, null=True)
-    kontaktna_oseba = models.ForeignKey('KontaktnaOseba', blank=True, null=True)
-    oskrbnik = models.ForeignKey('Uporabnik', blank=True, null=True)

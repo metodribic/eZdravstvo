@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.core.serializers import json
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
@@ -26,12 +26,12 @@ from django.conf import settings
 
 # Create your views here.
 from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock, \
-    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, Oskrbovanec
+    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, UporabnikZdravnik
 
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
     LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer, SifrantRegistriranihSerializer, \
-    VrednostiMeritevSerializer, KontaktnaOsebaSerializer, OskrbovanecSerializer
+    VrednostiMeritevSerializer, KontaktnaOsebaSerializer
 
 
 
@@ -61,6 +61,12 @@ class PreglediViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        try:
+            pacient = self.request.META['HTTP_PACIENT']
+            if pacient != None:
+                user = Uporabnik.objects.get(user_ptr_id = pacient)
+        except Exception as e:
+            print(e)
         return Pregled.objects.filter(uporabnik = user)
 
 # MERITVE
@@ -70,6 +76,13 @@ class MeritevViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        try:
+            pacient = self.request.META['HTTP_PACIENT']
+            if pacient != None:
+                user = Uporabnik.objects.get(user_ptr_id = pacient)
+        except Exception as e:
+            print(e)
+
         return Meritev.objects.filter(uporabnik=user)
 
 
@@ -105,7 +118,14 @@ class ZdravnikUporabnikiViewSet(viewsets.ModelViewSet):
     serializer_class = ZdravnikUporabnikiSerializer
 
     def get_queryset(self):
-        return Uporabnik.objects.filter(zdravnik__id=self.request.user.id)
+        user = self.request.user
+        try:
+            pacient = self.request.META['HTTP_PACIENT']
+            if pacient != None:
+                user = Uporabnik.objects.get(user_ptr_id = pacient)
+        except Exception as e:
+            print(e)
+        return Uporabnik.objects.filter(zdravnik__id=user.id)
 
 
 # OSEBJE
@@ -128,6 +148,12 @@ class DietaViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        try:
+            pacient = self.request.META['HTTP_PACIENT']
+            if pacient != None:
+                user = Uporabnik.objects.get(user_ptr_id = pacient)
+        except Exception as e:
+            print(e)
         return Dieta.objects.filter(uporabnik = user)
 
 
@@ -139,6 +165,13 @@ class BolezniViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        try:
+            pacient = self.request.META['HTTP_PACIENT']
+            if pacient != None:
+                user = Uporabnik.objects.get(user_ptr_id = pacient)
+        except Exception as e:
+            print(e)
+
         return Bolezni.objects.filter(uporabnik = user)
 
 
@@ -150,6 +183,13 @@ class ZdraviloViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        try:
+            pacient = self.request.META['HTTP_PACIENT']
+            if pacient != None:
+                user = Uporabnik.objects.get(user_ptr_id = pacient)
+        except Exception as e:
+            print(e)
+
         return Zdravilo.objects.filter(uporabnik=user)
 
 
@@ -455,8 +495,103 @@ def aktivacija(request, format=None):
         response = JSONResponse({"error" : "Usage: {'email':'someone@someplace', 'password':'password'}"})
         response.status_code = 400 #Bad request
         return response
+    
 
+@api_view(['PUT'])
+@permission_classes((IsAuthenticated,))
+def changeZdravnik(request, format=None):
+    """
+    Change Pacient's zdravnik
+    """
+    try: 
+        try: 
+            zdravnikId = request.data['zdravnik'];
+        except KeyError:
+            zdravnikId = -2
+        try:
+            zobozdravnikId = request.data['zobozdravnik'];
+        except KeyError:
+            zobozdravnikId = -2
+        try: 
+            id = request.META['HTTP_PACIENT'];
+        except KeyError:
+            id = request.user.id
+            
+        try:
+            uporabnik = Uporabnik.objects.get(id = id)
+            try:
+                rels = UporabnikZdravnik.objects.filter(uporabnik = uporabnik)
+            except ObjectDoesNotExist:  # There is no relations
+               pass 
+       
+            #### Zdravnik
+            try:
+                if zdravnikId > -1:
+                    zdravnik = Zdravnik.objects.get(id = zdravnikId)
+                    if zdravnik.sprejema_paciente != True or zdravnik.prosta_mesta <= 0:
+                        response = JSONResponse({"error": "Zdravnik " + zdravnik.ime + " " + 
+                            zdravnik.priimek + " ne sprejema vec pacientov"})
+                        response.status_code = 403
+                        return response
 
+            except ObjectDoesNotExist:  # Zdravnik doesn't exist
+                print( "No such zdravnik" )
+                zdravnikId = -2
+                
+            #### Zobozdravnik
+            try:
+                if zobozdravnikId > -1:
+                    zobozdravnik = Zdravnik.objects.get(id = zobozdravnikId)
+                    if zobozdravnik.sprejema_paciente != True or zobozdravnik.prosta_mesta <= 0:
+                        response = JSONResponse({"error": "Zdravnik " + zobozdravnik.ime + " " + 
+                            zobozdravnik.priimek + " ne sprejema vec pacientov"})
+                        response.status_code = 403
+                        return response
+                        
+            except ObjectDoesNotExist:  # Zdravnik doesn't exist
+                print( "No such zobozdravnik" )
+                zobozdravnikId = -2
+               
+            else:  
+                sameZdravnik = False #So we don't add the same relation
+                sameZobozdravnik = False 
+                
+                # Loop over relations and modify/delete if necessary
+                for r in rels:  #Replace relations
+                    if r.zdravnik.id == zobozdravnikId:
+                        sameZobozdravnik = True
+                    if r.zdravnik.id == zdravnikId:
+                        sameZdravnik = True
+                        
+                    if r.zdravnik.tip == "zobozdravnik" and zobozdravnikId > -2 and r.zdravnik.id != zobozdravnikId: # = error, do not change
+                        r.delete()
+                        r.zdravnik.prosta_mesta += 1
+                        r.zdravnik.save()
+                        
+                    elif r.zdravnik.tip != "zobozdravnik" and zdravnikId > -2 and r.zdravnik.id != zdravnikId: # = error, do not change
+                        r.delete()
+                        r.zdravnik.prosta_mesta += 1
+                        r.zdravnik.save()
+                        
+                if zobozdravnikId > -1 and sameZobozdravnik == False: #Changing zobozdravnik
+                        UporabnikZdravnik.objects.create(uporabnik_id = id, zdravnik_id = zobozdravnikId)
+                        zobozdravnik.prosta_mesta -= 1
+                        zobozdravnik.save()
+                if zdravnikId > -1 and sameZdravnik == False: #Changing zobozdravnik
+                    UporabnikZdravnik.objects.create(uporabnik_id = id, zdravnik_id = zdravnikId)
+                    zdravnik.prosta_mesta -= 1
+                    zdravnik.save()
+
+            return Response()
+        except ObjectDoesNotExist:
+            response = JSONResponse({"error": "User does not exist"})
+            response.status_code = 400
+            return response
+    except Exception as ex:
+        traceback.print_exc()
+        response = JSONResponse({"error":"Unknown error"})
+        response.status_code = 500; # Bad request
+        return response
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
@@ -516,7 +651,3 @@ class KontaktnaOsebaViewSet(viewsets.ModelViewSet):
     queryset = KontaktnaOseba.objects.all()
     serializer_class = KontaktnaOsebaSerializer
 
-
-class OskrbovanecViewSet(viewsets.ModelViewSet):
-    queryset = Oskrbovanec.objects.all()
-    serializer_class = OskrbovanecSerializer
