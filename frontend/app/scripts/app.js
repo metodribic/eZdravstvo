@@ -153,6 +153,6 @@ angular
         }
         $http.defaults.headers.common.pacient = id;
         $rootScope.selected = { value: item.ime + " " + item.priimek };
-        $state.go($state.current, {}, {reload: true});
+        $state.reload();
     };
   });

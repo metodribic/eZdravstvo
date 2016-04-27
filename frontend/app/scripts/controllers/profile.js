@@ -31,9 +31,12 @@ angular.module('tpo')
     var trenutniUporabnik = $rootScope.uporabnik;
     $scope.sprejema = true;
 
+	console.log(trenutniUporabnik);
     // Preveri ali je prijavljena oseba zravnik ali pacient
-    if(trenutniUporabnik.role.naziv == 'Pacient')
+    if(trenutniUporabnik.role.naziv == 'Pacient') {
       $scope.tipUporabnika = 'Pacient';
+      pridobi_zdravnike();
+	}
     else if(trenutniUporabnik.role.naziv == 'Zdravnik'){
       $scope.tipUporabnika = 'Zdravnik';
     }
@@ -180,6 +183,8 @@ angular.module('tpo')
     
     function pridobi_zdravnike () {
         var _this = $scope;
+        $scope.zdravniki = [];
+        $scope.zobozdravniki = [];
       Zdravnik.query({sprejema_paciente:true}).$promise.then(function(response){
           var zobo = [];
           var zdravniki = [];
@@ -259,7 +264,7 @@ angular.module('tpo')
             }).then(function successCallback(response) {
                 addAlert("Shranjeno", 'success');
             }, function errorCallback(response) {
-                addAlert(response.data.error, 'danger');
+                addAlert(response.data.error, 'error');
             });
         });
     };
