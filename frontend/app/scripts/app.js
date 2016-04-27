@@ -145,12 +145,13 @@ angular
       });
 
     $rootScope.changeUser = function(item, model) {
-        $rootScope.uporabnik = item;
         var id = item.id;
         if(!id) {
             //For some stupid reason there is no oskrbovanec id
             id = item.url.substring(item.url.lastIndexOf('/')+1);
+            item.id = id;
         }
+        $rootScope.uporabnik = item;
         $http.defaults.headers.common.pacient = id;
         $rootScope.selected = { value: item.ime + " " + item.priimek };
         $state.reload();
