@@ -24,8 +24,8 @@ e-mail,👍
 */
 
 angular.module('tpo')
-  .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik','Notification', 'Ustanova', 'KontaktnaOseba',
-  function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik, Notification, Ustanova, KontaktnaOseba) {
+  .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik','Notification', 'Ustanova', 'KontaktnaOseba',  '$http', '$q', 'API_URL',
+  function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik, Notification, Ustanova, KontaktnaOseba, $http, $q, API_URL) {
     // $scope.datePicker.date = {startDate: null, endDate: null};
 
     var trenutniUporabnik = $rootScope.uporabnik;
@@ -176,6 +176,92 @@ angular.module('tpo')
           Notification.error({message: 'Ustanove s podano šifro ni bilo mogoče najti!', title: '<b>Napaka!</b>'});
           $rootScope.uporabnik.ustanova = AuthService.getCurrentUser().ustanova;
       });
+    };
+    
+    function pridobi_zdravnike () {
+        var _this = $scope;
+      Zdravnik.query({sprejema_paciente:true}).$promise.then(function(response){
+          var zobo = [];
+          var zdravniki = [];
+          var izbraniZobo;
+          var izbraniZdr;
+         
+          //Preverimo za zdravnike, ki bodo izbrani default
+          if(trenutniUporabnik && trenutniUporabnik.zdravnik) {
+              var zdr = trenutniUporabnik.zdravnik;
+              for(var i=0; i<zdr.length; i++) {
+                  if(zdr[i].tip === "osebni")
+                      izbraniZdr = zdr[i];
+                  else if(zdr[i].tip === "zobozdravnik")
+                      izbraniZobo = zdr[i];
+              }
+          }
+          
+          for(var i=0; i<response.length; i++) {
+              if(response[i].tip === "zobozdravnik")
+                  zobo.push(response[i]);
+              else
+                  zdravniki.push(response[i]);
+          }
+        _this.zdravniki = zdravniki;
+        _this.zobozdravniki = zobo;
+        $scope.izbrani = {};
+        if(izbraniZdr)
+        $scope.izbrani.zdravnik = izbraniZdr.naziv + " " + izbraniZdr.ime + " " + 
+            izbraniZdr.priimek + " (" + izbraniZdr.sifra.sifra + ")";
+        if(izbraniZobo)
+            $scope.izbrani.zobozdravnik = izbraniZobo.naziv + " " + izbraniZobo.ime + " " + 
+            izbraniZobo.priimek + " (" + izbraniZobo.sifra.sifra + ")";
+      }, function(error) {console.log(error); });
+    }
+
+
+    $scope.changeZdravnik = function(item, model) { 
+        izbraniZdr = item;
+        if(izbraniZdr) {
+            $scope.izbrani.zdravnik = izbraniZdr.naziv + " " + izbraniZdr.ime + " " +
+            izbraniZdr.priimek + " (" + izbraniZdr.sifra.sifra + ")";
+        }
+        $scope.izbraniZdr = izbraniZdr ? izbraniZdr.id : -1;
+    };
+    
+    $scope.changeZobozdravnik = function(item, model) { 
+        izbraniZdr = item;
+        if(izbraniZdr) {
+            $scope.izbrani.zobozdravnik = izbraniZdr.naziv + " " + izbraniZdr.ime + " " +
+             izbraniZdr.priimek + " (" + izbraniZdr.sifra.sifra + ")";
+        }
+        $scope.izbranizobozdr = izbraniZdr ? izbraniZdr.id : -1;
+    };
+    
+    $scope.menjavaZdravnikov = function(){
+        var zdravnik = $scope.izbraniZdr;
+        var zobozdravnik = $scope.izbranizobozdr;
+        var data = {};
+        console.log(zdravnik);
+        console.log(zobozdravnik);
+        
+        if(zdravnik)
+            data.zdravnik = zdravnik;
+        if(zobozdravnik)
+            data.zobozdravnik = zobozdravnik;
+        if(!data)
+            return;
+        
+        return $q(function(resolve, reject) {
+            $http({
+                method: 'PUT',
+                url: 'http://' + API_URL + '/menjava_zdravnika',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            }).then(function successCallback(response) {
+                addAlert("Shranjeno", 'success');
+            }, function errorCallback(response) {
+                addAlert(response.data.error, 'danger');
+            });
+        });
     };
 
 

@@ -76,17 +76,17 @@
                 <!-- The user image in the navbar-->
                 <img src="images/avatar-default.png" class="user-image" alt="User Image">
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                <span class="hidden-xs">{{uporabnik.ime}} {{uporabnik.priimek}}</span>
+                <span class="hidden-xs">{{user.ime}} {{user.priimek}}</span>
               </a>
               <ul class="dropdown-menu">
                 <!-- The user image in the menu -->
                 <li class="user-header">
                   <img src="images/avatar-default.png" class="img-circle" alt="user image">
                   <p>
-                    {{uporabnik.ime}} {{uporabnik.priimek}} - {{uporabnik.role.naziv}}
+                    {{user.ime}} {{user.priimek}} - {{user.role.naziv}}
                   </p>
                   <p>
-                      <span style="font-size:12px">Last login: {{uporabnik.last_login | date:'dd.MM.yy HH:mm:ss'}}</span>
+                      <span style="font-size:12px">Last login: {{user.last_login | date:'dd.MM.yy HH:mm:ss'}}</span>
                   </p>
                 </li>
                 <!-- Menu Footer-->
@@ -119,7 +119,17 @@
             <a  target="_self">{{uporabnik.role.naziv}}</a>
           </div>
         </div>
-
+        <div class="izbiraOskrbovanca">
+            <p>Izbrani uporabnik</p>
+            <ui-select ng-model="selected.value" on-select="changeUser($item, $model)">
+                <ui-select-match>
+                    <span ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="oskrbovanec in (profili | filter: $select.search)">
+                    <span>{{oskrbovanec.ime}} {{oskrbovanec.priimek}}</span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
         <!-- /.search form -->
 
         <!-- Sidebar Menu -->

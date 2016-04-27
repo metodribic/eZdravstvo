@@ -101,7 +101,7 @@ angular
         });
     })
 
-  .run(function ($rootScope, $state, AuthService, Uporabniki, Notification) {
+  .run(function ($rootScope, $state, AuthService, Uporabniki, Notification, $http, $route) {
 
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
 
@@ -119,19 +119,40 @@ angular
         }
 
         if(AuthService.isAuthenticated()) {
-          $rootScope.uporabnik = AuthService.getCurrentUser();
+            if(!$rootScope.user) {
+                $rootScope.user = AuthService.getCurrentUser();
+                $rootScope.uporabnik = AuthService.getCurrentUser();
+            }
+            if(!$rootScope.profili) {
+              $rootScope.profili = [$rootScope.user];
+              $rootScope.profili = $rootScope.profili.concat($rootScope.uporabnik.oskrbovanci);
+              $rootScope.selected = { value: $rootScope.profili[0].ime + " " + $rootScope.profili[0].priimek };
+            }
           // check if admin and set link correctly
-          if( $rootScope.uporabnik.role.naziv === "Admin" ){
+          if( $rootScope.user.role.naziv === "Admin" ){
             $rootScope.isSuperU = true;
           }else{
             $rootScope.isSuperU = false;
           }
-          if( $rootScope.uporabnik.role.naziv === "Zdravnik"  ){
+          if( $rootScope.user.role.naziv === "Zdravnik"  ){
             $rootScope.isDoctor = true;
           }else{
             $rootScope.isDoctor = false;
           }
+        } else {
+            delete $rootScope.profili;
         }
       });
 
+    $rootScope.changeUser = function(item, model) {
+        $rootScope.uporabnik = item;
+        var id = item.id;
+        if(!id) {
+            //For some stupid reason there is no oskrbovanec id
+            id = item.url.substring(item.url.lastIndexOf('/')+1);
+        }
+        $http.defaults.headers.common.pacient = id;
+        $rootScope.selected = { value: item.ime + " " + item.priimek };
+        $state.go($state.current, {}, {reload: true});
+    };
   });
