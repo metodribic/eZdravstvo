@@ -83,7 +83,6 @@ class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     class Meta:
         model = Zdravilo
-        depth = 3
 
 
 """ BOLEZNI """
@@ -92,7 +91,6 @@ class BolezniSerializer(serializers.HyperlinkedModelSerializer):
     zdravilo = ZdraviloSerializer(many=True)
     class Meta:
         model = Bolezni
-        depth = 3
 
 
 """ DIETA NAVODILA """
@@ -108,7 +106,6 @@ class DietaSerializer(serializers.HyperlinkedModelSerializer):
     navodila = NavodilaDietaSerializer(many=True)
     class Meta:
         model = Dieta
-        depth = 3
 
 
 """ Kontaktna oseba """
@@ -117,7 +114,6 @@ class KontaktnaOsebaSerializer(serializers.HyperlinkedModelSerializer):
     posta = PostaSerializer()
     class Meta:
         model = KontaktnaOseba
-        depth = 3
 
     def update(self, instance, validated_data):
         # posta extra cudna zadeva, ni cela v validated data...
@@ -147,7 +143,7 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Uporabnik
-        depth = 3
+        depth = 3   # za prikaz zdravil pri boleznih
         exclude = ('password','first_name', 'last_name', 'is_superuser', 'is_staff')
 
     def update(self, instance, validated_data):
@@ -172,7 +168,6 @@ class UporabnikZdravnik(serializers.HyperlinkedModelSerializer):
     
     class Meta:
         db_table = "tpo_uporabnik_zdravnik"
-        depth = 3
 
 
 """ VREDNOSTI MERITEV """
@@ -181,7 +176,6 @@ class VrednostiMeritevSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = VrednostiMeritev
-        depth = 3
 
 
 """ MERITEV """
@@ -192,7 +186,6 @@ class MeritevSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Meritev
-        depth = 3
 
 
 """ PREGLED """
@@ -205,7 +198,6 @@ class PregledSerializer(serializers.HyperlinkedModelSerializer):
     zdravilo = ZdraviloSerializer(many=True)
     class Meta:
         model = Pregled
-        depth = 3
 
 
 class LoginSerializer(serializers.Serializer):
