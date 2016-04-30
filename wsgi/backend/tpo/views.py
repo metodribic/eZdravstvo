@@ -54,14 +54,17 @@ class UporabnikiViewSet(viewsets.ModelViewSet):
 
 
 # PREGLED
-@permission_classes((IsAuthenticated,))
 class PreglediViewSet(viewsets.ModelViewSet):
     queryset = Pregled.objects.all()
     serializer_class = PregledSerializer
 
     def get_queryset(self):
-        user = self.request.user
-        return Pregled.objects.filter(uporabnik = user)
+        uporIme = self.request.query_params.get('username', None)
+        if uporIme is not None:
+            upor = Uporabnik.objects.filter(username=uporIme)
+            return Pregled.objects.filter(uporabnik=upor)
+        return None
+
 
 # MERITVE
 class MeritevViewSet(viewsets.ModelViewSet):
@@ -69,9 +72,11 @@ class MeritevViewSet(viewsets.ModelViewSet):
     serializer_class = MeritevSerializer
 
     def get_queryset(self):
-        user = self.request.user
-        return Meritev.objects.filter(uporabnik=user)
-
+        uporIme = self.request.query_params.get('username', None)
+        if uporIme is not None:
+            upor = Uporabnik.objects.filter(username=uporIme)
+            return Meritev.objects.filter(uporabnik=upor)
+        return None
 
 # POSTA
 class PostaViewSet(viewsets.ModelViewSet):

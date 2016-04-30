@@ -140,6 +140,7 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField()
     is_superuser = serializers.BooleanField()
     kontaktna_oseba = KontaktnaOsebaSerializer()
+
     class Meta:
         model = Uporabnik
         exclude = ('password','first_name', 'last_name', 'is_superuser', 'is_staff')
@@ -204,6 +205,7 @@ class PregledSerializer(serializers.HyperlinkedModelSerializer):
     zdravilo = ZdraviloSerializer(many=True)
     class Meta:
         model = Pregled
+        depth = 2
 
 
 class LoginSerializer(serializers.Serializer):
@@ -230,3 +232,5 @@ class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Uporabnik
+        depth = 3   # izpise nested fielde (diete, bolezni,..)
+

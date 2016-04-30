@@ -17,60 +17,90 @@
 */
 
 angular.module('tpo')
-  .controller('NadzornaPloscaCtrl', ['$scope','$state','Uporabniki','$rootScope','AuthService','Pregled','Meritve','Bolezni','Zdravila','Diete', function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled, Meritve, Bolezni, Zdravila, Diete) {
+  .controller('NadzornaPloscaCtrl', ['$scope','$state','Uporabniki','$rootScope','AuthService','Pregled','Meritve','Bolezni','Zdravila','Diete', 'ZdravnikoviPacienti', function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled, Meritve, Bolezni, Zdravila, Diete, ZdravnikoviPacienti ) {
 
-    /*GET USER FROM LOCAL STORAGE*/
-    // $scope.uporabnik = AuthService.getCurrentUser();
-    /* če ni prijavlen ga dej na login*/
-    if(!$scope.uporabnik)
-      $state.go("login");
-    /* limit for pagination*/
-    var pagination_limit = 5;
+      mojScope = $scope;
 
-    /* Loči zasebnega zdravnika ter zobozdravnika */
-    $scope.osebniZdravnik = {};
-    $scope.osebniZobozdravnik = {};
-    for(var index in $scope.uporabnik.zdravnik){
-     var tmpZdravnik = $scope.uporabnik.zdravnik[index];
-     if(tmpZdravnik.tip == 'osebni'){
-       $scope.osebniZdravnik = tmpZdravnik;
+      /* če ni prijavlen ga dej na login*/
+      if(!$scope.uporabnik)
+          $state.go("login");
+
+
+      $scope.posodobiPacienta = function (uporabnikZdravnika) {
+
+          clearData();
+
+          if( angular.isUndefined(uporabnikZdravnika) || uporabnikZdravnika.ime == "" ){
+              // ni pacienta
+              mojScope.izbranPacient = false;
+          }else {
+              mojScope.izbranPacient = true;
+              // dobi pacienta ki smo ga izbrali
+              mojScope.uporabnik = uporabnikZdravnika;
+              mojScope.bolezni = uporabnikZdravnika.bolezni;
+              mojScope.diete = uporabnikZdravnika.dieta;
+              mojScope.zdravila = uporabnikZdravnika.zdravila;
+
+              uporabIme = mojScope.uporabnik.username;
+              Meritve.get({username:uporabIme, limit:5}).$promise.then(function (response) {
+                  mojScope.meritve = response.results;
+              });
+              Pregled.get({username:uporabIme, limit:5}).$promise.then(function (response) {
+                  mojScope.pregledi = response.results;
+              });
+
+              /* Loči zasebnega zdravnika ter zobozdravnika */
+              mojScope.osebniZdravnik = {};
+              mojScope.osebniZobozdravnik = {};
+              for (var index in uporabnikZdravnika.zdravnik) {
+                  var tmpZdravnik = uporabnikZdravnika.zdravnik[index];
+                  if (tmpZdravnik.tip == 'osebni') {
+                      mojScope.osebniZdravnik = tmpZdravnik;
+                  }
+                  if (tmpZdravnik.tip == 'zobozdravnik') {
+                      mojScope.osebniZobozdravnik = tmpZdravnik;
+                  }
+              }
+
+              /* metoda za krajšanje linkov, če so predolgi */
+              $scope.okrajsaj = function (input) {
+                  if (input.length > 40) {
+                    return input.substring(0, 30) + "...";
+                  }
+                  return input;
+              };
+          }
       }
-      if(tmpZdravnik.tip == 'zobozdravnik') {
-        $scope.osebniZobozdravnik = tmpZdravnik;
+
+
+      if( $scope.uporabnik.role.naziv ===  "Pacient"){
+          // ce je uporabnik pacient, prikazi enako kot do sedaj
+          $scope.izbranPacient = true;
+          $scope.omogociIzbiranjePacienta = false;
+
+          $scope.posodobiPacienta( $scope.uporabnik );
+
+      }else{
+          // je skor zdravnik
+          $scope.omogociIzbiranjePacienta = true;
+          $scope.izbranPacient = false;
+
+          /* GET Pacienti tega zdravnika */
+          ZdravnikoviPacienti.get({limit:  150}).$promise.then(function(response){
+              $scope.mojiPacienti = response.results;
+          });
       }
-    }
 
-    /* GET Uporabnik Pregledi */
-    Pregled.get({limit:  pagination_limit}).$promise.then(function(response){
-      $scope.pregledi = response.results;
-    });
-
-    /* GET Uporabnik Meritve*/
-    Meritve.get({limit: pagination_limit}).$promise.then(function(response){
-      $scope.meritve = response.results;
-    });
-
-    /* GET Uporabnik Bolezni*/
-    Bolezni.get({limit: pagination_limit}).$promise.then(function(response){
-      $scope.bolezni = response.results;
-    });
-
-    /* GET Uporabnik Zdravila*/
-    Zdravila.get({limit: pagination_limit}).$promise.then(function(response){
-      $scope.zdravila = response.results;
-    });
-
-    /* GET Uporabnik Diete*/
-    Diete.get({limit: pagination_limit}).$promise.then(function(response){
-      $scope.diete = response.results;
-    });
-
-    /* metoda za krajšanje linkov, če so predolgi */
-    $scope.okrajsaj = function(input){
-      if(input.length > 40){
-        return input.substring(0,30)+"...";
+      function clearData(){
+          mojScope.uporabnik = "";
+          mojScope.bolezni = [];
+          mojScope.diete = [];
+          mojScope.zdravila = [];
+          mojScope.meritve = [];
+          mojScope.pregledi = [];
+          mojScope.osebniZdravnik = {};
+          mojScope.osebniZobozdravnik = {};
       }
-      return input;
-    };
+
 
   }]);
