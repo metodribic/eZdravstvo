@@ -32,10 +32,11 @@ angular.module('tpo.services', ['ngResource', 'config'])
   function destroyUser() {
     authToken = undefined;
     isAuthenticated = false;
-    $http.defaults.headers.common.Authorization = undefined;
+    $http.defaults.headers.common.Authorization = {};
     window.localStorage.removeItem(LOCAL_TOKEN_KEY);
     window.localStorage.removeItem(LOCAL_USER_KEY);
     delete $rootScope.uporabnik;
+    delete $rootScope.user;
   }
 
   var getCurrentUser = function() {
@@ -74,14 +75,17 @@ angular.module('tpo.services', ['ngResource', 'config'])
             }).then(function successCallback(response) {
                 if(response.data && response.data.uporabnik) {
                     $rootScope.uporabnik = response.data.uporabnik;
+                    $rootScope.user = response.data.uporabnik;
                     storeUser(response.data.token, response.data.uporabnik);
                 }
                 else if(response.data.zdravnik) {
                     $rootScope.uporabnik = response.data.zdravnik;
+                    $rootScope.user = response.data.zdravnik;
                     storeUser(response.data.token, response.data.zdravnik);
                 }
                 else if(response.data.osebje) {
                     $rootScope.uporabnik = response.data.osebje;
+                    $rootScope.user = response.data.osebje;
                     storeUser(response.data.token, response.data.osebje);
                 }
                 resolve('Login success.');

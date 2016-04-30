@@ -11,7 +11,7 @@ angular.module('tpo')
     /* GET pregled */
 
       var pregledID = $stateParams.id;
-      Pregled.get({ username:$scope.uporabnik.username, pregledId:pregledID}).$promise.then(function(response){
+      Pregled.get({ pregledId:pregledID}).$promise.then(function(response){
       /* shrani pregled v $scope, da lahk dostopaš v view do njega */
         //console.log(response);
 

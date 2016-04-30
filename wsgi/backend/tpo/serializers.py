@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni, Dieta, \
-    Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, Oskrbovanec
+    Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba
 
 """ POSTA """
 class PostaSerializer(serializers.HyperlinkedModelSerializer):
@@ -83,6 +83,7 @@ class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     class Meta:
         model = Zdravilo
+        depth = 3
 
 
 """ BOLEZNI """
@@ -91,6 +92,7 @@ class BolezniSerializer(serializers.HyperlinkedModelSerializer):
     zdravilo = ZdraviloSerializer(many=True)
     class Meta:
         model = Bolezni
+        depth = 3
 
 
 """ DIETA NAVODILA """
@@ -106,6 +108,7 @@ class DietaSerializer(serializers.HyperlinkedModelSerializer):
     navodila = NavodilaDietaSerializer(many=True)
     class Meta:
         model = Dieta
+        depth = 3
 
 
 """ Kontaktna oseba """
@@ -114,6 +117,7 @@ class KontaktnaOsebaSerializer(serializers.HyperlinkedModelSerializer):
     posta = PostaSerializer()
     class Meta:
         model = KontaktnaOseba
+        depth = 3
 
     def update(self, instance, validated_data):
         # posta extra cudna zadeva, ni cela v validated data...
@@ -143,6 +147,7 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Uporabnik
+        depth = 3
         exclude = ('password','first_name', 'last_name', 'is_superuser', 'is_staff')
 
     def update(self, instance, validated_data):
@@ -161,20 +166,13 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
         return instance
 
 
-""" OSKRBOVANEC """
-class OskrbovanecSerializer(serializers.HyperlinkedModelSerializer):
-    role = VlogaSerializer()
-    posta = PostaSerializer()
-    ambulanta = AmbulantaSerializer(read_only=True, partial=True)
-    zdravila = ZdraviloSerializer(many=True, partial=True)
-    bolezni = BolezniSerializer(many=True, partial=True)
-    zdravnik = ZdravnikSerializer(many=True, partial=True)
-    dieta = DietaSerializer(many=True, partial=True)
-    id = serializers.IntegerField()
-    kontaktna_oseba = KontaktnaOsebaSerializer()
-
+class UporabnikZdravnik(serializers.HyperlinkedModelSerializer):
+    uporabnik = UporabnikSerializer()
+    zdravnik = ZdravnikSerializer()
+    
     class Meta:
-        model = Oskrbovanec
+        db_table = "tpo_uporabnik_zdravnik"
+        depth = 3
 
 
 """ VREDNOSTI MERITEV """
@@ -183,6 +181,7 @@ class VrednostiMeritevSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = VrednostiMeritev
+        depth = 3
 
 
 """ MERITEV """
@@ -193,6 +192,7 @@ class MeritevSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Meritev
+        depth = 3
 
 
 """ PREGLED """
@@ -205,7 +205,7 @@ class PregledSerializer(serializers.HyperlinkedModelSerializer):
     zdravilo = ZdraviloSerializer(many=True)
     class Meta:
         model = Pregled
-        depth = 2
+        depth = 3
 
 
 class LoginSerializer(serializers.Serializer):

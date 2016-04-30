@@ -17,7 +17,10 @@
 */
 
 angular.module('tpo')
-  .controller('NadzornaPloscaCtrl', ['$scope','$state','Uporabniki','$rootScope','AuthService','Pregled','Meritve','Bolezni','Zdravila','Diete', 'ZdravnikoviPacienti', function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled, Meritve, Bolezni, Zdravila, Diete, ZdravnikoviPacienti ) {
+  .controller('NadzornaPloscaCtrl', ['$scope','$state','Uporabniki','$rootScope','AuthService',
+      'Pregled','Meritve','Bolezni','Zdravila','Diete', 'ZdravnikoviPacienti', '$http',
+      function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled,
+                Meritve, Bolezni, Zdravila, Diete, ZdravnikoviPacienti, $http ) {
 
       mojScope = $scope;
 
@@ -41,13 +44,27 @@ angular.module('tpo')
               mojScope.diete = uporabnikZdravnika.dieta;
               mojScope.zdravila = uporabnikZdravnika.zdravila;
 
-              uporabIme = mojScope.uporabnik.username;
-              Meritve.get({username:uporabIme, limit:5}).$promise.then(function (response) {
+              console.log(uporabnikZdravnika);
+              //$rootScope.changeUser(uporabnikZdravnika, uporabnikZdravnika);  // zamenjejmo userja
+
+        var id = uporabnikZdravnika.id;
+        if(!id) {
+            //For some stupid reason there is no oskrbovanec id
+            id = item.url.substring(item.url.lastIndexOf('/')+1);
+            item.id = id;
+        }
+        //$rootScope.uporabnik = item;
+        $http.defaults.headers.common.pacient = id;
+              
+
+              Meritve.get({limit:5}).$promise.then(function (response) {
                   mojScope.meritve = response.results;
               });
-              Pregled.get({username:uporabIme, limit:5}).$promise.then(function (response) {
+
+              Pregled.get({limit:5}).$promise.then(function (response) {
                   mojScope.pregledi = response.results;
               });
+
 
               /* Loči zasebnega zdravnika ter zobozdravnika */
               mojScope.osebniZdravnik = {};
