@@ -31,7 +31,7 @@ angular.module('tpo')
     var trenutniUporabnik = $rootScope.uporabnik;
     $scope.sprejema = true;
 
-	console.log(trenutniUporabnik);
+	// console.log(trenutniUporabnik);
     // Preveri ali je prijavljena oseba zravnik ali pacient
     if(trenutniUporabnik.role.naziv == 'Pacient') {
       $scope.tipUporabnika = 'Pacient';
@@ -120,9 +120,8 @@ angular.module('tpo')
     };
 
     // POSODOBI KONTAKTNO OSEBO!
-    $scope.shrani_oskrbovanca = function(){
+    $scope.shrani_kontaktno = function(){
       var updated_kontaktna = new KontaktnaOseba();
-      updated_kontaktna.id = $rootScope.uporabnik.kontaktna_oseba.id;
       updated_kontaktna.ime = $rootScope.uporabnik.kontaktna_oseba.ime;
       updated_kontaktna.priimek = $rootScope.uporabnik.kontaktna_oseba.priimek;
       updated_kontaktna.naslov = $rootScope.uporabnik.kontaktna_oseba.naslov;
@@ -134,8 +133,21 @@ angular.module('tpo')
       updated_kontaktna.telefon = $rootScope.uporabnik.kontaktna_oseba.telefon;
 
 
-      updated_kontaktna.$update({kontaktnaId: $rootScope.uporabnik.kontaktna_oseba.id});
-      Notification.success('Kontaktna oseba uspešno posodobljen!!');
+      // update kontaktna oseba
+      if( $rootScope.uporabnik.kontaktna_oseba.id != null ){
+        updated_kontaktna.id = $rootScope.uporabnik.kontaktna_oseba.id;
+        updated_kontaktna.$update({kontaktnaId: $rootScope.uporabnik.kontaktna_oseba.id}, function(response){
+          Notification.success('Kontaktna oseba uspešno posodobljen!!');
+        });
+      }
+      // create kontaktna oseba
+      else {
+        updated_kontaktna.id = $rootScope.uporabnik.id;
+        KontaktnaOseba.save(updated_kontaktna, function(response){
+          Notification.success('Kontaktna oseba uspešno ustvarjena!!');
+        });
+      }
+
     };
 
     // PRIDOBIVANJE POSTE GLEDE NA ID
@@ -180,7 +192,7 @@ angular.module('tpo')
           $rootScope.uporabnik.ustanova = AuthService.getCurrentUser().ustanova;
       });
     };
-    
+
     function pridobi_zdravnike () {
         var _this = $scope;
         $scope.zdravniki = [];
@@ -190,7 +202,7 @@ angular.module('tpo')
           var zdravniki = [];
           var izbraniZobo;
           var izbraniZdr;
-         
+
           //Preverimo za zdravnike, ki bodo izbrani default
           if(trenutniUporabnik && trenutniUporabnik.zdravnik) {
               var zdr = trenutniUporabnik.zdravnik;
@@ -201,7 +213,7 @@ angular.module('tpo')
                       izbraniZobo = zdr[i];
               }
           }
-          
+
           for(var i=0; i<response.length; i++) {
               if(response[i].tip === "zobozdravnik")
                   zobo.push(response[i]);
@@ -212,16 +224,16 @@ angular.module('tpo')
         _this.zobozdravniki = zobo;
         $scope.izbrani = {};
         if(izbraniZdr)
-        $scope.izbrani.zdravnik = izbraniZdr.naziv + " " + izbraniZdr.ime + " " + 
+        $scope.izbrani.zdravnik = izbraniZdr.naziv + " " + izbraniZdr.ime + " " +
             izbraniZdr.priimek + " (" + izbraniZdr.sifra.sifra + ")";
         if(izbraniZobo)
-            $scope.izbrani.zobozdravnik = izbraniZobo.naziv + " " + izbraniZobo.ime + " " + 
+            $scope.izbrani.zobozdravnik = izbraniZobo.naziv + " " + izbraniZobo.ime + " " +
             izbraniZobo.priimek + " (" + izbraniZobo.sifra.sifra + ")";
       }, function(error) {console.log(error); });
     }
 
 
-    $scope.changeZdravnik = function(item, model) { 
+    $scope.changeZdravnik = function(item, model) {
         izbraniZdr = item;
         if(izbraniZdr) {
             $scope.izbrani.zdravnik = izbraniZdr.naziv + " " + izbraniZdr.ime + " " +
@@ -229,8 +241,8 @@ angular.module('tpo')
         }
         $scope.izbraniZdr = izbraniZdr ? izbraniZdr.id : -1;
     };
-    
-    $scope.changeZobozdravnik = function(item, model) { 
+
+    $scope.changeZobozdravnik = function(item, model) {
         izbraniZdr = item;
         if(izbraniZdr) {
             $scope.izbrani.zobozdravnik = izbraniZdr.naziv + " " + izbraniZdr.ime + " " +
@@ -238,21 +250,21 @@ angular.module('tpo')
         }
         $scope.izbranizobozdr = izbraniZdr ? izbraniZdr.id : -1;
     };
-    
+
     $scope.menjavaZdravnikov = function(){
         var zdravnik = $scope.izbraniZdr;
         var zobozdravnik = $scope.izbranizobozdr;
         var data = {};
         console.log(zdravnik);
         console.log(zobozdravnik);
-        
+
         if(zdravnik)
             data.zdravnik = zdravnik;
         if(zobozdravnik)
             data.zobozdravnik = zobozdravnik;
         if(!data)
             return;
-        
+
         return $q(function(resolve, reject) {
             $http({
                 method: 'PUT',

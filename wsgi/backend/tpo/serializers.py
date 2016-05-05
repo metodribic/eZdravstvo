@@ -73,9 +73,8 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
         instance.ustanova_id = validated_data['ustanova']['id']
         instance.save()
         #Zdravnik.objects.filter(email=mail).exists()
-
-
         return instance
+
 
 
 """ ZDRAVILO """
@@ -124,8 +123,21 @@ class KontaktnaOsebaSerializer(serializers.HyperlinkedModelSerializer):
         instance.telefon = validated_data['telefon']
         instance.sorodstveno_razmerje = validated_data['sorodstveno_razmerje']
         instance.save()
-
         return instance
+
+    #def create(self, id, ime, priimek, naslov, posta, sorodstveno_razmerje, telefon):
+    def create(self, validated_data):
+        kontaktna = KontaktnaOseba(ime=validated_data['ime'],
+                                   priimek=validated_data['priimek'],
+                                   naslov=validated_data['naslov'],
+                                   posta_id = self._kwargs['data']['posta']['id'],
+                                   sorodstveno_razmerje=validated_data['sorodstveno_razmerje'],
+                                   telefon=validated_data['telefon'])
+        kontaktna.save()
+        uporabnik = Uporabnik.objects.get(id =validated_data['id'])
+        uporabnik.kontaktna_oseba_id = kontaktna.id
+        uporabnik.save()
+        return kontaktna
 
 
 """ UPORABNIK """
