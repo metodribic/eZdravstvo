@@ -43,8 +43,6 @@ angular.module('tpo')
               mojScope.bolezni = uporabnikZdravnika.bolezni;
               mojScope.diete = uporabnikZdravnika.dieta;
               mojScope.zdravila = uporabnikZdravnika.zdravila;
-
-              console.log(uporabnikZdravnika);
               //$rootScope.changeUser(uporabnikZdravnika, uporabnikZdravnika);  // zamenjejmo userja
 
         var id = uporabnikZdravnika.id;
@@ -55,7 +53,7 @@ angular.module('tpo')
         }
         //$rootScope.uporabnik = item;
         $http.defaults.headers.common.pacient = id;
-              
+
 
               Meritve.get({limit:5}).$promise.then(function (response) {
                   mojScope.meritve = response.results;
