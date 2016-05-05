@@ -41,10 +41,6 @@ angular.module('tpo')
       $scope.tipUporabnika = 'Zdravnik';
     }
 
-    // (function() {
-    //     prostaMesta.disabled = true;
-    // })();
-
 
     $scope.shrani_spremembe_zdravnik = function(){
       // preveri če je prijavljen uporabnik zdravnik
@@ -90,7 +86,7 @@ angular.module('tpo')
         // TODO: Preveri če je oskrbovanec
 
         var updated_user = new Uporabniki();
-        updated_user.id = trenutniUporabnik.id;
+        updated_user.id = $rootScope.uporabnik.id;
         updated_user.ime = $rootScope.uporabnik.ime;
         updated_user.priimek = $rootScope.uporabnik.priimek;
         updated_user.kraj_rojstva = $rootScope.uporabnik.kraj_rojstva;
@@ -110,7 +106,7 @@ angular.module('tpo')
         else {
           updated_user.datum_rojstva = null;
         }
-        updated_user.$update({iduporabnik: trenutniUporabnik.id}, function(response){
+        updated_user.$update({iduporabnik: $rootScope.uporabnik.id}, function(response){
           $rootScope.uporabnik = response;
           window.localStorage.setItem('user', JSON.stringify(response));
         });

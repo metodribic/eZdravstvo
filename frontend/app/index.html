@@ -127,6 +127,7 @@
                 </ui-select-match>
                 <ui-select-choices repeat="oskrbovanec in (profili | filter: $select.search)">
                     <span>{{oskrbovanec.ime}} {{oskrbovanec.priimek}}</span>
+                    <span ng-show="oskrbovanec.ime.length == 0 || oskrbovanec.priimek.length == 0">Nepopoln profil!</span>
                 </ui-select-choices>
             </ui-select>
         </div>
@@ -167,7 +168,7 @@
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper" style="height: 1500px;">
+    <div class="content-wrapper" style="height: 2000px;">
       <!-- Content Header (Page header) -->
       <!-- <section class="content-header">
         <h1>
