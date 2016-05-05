@@ -12,6 +12,24 @@
     </div> -->
     <!-- /.box-header -->
     <div class="box-body">
+        <!-- IZBIRA PACIENTA -->
+        <div ng-show="omogociIzbiranjePacienta" >
+
+            <div class="form-group" >
+                    <label for="pacie">Pacienti</label>
+                    <ui-select id="pacie" ng-model="uporabnikZdravnika" on-select="posodobiPacienta(uporabnikZdravnika)" >
+                        <ui-select-match placeholder="Izberite pacienta..."  >
+                            {{ uporabnikZdravnika.ime }} {{ uporabnikZdravnika.priimek }}
+                        </ui-select-match>
+                        <ui-select-choices repeat="o in mojiPacienti | filter:$select.search">
+                            {{ o.ime }} {{ o.priimek }} ({{o.email}})
+                        </ui-select-choices>
+                    </ui-select>
+            </div>
+
+        </div>
+
+        <div ng-show="izbranPacient">
       <h3 class="bottom-border header">Osebni podatki</h3>
       <div class="row">
 
@@ -305,7 +323,7 @@
               <tr ng-repeat="zdravilo in zdravila">
                 <td>{{zdravilo.zdravilo}}</td>
                 <td><a ng-href="{{zdravilo.navodila}}">{{okrajsaj(zdravilo.navodila)}}</a></td>
-              </tr>
+              </tr><!-- okrajsaj -->
             </tbody>
           </table>
         </div>
@@ -329,7 +347,7 @@
                 <td class="col-8">
                   <span ng-repeat="navodilo in dieta.navodila">
                     <a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url)}}</a>
-                    <br>
+                    <br><!--okrajsaj-->
                   </span>
 
                   <!-- <ul ng-repeat="navodilo in dieta.navodila" style="list-style-type:none">
@@ -346,6 +364,9 @@
       </div>
       <!-- /.row -->
 
+
+
+        </div>
     </div>
     <!-- ./box-body -->
   </div>

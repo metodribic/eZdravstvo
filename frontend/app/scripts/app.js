@@ -38,7 +38,7 @@ angular
               templateUrl: '../views/nadzornaPlosca.html',
               controller: 'NadzornaPloscaCtrl'
           })
-
+          
           .state('login', {
               url: '/login',
               templateUrl: '../views/login.html',

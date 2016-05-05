@@ -54,7 +54,6 @@ class UporabnikiViewSet(viewsets.ModelViewSet):
 
 
 # PREGLED
-@permission_classes((IsAuthenticated,))
 class PreglediViewSet(viewsets.ModelViewSet):
     queryset = Pregled.objects.all()
     serializer_class = PregledSerializer
@@ -68,6 +67,7 @@ class PreglediViewSet(viewsets.ModelViewSet):
         except Exception as e:
             print(e)
         return Pregled.objects.filter(uporabnik = user)
+
 
 # MERITVE
 class MeritevViewSet(viewsets.ModelViewSet):
@@ -84,7 +84,6 @@ class MeritevViewSet(viewsets.ModelViewSet):
             print(e)
 
         return Meritev.objects.filter(uporabnik=user)
-
 
 # POSTA
 class PostaViewSet(viewsets.ModelViewSet):

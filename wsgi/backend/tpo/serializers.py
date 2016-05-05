@@ -152,9 +152,10 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField()
     is_superuser = serializers.BooleanField()
     kontaktna_oseba = KontaktnaOsebaSerializer()
+
     class Meta:
         model = Uporabnik
-        depth=2
+        depth = 3   # za prikaz zdravil pri boleznih
         exclude = ('password','first_name', 'last_name', 'is_superuser', 'is_staff')
 
     def update(self, instance, validated_data):
@@ -179,6 +180,7 @@ class UporabnikZdravnik(serializers.HyperlinkedModelSerializer):
     
     class Meta:
         db_table = "tpo_uporabnik_zdravnik"
+
 
 """ VREDNOSTI MERITEV """
 class VrednostiMeritevSerializer(serializers.HyperlinkedModelSerializer):
@@ -234,3 +236,5 @@ class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Uporabnik
+        depth = 3   # izpise nested fielde (diete, bolezni,..)
+
