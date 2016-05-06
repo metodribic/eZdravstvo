@@ -1,47 +1,24 @@
-'use strict()';
+ 'use strict()';
 
-/*
-Uporabniški profil obsega:
-  številko kartice zdravstvenega zavarovanja, 👍
-  priimek in ime, 👍
-  naslov, 👍
-  telefon, 👍
-  datum rojstva,
-  spol,👍
-  podatke o kontaktni osebi: 👍
-    priimek in ime, 👍
-    naslov, 👍
-    telefon, 👍
-    sorodstveno razmerje 👍
-
------- ZDRAVNIK -----
-številko zdravnika, 👍
-priimek in ime, 👍
-šifro izvajalca zdravstvene dejavnosti (npr. zdravstvenega doma),👍
-telefon,👍
-e-mail,👍
-število pacientov, ki jih lahko sprejme). 👍
-*/
 
 angular.module('tpo')
   .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik','Notification', 'Ustanova', 'KontaktnaOseba',  '$http', '$q', 'API_URL',
   function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik, Notification, Ustanova, KontaktnaOseba, $http, $q, API_URL) {
-    // $scope.datePicker.date = {startDate: null, endDate: null};
 
+    // shrani uporabnika, ki je trenutno prijavljen
     var trenutniUporabnik = $rootScope.uporabnik;
     $scope.sprejema = true;
 
-	// console.log(trenutniUporabnik);
     // Preveri ali je prijavljena oseba zravnik ali pacient
     if(trenutniUporabnik.role.naziv == 'Pacient') {
       $scope.tipUporabnika = 'Pacient';
       pridobi_zdravnike();
-	}
+	  }
     else if(trenutniUporabnik.role.naziv == 'Zdravnik'){
       $scope.tipUporabnika = 'Zdravnik';
     }
 
-
+    // metoda za posodabljanje profila
     $scope.shrani_spremembe_zdravnik = function(){
       // preveri če je prijavljen uporabnik zdravnik
       if(trenutniUporabnik.role.naziv == 'Zdravnik'){
@@ -56,11 +33,13 @@ angular.module('tpo')
           id: $rootScope.uporabnik.ustanova.id
         };
 
+        // pridobi vredsnoti iz checkboxa
         if(radioBtn1.checked)
           zdravnik.sprejema_paciente = true;
         else if(radioBtn2.checked)
           zdravnik.sprejema_paciente = false;
 
+        // posodobi  zdravnik
         zdravnik.$update({zdravnikId: trenutniUporabnik.id}, function(response){
           $rootScope.uporabnik = response;
           window.localStorage.setItem('user', JSON.stringify(response));
@@ -69,6 +48,7 @@ angular.module('tpo')
       }
     };
 
+    // funkcija za onemogočanje vnašanja števila pacientov, če jih zdravnik sploh ne sprejema
     $scope.hideNumber = function(arg){
       if(arg){
         prostaMesta.disabled = true;
@@ -79,11 +59,10 @@ angular.module('tpo')
     };
 
 
-    // POSODOBI PRFIL
+    // POSODOBI PROFIL
     $scope.shrani_spremembe_pacient = function(){
       // če je pacient ali admin
       if( trenutniUporabnik.role.naziv == 'Pacient' || trenutniUporabnik.role.naziv == 'Admin' ){
-        // TODO: Preveri če je oskrbovanec
 
         var updated_user = new Uporabniki();
         updated_user.id = $rootScope.uporabnik.id;
@@ -128,9 +107,8 @@ angular.module('tpo')
       updated_kontaktna.sorodstveno_razmerje = $rootScope.uporabnik.kontaktna_oseba.sorodstveno_razmerje;
       updated_kontaktna.telefon = $rootScope.uporabnik.kontaktna_oseba.telefon;
 
-
       // update kontaktna oseba
-      if( $rootScope.uporabnik.kontaktna_oseba.id != null ){
+      if( $rootScope.uporabnik.kontaktna_oseba.id !== null ){
         updated_kontaktna.id = $rootScope.uporabnik.kontaktna_oseba.id;
         updated_kontaktna.$update({kontaktnaId: $rootScope.uporabnik.kontaktna_oseba.id}, function(response){
           Notification.success('Kontaktna oseba uspešno posodobljen!!');

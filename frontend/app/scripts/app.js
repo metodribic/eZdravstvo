@@ -105,12 +105,6 @@ angular
 
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
 
-        //  preveri če ima izpoljnen profil
-        // if(toState.url !== '/profile' && $rootScope.uporabnik && ($rootScope.uporabnik.ime.length === 0 || $rootScope.uporabnik.priimek.length === 0)){
-        //   // Notification.warning({message: 'Za nadaljevanje izpolnite profil!', title: '<b>Opozorilo!</b>'});
-        //   $state.go('profile');
-        // }
-
         if (toState.url !== '/login' && toState.url !== '/forgotPassword' && toState.url !== '/register' && !AuthService.isAuthenticated()){
           // User isn’t authenticated
           $state.go("login");
@@ -123,8 +117,6 @@ angular
             event.preventDefault();
           }
         }
-
-
 
         if(AuthService.isAuthenticated()) {
             if(!$rootScope.user) {

@@ -96,6 +96,14 @@
 
           <form class="form-horizontal" role="form" ng-submit="shrani_spremembe_zdravnik()" ng-if="tipUporabnika=='Zdravnik'">
 
+            <!-- SIFRA -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Šifra zdravnika:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model = "uporabnik.sifra.sifra" disabled>
+              </div>
+            </div>
+
             <!-- Ime uporabnika -->
             <div class="form-group">
               <label class="control-label col-sm-2">Ime:</label>
@@ -124,7 +132,7 @@
             <!-- ZDRAVNIKOVI FIELDI -->
 
             <!-- email -->
-            <div class="form-group" ng->
+            <div class="form-group">
               <label class="control-label col-sm-2">Email:</label>
               <div class="col-sm-10">
                 <input type="email" class="form-control" ng-model = "uporabnik.email" required>
@@ -132,9 +140,9 @@
             </div>
 
             <!-- sifra -->
-            <div class="form-group" ng->
+            <div class="form-group">
               <label class="control-label col-sm-2">Sprejema paciente:</label>
-              <div class="col-sm-2">
+              <div class="col-sm-3">
                 <label class="radio-inline">
                   <input type="radio" name="inlineRadioOptions" id="radioBtn1" value="true" ng-checked="uporabnik.sprejema_paciente" ng-click="hideNumber(false)"> Da
                 </label>
@@ -144,7 +152,7 @@
                 </label>
               </div>
 
-              <div class="col-sm-8">
+              <div class="col-sm-7">
                 <label class="control-label col-sm-3">Prosta mesta:</label>
                 <div class="col-sm-9" style="padding-right: 0">
                   <input type="number" id="prostaMesta" class="form-control" ng-model = "uporabnik.prosta_mesta" ng-disabled="!uporabnik.sprejema_paciente" required>
