@@ -46,7 +46,7 @@
     <![endif]-->
 </head>
 <body class="skin-green sidebar-mini" ng-app="tpo">
-  <div class="wrapper">
+  <div class="wrapper" ng-controller="IndexCtrl">
 
     <!-- Main Header -->
     <header class="main-header">
@@ -119,7 +119,9 @@
             <a  target="_self">{{uporabnik.role.naziv}}</a>
           </div>
         </div>
+
         <div class="izbiraOskrbovanca" ng-show="uporabnik.role.naziv == 'Pacient'">
+            <!-- <p>Izbrani uporabnik <a ng-click=""><i>(Dodaj)</i></a></p> -->
             <p>Izbrani uporabnik</p>
             <ui-select ng-model="selected.value" on-select="changeUser($item, $model)">
                 <ui-select-match>
@@ -131,11 +133,34 @@
                 </ui-select-choices>
             </ui-select>
         </div>
+
+
+        <!-- <div class="btn-group izbiraOskrbovanca" role="group">
+          <button type="button" class="btn btn-default">+</button>
+
+          <div class="btn-group" role="group">
+            <div>
+
+                <ui-select ng-model="selected.value" on-select="changeUser($item, $model)">
+                    <ui-select-match>
+                        <span ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="oskrbovanec in (profili | filter: $select.search)">
+                        <span>{{oskrbovanec.ime}} {{oskrbovanec.priimek}}</span>
+                        <span ng-show="oskrbovanec.ime.length == 0 || oskrbovanec.priimek.length == 0">Nepopoln profil!</span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+          </div>
+        </div> -->
+
+
+
         <!-- /.search form -->
 
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
-          <li class="header">Pozdravljeni v eZdravstvu!</li>
+          <li class="header">Osebni podatki in akcije</li>
           <!-- Optionally, you can add icons to the links -->
           <li><a ui-sref="nadzornaPlosca"><i class="fa fa-home"></i> <span>Nadzorna plošča</span></a></li>
           <li><a href="#"><i class="fa fa-heartbeat"></i> <span>Meritve</span></a></li>
@@ -159,7 +184,10 @@
           </li> -->
 
 
-
+          <li class="header">Administracijske akcije</li>
+          <li>
+            <a ui-sref="profile"><i class="fa fa-plus"></i><span ng-click="ustvariOskrbovanca()">Dodaj oskrbovanca</span></a>
+          </li>
 
         </ul>
         <!-- /.sidebar-menu -->
@@ -231,6 +259,7 @@
   <script src="scripts/controllers/registracijaUporabnikaAdmin.js"></script>
   <script src="scripts/services/services.js"></script>
   <script src="scripts/controllers/dodajPregled.js"></script>
+  <script src="scripts/controllers/index.js"></script>
   <!-- endbuild -->
 
 
