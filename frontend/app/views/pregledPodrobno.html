@@ -86,7 +86,7 @@
               <tr>
                 <td><b>Opombe:</b></td>
                 <td>
-                    <span ng-repeat="opomba in pregled.opombe">/</span>
+                    <span ng-show="pregled.opombe.length > 0">{{pregled.opombe}}</span>
                     <span ng-show="pregled.opombe.length == 0">/</span>
                 </td>
               </tr>

@@ -51,6 +51,13 @@ angular.module('tpo')
       var datum = new Date();
       $scope.datum = datum.getDay() +'.'+ datum.getMonth() +'.' +datum.getFullYear();
 
+      //pridobi vse bolezni za izbiro
+      Bolezni.query().$promise.then(function(response){
+        $scope.bolezni = response;
+        console.log(response);
+      });
+
+
       //
       // $scope.naslednji_pregled = function(arg){
       //   if(arg === null){
