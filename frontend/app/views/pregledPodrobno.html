@@ -84,6 +84,13 @@
                 </td>
               </tr>
               <tr>
+                <td><b>Opombe:</b></td>
+                <td>
+                    <span ng-repeat="opomba in pregled.opombe">/</span>
+                    <span ng-show="pregled.opombe.length == 0">/</span>
+                </td>
+              </tr>
+              <tr>
                 <td><b>Naslednji pregled:</b></td>
                 <td>
                 <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega | date:'dd.MM.yyyy'}}</span>
