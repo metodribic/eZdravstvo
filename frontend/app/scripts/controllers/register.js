@@ -162,7 +162,7 @@ angular.module('tpo')
 
         function isVarUndefinedOrEmptyStr( val ){
 
-                if( val == "" || angular.isUndefined(val) || val == null ){
+                if( val === "" || angular.isUndefined(val) || val === null ){
                     return true;
                 }
                 return false;
