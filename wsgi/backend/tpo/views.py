@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.core.serializers import json
 from rest_framework import viewsets, status, filters
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, list_route
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import parser_classes
@@ -161,6 +161,13 @@ class DietaViewSet(viewsets.ModelViewSet):
 class BolezniViewSet(viewsets.ModelViewSet):
     queryset = Bolezni.objects.all()
     serializer_class = BolezniSerializer
+   
+    @list_route(methods=['GET'])
+    def seznam(self, request):
+        queryset = Bolezni.objects.all()
+        serializer = BolezniSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+ 
 
     def get_queryset(self):
         user = self.request.user
