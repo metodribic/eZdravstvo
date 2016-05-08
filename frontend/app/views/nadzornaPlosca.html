@@ -16,7 +16,9 @@
         <div ng-show="omogociIzbiranjePacienta" >
 
             <div class="form-group" >
-                    <label for="pacie">Pacienti</label>
+                    <label for="pacie">
+                        <h3 class="bottom-border header">Pacienti</h3>
+                    </label>
                     <ui-select id="pacie" ng-model="uporabnikZdravnika" on-select="posodobiPacienta(uporabnikZdravnika)" >
                         <ui-select-match placeholder="Izberite pacienta..."   >
                             {{ uporabnikZdravnika.ime }} {{ uporabnikZdravnika.priimek }}

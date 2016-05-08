@@ -39,6 +39,7 @@ angular.module('tpo')
               if(  angular.isUndefined(uporabnikZdravnika) || angular.isUndefined(uporabnikZdravnika.ime) || uporabnikZdravnika.ime == "" ){
                   // ni pacienta
                   mojScope.izbranPacient = false;
+
               }else {
                   mojScope.izbranPacient = true;
                   // dobi pacienta ki smo ga izbrali
@@ -56,6 +57,7 @@ angular.module('tpo')
                   }
                   //$rootScope.uporabnik = item;
                   $http.defaults.headers.common.pacient = id;
+                  $rootScope.izbraniUporabId = id;
 
                   Meritve.get({limit:5}).$promise.then(function (response) {
                       mojScope.meritve = response.results;
@@ -110,8 +112,16 @@ angular.module('tpo')
           $http.defaults.headers.common.pacient = $rootScope.user.id;
           /* GET Pacienti tega zdravnika */
           ZdravnikoviPacienti.get({limit:  150}).$promise.then(function(response){
+
               $scope.mojiPacienti = response.results;
               zdravnikoviPacientiNalozeni = true;
+
+              if( ! angular.isUndefined($rootScope.izbraniUporabId) ){
+                  Uporabniki.get({ limit:1, iduporabnik:$rootScope.izbraniUporabId }).$promise.then(function (response) {
+                      tmpUpor = response;
+                      $scope.posodobiPacienta( tmpUpor );
+                  });
+              }
           });
 
       }
