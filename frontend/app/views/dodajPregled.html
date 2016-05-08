@@ -38,9 +38,9 @@
             -->
             <!---->
             <div class="form-group" >
-                <label class="control-label col-sm-2" for="pacie">Pacient:</label>
+                <label class="control-label col-sm-2">Pacient:</label>
                 <div class="col-sm-10">
-                    <ui-select ng-model="pacienti" theme="bootstrap">
+                    <ui-select ng-model="pacienti">
                         <ui-select-match placeholder="Izberite pacienta...">{{$select.selected.name}}</ui-select-match>
                         <ui-select-choices repeat="item in pacienti | filter: $select.search">
                             <div ng-bind-html="item">{{item.ime}} {{item.priimek}}</div>
@@ -48,6 +48,22 @@
                     </ui-select>
                 </div>
             </div>
+
+
+            <!-- bolezni -->
+            <div class="form-group" >
+                <label class="control-label col-sm-2">Bolezni:</label>
+                <div class="col-sm-10">
+                    <ui-select ng-model="bolezni">
+
+                        <ui-select-match placeholder="Izberite bolezen...">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="bolezen in bolezni">
+                            <div ng-bind-html="bolezen.naziv"> {{bolezen.naziv}} </div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
 
             <!-- meritve -->
             <div class="form-group" >
@@ -61,21 +77,6 @@
                     </ui-select>
                 </div>
             </div>
-
-
-            <!-- bolezni -->
-            <div class="form-group" >
-                <label class="control-label col-sm-2">Bolezni:</label>
-                <div class="col-sm-10">
-                    <ui-select ng-model="bolezni" theme="bootstrap">
-                        <ui-select-match placeholder="Izberite bolezen...">{{$select.selected.name}}</ui-select-match>
-                        <ui-select-choices repeat="item in bolezni | filter: $select.search">
-                            <div ng-bind-html="item"> {{item.naziv}} </div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>
-
 
             <!-- zdravila -->
             <div class="form-group" >
