@@ -35,6 +35,10 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
+.factory('VrednostiMeritevSeznam', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/vrednosti_meritev/seznam');
+})
+
 
 .factory('Ustanova', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/ustanova/:ustanovaId', { ustanovaId: '@ustanovaId' }, {
@@ -84,6 +88,11 @@ angular.module('tpo.models', ['ngResource', 'config'])
 			method: 'UPDATE'
 		}
 	});
+})
+
+
+.factory('BolezniSeznam', function($resource, API_URL) {
+   return $resource('http://' + API_URL + '/bolezni/seznam');
 })
 
 

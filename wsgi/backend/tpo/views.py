@@ -85,6 +85,19 @@ class MeritevViewSet(viewsets.ModelViewSet):
 
         return Meritev.objects.filter(uporabnik=user)
 
+
+#MERITVE SEZNAM
+class VrednostiMeritevViewSet(viewsets.ModelViewSet):
+    queryset = VrednostiMeritev.objects.all()
+    serializer_class = VrednostiMeritevSerializer
+
+    @list_route(methods=['GET'])
+    def seznam(self, request):
+        queryset = VrednostiMeritev.objects.all()
+        serializer = VrednostiMeritevSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+
+
 # POSTA
 class PostaViewSet(viewsets.ModelViewSet):
     queryset = Posta.objects.all()
@@ -662,11 +675,6 @@ def changePassword(request, format=None):
 class SifrantRegistriranihViewSet(viewsets.ModelViewSet):
     queryset = SifrantRegistriranih.objects.all()
     serializer_class = SifrantRegistriranihSerializer
-
-
-class VrednostiMeritevViewSet(viewsets.ModelViewSet):
-    queryset = VrednostiMeritev.objects.all()
-    serializer_class = VrednostiMeritevSerializer
 
 
 class KontaktnaOsebaViewSet(viewsets.ModelViewSet):
