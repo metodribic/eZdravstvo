@@ -92,7 +92,11 @@ angular.module('tpo.models', ['ngResource', 'config'])
 
 
 .factory('BolezniSeznam', function($resource, API_URL) {
-   return $resource('http://' + API_URL + '/bolezni/seznam');
+	return $resource('http://' + API_URL + '/bolezni/seznam', { bolezenId: '@bolezenId' }, {
+		update: {
+			method: 'UPDATE'
+		}
+	});
 })
 
 
@@ -104,6 +108,13 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
+.factory('ZdravilaSeznam', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/zdravila/seznam', {
+		update: {
+			method: 'UPDATE'
+		}
+	});
+})
 
 .factory('Zdravnik', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/zdravnik/:zdravnikId', { zdravnikId: '@zdravnikId' }, {
@@ -142,6 +153,14 @@ angular.module('tpo.models', ['ngResource', 'config'])
 
 .factory('Diete', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/diete/:dietaId', { dietaId: '@dietaId' }, {
+		update: {
+			method: 'UPDATE'
+		}
+	});
+})
+
+.factory('DieteSeznam', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/diete/seznam', { dietaId: '@dietaId' }, {
 		update: {
 			method: 'UPDATE'
 		}

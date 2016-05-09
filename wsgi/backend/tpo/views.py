@@ -158,6 +158,12 @@ class DietaViewSet(viewsets.ModelViewSet):
     queryset = Dieta.objects.all()
     serializer_class = DietaSerializer
 
+    @list_route(methods=['GET'])
+    def seznam(self, request):
+        queryset = Dieta.objects.all()
+        serializer = DietaSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+
     def get_queryset(self):
         user = self.request.user
         try:
@@ -194,11 +200,18 @@ class BolezniViewSet(viewsets.ModelViewSet):
         return Bolezni.objects.filter(uporabnik = user)
 
 
-@permission_classes((IsAuthenticated,))
+
 # ZDRAVILO
+@permission_classes((IsAuthenticated,))
 class ZdraviloViewSet(viewsets.ModelViewSet):
     queryset = Zdravilo.objects.all()
     serializer_class = ZdraviloSerializer
+
+    @list_route(methods=['GET'])
+    def seznam(self, request):
+        queryset = Zdravilo.objects.all()
+        serializer = ZdraviloSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
 
     def get_queryset(self):
         user = self.request.user

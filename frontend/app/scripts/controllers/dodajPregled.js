@@ -21,15 +21,16 @@ v pacientovi nadzorni plošči in obsegajo:
 */
 
 angular.module('tpo')
-  .controller('DodajPregledCtrl', ['$scope','$state','Uporabniki','$rootScope','AuthService','Pregled','Meritve', 'VrednostiMeritevSeznam', 'Bolezni', 'BolezniSeznam', 'Zdravila','Diete','ZdravnikoviPacienti','Notification',
-    function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled, Meritve, VrednostiMeritevSeznam, Bolezni, BolezniSeznam, Zdravila, Diete, ZdravnikoviPacienti, Notification) {
+  .controller('DodajPregledCtrl', ['$scope','$state','Uporabniki','$rootScope','AuthService','Pregled','Meritve', 'VrednostiMeritevSeznam', 'Bolezni', 'BolezniSeznam', 'Zdravila', 'ZdravilaSeznam', 'Diete', 'DieteSeznam', 'ZdravnikoviPacienti','Notification',
+    function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled, Meritve, VrednostiMeritevSeznam, Bolezni, BolezniSeznam, Zdravila, ZdravilaSeznam, Diete, DieteSeznam, ZdravnikoviPacienti, Notification) {
       var naziv = '';
       var naslednji_pregled = null;
+
 
       // Pridobi Zdravnikove paciente
       ZdravnikoviPacienti.query().$promise.then(function(response){
         $scope.pacienti = response;
-        console.log(response);
+        //console.log(response);
       });
 
 
@@ -60,10 +61,20 @@ angular.module('tpo')
       //pridobi vse meritve za izbiro
       VrednostiMeritevSeznam.query().$promise.then(function(response) {
         $scope.vrednosti_meritev = response;
-        console.log(response);
+        //console.log(response);
       });
 
+      //pridobi vsa zdravila za izbiro
+      ZdravilaSeznam.query().$promise.then(function(response) {
+        $scope.zdravila = response;
+        //console.log(response);
+      });
 
+      //pridobi vse diete za izbiro
+      DieteSeznam.query().$promise.then(function(response) {
+        $scope.diete = response;
+        //console.log(response);
+      });
 
       //
       // $scope.naslednji_pregled = function(arg){
