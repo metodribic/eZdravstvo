@@ -75,7 +75,21 @@ angular.module('tpo')
         $scope.diete = response;
         //console.log(response);
       });
+      
+      //dodaj pregled
+      $scope.ustvariPregled=function (pregled) {
+        var a = new Pregled();
 
+        //a.zdravnik = $scope.pregled.
+        a.uporabnik = $scope.pregled.izbranPacient;
+        a.meritve = $scope.pregled.izbranaMeritev;
+        a.bolezen = $scope.pregled.izbranaBolezen;
+        a.zdravilo = $scope.pregled.izbranaZdravila;
+        a.dieta = $scope.pregled.izbranaDieta;
+        a.opombe = $scope.pregled.opombe;
+        a.datum_naslednjega = $scope.pregled.datum_naslednjega;
+      }
+      
       //
       // $scope.naslednji_pregled = function(arg){
       //   if(arg === null){

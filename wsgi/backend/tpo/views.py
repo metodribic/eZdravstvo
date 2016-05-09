@@ -411,6 +411,46 @@ def registracijaAdmin(request, format=None):
 
 
 @api_view(['POST'])
+def dodajPregled(request, format=None):
+    """
+    Create PREGLED
+    """
+    try:
+        datum_pregleda = request.data['datum_pregleda']
+        zdravnik = request.data['zdravnik']
+        uporabnik = request.data('uporabnik')
+        meritve = request.data('meritve')
+        bolezen = request.data('bolezen')
+        zdravilo = request.data('zdravilo')
+        dieta = request.data('dieta')
+        datum_naslednjega = request.data('datum_naslednjega')
+        opombe = request.data.get('opombe', "")
+
+        pregled = Pregled.objects.create(datum_pregleda = datum_pregleda, zdravnik = zdravnik, uporabnik = uporabnik,
+                                         meritve = meritve, bolezen = bolezen, zdravilo = zdravilo, dieta = dieta, datum_naslednjega = datum_naslednjega, opombe = opombe)
+
+    except ValidationError as ve:
+        print ve
+        response = JSONResponse({"error": "WeakPassword"})
+        response.status_code = 400
+        return response
+    except IntegrityError as e:
+        #Exception raised when the relational integrity of the database
+        #is affected, e.g. a foreign key check fails, duplicate key, etc.
+
+        traceback.print_exc()
+        respons = JSONResponse({"error": "{'type' : 'Integrity error'}"})
+        respons.status_code = 422
+        return respons
+
+    except Exception as ex:
+        traceback.print_exc()
+        response = JSONResponse({"error" : "Usage: {'email':'someone@someplace', 'password':'password'}"})
+        response.status_code = 400 # Bad request
+        return response
+
+
+@api_view(['POST'])
 def registracijaPacient(request, format=None):
     """
     Create new user
