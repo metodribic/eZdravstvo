@@ -12,8 +12,7 @@
     "angular-ui-router": "^0.2.18",
     "ui-select": "angular-ui-select#^0.16.1",
     "angular-ui-notification": "^0.2.0",
-    "ngDatepicker": "*",
-    "angular-daterangepicker": "^0.2.2"
+    "ngDatepicker": "*"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"
