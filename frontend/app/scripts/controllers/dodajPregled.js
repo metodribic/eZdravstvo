@@ -21,27 +21,15 @@ v pacientovi nadzorni plošči in obsegajo:
 */
 
 angular.module('tpo')
-  .controller('DodajPregledCtrl', ['$scope','$state','Uporabniki','$rootScope','AuthService','Pregled','Meritve', 'VrednostiMeritevSeznam', 'Bolezni', 'BolezniSeznam', 'Zdravila', 'ZdravilaSeznam', 'Diete', 'DieteSeznam', 'ZdravnikoviPacienti','Notification',
-    function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled, Meritve, VrednostiMeritevSeznam, Bolezni, BolezniSeznam, Zdravila, ZdravilaSeznam, Diete, DieteSeznam, ZdravnikoviPacienti, Notification) {
+  .controller('DodajPregledCtrl', ['$scope','$state','Uporabniki','$rootScope','AuthService','Pregled','Meritve',
+    'VrednostiMeritevSeznam', 'Bolezni', 'BolezniSeznam', 'Zdravila', 'ZdravilaSeznam', 'Diete', 'DieteSeznam',
+    'ZdravnikoviPacienti','Notification',
+    function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled, Meritve,
+              VrednostiMeritevSeznam, Bolezni, BolezniSeznam, Zdravila, ZdravilaSeznam,
+              Diete, DieteSeznam, ZdravnikoviPacienti, Notification) {
+
       var naziv = '';
       var naslednji_pregled = null;
-
-
-      //funkcija za pridobivanje zdravil
-      $scope.pridobiZdravila = function (izbraneBolezni) {
-        $scope.izbranaZdravila = [];
-
-
-        //console.log(izbraneBolezni);
-        for (bolezen of izbraneBolezni) {
-            //console.log(bolezen);
-            for (zdravilo of bolezen.zdravilo) {
-              //console.log(zdravilo);
-                $scope.izbranaZdravila.push(zdravilo);
-            }
-        }
-        console.log($scope.izbranaZdravila);
-      }
 
 
       // Pridobi Zdravnikove paciente
@@ -94,21 +82,70 @@ angular.module('tpo')
       });
 
 
-      /*
-      //dodaj pregled
-      $scope.ustvariPregled=function (pregled) {
+
+      mojScope = $scope;
+
+      //moj scope, v katerega shranjujem vse kar je v pregledu
+      mojScope.pregled = new Pregled();
+
+
+      //funkcija, ki ustvari pregled
+      $scope.ustvariPregled=function () {
         var a = new Pregled();
 
-        //a.zdravnik = $scope.pregled.
-        a.uporabnik = $scope.pregled.izbranPacient;
-        a.meritve = $scope.pregled.izbranaMeritev;
-        a.bolezen = $scope.pregled.izbranaBolezen;
-        a.zdravilo = $scope.pregled.izbranaZdravila;
-        a.dieta = $scope.pregled.izbranaDieta;
-        a.opombe = $scope.pregled.opombe;
-        a.datum_naslednjega = $scope.pregled.datum_naslednjega;
+        a.datum = $scope.datum;
+        a.zdravnik = $scope.trenutniZdravnik;
+        a.uporabnik = mojScope.pregled.uporabnik;
+        a.meritve = mojScope.pregled.meritve;
+        a.bolezen = mojScope.pregled.bolezen;
+        a.zdravilo = mojScope.pregled.zdravilo;
+        a.dieta = mojScope.pregled.dieta;
+        a.opombe = $scope.opombe;
+        //a.datum_naslednjega = $scope.datum_naslednjega;
+
+        mojScope.test = a;
+
+        console.log(a);
       }
-      */
+
+      //ustvari Uproabnika
+      $scope.ustvariPacienta = function (izbranPacient) {
+        mojScope.pregled.uporabnik = izbranPacient;
+      }
+
+      //ustvari Meritev
+      $scope.ustvariMeritev=function (izbranaMeritev) {
+
+        mojScope.pregled.meritve = izbranaMeritev;
+       //console.log(mojScope.pregled.meritve);
+        //console.log(m);
+      }
+
+      //funkcija za pridobivanje zdravil
+      $scope.ustvariBolezen = function (izbraneBolezni) {
+        $scope.izbranaZdravila = [];
+
+        //console.log(izbraneBolezni);
+        for (bolezen of izbraneBolezni) {
+            //console.log(bolezen);
+            for (zdravilo of bolezen.zdravilo) {
+              //console.log(zdravilo);
+                $scope.izbranaZdravila.push(zdravilo);
+            }
+        }
+        
+        mojScope.pregled.bolezen = izbraneBolezni;
+        mojScope.pregled.zdravilo = $scope.izbranaZdravila;
+
+        //console.log($scope.izbranaZdravila);
+      }
+      
+      //funkcija za pridobivanje diete
+      $scope.ustvariDieto = function (izbranaDieta) {
+
+        mojScope.pregled.dieta = izbranaDieta;
+        //console.log(d);
+      }
 
       //
       // $scope.naslednji_pregled = function(arg){
