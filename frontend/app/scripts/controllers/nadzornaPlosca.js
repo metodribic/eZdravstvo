@@ -34,8 +34,6 @@ angular.module('tpo')
 
 
       zdravnikoviPacientiNalozeni = false;
-      mojScope.niPacientov = true;
-      mojScope.niPacientov = false;
 
       $scope.posodobiPacienta = function (uporabnikZdravnika) {
 
@@ -62,7 +60,6 @@ angular.module('tpo')
                       id = item.url.substring(item.url.lastIndexOf('/')+1);
                       item.id = id;
                   }
-                  //$rootScope.uporabnik = item;
                   $http.defaults.headers.common.pacient = id;
                   $rootScope.izbraniUporabId = id;
 
@@ -122,28 +119,17 @@ angular.module('tpo')
 
               $scope.mojiPacienti = response.results;
 
-              console.log("nimaPac value:");
-              console.log(mojScope.jeZdravnik.nimaPac);
               if( $scope.mojiPacienti.length == 0 ){
                   mojScope.jeZdravnik.nimaPac = true;
-                  console.log(" == []");
-                  //$scope.niPacientov = true;
               }else{
-                  //$scope.niPacientov = false;
-                  console.log($scope.mojiPacienti);
                   mojScope.jeZdravnik.nimaPac = false;
               }
-              console.log(mojScope.jeZdravnik.nimaPac);
-
-              mojScope.niPacientov = false;
 
               zdravnikoviPacientiNalozeni = true;
-              $scope.niPacientov = true;
 
               if( ! angular.isUndefined($rootScope.izbraniUporabId) ){
                   Uporabniki.get({ limit:1, iduporabnik:$rootScope.izbraniUporabId }).$promise.then(function (response) {
-                      tmpUpor = response;
-                      $scope.posodobiPacienta( tmpUpor );
+                      $scope.posodobiPacienta( response );
                   });
               }
 
