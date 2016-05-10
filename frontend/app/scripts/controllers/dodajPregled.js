@@ -91,19 +91,37 @@ angular.module('tpo')
 
       //funkcija, ki ustvari pregled
       $scope.ustvariPregled=function () {
+        $scope.besedZaUpor = "";
         var a = new Pregled();
 
-        a.datum = $scope.datum;
-        a.zdravnik = $scope.trenutniZdravnik;
+        a.datum = mojScope.datum;
+        a.zdravnik = mojScope.trenutniZdravnik;
         a.uporabnik = mojScope.pregled.uporabnik;
         a.meritve = mojScope.pregled.meritve;
         a.bolezen = mojScope.pregled.bolezen;
         a.zdravilo = mojScope.pregled.zdravilo;
         a.dieta = mojScope.pregled.dieta;
-        a.opombe = $scope.opombe;
+        a.opombe = mojScope.opombe;
         //a.datum_naslednjega = $scope.datum_naslednjega;
 
-        mojScope.test = a;
+        //shranim pregled in pocakam na response
+        a.$save( function(){
+
+            if( userWasCreaterBool( succ.success ) ){
+                $scope.besedZaUpor = "Pregled uspešno ustvarjen.";
+
+                // clear fields
+                clearPregledFields(mojScope);
+
+                Notification.success({message: $scope.besedZaUpor });
+            }
+
+        }, function (err) {
+            responseFailedHandler ( $scope, err.data.error );
+            // showFailAlert( $scope );
+            Notification.error({message: $scope.besedZaUpor });
+        });
+
 
         console.log(a);
       }
@@ -142,10 +160,38 @@ angular.module('tpo')
       
       //funkcija za pridobivanje diete
       $scope.ustvariDieto = function (izbranaDieta) {
-
         mojScope.pregled.dieta = izbranaDieta;
         //console.log(d);
       }
+
+      //pobrise oz. ponastavi vse dropdowne in fielde v dodajPregled
+      function clearPregledFields( mojScope ){
+
+          mojScope.pregled.uporabnik="";
+          mojScope.pregled.meritve="";
+          mojScope.pregled.bolezen="";
+          mojScope.pregled.zdravilo ="";
+          mojScope.pregled.dieta= "";
+          mojScope.opombe = "";
+
+          //getDataFromModels();
+      };
+
+      function responseFailedHandler ( scope, servFail ){
+
+            console.log(servFail);
+
+          if( servFail === "User with this email already exists"){
+
+              scope.besedZaUpor = "PRDEC";
+          }else{
+              // POPRAVI - GLEJ KAJ JE NAROBE, opazil samo pri duplicate entry
+              scope.besedZaUpor = "WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO";
+              //$scope.besedZaUpor = "Prišlo je do napake, ponovno preglejte vnosna polja.";
+          }
+
+      };
+
 
       //
       // $scope.naslednji_pregled = function(arg){
