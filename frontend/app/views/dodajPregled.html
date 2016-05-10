@@ -71,10 +71,10 @@
             <div class="form-group" >
                 <label class="control-label col-sm-2">Bolezni:</label>
                 <div class="col-sm-10">
-                    <ui-select multiple ng-model="izbranaBolezen">
+                    <ui-select multiple ng-model="izbraneBolezni" on-select="pridobiZdravila(izbraneBolezni)">
                         <ui-select-match placeholder="Izberite bolezen...">{{$item.naziv}}</ui-select-match>
                         <ui-select-choices repeat="bolezen in bolezniSeznam">
-                            <div ng-bind-html="bolezen.naziv"> {{bolezen.naziv}} </div>
+                            <div ng-bind-html="bolezen.naziv" > {{bolezen.naziv}} </div> <span ng-show="bolezen.alergija">      <b>ALERGIJA</b></span>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -85,9 +85,9 @@
             <div class="form-group" >
                 <label class="control-label col-sm-2">Zdravila:</label>
                 <div class="col-sm-10">
-                    <ui-select ng-model="izbranaZdravila" ng-blur="pridobi_zdravilo()">
-                        <ui-select-match placeholder="Izberite zdravila...">{{$select.selected.zdravilo}}</ui-select-match>
-                        <ui-select-choices repeat="zdravilo in zdravila">
+                    <ui-select multiple ng-model="test" ng-blur="pridobi_zdravilo()">
+                        <ui-select-match placeholder="Izberite zdravila...">{{$item.zdravilo}}</ui-select-match>
+                        <ui-select-choices repeat="zdravilo in izbranaZdravila">
                             <div ng-bind-html="zdravilo.zdravilo"> {{zdravilo.zdravilo}} </div>
                         </ui-select-choices>
                     </ui-select>
@@ -99,8 +99,8 @@
             <div class="form-group" >
                 <label class="control-label col-sm-2">Dieta:</label>
                 <div class="col-sm-10">
-                    <ui-select ng-model="izbranaDieta">
-                        <ui-select-match placeholder="Izberite dieto...">{{$select.selected.naziv}}</ui-select-match>
+                    <ui-select multiple ng-model="izbranaDieta">
+                        <ui-select-match placeholder="Izberite dieto...">{{$item.naziv}}</ui-select-match>
                         <ui-select-choices repeat="dieta in diete">
                             <div ng-bind-html="dieta.naziv"> {{dieta.naziv}} </div>
                         </ui-select-choices>
@@ -109,7 +109,7 @@
             </div>
 
 
-            <!-- navodila -->
+
 
             <!-- opombe -->
             <div class="form-group">

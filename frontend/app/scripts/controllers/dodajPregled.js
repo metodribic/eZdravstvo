@@ -27,6 +27,23 @@ angular.module('tpo')
       var naslednji_pregled = null;
 
 
+      //funkcija za pridobivanje zdravil
+      $scope.pridobiZdravila = function (izbraneBolezni) {
+        $scope.izbranaZdravila = [];
+
+
+        //console.log(izbraneBolezni);
+        for (bolezen of izbraneBolezni) {
+            //console.log(bolezen);
+            for (zdravilo of bolezen.zdravilo) {
+              //console.log(zdravilo);
+                $scope.izbranaZdravila.push(zdravilo);
+            }
+        }
+        console.log($scope.izbranaZdravila);
+      }
+
+
       // Pridobi Zdravnikove paciente
       ZdravnikoviPacienti.query().$promise.then(function(response){
         $scope.pacienti = response;
@@ -75,7 +92,9 @@ angular.module('tpo')
         $scope.diete = response;
         //console.log(response);
       });
-      
+
+
+      /*
       //dodaj pregled
       $scope.ustvariPregled=function (pregled) {
         var a = new Pregled();
@@ -89,7 +108,8 @@ angular.module('tpo')
         a.opombe = $scope.pregled.opombe;
         a.datum_naslednjega = $scope.pregled.datum_naslednjega;
       }
-      
+      */
+
       //
       // $scope.naslednji_pregled = function(arg){
       //   if(arg === null){
