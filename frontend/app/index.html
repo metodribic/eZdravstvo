@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../bower_components/ui-select/dist/select.css" />
     <link rel="stylesheet" href="../bower_components/angular-ui-notification/dist/angular-ui-notification.css" />
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="../bower_components/ngDatepicker/src/css/ngDatepicker.css">
+    <link rel="stylesheet" href="../bower_components/bootstrap-daterangepicker/daterangepicker-bs3.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -35,6 +35,8 @@
     <link rel="stylesheet" href="dist/css/skins/skin-green.min.css">
 
     <!-- datepicker -->
+    <link rel="stylesheet" href="../bower_components/ngDatepicker/src/css/ngDatepicker.css">
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -44,7 +46,7 @@
     <![endif]-->
 </head>
 <body class="skin-green sidebar-mini" ng-app="tpo">
-  <div class="wrapper" ng-controller="IndexCtrl">
+  <div class="wrapper">
 
     <!-- Main Header -->
     <header class="main-header">
@@ -117,9 +119,7 @@
             <a  target="_self">{{uporabnik.role.naziv}}</a>
           </div>
         </div>
-
-        <div class="izbiraOskrbovanca" ng-show="uporabnik.role.naziv == 'Pacient'">
-            <!-- <p>Izbrani uporabnik <a ng-click=""><i>(Dodaj)</i></a></p> -->
+        <div class="izbiraOskrbovanca">
             <p>Izbrani uporabnik</p>
             <ui-select ng-model="selected.value" on-select="changeUser($item, $model)">
                 <ui-select-match>
@@ -127,17 +127,14 @@
                 </ui-select-match>
                 <ui-select-choices repeat="oskrbovanec in (profili | filter: $select.search)">
                     <span>{{oskrbovanec.ime}} {{oskrbovanec.priimek}}</span>
-                    <span ng-show="oskrbovanec.ime.length == 0 || oskrbovanec.priimek.length == 0">Nepopoln profil!</span>
                 </ui-select-choices>
             </ui-select>
         </div>
-
-
         <!-- /.search form -->
 
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
-          <li class="header">Osebni podatki in akcije</li>
+          <li class="header">Pozdravljeni v eZdravstvu!</li>
           <!-- Optionally, you can add icons to the links -->
           <li><a ui-sref="nadzornaPlosca"><i class="fa fa-home"></i> <span>Nadzorna plošča</span></a></li>
           <li><a href="#"><i class="fa fa-heartbeat"></i> <span>Meritve</span></a></li>
@@ -161,10 +158,7 @@
           </li> -->
 
 
-          <li class="header">Administracijske akcije</li>
-          <li>
-            <a ui-sref="profile"><i class="fa fa-plus"></i><span ng-click="ustvariOskrbovanca()">Dodaj oskrbovanca</span></a>
-          </li>
+
 
         </ul>
         <!-- /.sidebar-menu -->
@@ -173,7 +167,7 @@
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper" style="height: 2000px;">
+    <div class="content-wrapper" style="height: 1500px;">
       <!-- Content Header (Page header) -->
       <!-- <section class="content-header">
         <h1>
@@ -217,6 +211,8 @@
   <script src="../bower_components/moment/moment.js"></script>
   <script src="../bower_components/ngDatepicker/src/js/ngDatepicker.js"></script>
   <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+  <script src="../bower_components/angular-daterangepicker/js/angular-daterangepicker.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 
@@ -234,7 +230,6 @@
   <script src="scripts/controllers/registracijaUporabnikaAdmin.js"></script>
   <script src="scripts/services/services.js"></script>
   <script src="scripts/controllers/dodajPregled.js"></script>
-  <script src="scripts/controllers/index.js"></script>
   <!-- endbuild -->
 
 
