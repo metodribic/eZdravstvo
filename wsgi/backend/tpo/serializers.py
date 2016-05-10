@@ -204,7 +204,7 @@ class MeritevSerializer(serializers.HyperlinkedModelSerializer):
 class PregledSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     zdravnik = ZdravnikSerializer()
-    meritve = MeritevSerializer()
+    #meritve = MeritevSerializer()
     bolezen = BolezniSerializer(many=True)
     dieta = DietaSerializer(many=True)
     zdravilo = ZdraviloSerializer(many=True)
