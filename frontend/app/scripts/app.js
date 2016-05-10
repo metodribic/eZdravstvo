@@ -21,8 +21,7 @@ angular
     'tpo.services',
     'tpo.models',
     'ui-notification',
-    'jkuri.datepicker',
-    'daterangepicker'
+    'jkuri.datepicker'
 
   ])
   .config(['$resourceProvider','$stateProvider', '$urlRouterProvider',
