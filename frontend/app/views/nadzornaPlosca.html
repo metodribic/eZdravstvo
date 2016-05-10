@@ -19,16 +19,13 @@
                     <label for="pacie">
                         <h3 class="bottom-border header">Pacienti</h3>
                     </label>
-                    <ui-select id="pacie" ng-model="uporabnikZdravnika" on-select="posodobiPacienta(uporabnikZdravnika)" >
-                        <ui-select-match placeholder="Izberite pacienta..."   >
+                    <ui-select ng-disabled="jeZdravnik.nimaPac" id="pacie" ng-model="uporabnikZdravnika" on-select="posodobiPacienta(uporabnikZdravnika)" >
+                        <ui-select-match placeholder="{{ jeZdravnik.placeholderBes }}"   >
                             {{ uporabnikZdravnika.ime }} {{ uporabnikZdravnika.priimek }}
                         </ui-select-match>
-                        <ui-select-choices repeat="o in mojiPacienti | filter:$select.search">
+                        <ui-select-choices repeat="o in mojiPacienti | filter:$select.search ">
                             {{ o.ime }} {{ o.priimek }} ({{o.email}})
                         </ui-select-choices>
-                        <ui-select-no-choice>
-                            Ni pacientov.
-                        </ui-select-no-choice>
                     </ui-select>
             </div>
 

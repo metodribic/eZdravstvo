@@ -28,7 +28,14 @@ angular.module('tpo')
       if(!$scope.uporabnik)
           $state.go("login");
 
+      mojScope.jeZdravnik = {};
+      mojScope.jeZdravnik.placeholderBes = "Nalagam paciente...";
+      mojScope.jeZdravnik.nimaPac = true;   // disable
+
+
       zdravnikoviPacientiNalozeni = false;
+      mojScope.niPacientov = true;
+      mojScope.niPacientov = false;
 
       $scope.posodobiPacienta = function (uporabnikZdravnika) {
 
@@ -114,7 +121,24 @@ angular.module('tpo')
           ZdravnikoviPacienti.get({limit:  150}).$promise.then(function(response){
 
               $scope.mojiPacienti = response.results;
+
+              console.log("nimaPac value:");
+              console.log(mojScope.jeZdravnik.nimaPac);
+              if( $scope.mojiPacienti.length == 0 ){
+                  mojScope.jeZdravnik.nimaPac = true;
+                  console.log(" == []");
+                  //$scope.niPacientov = true;
+              }else{
+                  //$scope.niPacientov = false;
+                  console.log($scope.mojiPacienti);
+                  mojScope.jeZdravnik.nimaPac = false;
+              }
+              console.log(mojScope.jeZdravnik.nimaPac);
+
+              mojScope.niPacientov = false;
+
               zdravnikoviPacientiNalozeni = true;
+              $scope.niPacientov = true;
 
               if( ! angular.isUndefined($rootScope.izbraniUporabId) ){
                   Uporabniki.get({ limit:1, iduporabnik:$rootScope.izbraniUporabId }).$promise.then(function (response) {
@@ -122,6 +146,8 @@ angular.module('tpo')
                       $scope.posodobiPacienta( tmpUpor );
                   });
               }
+
+              mojScope.jeZdravnik.placeholderBes = "Izberite pacienta...";
           });
 
       }
