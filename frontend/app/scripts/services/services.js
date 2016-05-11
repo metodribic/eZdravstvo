@@ -37,6 +37,9 @@ angular.module('tpo.services', ['ngResource', 'config'])
     window.localStorage.removeItem(LOCAL_USER_KEY);
     delete $rootScope.uporabnik;
     delete $rootScope.user;
+    if( $rootScope.izbraniUporabId ){
+        delete $rootScope.izbraniUporabId;
+    }
   }
 
   var getCurrentUser = function() {

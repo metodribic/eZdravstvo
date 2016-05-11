@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../bower_components/ui-select/dist/select.css" />
     <link rel="stylesheet" href="../bower_components/angular-ui-notification/dist/angular-ui-notification.css" />
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="../bower_components/bootstrap-daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" href="../bower_components/ngDatepicker/src/css/ngDatepicker.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -31,7 +31,6 @@
           apply the skin class to the body tag so the changes take effect.
     -->
     <link rel="stylesheet" href="dist/css/skins/skin-green.min.css">
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -113,7 +112,7 @@
             <a  target="_self">{{uporabnik.role.naziv}}</a>
           </div>
         </div>
-        <div class="izbiraOskrbovanca">
+        <div class="izbiraOskrbovanca" ng-show="!isDoctor">
             <p>Izbrani uporabnik</p>
             <ui-select ng-model="selected.value" on-select="changeUser($item, $model)">
                 <ui-select-match>
@@ -142,17 +141,8 @@
 
 
           <li><a ui-sref="listPregledov"><i class="fa fa-stethoscope"></i> <span>Pregledi</span></a></li>
-
-          <!-- <li class="treeview">
-            <a href="#"><i class="fa fa-medkit"></i> <span>Šifranti</span> <i class="fa fa-angle-left pull-right"></i></a>
-            <ul class="treeview-menu">
-              <li><a href="#">Alergije</a></li>
-              <li><a href="#">Ostalo</a></li>
-            </ul>
-          </li> -->
-
-
-
+          <li class="header">Administrativne akcije</li>
+          <li><a href="#"><i class="fa fa-user-plus"></i> <span>Dodaj oskrbovanca</span></a></li>
 
         </ul>
         <!-- /.sidebar-menu -->
@@ -202,11 +192,10 @@
   <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
   <script src="../bower_components/ui-select/dist/select.js"></script>
   <script src="../bower_components/angular-ui-notification/dist/angular-ui-notification.js"></script>
+  <script src="../bower_components/jquery-ui/jquery-ui.js"></script>
+  <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
   <script src="../bower_components/moment/moment.js"></script>
   <script src="../bower_components/ngDatepicker/src/js/ngDatepicker.js"></script>
-  <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
-  <script src="../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-  <script src="../bower_components/angular-daterangepicker/js/angular-daterangepicker.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 

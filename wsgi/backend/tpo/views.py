@@ -436,15 +436,6 @@ def ustvariPregled(request, format=None):
         uporabnik = Uporabnik.objects.get(id=uporabnikID)
 
 
-        #pregled = Pregled.objects.create(id = "13", opombe = opombe, datum = datum_pregleda, uporabnik = uporabnik, zdravnik = zdravnik, datum_naslednjega = datum_pregleda)
-
-        bla=0
-        for m in meritve:
-            #print m
-            vrednostMeritev = VrednostiMeritev.objects.get(id=m["id"])
-            #meritve = Meritev.objects.create(id = bla, tip_meritve = vrednostMeritev, vrednost_meritve = izmerjena_vrednost_meritve, datum = datum_pregleda, uporabnik_id = uporabnikID, pregled = pregled)
-            bla+=1
-
 
         #pohendlaj diete
 
@@ -456,6 +447,13 @@ def ustvariPregled(request, format=None):
             bla1+=1
         """
 
+        pregled = Pregled.objects.create(opombe = opombe, datum = datum_pregleda, uporabnik = uporabnik, zdravnik = zdravnik, datum_naslednjega = datum_pregleda)
+        print(pregled)
+
+        for m in meritve:
+            #print m
+            vrednostMeritev = VrednostiMeritev.objects.get(id=m["id"])
+            meritve = Meritev.objects.create(tip_meritve = vrednostMeritev, vrednost_meritve = izmerjena_vrednost_meritve, datum = datum_pregleda, uporabnik_id = uporabnikID, pregled = pregled)
 
         return Response()
 

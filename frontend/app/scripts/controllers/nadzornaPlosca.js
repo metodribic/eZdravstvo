@@ -28,6 +28,11 @@ angular.module('tpo')
       if(!$scope.uporabnik)
           $state.go("login");
 
+      mojScope.jeZdravnik = {};
+      mojScope.jeZdravnik.placeholderBes = "Nalagam paciente...";
+      mojScope.jeZdravnik.nimaPac = true;   // disable
+
+
       zdravnikoviPacientiNalozeni = false;
 
       $scope.posodobiPacienta = function (uporabnikZdravnika) {
@@ -39,6 +44,7 @@ angular.module('tpo')
               if(  angular.isUndefined(uporabnikZdravnika) || angular.isUndefined(uporabnikZdravnika.ime) || uporabnikZdravnika.ime == "" ){
                   // ni pacienta
                   mojScope.izbranPacient = false;
+
               }else {
                   mojScope.izbranPacient = true;
                   // dobi pacienta ki smo ga izbrali
@@ -46,7 +52,7 @@ angular.module('tpo')
                   mojScope.bolezni = uporabnikZdravnika.bolezni;
                   mojScope.diete = uporabnikZdravnika.dieta;
                   mojScope.zdravila = uporabnikZdravnika.zdravila;
-                  //$rootScope.changeUser(uporabnikZdravnika, uporabnikZdravnika);  // zamenjejmo userja
+                  // zamenjejmo userja
 
                   var id = uporabnikZdravnika.id;
                   if(!id) {
@@ -54,8 +60,8 @@ angular.module('tpo')
                       id = item.url.substring(item.url.lastIndexOf('/')+1);
                       item.id = id;
                   }
-                  //$rootScope.uporabnik = item;
                   $http.defaults.headers.common.pacient = id;
+                  $rootScope.izbraniUporabId = id;
 
                   Meritve.get({limit:5}).$promise.then(function (response) {
                       mojScope.meritve = response.results;
@@ -106,12 +112,27 @@ angular.module('tpo')
           $scope.omogociIzbiranjePacienta = true;
           $scope.izbranPacient = false;
 
-
           $http.defaults.headers.common.pacient = $rootScope.user.id;
           /* GET Pacienti tega zdravnika */
           ZdravnikoviPacienti.get({limit:  150}).$promise.then(function(response){
+
               $scope.mojiPacienti = response.results;
+
+              if( $scope.mojiPacienti.length == 0 ){
+                  mojScope.jeZdravnik.nimaPac = true;
+              }else{
+                  mojScope.jeZdravnik.nimaPac = false;
+              }
+
               zdravnikoviPacientiNalozeni = true;
+
+              if( ! angular.isUndefined($rootScope.izbraniUporabId) ){
+                  Uporabniki.get({ limit:1, iduporabnik:$rootScope.izbraniUporabId }).$promise.then(function (response) {
+                      $scope.posodobiPacienta( response );
+                  });
+              }
+
+              mojScope.jeZdravnik.placeholderBes = "Izberite pacienta...";
           });
 
       }
