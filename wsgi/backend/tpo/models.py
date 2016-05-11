@@ -26,7 +26,7 @@ class Uporabnik(User):
     is_deleted = models.BooleanField(default=False)
     telefon = models.CharField(max_length=100, blank=True, null=True)
     kontaktna_oseba = models.ForeignKey('KontaktnaOseba', blank=True, null=True)
-    oskrbovanci = models.ManyToManyField('self')
+    oskrbovanci = models.ManyToManyField('self', blank=True)
 
 class Zdravnik(User):
     ime = models.CharField(max_length=100, blank=True)

@@ -39,7 +39,7 @@
     <![endif]-->
 </head>
 <body class="skin-green sidebar-mini" ng-app="tpo">
-  <div class="wrapper">
+  <div class="wrapper" ng-controller="IndexCtrl">
 
     <!-- Main Header -->
     <header class="main-header">
@@ -120,6 +120,7 @@
                 </ui-select-match>
                 <ui-select-choices repeat="oskrbovanec in (profili | filter: $select.search)">
                     <span>{{oskrbovanec.ime}} {{oskrbovanec.priimek}}</span>
+                    <span ng-show="oskrbovanec.ime.length == 0 || oskrbovanec.priimek.length == 0">Nepopoln profil!</span>
                 </ui-select-choices>
             </ui-select>
         </div>
@@ -131,7 +132,7 @@
           <!-- Optionally, you can add icons to the links -->
           <li><a ui-sref="nadzornaPlosca"><i class="fa fa-home"></i> <span>Nadzorna plošča</span></a></li>
           <li><a href="#"><i class="fa fa-heartbeat"></i> <span>Meritve</span></a></li>
-          <li><a ui-sref="dodajPregled" ng-show="isDoctor"><i class="fa fa-file-text-o"></i> <span>Dodaj pregled</span></a></li>
+
 
           <li ng-show="isSuperU"><a href="#/registracijaAdmin"><i class="fa fa-gear"></i> <span>Registracija osebja</span></a></li>
             <!--
@@ -142,7 +143,8 @@
 
           <li><a ui-sref="listPregledov"><i class="fa fa-stethoscope"></i> <span>Pregledi</span></a></li>
           <li class="header">Administrativne akcije</li>
-          <li><a href="#"><i class="fa fa-user-plus"></i> <span>Dodaj oskrbovanca</span></a></li>
+          <li ng-hide="isDoctor"><a ng-click="ustvariOskrbovanca()"><i class="fa fa-user-plus"></i> <span>Dodaj oskrbovanca</span></a></li>
+          <li ng-show="isDoctor"><a ui-sref="dodajPregled" ><i class="fa fa-file-text-o"></i> <span>Dodaj pregled</span></a></li>
 
         </ul>
         <!-- /.sidebar-menu -->
@@ -213,6 +215,7 @@
   <script src="scripts/controllers/registracijaUporabnikaAdmin.js"></script>
   <script src="scripts/services/services.js"></script>
   <script src="scripts/controllers/dodajPregled.js"></script>
+  <script src="scripts/controllers/index.js"></script>
   <!-- endbuild -->
 
 

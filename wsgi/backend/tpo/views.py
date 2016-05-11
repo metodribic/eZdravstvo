@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.hashers import make_password
 from django.core.serializers import json
 from rest_framework import viewsets, status, filters
 from rest_framework.decorators import api_view, permission_classes, list_route
@@ -33,6 +34,7 @@ from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSeriali
     LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer, SifrantRegistriranihSerializer, \
     VrednostiMeritevSerializer, KontaktnaOsebaSerializer
 
+import random
 
 
 
@@ -392,8 +394,12 @@ def registracijaPacient(request, format=None):
     try:
         #print(request.data)
         # check if email and password are received or return 400
-        mail = request.data['email']
-        password = request.data['password']
+        if request.data['oskrbovanec']:
+            mail = request.data['email']
+            password = 'pbkdf2_sha256$24000$57Yuhx3LYR5c$/Mnf5vRoMky/AL38imTepBSZunwzNcs74qz5r4SZtsE=';
+        else:
+            mail = request.data['email']
+            password = request.data['password']
 
          #opcijska polja
         ime = request.data.get('ime', "")
@@ -433,16 +439,25 @@ def registracijaPacient(request, format=None):
 
 
             #posljes mail za aktivacijo
-            send_mail('Aktivacija eZdravstvo', 'Uspesno ste se registrirali na portal eZdravstvo. Za aktivacijo profila, kliknite na spodnji naslov: \n\n\n' +
+            if not(request.data['oskrbovanec']):
+                send_mail('Aktivacija eZdravstvo', 'Uspesno ste se registrirali na portal eZdravstvo. Za aktivacijo profila, kliknite na spodnji naslov: \n\n\n' +
                       settings.API_URL+'/activate/?email='+mail, 'ezdravstvo.tpo7@gmail.com', [mail], fail_silently=False)
+
+            if request.data['oskrbovanec']:
+                lastnik = Uporabnik.objects.get(id = request.data['lastnik'])
+                lastnik.oskrbovanci.add(pacient.pk)
+                lastnik.save()
 
             respons = JSONResponse({"success": "function : {'user created':'Pacient'}"})
             respons.status_code = 201
+            respons.pacient = pacient.pk;
             return respons
+
 
 
         respons = JSONResponse({"success": "function : {'user created':'Pacient'}"})
         respons.status_code = 201
+        respons.pacient = pacient;
         return respons
 
     except ValidationError as ve:
