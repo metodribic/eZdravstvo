@@ -146,7 +146,6 @@ angular.module('tpo')
       //ustvari Meritev
       $scope.ustvariMeritev=function (izbranaMeritev) {
 
-
             mojScope.prikaziGlukozo = false;
             mojScope.prikaziKrvni = false;
             mojScope.prikaziSrcni = false;

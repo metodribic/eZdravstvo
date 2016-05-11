@@ -430,30 +430,45 @@ def ustvariPregled(request, format=None):
         #datum_naslednjega = request.data['datum_naslednjega']
         opombe = request.data['opombe']
 
+
         #print request.data
 
         zdravnik = Zdravnik.objects.get(id=zdravnikID)
         uporabnik = Uporabnik.objects.get(id=uporabnikID)
 
 
+        pregled = Pregled.objects.create(opombe=opombe,
+                                         datum=datum_pregleda,
+                                         zdravnik=zdravnik,
+                                         datum_naslednjega=datum_pregleda,
+                                         uporabnik=uporabnik)
 
-        #pohendlaj diete
 
-        """
-        bla1=0
+        # pohendlaj diete
         for d in dieta:
-            #print d
-            dieta = Dieta.objects.create(id = bla1, naziv = d["naziv"], pregled
-            bla1+=1
-        """
+            pregled.dieta.add(Dieta.objects.create(naziv=d["naziv"], sifra=d["sifra"]))
 
-        pregled = Pregled.objects.create(opombe = opombe, datum = datum_pregleda, uporabnik = uporabnik, zdravnik = zdravnik, datum_naslednjega = datum_pregleda)
-        print(pregled)
 
+        # pohendlaj bolezni
+        for b in bolezen:
+            pregled.bolezen.add(Bolezni.objects.create(naziv=b["naziv"], mkb10=b["mkb10"], alergija=b["alergija"]))
+
+
+        #pohendlaj zdravila
+        for z in zdravilo:
+            pregled.zdravilo.add(Zdravilo.objects.create(zdravilo=z["zdravilo"]))
+
+
+        #pohendlaj meritve
         for m in meritve:
-            #print m
             vrednostMeritev = VrednostiMeritev.objects.get(id=m["id"])
-            meritve = Meritev.objects.create(tip_meritve = vrednostMeritev, vrednost_meritve = izmerjena_vrednost_meritve, datum = datum_pregleda, uporabnik_id = uporabnikID, pregled = pregled)
+            meritve = Meritev.objects.create(tip_meritve=vrednostMeritev,
+                                             vrednost_meritve=izmerjena_vrednost_meritve,
+                                             datum=datum_pregleda,
+                                             uporabnik_id=uporabnikID,
+                                             pregled=pregled)
+
+
 
         return Response()
 
