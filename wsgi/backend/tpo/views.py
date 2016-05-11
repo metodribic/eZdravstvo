@@ -417,8 +417,6 @@ def ustvariPregled(request, format=None):
     """
     try:
 
-        #pprint(request.data)
-
         datum_pregleda = request.data['datum_pregleda']
         zdravnikID = request.data['zdravnik']
         uporabnikID = request.data['uporabnik']
@@ -430,8 +428,6 @@ def ustvariPregled(request, format=None):
         #datum_naslednjega = request.data['datum_naslednjega']
         opombe = request.data['opombe']
 
-
-        #print request.data
 
         zdravnik = Zdravnik.objects.get(id=zdravnikID)
         uporabnik = Uporabnik.objects.get(id=uporabnikID)
