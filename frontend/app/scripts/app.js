@@ -81,6 +81,11 @@ angular
               controller: 'ProfileCtrl'
           })
 
+          .state('prijavaPregled', {
+              url: '/prijavaPregled',
+              templateUrl: '../views/prijavaPregled.html'
+          })
+
           .state('dodajPregled', {
               url: '/dodajpregled',
               templateUrl: '../views/dodajPregled.html',

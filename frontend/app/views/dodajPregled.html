@@ -11,7 +11,7 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Datum pregleda:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" disabled ng-model="datum">
+                <input type="text" class="form-control" disabled ng-model="datum_pregleda">
               </div>
             </div>
 
@@ -19,7 +19,7 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Zdravnik:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" disabled ng-model="trenutniZdravnik"> <div>{{uporabnik.ime}} {{uporabnik.priimek}}</div>
+                <input type="text" class="form-control" disabled ng-model="trenutniZdravnik">
               </div>
             </div>
 
@@ -40,7 +40,7 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Meritve:</label>
                 <div class="col-sm-10">
-                    <ui-select  multiple ng-model="izbranaMeritev" on-select="ustvariMeritev(izbranaMeritev)">
+                    <ui-select  multiple ng-model="izbranaMeritev" on-select="ustvariMeritev(izbranaMeritev)" on-remove="ustvariMeritev(izbranaMeritev)">
                         <ui-select-match placeholder="Izberite meritev...">{{$item.tip}}</ui-select-match>
                         <ui-select-choices repeat="meritev in vrednosti_meritev">
                             <div ng-bind-html="meritev.tip"> {{meritev.tip}} </div>
@@ -48,6 +48,44 @@
                     </ui-select>
                 </div>
             </div>
+
+
+            <!-- VREDNOSTI MERITEV -->
+            <div class="form-group" ng-show="prikaziGlukozo" on-remove="ustvariMeritev(izbranaMeritev)">
+                <label class="control-label col-sm-2">Glukoza:</label>
+                <div class="col-sm-10">
+                    <input type="number" />
+                </div>
+             </div>
+
+             <div class="form-group" ng-show="prikaziKrvni">
+                <label class="control-label col-sm-2">Krvni pritisk:</label>
+                <div class="col-sm-10">
+                    <input type="number" />
+                </div>
+             </div>
+
+             <div class="form-group" ng-show="prikaziSrcni">
+                <label class="control-label col-sm-2">Srčni pritisk:</label>
+                <div class="col-sm-10">
+                    <input type="number" />
+                </div>
+             </div>
+
+             <div class="form-group" ng-show="prikaziTeza">
+                <label class="control-label col-sm-2">Teža:</label>
+                <div class="col-sm-10">
+                    <input type="number" />
+                </div>
+             </div>
+
+             <div class="form-group" ng-show="prikaziTemperatura">
+                <label class="control-label col-sm-2">Telesna temperatura:</label>
+                <div class="col-sm-10">
+                    <input type="number" />
+                </div>
+             </div>
+
 
             <!-- bolezni -->
             <div class="form-group" >
@@ -101,7 +139,7 @@
               </div>
             </div>
 
-            <!-- datum naslednjega -->
+            <!-- datum naslednjega
             <div class="form-group">
               <label class="control-label col-sm-2">Datum naslednjega:</label>
               <div class="col-sm-10">
@@ -117,6 +155,13 @@
                     <li><a href="#">Izberite poljuben datum ...</a></li>
                   </ul>
                 </div>
+              </div>
+            </div>
+            -->
+
+              <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default" ui-sref="prijavaPregled">Prijavi na pregled</button>
               </div>
             </div>
 
