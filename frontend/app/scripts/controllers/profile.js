@@ -189,6 +189,8 @@ angular.module('tpo')
           }
 
           for(var i=0; i<response.length; i++) {
+              if(!response[i].sprejema_paciente || response[i].prosta_mesta < 1)
+                  continue;
               if(response[i].tip === "zobozdravnik")
                   zobo.push(response[i]);
               else
