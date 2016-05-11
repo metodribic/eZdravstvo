@@ -112,7 +112,7 @@
             <a  target="_self">{{uporabnik.role.naziv}}</a>
           </div>
         </div>
-        <div class="izbiraOskrbovanca">
+        <div class="izbiraOskrbovanca" ng-show="!isDoctor">
             <p>Izbrani uporabnik</p>
             <ui-select ng-model="selected.value" on-select="changeUser($item, $model)">
                 <ui-select-match>
@@ -141,17 +141,8 @@
 
 
           <li><a ui-sref="listPregledov"><i class="fa fa-stethoscope"></i> <span>Pregledi</span></a></li>
-
-          <!-- <li class="treeview">
-            <a href="#"><i class="fa fa-medkit"></i> <span>Šifranti</span> <i class="fa fa-angle-left pull-right"></i></a>
-            <ul class="treeview-menu">
-              <li><a href="#">Alergije</a></li>
-              <li><a href="#">Ostalo</a></li>
-            </ul>
-          </li> -->
-
-
-
+          <li class="header">Administrativne akcije</li>
+          <li><a href="#"><i class="fa fa-user-plus"></i> <span>Dodaj oskrbovanca</span></a></li>
 
         </ul>
         <!-- /.sidebar-menu -->
