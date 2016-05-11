@@ -108,7 +108,7 @@ class Pregled(models.Model):
     opombe = models.CharField(max_length=2048)
     datum = models.DateField()
     zdravnik = models.ForeignKey('Zdravnik')
-    meritve = models.ForeignKey('Meritev')
+    #meritve = models.ForeignKey('Meritev')
     bolezen = models.ManyToManyField('Bolezni')
     zdravilo = models.ManyToManyField('Zdravilo')
     dieta = models.ManyToManyField('Dieta')
@@ -145,6 +145,7 @@ class Meritev(models.Model):
     vrednost_meritve = models.CharField(max_length=100)
     datum = models.DateField()
     uporabnik = models.ForeignKey('Uporabnik')
+    pregled = models.ForeignKey('Pregled')
 
 
 class IPLock(models.Model):
