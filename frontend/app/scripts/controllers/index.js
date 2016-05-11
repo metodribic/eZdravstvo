@@ -12,7 +12,6 @@ angular.module('tpo')
       oskrbovanec.$save(function(response){
         Uporabniki.get({iduporabnik: $rootScope.user.id}).$promise.then(function(response){
           Notification.success('Oskrbovanec uspešno ustvarjen!');
-          console.log(response);
           $rootScope.uporabnik = response;
           $rootScope.user = response;
           $rootScope.profili = [$rootScope.user];
