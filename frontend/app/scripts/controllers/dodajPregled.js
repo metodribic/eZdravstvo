@@ -51,11 +51,11 @@ angular.module('tpo')
       }
 
       // formatiraj string za prikaz trneutnega zdravnika
-      //$scope.trenutniZdravnik = $rootScope.uporabnik.ime +' '+$rootScope.uporabnik.priimek + naziv;
+      $scope.trenutniZdravnik = $rootScope.uporabnik.ime +' '+$rootScope.uporabnik.priimek + naziv;
 
       // pridobi ustrezen datum
       // datum_pregleda = new Date();
-        datum_pregleda = moment();
+        // datum_pregleda = moment();
       $scope.datum_pregleda = moment().format("DD.MM.YYYY");
 
       //pridobi vse bolezni za izbiro
@@ -85,6 +85,8 @@ angular.module('tpo')
 
 
       mojScope = $scope;
+
+
 
       //moj scope, v katerega shranjujem vse kar je v pregledu
       mojScope.pregled = new DodajPregled();
@@ -138,9 +140,33 @@ angular.module('tpo')
         mojScope.pregled.uporabnik = izbranPacient;
       }
 
+
+        
+        
       //ustvari Meritev
       $scope.ustvariMeritev=function (izbranaMeritev) {
 
+
+            mojScope.prikaziGlukozo = false;
+            mojScope.prikaziKrvni = false;
+            mojScope.prikaziSrcni = false;
+            mojScope.prikaziTeza = false;
+            mojScope.prikaziTemperatura = false;
+
+
+        for (meritev of izbranaMeritev)  {
+            if(meritev.tip === "Glukoza") {
+                mojScope.prikaziGlukozo = true;
+            }else if (meritev.tip === "Krvni pritisk") {
+                mojScope.prikaziKrvni = true;
+            }else if (meritev.tip === "Srčni pritisk") {
+                mojScope.prikaziSrcni = true;
+            }else if (meritev.tip === "Teža") {
+                mojScope.prikaziTeza = true;
+            }else {
+                mojScope.prikaziTemperatura = true;
+            }
+        }
         mojScope.pregled.meritve = izbranaMeritev;
        //console.log(mojScope.pregled.meritve);
         //console.log(m);
