@@ -52,7 +52,7 @@ angular.module('tpo')
                   mojScope.bolezni = uporabnikZdravnika.bolezni;
                   mojScope.diete = uporabnikZdravnika.dieta;
                   mojScope.zdravila = uporabnikZdravnika.zdravila;
-                  //$rootScope.changeUser(uporabnikZdravnika, uporabnikZdravnika);  // zamenjejmo userja
+                  // zamenjejmo userja
 
                   var id = uporabnikZdravnika.id;
                   if(!id) {
@@ -111,7 +111,6 @@ angular.module('tpo')
           // je skor zdravnik
           $scope.omogociIzbiranjePacienta = true;
           $scope.izbranPacient = false;
-
 
           $http.defaults.headers.common.pacient = $rootScope.user.id;
           /* GET Pacienti tega zdravnika */
