@@ -21,7 +21,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.core.mail import send_mail
 from django.conf import settings
-
+from pprint import pprint
 
 
 # Create your views here.
@@ -85,6 +85,19 @@ class MeritevViewSet(viewsets.ModelViewSet):
 
         return Meritev.objects.filter(uporabnik=user)
 
+
+#MERITVE SEZNAM
+class VrednostiMeritevViewSet(viewsets.ModelViewSet):
+    queryset = VrednostiMeritev.objects.all()
+    serializer_class = VrednostiMeritevSerializer
+
+    @list_route(methods=['GET'])
+    def seznam(self, request):
+        queryset = VrednostiMeritev.objects.all()
+        serializer = VrednostiMeritevSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+
+
 # POSTA
 class PostaViewSet(viewsets.ModelViewSet):
     queryset = Posta.objects.all()
@@ -145,6 +158,12 @@ class DietaViewSet(viewsets.ModelViewSet):
     queryset = Dieta.objects.all()
     serializer_class = DietaSerializer
 
+    @list_route(methods=['GET'])
+    def seznam(self, request):
+        queryset = Dieta.objects.all()
+        serializer = DietaSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+
     def get_queryset(self):
         user = self.request.user
         try:
@@ -181,11 +200,18 @@ class BolezniViewSet(viewsets.ModelViewSet):
         return Bolezni.objects.filter(uporabnik = user)
 
 
-@permission_classes((IsAuthenticated,))
+
 # ZDRAVILO
+@permission_classes((IsAuthenticated,))
 class ZdraviloViewSet(viewsets.ModelViewSet):
     queryset = Zdravilo.objects.all()
     serializer_class = ZdraviloSerializer
+
+    @list_route(methods=['GET'])
+    def seznam(self, request):
+        queryset = Zdravilo.objects.all()
+        serializer = ZdraviloSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
 
     def get_queryset(self):
         user = self.request.user
@@ -378,6 +404,71 @@ def registracijaAdmin(request, format=None):
         return respons
 
     except Exception as ex:
+        traceback.print_exc()
+        response = JSONResponse({"error" : "Usage: {'email':'someone@someplace', 'password':'password'}"})
+        response.status_code = 400 # Bad request
+        return response
+
+
+@api_view(['POST'])
+def ustvariPregled(request, format=None):
+    """
+    Create PREGLED
+    """
+    try:
+
+        #pprint(request.data)
+
+        datum_pregleda = request.data['datum_pregleda']
+        zdravnikID = request.data['zdravnik']
+        uporabnikID = request.data['uporabnik']
+        meritve = request.data['meritve']
+        izmerjena_vrednost_meritve = request.data['vrednost_meritve']
+        bolezen = request.data['bolezen']
+        zdravilo = request.data['zdravilo']
+        dieta = request.data['dieta']
+        #datum_naslednjega = request.data['datum_naslednjega']
+        opombe = request.data['opombe']
+
+        #print request.data
+
+        zdravnik = Zdravnik.objects.get(id=zdravnikID)
+        uporabnik = Uporabnik.objects.get(id=uporabnikID)
+
+        datum_pregledaTMP = datum_pregleda.split(".")
+
+
+        pregled = Pregled.objects.create(id = "13", opombe = opombe, datum = datum_pregleda, uporabnik = uporabnik, zdravnik = zdravnik, datum_naslednjega = datum_pregleda)
+
+        bla=0
+        for m in meritve:
+            #print m
+            vrednostMeritev = VrednostiMeritev.objects.get(id=m["id"])
+            meritve = Meritev.objects.create(id = bla, tip_meritve = vrednostMeritev, vrednost_meritve = izmerjena_vrednost_meritve, datum = datum_pregleda, uporabnik_id = uporabnikID, pregled = pregled)
+            bla+=1
+
+
+
+
+
+        return Response()
+
+    except ValidationError as ve:
+        print ve
+        response = JSONResponse({"error": "WeakPassword"})
+        response.status_code = 400
+        return response
+    except IntegrityError as e:
+        #Exception raised when the relational integrity of the database
+        #is affected, e.g. a foreign key check fails, duplicate key, etc.
+
+        traceback.print_exc()
+        respons = JSONResponse({"error": "{'type' : 'Integrity error'}"})
+        respons.status_code = 422
+        return respons
+
+    except Exception as ex:
+        print ex
         traceback.print_exc()
         response = JSONResponse({"error" : "Usage: {'email':'someone@someplace', 'password':'password'}"})
         response.status_code = 400 # Bad request
@@ -662,11 +753,6 @@ def changePassword(request, format=None):
 class SifrantRegistriranihViewSet(viewsets.ModelViewSet):
     queryset = SifrantRegistriranih.objects.all()
     serializer_class = SifrantRegistriranihSerializer
-
-
-class VrednostiMeritevViewSet(viewsets.ModelViewSet):
-    queryset = VrednostiMeritev.objects.all()
-    serializer_class = VrednostiMeritevSerializer
 
 
 class KontaktnaOsebaViewSet(viewsets.ModelViewSet):

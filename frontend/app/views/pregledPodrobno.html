@@ -32,11 +32,11 @@
                 <td>{{pregled.zdravnik.naziv}} {{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
               <tr>
                 <td><b>Meritve:</b></td>
-                  <td ng-hide = "pregled.meritve.length == 0">
-                      {{pregled.meritve.tip_meritve.tip}}&nbsp;<i>(šifra: {{pregled.meritve.tip_meritve.sifra}})</i>: <b>{{pregled.meritve.vrednost_meritve}}</b>
-                      <!-- <i>(Normalno med: {{pregled.meritve.tip_meritve.normalno_min}} in {{pregled.meritve.tip_meritve.normalno_max}})</i> -->
+                  <td ng-hide = "meritve.length == 0" ng-repeat="meritev in meritve">
+                      {{meritev.tip_meritve.tip}}&nbsp;<i>(šifra: {{meritev.tip_meritve.sifra}})</i>:
+                      <b>{{meritev.vrednost_meritve}}</b>
                   </td>
-                  <span ng-show = "pregled.meritve.length == 0">/</span>
+                  <span ng-show = "meritve.length == 0">/</span>
               </tr>
               <tr>
                 <td><b>Bolezni:</b></td>
@@ -81,6 +81,13 @@
                 <td>
                     <span ng-repeat="zdravilo in pregled.zdravilo">/</span>
                     <span ng-show="pregled.zdravilo.length == 0">/</span>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Opombe:</b></td>
+                <td>
+                    <span ng-show="pregled.opombe.length > 0">{{pregled.opombe}}</span>
+                    <span ng-show="pregled.opombe.length == 0">/</span>
                 </td>
               </tr>
               <tr>

@@ -4,7 +4,7 @@ from rest_framework import routers
 from tpo.views import UporabnikiViewSet, PreglediViewSet, PostaViewSet, AmbulantaViewSet, UstanovaViewSet, ZdravnikViewSet, \
     OsebjeViewSet, MeritevViewSet, DietaViewSet, BolezniViewSet, ZdraviloViewSet, RolesViewSet, login,\
     NavodiloDietaViewSet, changePassword, ZdravnikUporabnikiViewSet, registracijaAdmin, registracijaPacient, aktivacija, \
-    SifrantRegistriranihViewSet, VrednostiMeritevViewSet, KontaktnaOsebaViewSet, changeZdravnik    
+    SifrantRegistriranihViewSet, VrednostiMeritevViewSet, KontaktnaOsebaViewSet, changeZdravnik, ustvariPregled
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'uporabniki', UporabnikiViewSet)
@@ -33,5 +33,6 @@ urlpatterns = [
     url(r'registracijaAdmin', registracijaAdmin),
     url(r'activate', aktivacija),
     url(r'registracijaPacient', registracijaPacient),
-    url(r'menjava_zdravnika', changeZdravnik)
+    url(r'menjava_zdravnika', changeZdravnik),
+    url(r'ustvariPregled', ustvariPregled)
 ]
