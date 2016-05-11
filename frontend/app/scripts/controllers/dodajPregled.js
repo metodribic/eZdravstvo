@@ -21,10 +21,10 @@ v pacientovi nadzorni plošči in obsegajo:
 */
 
 angular.module('tpo')
-  .controller('DodajPregledCtrl', ['$scope','$state','Uporabniki','$rootScope','AuthService','Pregled','Meritve',
+  .controller('DodajPregledCtrl', ['$scope','$state','Uporabniki','$rootScope','AuthService','Pregled', 'DodajPregled','Meritve',
     'VrednostiMeritevSeznam', 'Bolezni', 'BolezniSeznam', 'Zdravila', 'ZdravilaSeznam', 'Diete', 'DieteSeznam',
     'ZdravnikoviPacienti','Notification',
-    function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled, Meritve,
+    function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled, DodajPregled, Meritve,
               VrednostiMeritevSeznam, Bolezni, BolezniSeznam, Zdravila, ZdravilaSeznam,
               Diete, DieteSeznam, ZdravnikoviPacienti, Notification) {
 
@@ -51,11 +51,12 @@ angular.module('tpo')
       }
 
       // formatiraj string za prikaz trneutnega zdravnika
-      $scope.trenutniZdravnik = $rootScope.uporabnik.ime +' '+$rootScope.uporabnik.priimek + naziv;
+      //$scope.trenutniZdravnik = $rootScope.uporabnik.ime +' '+$rootScope.uporabnik.priimek + naziv;
 
       // pridobi ustrezen datum
-      var datum = new Date();
-      $scope.datum = datum.getDay() +'.'+ datum.getMonth() +'.' +datum.getFullYear();
+      // datum_pregleda = new Date();
+        datum_pregleda = moment();
+      $scope.datum_pregleda = moment().format("DD.MM.YYYY");
 
       //pridobi vse bolezni za izbiro
       BolezniSeznam.query().$promise.then(function(response){
@@ -86,22 +87,28 @@ angular.module('tpo')
       mojScope = $scope;
 
       //moj scope, v katerega shranjujem vse kar je v pregledu
-      mojScope.pregled = new Pregled();
+      mojScope.pregled = new DodajPregled();
 
 
       //funkcija, ki ustvari pregled
       $scope.ustvariPregled=function () {
         $scope.besedZaUpor = "";
-        var a = new Pregled();
+        var a = new DodajPregled();
 
-        a.datum = mojScope.datum;
-        a.zdravnik = mojScope.trenutniZdravnik;
-        a.uporabnik = mojScope.pregled.uporabnik;
+        a.datum_pregleda = moment(mojScope.datum_pregleda, "DD.MM.YYYY").format("YYYY-MM-DD");
+        a.zdravnik = $rootScope.uporabnik.id;
+        a.uporabnik = mojScope.pregled.uporabnik.id;
         a.meritve = mojScope.pregled.meritve;
+        a.vrednost_meritve = "dopolni";
         a.bolezen = mojScope.pregled.bolezen;
         a.zdravilo = mojScope.pregled.zdravilo;
         a.dieta = mojScope.pregled.dieta;
         a.opombe = mojScope.opombe;
+
+
+        console.log(a.datum);
+
+        //console.log(a.uporabnik.id);
         //a.datum_naslednjega = $scope.datum_naslednjega;
 
         //shranim pregled in pocakam na response

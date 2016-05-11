@@ -21,7 +21,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.core.mail import send_mail
 from django.conf import settings
-
+from pprint import pprint
 
 
 # Create your views here.
@@ -411,23 +411,47 @@ def registracijaAdmin(request, format=None):
 
 
 @api_view(['POST'])
-def dodajPregled(request, format=None):
+def ustvariPregled(request, format=None):
     """
     Create PREGLED
     """
     try:
-        datum_pregleda = request.data['datum_pregleda']
-        zdravnik = request.data['zdravnik']
-        uporabnik = request.data('uporabnik')
-        meritve = request.data('meritve')
-        bolezen = request.data('bolezen')
-        zdravilo = request.data('zdravilo')
-        dieta = request.data('dieta')
-        datum_naslednjega = request.data('datum_naslednjega')
-        opombe = request.data.get('opombe', "")
 
-        pregled = Pregled.objects.create(datum_pregleda = datum_pregleda, zdravnik = zdravnik, uporabnik = uporabnik,
-                                         meritve = meritve, bolezen = bolezen, zdravilo = zdravilo, dieta = dieta, datum_naslednjega = datum_naslednjega, opombe = opombe)
+        #pprint(request.data)
+
+        datum_pregleda = request.data['datum_pregleda']
+        zdravnikID = request.data['zdravnik']
+        uporabnikID = request.data['uporabnik']
+        meritve = request.data['meritve']
+        izmerjena_vrednost_meritve = request.data['vrednost_meritve']
+        bolezen = request.data['bolezen']
+        zdravilo = request.data['zdravilo']
+        dieta = request.data['dieta']
+        #datum_naslednjega = request.data['datum_naslednjega']
+        opombe = request.data['opombe']
+
+        #print request.data
+
+        zdravnik = Zdravnik.objects.get(id=zdravnikID)
+        uporabnik = Uporabnik.objects.get(id=uporabnikID)
+
+        datum_pregledaTMP = datum_pregleda.split(".")
+
+
+        pregled = Pregled.objects.create(id = "13", opombe = opombe, datum = datum_pregleda, uporabnik = uporabnik, zdravnik = zdravnik, datum_naslednjega = datum_pregleda)
+
+        bla=0
+        for m in meritve:
+            #print m
+            vrednostMeritev = VrednostiMeritev.objects.get(id=m["id"])
+            meritve = Meritev.objects.create(id = bla, tip_meritve = vrednostMeritev, vrednost_meritve = izmerjena_vrednost_meritve, datum = datum_pregleda, uporabnik_id = uporabnikID, pregled = pregled)
+            bla+=1
+
+
+
+
+
+        return Response()
 
     except ValidationError as ve:
         print ve
@@ -444,6 +468,7 @@ def dodajPregled(request, format=None):
         return respons
 
     except Exception as ex:
+        print ex
         traceback.print_exc()
         response = JSONResponse({"error" : "Usage: {'email':'someone@someplace', 'password':'password'}"})
         response.status_code = 400 # Bad request

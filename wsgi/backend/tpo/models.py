@@ -104,11 +104,10 @@ class Zdravilo(models.Model):
 
 
 class Pregled(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     opombe = models.CharField(max_length=2048)
     datum = models.DateField()
     zdravnik = models.ForeignKey('Zdravnik')
-    #meritve = models.ForeignKey('Meritev')
     bolezen = models.ManyToManyField('Bolezni')
     zdravilo = models.ManyToManyField('Zdravilo')
     dieta = models.ManyToManyField('Dieta')

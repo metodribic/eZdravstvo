@@ -17,6 +17,15 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
+
+.factory('DodajPregled', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/ustvariPregled', {
+		update: {
+			method: 'POST'
+		}
+	});
+})
+
 	
 .factory('Posta', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/posta/:postaId', { postaId: '@postaId' }, {
