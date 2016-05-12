@@ -13,7 +13,6 @@ angular.module('tpo')
         Uporabniki.get({iduporabnik: $rootScope.user.id}).$promise.then(function(response){
           Notification.success('Oskrbovanec uspešno ustvarjen!');
           $rootScope.uporabnik = response;
-          $rootScope.user = response;
           $rootScope.profili = [$rootScope.user];
           $rootScope.profili = $rootScope.profili.concat(response.oskrbovanci);
           $rootScope.selected = { value: $rootScope.profili[0].ime + " " + $rootScope.profili[0].priimek };

@@ -699,9 +699,11 @@ def changeZdravnik(request, format=None):
             else:  
                 sameZdravnik = False #So we don't add the same relation
                 sameZobozdravnik = False 
+                responseZdravniki = {}
                 
                 # Loop over relations and modify/delete if necessary
                 for r in rels:  #Replace relations
+                    print r
                     if r.zdravnik.id == zobozdravnikId:
                         sameZobozdravnik = True
                     if r.zdravnik.id == zdravnikId:
@@ -718,15 +720,18 @@ def changeZdravnik(request, format=None):
                         r.zdravnik.save()
                         
                 if zobozdravnikId > -1 and sameZobozdravnik == False: #Changing zobozdravnik
-                        UporabnikZdravnik.objects.create(uporabnik_id = id, zdravnik_id = zobozdravnikId)
-                        zobozdravnik.prosta_mesta -= 1
-                        zobozdravnik.save()
+                    UporabnikZdravnik.objects.create(uporabnik_id = id, zdravnik_id = zobozdravnikId)
+                    zobozdravnik.prosta_mesta -= 1
+                    zobozdravnik.save()
+                    serializer = ZdravnikSerializer(zobozdravnik, context={'request': request})
+                    responseZdravniki['zobozdravnik'] = serializer.data
                 if zdravnikId > -1 and sameZdravnik == False: #Changing zobozdravnik
                     UporabnikZdravnik.objects.create(uporabnik_id = id, zdravnik_id = zdravnikId)
                     zdravnik.prosta_mesta -= 1
                     zdravnik.save()
-
-            return Response()
+                    serializer = ZdravnikSerializer(zdravnik, context={'request': request})
+                    responseZdravniki['zdravnik'] = serializer.data
+            return JSONResponse(responseZdravniki)
         except ObjectDoesNotExist:
             response = JSONResponse({"error": "User does not exist"})
             response.status_code = 400

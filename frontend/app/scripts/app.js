@@ -165,6 +165,12 @@ angular
           $rootScope.uporabnik.posta.id = parseInt($rootScope.uporabnik.posta.id);
         }
 
+        // zračuni id od kontaktne osebe oskrbovanca
+        if($rootScope.uporabnik.kontaktna_oseba !== null && !$rootScope.uporabnik.kontaktna_oseba.id && $rootScope.uporabnik.kontaktna_oseba.url){
+            var a = $rootScope.uporabnik.kontaktna_oseba;
+            a.id = a.url.substring(a.url.lastIndexOf('/')+1);
+        }
+
         // zračuni id od pošte za kontaktna_oseba od oskrbovanca
         if($rootScope.uporabnik.kontaktna_oseba !== null && $rootScope.uporabnik.kontaktna_oseba.posta !== null && $rootScope.uporabnik.kontaktna_oseba.posta.id === undefined){
           $rootScope.uporabnik.kontaktna_oseba.posta.id = $rootScope.uporabnik.kontaktna_oseba.posta.url.substring($rootScope.uporabnik.kontaktna_oseba.posta.url.length - 4);
