@@ -6,10 +6,10 @@
 /* Controler za podrobni pogled pregleda*/
 
 angular.module('tpo')
-  .controller('ListPregledovZdravnikCtrl', ['$scope','PregledZdravnik', function ($scope, PregledZdravnik) {
+  .controller('ListPregledovCtrl', ['$scope','Pregled', function ($scope, Pregled) {
         //pridobi preglede vseh zdravnikovih pacientov
       
-        PregledZdravnik.query().$promise.then(function(response){
+        Pregled.query().$promise.then(function(response){
         $scope.pregledi = response;
         // console.log($scope.pregledi);
     });

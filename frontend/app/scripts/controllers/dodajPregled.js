@@ -155,6 +155,7 @@ angular.module('tpo')
 
         for (meritev of izbranaMeritev)  {
             if(meritev.tip === "Glukoza") {
+                //console.log(mojScope.glukozaMeritev);
                 mojScope.prikaziGlukozo = true;
             }else if (meritev.tip === "Krvni pritisk") {
                 mojScope.prikaziKrvni = true;
@@ -171,6 +172,8 @@ angular.module('tpo')
         //console.log(m);
       }
 
+
+      //TOLE JE TREBA POGLEDAT, ZARADI TEGA NE DELUJE BRISANJE ZDRAVIL
       //funkcija za pridobivanje zdravil
       $scope.ustvariBolezen = function (izbraneBolezni) {
         $scope.izbranaZdravila = [];
