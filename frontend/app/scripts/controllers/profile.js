@@ -274,7 +274,7 @@ angular.module('tpo')
             $rootScope.uporabnik.zdravnik.push(nov);
             return;
         }
-        for(let i=0; i<z.length; i++) {
+        for(var i=0; i<z.length; i++) {
             //Replace
             if(nov !== -1 && nov !== -2 && (nov.tip !== "zobozdravnik" && z[i].tip !== "zobozdravnik" || 
                                             nov.tip === "zobozdravnik" && z[i].tip === "zobozdravnik" )) {

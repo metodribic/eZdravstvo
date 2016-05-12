@@ -110,7 +110,8 @@ angular.module('tpo')
 
         //mojScope.rezultatiMeritev = [];
 
-        for (meritev of $scope.test)  {
+        for (var i=0; i<$scope.test.length; i++)  {
+            var meritev = $scope.test[i];
             if(meritev.tip === "Glukoza") {
                 //ce je v mejah normale, ga sprejmi
                 if (mojScope.glukozaMeritev>= 0 && mojScope.glukozaMeritev<=50) {
@@ -190,7 +191,8 @@ angular.module('tpo')
 
            mojScope.rezultatiMeritev = [];
 
-        for (meritev of izbranaMeritev)  {
+        for (var i=0; i<izbranaMeritev.length; i++)  {
+            var meritev = izbranaMeritev[i];
             if(meritev.tip === "Glukoza") {
                 mojScope.prikaziGlukozo = true;
             }else if (meritev.tip === "Krvni pritisk") {
@@ -211,9 +213,11 @@ angular.module('tpo')
       $scope.ustvariBolezen = function (izbraneBolezni) {
         $scope.izbranaZdravila = [];
 
-        for (bolezen of izbraneBolezni) {
-            for (zdravilo of bolezen.zdravilo) {
-                $scope.izbranaZdravila.push(zdravilo);
+        for (var i=0; i<izbraneBolezni.length; i++)  {
+            var bolezen = izbraneBolezni[i];
+            for (var j=0; j<bolezen.zdravilo.length; j++) {
+                for(var k=0; k<bolezen.zdravilo.length; k++)
+                    $scope.izbranaZdravila.push(bolezen.zdravilo[i]);
             }
         }
         
