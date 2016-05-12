@@ -101,17 +101,15 @@ angular.module('tpo')
         a.zdravnik = $rootScope.uporabnik.id;
         a.uporabnik = mojScope.pregled.uporabnik.id;
         a.meritve = mojScope.pregled.meritve;
-        a.vrednost_meritve = "dopolni";
+        a.vrednost_meritve = mojScope.rezultatiMeritev;
         a.bolezen = mojScope.pregled.bolezen;
         a.zdravilo = mojScope.pregled.zdravilo;
         a.dieta = mojScope.pregled.dieta;
         a.opombe = mojScope.opombe;
 
 
-        console.log(a.datum);
+        //console.log(a.vrednost_meritve);
 
-        //console.log(a.uporabnik.id);
-        //a.datum_naslednjega = $scope.datum_naslednjega;
 
         //shranim pregled in pocakam na response
         a.$save( function(){
@@ -146,25 +144,34 @@ angular.module('tpo')
       //ustvari Meritev
       $scope.ustvariMeritev=function (izbranaMeritev) {
 
+
+
             mojScope.prikaziGlukozo = false;
             mojScope.prikaziKrvni = false;
             mojScope.prikaziSrcni = false;
             mojScope.prikaziTeza = false;
             mojScope.prikaziTemperatura = false;
 
+           mojScope.rezultatiMeritev = [];
 
         for (meritev of izbranaMeritev)  {
             if(meritev.tip === "Glukoza") {
                 //console.log(mojScope.glukozaMeritev);
                 mojScope.prikaziGlukozo = true;
+                mojScope.rezultatiMeritev.push(mojScope.glukozaMeritev);
             }else if (meritev.tip === "Krvni pritisk") {
                 mojScope.prikaziKrvni = true;
+                mojScope.rezultatiMeritev.push(mojScope.krvniMeritev);
             }else if (meritev.tip === "Srčni pritisk") {
                 mojScope.prikaziSrcni = true;
+                mojScope.rezultatiMeritev.push(mojScope.srcniMeritev);
             }else if (meritev.tip === "Teža") {
                 mojScope.prikaziTeza = true;
+                mojScope.rezultatiMeritev.push(mojScope.tezaMeritev);
             }else {
                 mojScope.prikaziTemperatura = true;
+                //console.log(mojScope.tempMeritev);
+                mojScope.rezultatiMeritev.push(mojScope.tempMeritev);
             }
         }
         mojScope.pregled.meritve = izbranaMeritev;
