@@ -160,7 +160,7 @@ angular
           $rootScope.uporabnik.posta.id = parseInt($rootScope.uporabnik.posta.id);
         }
 
-        // zračuni id od pošte
+        // zračuni id od pošte za kontaktna_oseba
         if($rootScope.uporabnik.kontaktna_oseba.posta.id === undefined){
           $rootScope.uporabnik.kontaktna_oseba.posta.id = $rootScope.uporabnik.kontaktna_oseba.posta.url.substring($rootScope.uporabnik.kontaktna_oseba.posta.url.length - 4);
           $rootScope.uporabnik.kontaktna_oseba.posta.id = parseInt($rootScope.uporabnik.kontaktna_oseba.posta.id);

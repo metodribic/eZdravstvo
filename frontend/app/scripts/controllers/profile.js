@@ -107,7 +107,6 @@ angular.module('tpo')
       updated_kontaktna.sorodstveno_razmerje = $rootScope.uporabnik.kontaktna_oseba.sorodstveno_razmerje;
       updated_kontaktna.telefon = $rootScope.uporabnik.kontaktna_oseba.telefon;
 
-      console.log($rootScope.uporabnik);
       // update kontaktna oseba
       if( typeof $rootScope.uporabnik.kontaktna_oseba.id !== undefined ){
         console.log('test');
