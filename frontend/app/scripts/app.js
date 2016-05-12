@@ -154,14 +154,14 @@ angular
         $http.defaults.headers.common.pacient = id;
         $rootScope.selected = { value: item.ime + " " + item.priimek };
 
-        // zračuni id od pošte
-        if($rootScope.uporabnik.posta.id === undefined){
+        // zračuni id od pošte od oskrbovanca
+        if($rootScope.uporabnik.posta !== null && $rootScope.uporabnik.posta.id === undefined){
           $rootScope.uporabnik.posta.id = $rootScope.uporabnik.posta.url.substring($rootScope.uporabnik.posta.url.length - 4);
           $rootScope.uporabnik.posta.id = parseInt($rootScope.uporabnik.posta.id);
         }
 
-        // zračuni id od pošte za kontaktna_oseba
-        if($rootScope.uporabnik.kontaktna_oseba.posta.id === undefined){
+        // zračuni id od pošte za kontaktna_oseba od oskrbovanca
+        if($rootScope.uporabnik.kontaktna_oseba !== null && $rootScope.uporabnik.kontaktna_oseba.posta !== null && $rootScope.uporabnik.kontaktna_oseba.posta.id === undefined){
           $rootScope.uporabnik.kontaktna_oseba.posta.id = $rootScope.uporabnik.kontaktna_oseba.posta.url.substring($rootScope.uporabnik.kontaktna_oseba.posta.url.length - 4);
           $rootScope.uporabnik.kontaktna_oseba.posta.id = parseInt($rootScope.uporabnik.kontaktna_oseba.posta.id);
         }
