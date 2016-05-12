@@ -86,29 +86,24 @@ class Roles(models.Model):
 
 
 class Dieta(models.Model):
-    id = models.IntegerField(primary_key=True)
     naziv = models.CharField(max_length=100)
     sifra = models.CharField(max_length=20)
     navodila = models.ManyToManyField('NavodilaDieta', blank=True)
 
 
 class NavodilaDieta(models.Model):
-    id = models.IntegerField(primary_key=True)
     url = models.CharField(max_length=512)
 
 
 class Zdravilo(models.Model):
-    id = models.IntegerField(primary_key=True)
     zdravilo = models.CharField(max_length=100)
     navodila = models.CharField(max_length=1024)
 
 
 class Pregled(models.Model):
-    id = models.IntegerField(primary_key=True)
     opombe = models.CharField(max_length=2048)
     datum = models.DateField()
     zdravnik = models.ForeignKey('Zdravnik')
-    #meritve = models.ForeignKey('Meritev')
     bolezen = models.ManyToManyField('Bolezni')
     zdravilo = models.ManyToManyField('Zdravilo')
     dieta = models.ManyToManyField('Dieta')
@@ -117,7 +112,6 @@ class Pregled(models.Model):
 
 
 class Bolezni(models.Model):
-    id = models.IntegerField(primary_key=True)
     naziv = models.CharField(max_length=45)
     mkb10 = models.CharField(max_length=45)
     alergija = models.BooleanField()
@@ -126,7 +120,6 @@ class Bolezni(models.Model):
 
 # Dovoljene(max,min,nemogoce) vrednosti za doloceno meritev
 class VrednostiMeritev(models.Model):
-    id = models.IntegerField(primary_key=True)
     tip = models.CharField(max_length=50)
     enota = models.CharField(max_length=50)
     normalno_min = models.CharField(max_length=50)
@@ -140,7 +133,6 @@ class VrednostiMeritev(models.Model):
 
 
 class Meritev(models.Model):
-    id = models.IntegerField(primary_key=True)
     tip_meritve = models.ForeignKey('VrednostiMeritev')
     vrednost_meritve = models.CharField(max_length=100)
     datum = models.DateField()

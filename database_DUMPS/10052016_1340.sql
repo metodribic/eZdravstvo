@@ -107,7 +107,7 @@ DROP TABLE IF EXISTS `auth_user`;
 CREATE TABLE `auth_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `password` varchar(128) NOT NULL,
-  `last_login` datetime(6) DEFAULT NULL,
+  `last_login` datetime DEFAULT NULL,
   `is_superuser` tinyint(1) NOT NULL,
   `username` varchar(30) NOT NULL,
   `first_name` varchar(30) NOT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE `auth_user` (
   `email` varchar(254) NOT NULL,
   `is_staff` tinyint(1) NOT NULL,
   `is_active` tinyint(1) NOT NULL,
-  `date_joined` datetime(6) NOT NULL,
+  `date_joined` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
@@ -196,7 +196,7 @@ DROP TABLE IF EXISTS `authtoken_token`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `authtoken_token` (
   `key` varchar(40) NOT NULL,
-  `created` datetime(6) NOT NULL,
+  `created` datetime NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`key`),
   UNIQUE KEY `user_id` (`user_id`),
@@ -223,7 +223,7 @@ DROP TABLE IF EXISTS `django_admin_log`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `django_admin_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `action_time` datetime(6) NOT NULL,
+  `action_time` datetime NOT NULL,
   `object_id` longtext,
   `object_repr` varchar(200) NOT NULL,
   `action_flag` smallint(5) unsigned NOT NULL,
@@ -284,7 +284,7 @@ CREATE TABLE `django_migrations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `app` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `applied` datetime(6) NOT NULL,
+  `applied` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -309,7 +309,7 @@ DROP TABLE IF EXISTS `django_session`;
 CREATE TABLE `django_session` (
   `session_key` varchar(40) NOT NULL,
   `session_data` longtext NOT NULL,
-  `expire_date` datetime(6) NOT NULL,
+  `expire_date` datetime NOT NULL,
   PRIMARY KEY (`session_key`),
   KEY `django_session_de54fa62` (`expire_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -363,7 +363,7 @@ DROP TABLE IF EXISTS `tpo_bolezni`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tpo_bolezni` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `naziv` varchar(45) NOT NULL,
   `mkb10` varchar(45) NOT NULL,
   `alergija` tinyint(1) NOT NULL,
@@ -418,7 +418,7 @@ DROP TABLE IF EXISTS `tpo_dieta`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tpo_dieta` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `naziv` varchar(100) NOT NULL,
   `sifra` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
@@ -530,7 +530,7 @@ DROP TABLE IF EXISTS `tpo_meritev`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tpo_meritev` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `vrednost_meritve` varchar(100) NOT NULL,
   `datum` date NOT NULL,
   `tip_meritve_id` int(11) NOT NULL,
@@ -564,7 +564,7 @@ DROP TABLE IF EXISTS `tpo_navodiladieta`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tpo_navodiladieta` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(512) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -648,7 +648,7 @@ DROP TABLE IF EXISTS `tpo_pregled`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tpo_pregled` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `opombe` varchar(2048) NOT NULL,
   `datum` date NOT NULL,
   `datum_naslednjega` date DEFAULT NULL,
@@ -816,7 +816,7 @@ CREATE TABLE `tpo_uporabnik` (
   `user_ptr_id` int(11) NOT NULL,
   `ime` varchar(100) NOT NULL,
   `priimek` varchar(100) NOT NULL,
-  `datum_rojstva` datetime(6) DEFAULT NULL,
+  `datum_rojstva` datetime DEFAULT NULL,
   `kraj_rojstva` varchar(50) NOT NULL,
   `naslov` varchar(100) NOT NULL,
   `st_zzzs` int(11) DEFAULT NULL,
@@ -1032,7 +1032,7 @@ DROP TABLE IF EXISTS `tpo_vrednostimeritev`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tpo_vrednostimeritev` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `tip` varchar(50) NOT NULL,
   `enota` varchar(50) NOT NULL,
   `normalno_min` varchar(50) NOT NULL,
@@ -1065,7 +1065,7 @@ DROP TABLE IF EXISTS `tpo_zdravilo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tpo_zdravilo` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `zdravilo` varchar(100) NOT NULL,
   `navodila` varchar(1024) NOT NULL,
   PRIMARY KEY (`id`)
