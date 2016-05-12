@@ -456,10 +456,10 @@ def ustvariPregled(request, format=None):
 
 
         #pohendlaj meritve
-        for m in meritve:
-            vrednostMeritev = VrednostiMeritev.objects.get(id=m["id"])
+        for v in izmerjena_vrednost_meritve:
+            vrednostMeritev = VrednostiMeritev.objects.get(id=v["tip"])
             meritve = Meritev.objects.create(tip_meritve=vrednostMeritev,
-                                             vrednost_meritve=izmerjena_vrednost_meritve,
+                                             vrednost_meritve=v["vrednost"],
                                              datum=datum_pregleda,
                                              uporabnik_id=uporabnikID,
                                              pregled=pregled)

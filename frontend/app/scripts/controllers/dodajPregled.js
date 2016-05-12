@@ -54,8 +54,6 @@ angular.module('tpo')
       $scope.trenutniZdravnik = $rootScope.uporabnik.ime +' '+$rootScope.uporabnik.priimek + naziv;
 
       // pridobi ustrezen datum
-      // datum_pregleda = new Date();
-        // datum_pregleda = moment();
       $scope.datum_pregleda = moment().format("DD.MM.YYYY");
 
       //pridobi vse bolezni za izbiro
@@ -82,10 +80,13 @@ angular.module('tpo')
         //console.log(response);
       });
 
+      //ustvari Uproabnika
+      $scope.ustvariPacienta = function (izbranPacient) {
+        mojScope.pregled.uporabnik = izbranPacient;
+      }
 
 
       mojScope = $scope;
-
 
 
       //moj scope, v katerega shranjujem vse kar je v pregledu
@@ -107,44 +108,79 @@ angular.module('tpo')
         a.dieta = mojScope.pregled.dieta;
         a.opombe = mojScope.opombe;
 
+        //mojScope.rezultatiMeritev = [];
 
-        //console.log(a.vrednost_meritve);
+        for (meritev of $scope.test)  {
+            if(meritev.tip === "Glukoza") {
+                //ce je v mejah normale, ga sprejmi
+                if (mojScope.glukozaMeritev>= 0 && mojScope.glukozaMeritev<=50) {
+                    mojScope.rezultatiMeritev.push({vrednost:mojScope.glukozaMeritev, tip:1});
+                }
+                //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
+                else {
+                    Notification.error({message: "Podatki za GLUKOZO so napačni!"});
+                }
+            }else if (meritev.tip === "Krvni pritisk") {
+                //ce je v mejah normale, ga sprejmi
+                if ((mojScope.krvniMeritevSpodnji>= 30 && mojScope.krvniMeritevSpodnji<=300) && (mojScope.krvniMeritevZgornji>= 30 && mojScope.krvniMeritevZgornji<=300)) {
+                     mojScope.rezultatiMeritev.push({vrednost:mojScope.krvniMeritevSpodnji+"/"+mojScope.krvniMeritevZgornji, tip:2});
+                }
+                //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
+                else {
+                    Notification.error({message: "Podatki za KRVNI PRITISK so napačni!"});
+                }
+            }else if (meritev.tip === "Srčni pritisk") {
+                //ce je v mejah normale, ga sprejmi
+                if (mojScope.srcniMeritev>= 30 && mojScope.srcniMeritev<=200) {
+                    mojScope.rezultatiMeritev.push({vrednost:mojScope.srcniMeritev, tip:3});
+                }
+                //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
+                else {
+                    Notification.error({message: "Podatki za SRČNI PRITISK so napačni!"});
+                }
+            }else if (meritev.tip === "Teža") {
+                //ce je v mejah normale, ga sprejmi
+                if (mojScope.tezaMeritev>= 15 && mojScope.tezaMeritev<=50) {
+                    mojScope.rezultatiMeritev.push({vrednost:mojScope.tezaMeritev, tip:5});
+                }
+                //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
+                else {
+                    Notification.error({message: "Podatki za TEŽO(BMI) so napačni!"});
+                }
+            }else {
+                //ce je v mejah normale, ga sprejmi
+                if (mojScope.tempMeritev>= 34 && mojScope.tempMeritev<=42) {
+                    mojScope.rezultatiMeritev.push({vrednost:mojScope.tempMeritev, tip:4});;
+                }
+                //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
+                else {
+                    Notification.error({message: "Podatki za TEMPERATURO so napačni!"});
+                }
+            }
+        }
 
 
         //shranim pregled in pocakam na response
         a.$save( function(){
 
-            if( userWasCreaterBool( succ.success ) ){
-                $scope.besedZaUpor = "Pregled uspešno ustvarjen.";
+            Notification.success({message: "Pregled uspešno ustvarjen." });
 
-                // clear fields
-                clearPregledFields(mojScope);
-
-                Notification.success({message: $scope.besedZaUpor });
-            }
+            //reloadam stran, da se pobrisejo fieldi
+            $state.reload();
 
         }, function (err) {
             responseFailedHandler ( $scope, err.data.error );
             // showFailAlert( $scope );
-            Notification.error({message: $scope.besedZaUpor });
+            Notification.error({message: "NEKJE JE NAPAKA!" });
         });
-
-
-        console.log(a);
       }
 
-      //ustvari Uproabnika
-      $scope.ustvariPacienta = function (izbranPacient) {
-        mojScope.pregled.uporabnik = izbranPacient;
-      }
+       $scope.test = [];
 
-
-        
-        
       //ustvari Meritev
       $scope.ustvariMeritev=function (izbranaMeritev) {
 
-
+            $scope.test = izbranaMeritev;
 
             mojScope.prikaziGlukozo = false;
             mojScope.prikaziKrvni = false;
@@ -156,40 +192,27 @@ angular.module('tpo')
 
         for (meritev of izbranaMeritev)  {
             if(meritev.tip === "Glukoza") {
-                //console.log(mojScope.glukozaMeritev);
                 mojScope.prikaziGlukozo = true;
-                mojScope.rezultatiMeritev.push(mojScope.glukozaMeritev);
             }else if (meritev.tip === "Krvni pritisk") {
                 mojScope.prikaziKrvni = true;
-                mojScope.rezultatiMeritev.push(mojScope.krvniMeritev);
             }else if (meritev.tip === "Srčni pritisk") {
                 mojScope.prikaziSrcni = true;
-                mojScope.rezultatiMeritev.push(mojScope.srcniMeritev);
             }else if (meritev.tip === "Teža") {
                 mojScope.prikaziTeza = true;
-                mojScope.rezultatiMeritev.push(mojScope.tezaMeritev);
             }else {
                 mojScope.prikaziTemperatura = true;
-                //console.log(mojScope.tempMeritev);
-                mojScope.rezultatiMeritev.push(mojScope.tempMeritev);
             }
         }
         mojScope.pregled.meritve = izbranaMeritev;
-       //console.log(mojScope.pregled.meritve);
-        //console.log(m);
       }
 
 
-      //TOLE JE TREBA POGLEDAT, ZARADI TEGA NE DELUJE BRISANJE ZDRAVIL
       //funkcija za pridobivanje zdravil
       $scope.ustvariBolezen = function (izbraneBolezni) {
         $scope.izbranaZdravila = [];
 
-        //console.log(izbraneBolezni);
         for (bolezen of izbraneBolezni) {
-            //console.log(bolezen);
             for (zdravilo of bolezen.zdravilo) {
-              //console.log(zdravilo);
                 $scope.izbranaZdravila.push(zdravilo);
             }
         }
@@ -197,27 +220,13 @@ angular.module('tpo')
         mojScope.pregled.bolezen = izbraneBolezni;
         mojScope.pregled.zdravilo = $scope.izbranaZdravila;
 
-        //console.log($scope.izbranaZdravila);
       }
       
       //funkcija za pridobivanje diete
       $scope.ustvariDieto = function (izbranaDieta) {
         mojScope.pregled.dieta = izbranaDieta;
-        //console.log(d);
       }
 
-      //pobrise oz. ponastavi vse dropdowne in fielde v dodajPregled
-      function clearPregledFields( mojScope ){
-
-          mojScope.pregled.uporabnik="";
-          mojScope.pregled.meritve="";
-          mojScope.pregled.bolezen="";
-          mojScope.pregled.zdravilo ="";
-          mojScope.pregled.dieta= "";
-          mojScope.opombe = "";
-
-          //getDataFromModels();
-      };
 
       function responseFailedHandler ( scope, servFail ){
 
@@ -225,26 +234,12 @@ angular.module('tpo')
 
           if( servFail === "User with this email already exists"){
 
-              scope.besedZaUpor = "PRDEC";
+              scope.besedZaUpor = "NEKAJ JE NAROBE";
           }else{
               // POPRAVI - GLEJ KAJ JE NAROBE, opazil samo pri duplicate entry
-              scope.besedZaUpor = "WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO";
-              //$scope.besedZaUpor = "Prišlo je do napake, ponovno preglejte vnosna polja.";
+              //scope.besedZaUpor = "WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO";
+              Notification.error({message: "NEKJE JE NAPAKA!" });
           }
 
       };
-
-
-      //
-      // $scope.naslednji_pregled = function(arg){
-      //   if(arg === null){
-      //     naslednji_pregled = null;
-      //   }
-      //   else if (arg == 'teden') {
-      //     naslednji_pregled = curr.getDate() - curr.getDay()+7;
-      //   }
-      //   else {
-      //     naslednji_pregled = arg;
-      //   }
-      // };
   }]);
