@@ -154,6 +154,18 @@ angular
         $http.defaults.headers.common.pacient = id;
         $rootScope.selected = { value: item.ime + " " + item.priimek };
 
+        // zračuni id od pošte
+        if($rootScope.uporabnik.posta.id === undefined){
+          $rootScope.uporabnik.posta.id = $rootScope.uporabnik.posta.url.substring($rootScope.uporabnik.posta.url.length - 4);
+          $rootScope.uporabnik.posta.id = parseInt($rootScope.uporabnik.posta.id);
+        }
+
+        // zračuni id od pošte
+        if($rootScope.uporabnik.kontaktna_oseba.posta.id === undefined){
+          $rootScope.uporabnik.kontaktna_oseba.posta.id = $rootScope.uporabnik.kontaktna_oseba.posta.url.substring($rootScope.uporabnik.kontaktna_oseba.posta.url.length - 4);
+          $rootScope.uporabnik.kontaktna_oseba.posta.id = parseInt($rootScope.uporabnik.kontaktna_oseba.posta.id);
+        }
+
         //  preveri če ima profil, če ne ga prisli da ga ustvari
         if($rootScope.selected.value == " "){
           Notification.warning({message: 'Za nadaljevanje izpolnite profil!', title: '<b>Opozorilo!</b>'});

@@ -107,8 +107,10 @@ angular.module('tpo')
       updated_kontaktna.sorodstveno_razmerje = $rootScope.uporabnik.kontaktna_oseba.sorodstveno_razmerje;
       updated_kontaktna.telefon = $rootScope.uporabnik.kontaktna_oseba.telefon;
 
+      console.log($rootScope.uporabnik);
       // update kontaktna oseba
-      if( $rootScope.uporabnik.kontaktna_oseba.id !== null ){
+      if( typeof $rootScope.uporabnik.kontaktna_oseba.id !== undefined ){
+        console.log('test');
         updated_kontaktna.id = $rootScope.uporabnik.kontaktna_oseba.id;
         updated_kontaktna.$update({kontaktnaId: $rootScope.uporabnik.kontaktna_oseba.id}, function(response){
           Notification.success('Kontaktna oseba uspešno posodobljen!!');
@@ -286,5 +288,5 @@ angular.module('tpo')
     function addAlert(msg, state) {
         Notification({message: msg}, state);
     }
-    
+
   }]);

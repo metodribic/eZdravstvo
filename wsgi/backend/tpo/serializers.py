@@ -6,6 +6,7 @@ from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Me
 
 """ POSTA """
 class PostaSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField()
     class Meta:
         model = Posta
         fields =('id', 'kraj')
