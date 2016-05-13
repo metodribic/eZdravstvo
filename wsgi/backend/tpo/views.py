@@ -501,7 +501,7 @@ def registracijaPacient(request, format=None):
     try:
         #print(request.data)
         # check if email and password are received or return 400
-        if request.data['oskrbovanec']:
+        if request.data.get('oskrbovanec', "") != "":
             mail = request.data['email']
             password = 'pbkdf2_sha256$24000$57Yuhx3LYR5c$/Mnf5vRoMky/AL38imTepBSZunwzNcs74qz5r4SZtsE=';
         else:
@@ -546,11 +546,11 @@ def registracijaPacient(request, format=None):
 
 
             #posljes mail za aktivacijo
-            if not(request.data['oskrbovanec']):
+            if request.data.get('oskrbovanec', "") != "":
                 send_mail('Aktivacija eZdravstvo', 'Uspesno ste se registrirali na portal eZdravstvo. Za aktivacijo profila, kliknite na spodnji naslov: \n\n\n' +
                       settings.API_URL+'/activate/?email='+mail, 'ezdravstvo.tpo7@gmail.com', [mail], fail_silently=False)
 
-            if request.data['oskrbovanec']:
+            if request.data.get('oskrbovanec', "") != "":
                 lastnik = Uporabnik.objects.get(id = request.data['lastnik'])
                 lastnik.oskrbovanci.add(pacient.pk)
                 lastnik.save()
