@@ -84,6 +84,7 @@ class MeritevViewSet(viewsets.ModelViewSet):
                 user = Uporabnik.objects.get(user_ptr_id = pacient)
         except Exception as e:
             print(e)
+
         if self.request.GET.get('pregledId', -1) != -1:
             pregledId = self.request.GET.get('pregledId', -1)
             return Meritev.objects.filter(uporabnik=user, pregled_id=pregledId)
@@ -461,6 +462,7 @@ def ustvariPregled(request, format=None):
 
 
         #pohendlaj meritve
+
         for v in izmerjena_vrednost_meritve:
             vrednostMeritev = VrednostiMeritev.objects.get(id=v["tip"])
             meritve = Meritev.objects.create(tip_meritve=vrednostMeritev,
@@ -494,6 +496,7 @@ def ustvariPregled(request, format=None):
         response = JSONResponse({"error" : "Usage: {'email':'someone@someplace', 'password':'password'}"})
         response.status_code = 400 # Bad request
         return response
+
 
 
 @api_view(['POST'])

@@ -32,9 +32,11 @@
                 <td>{{pregled.zdravnik.naziv}} {{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
               <tr>
                 <td><b>Meritve:</b></td>
-                  <td ng-hide = "meritve.length == 0" ng-repeat="meritev in meritve">
-                      {{meritev.tip_meritve.tip}}&nbsp;<i>(šifra: {{meritev.tip_meritve.sifra}})</i>:
-                      <b>{{meritev.vrednost_meritve}}</b>
+                  <td>
+                      <span ng-hide = "meritve.length == 0" ng-repeat="meritev in meritve">
+                      - {{meritev.tip_meritve.tip}}&nbsp;<i>(šifra: {{meritev.tip_meritve.sifra}})</i>:
+                      <b>{{meritev.vrednost_meritve}}</b> <br>
+                      </span>
                   </td>
                   <span ng-show = "meritve.length == 0">/</span>
               </tr>
@@ -42,7 +44,7 @@
                 <td><b>Bolezni:</b></td>
                 <td>
                     <span ng-repeat="bolezen in pregled.bolezen">
-                        {{bolezen.naziv}} <span ng-show="bolezen.alergija"><i>(Alergija)</i></span> - {{bolezen.mkb10}}
+                        - {{bolezen.naziv}} <span ng-show="bolezen.alergija"><i>(Alergija)</i></span> - {{bolezen.mkb10}}
                         <!--
                         <ul>
                             <a ng-href="{{bolezen.navodila}}"><i>{{bolezen.navodila}}</i></a>
@@ -56,7 +58,7 @@
                 <td><b>Zdravila:</b></td>
                 <td>
                     <span ng-repeat="zdravilo in pregled.zdravilo">
-                        {{zdravilo.zdravilo}} :
+                        - {{zdravilo.zdravilo}}
                         <ul>
                             <a ng-href="{{zdravilo.navodila}}"><i>{{zdravilo.navodila}}</i></a>
                         </ul>
@@ -68,7 +70,7 @@
                 <td><b>Dieta:</b></td>
                 <td>
                     <span ng-repeat="dieta in pregled.dieta">
-                        {{dieta.naziv}} :
+                        - {{dieta.naziv}} <br>
                         <ul ng-repeat="navodilo in dieta.navodila" style="list-style-type:none">
                             <li><a ng-href="{{navodilo.url}}"><i>{{navodilo.url}}</i></a></li>
                         </ul>
@@ -79,7 +81,7 @@
               <tr>
                 <td><b>Navodila:</b></td>
                 <td>
-                    <span ng-repeat="zdravilo in pregled.zdravilo">/</span>
+                    <span ng-repeat="zdravilo in pregled.zdravilo">{{zdravilo.navodila}}</span>
                     <span ng-show="pregled.zdravilo.length == 0">/</span>
                 </td>
               </tr>
