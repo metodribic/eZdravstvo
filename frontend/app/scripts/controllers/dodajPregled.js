@@ -216,8 +216,7 @@ angular.module('tpo')
         for (var i=0; i<izbraneBolezni.length; i++)  {
             var bolezen = izbraneBolezni[i];
             for (var j=0; j<bolezen.zdravilo.length; j++) {
-                for(var k=0; k<bolezen.zdravilo.length; k++)
-                    $scope.izbranaZdravila.push(bolezen.zdravilo[i]);
+                $scope.izbranaZdravila.push(bolezen.zdravilo[j]);
             }
         }
         
