@@ -84,8 +84,11 @@ class MeritevViewSet(viewsets.ModelViewSet):
                 user = Uporabnik.objects.get(user_ptr_id = pacient)
         except Exception as e:
             print(e)
-
-        return Meritev.objects.filter(uporabnik=user)
+        if self.request.GET.get('pregledId', -1) != -1:
+            pregledId = self.request.GET.get('pregledId', -1)
+            return Meritev.objects.filter(uporabnik=user, pregled_id=pregledId)
+        else:
+            return Meritev.objects.filter(uporabnik=user)
 
 
 #MERITVE SEZNAM

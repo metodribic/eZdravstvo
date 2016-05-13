@@ -19,7 +19,7 @@ angular.module('tpo')
           //console.log($scope.pregled);
       });
 
-      Meritve.query().$promise.then(function(response) {
+      Meritve.query({pregledId: pregledID}).$promise.then(function(response) {
             $scope.meritve = response;
             //console.log(response);
       });
