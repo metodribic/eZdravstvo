@@ -447,17 +447,17 @@ def ustvariPregled(request, format=None):
 
         # pohendlaj diete
         for d in dieta:
-            pregled.dieta.add(Dieta.objects.create(naziv=d["naziv"], sifra=d["sifra"]))
+            pregled.dieta.add(Dieta.objects.get(naziv=d["naziv"], sifra=d["sifra"]))
 
 
         # pohendlaj bolezni
         for b in bolezen:
-            pregled.bolezen.add(Bolezni.objects.create(naziv=b["naziv"], mkb10=b["mkb10"], alergija=b["alergija"]))
+            pregled.bolezen.add(Bolezni.objects.get(naziv=b["naziv"], mkb10=b["mkb10"], alergija=b["alergija"]))
 
 
         #pohendlaj zdravila
         for z in zdravilo:
-            pregled.zdravilo.add(Zdravilo.objects.create(zdravilo=z["zdravilo"]))
+            pregled.zdravilo.add(Zdravilo.objects.get(zdravilo=z["zdravilo"]))
 
 
         #pohendlaj meritve

@@ -84,6 +84,7 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
 """ ZDRAVILO """
 class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
+
     class Meta:
         model = Zdravilo
 

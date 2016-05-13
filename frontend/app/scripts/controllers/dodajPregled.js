@@ -109,6 +109,7 @@ angular.module('tpo')
         a.opombe = mojScope.opombe;
 
         //mojScope.rezultatiMeritev = [];
+        var shraniPregledBoolean = true;
 
         for (var i=0; i<$scope.test.length; i++)  {
             var meritev = $scope.test[i];
@@ -119,6 +120,7 @@ angular.module('tpo')
                 }
                 //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
                 else {
+                    shraniPregledBoolean = false;
                     Notification.error({message: "Podatki za GLUKOZO so napačni!"});
                 }
             }else if (meritev.tip === "Krvni pritisk") {
@@ -128,6 +130,7 @@ angular.module('tpo')
                 }
                 //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
                 else {
+                    shraniPregledBoolean = false;
                     Notification.error({message: "Podatki za KRVNI PRITISK so napačni!"});
                 }
             }else if (meritev.tip === "Srčni pritisk") {
@@ -137,6 +140,7 @@ angular.module('tpo')
                 }
                 //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
                 else {
+                    shraniPregledBoolean = false;
                     Notification.error({message: "Podatki za SRČNI PRITISK so napačni!"});
                 }
             }else if (meritev.tip === "Teža") {
@@ -146,6 +150,7 @@ angular.module('tpo')
                 }
                 //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
                 else {
+                    shraniPregledBoolean = false;
                     Notification.error({message: "Podatki za TEŽO(BMI) so napačni!"});
                 }
             }else {
@@ -155,25 +160,27 @@ angular.module('tpo')
                 }
                 //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
                 else {
+                    shraniPregledBoolean = false;
                     Notification.error({message: "Podatki za TEMPERATURO so napačni!"});
                 }
             }
         }
 
+        if(shraniPregledBoolean) {
+            //shranim pregled in pocakam na response
+            a.$save( function(){
 
-        //shranim pregled in pocakam na response
-        a.$save( function(){
+                Notification.success({message: "Pregled uspešno ustvarjen." });
 
-            Notification.success({message: "Pregled uspešno ustvarjen." });
+                //reloadam stran, da se pobrisejo fieldi
+                $state.reload();
 
-            //reloadam stran, da se pobrisejo fieldi
-            $state.reload();
-
-        }, function (err) {
-            responseFailedHandler ( $scope, err.data.error );
-            // showFailAlert( $scope );
-            Notification.error({message: "NEKJE JE NAPAKA!" });
-        });
+            }, function (err) {
+                responseFailedHandler ( $scope, err.data.error );
+                // showFailAlert( $scope );
+                Notification.error({message: "NEKJE JE NAPAKA!" });
+            });
+        }
       }
 
        $scope.test = [];
