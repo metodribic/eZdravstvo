@@ -19,12 +19,5 @@ angular.module('tpo')
       Meritve.query({pregledId: pregledID}).$promise.then(function(response) {
             $scope.meritve = response;
       });
-
-      // funckija za prikaz krajšega urlja
-      $scope.okrajsaj = function (input, len) {
-          if (input.length > len+10)
-              return input.substring(0, len) + "...";
-          return input;
-      };
-
+      
   }]);
