@@ -69,7 +69,6 @@ angular.module('tpo')
 
                   Pregled.get({limit:5}).$promise.then(function (response) {
                       mojScope.pregledi = response.results;
-                      console.log(response);
                   });
 
 
