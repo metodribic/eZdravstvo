@@ -11,6 +11,5 @@ angular.module('tpo')
 
         Pregled.query().$promise.then(function(response){
         $scope.pregledi = response;
-        console.log($scope.pregledi.length);
     });
   }]);
