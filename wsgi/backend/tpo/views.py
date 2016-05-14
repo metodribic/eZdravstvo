@@ -556,14 +556,30 @@ def registracijaPacient(request, format=None):
                 send_mail('Aktivacija eZdravstvo', 'Uspesno ste se registrirali na portal eZdravstvo. Za aktivacijo profila, kliknite na spodnji naslov: \n\n\n' +
                       settings.API_URL+'/activate/?email='+mail, 'ezdravstvo.tpo7@gmail.com', [mail], fail_silently=False)
 
+            # ce je okrbovanec ne posljes maila
             if request.data.get('oskrbovanec', "") != "":
+                # pridobi lastnika
                 lastnik = Uporabnik.objects.get(id = request.data['lastnik'])
+
+                # kontaktna oseba == lastnik
+                kontaktna = KontaktnaOseba(ime=lastnik.ime,
+                                          priimek=lastnik.priimek,
+                                          naslov=lastnik.naslov,
+                                          posta_id=lastnik.posta_id,
+                                          sorodstveno_razmerje='Sorodnik',
+                                          telefon=lastnik.telefon)
+                kontaktna.save()
+
+                # dodaj kontaktno osebo oskrbovancu
+                pacient.kontaktna_oseba_id = kontaktna.id
+                pacient.save()
+
+                # oskrbovanca dodaj lasntiku
                 lastnik.oskrbovanci.add(pacient.pk)
                 lastnik.save()
 
             respons = JSONResponse({"success": "function : {'user created':'Pacient'}"})
             respons.status_code = 201
-            respons.pacient = pacient.pk;
             return respons
 
 

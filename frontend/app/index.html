@@ -79,7 +79,7 @@
                     {{user.ime}} {{user.priimek}} - {{user.role.naziv}}
                   </p>
                   <p>
-                      <span style="font-size:12px">Last login: {{user.last_login | date:'dd.MM.yy HH:mm:ss'}}</span>
+                      <span style="font-size:12px">Zadnja prijava: {{user.last_login | date:'dd.MM.yy ob HH:mm'}}</span>
                   </p>
                 </li>
                 <!-- Menu Footer-->
@@ -131,7 +131,7 @@
           <li class="header">Pozdravljeni v eZdravstvu!</li>
           <!-- Optionally, you can add icons to the links -->
           <li><a ui-sref="nadzornaPlosca"><i class="fa fa-home"></i> <span>Nadzorna plošča</span></a></li>
-          <li><a href="#"><i class="fa fa-heartbeat"></i> <span>Meritve</span></a></li>
+          <!-- <li><a href="#"><i class="fa fa-heartbeat"></i> <span>Meritve</span></a></li> -->
 
 
           <li ng-show="isSuperU"><a href="#/registracijaAdmin"><i class="fa fa-gear"></i> <span>Registracija osebja</span></a></li>
@@ -143,7 +143,7 @@
 
           <li><a ui-sref="listPregledov"><i class="fa fa-stethoscope"></i> <span>Pregledi</span></a></li>
           <li class="header">Administrativne akcije</li>
-          <li ng-hide="isDoctor"><a ng-click="ustvariOskrbovanca()"><i class="fa fa-user-plus"></i> <span>Dodaj oskrbovanca</span></a></li>
+          <li class="pointer" ng-hide="isDoctor"><a ng-click="ustvariOskrbovanca()"><i class="fa fa-user-plus"></i> <span>Dodaj oskrbovanca</span></a></li>
           <li ng-show="isDoctor"><a ui-sref="dodajPregled" ><i class="fa fa-file-text-o"></i> <span>Dodaj pregled</span></a></li>
 
         </ul>

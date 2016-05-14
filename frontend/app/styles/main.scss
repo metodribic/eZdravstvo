@@ -57,10 +57,14 @@ $default-green: #00A65A;
 }
 
 .izbiraOskrbovanca {
-    color: #aaa; 
-    text-align: center; 
-    width: 90%; 
+    color: #aaa;
+    text-align: center;
+    width: 90%;
     margin: 0 auto;
     padding: 0 0.5em;
     margin-bottom: 1em;
+}
+
+.pointer {
+  cursor: pointer;
 }

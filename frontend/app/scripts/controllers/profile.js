@@ -100,15 +100,15 @@ angular.module('tpo')
       updated_kontaktna.ime = $rootScope.uporabnik.kontaktna_oseba.ime;
       updated_kontaktna.priimek = $rootScope.uporabnik.kontaktna_oseba.priimek;
       updated_kontaktna.naslov = $rootScope.uporabnik.kontaktna_oseba.naslov;
+      updated_kontaktna.sorodstveno_razmerje = $rootScope.uporabnik.kontaktna_oseba.sorodstveno_razmerje;
+      updated_kontaktna.telefon = $rootScope.uporabnik.kontaktna_oseba.telefon;
       updated_kontaktna.posta = {
         id: $rootScope.uporabnik.kontaktna_oseba.posta.id,
         kraj: $rootScope.uporabnik.kontaktna_oseba.posta.kraj
       };
-      updated_kontaktna.sorodstveno_razmerje = $rootScope.uporabnik.kontaktna_oseba.sorodstveno_razmerje;
-      updated_kontaktna.telefon = $rootScope.uporabnik.kontaktna_oseba.telefon;
+
       // update kontaktna oseba
       if($rootScope.uporabnik.kontaktna_oseba.id){
-        console.log('test');
         updated_kontaktna.id = $rootScope.uporabnik.kontaktna_oseba.id;
         updated_kontaktna.$update({kontaktnaId: $rootScope.uporabnik.kontaktna_oseba.id}, function(response){
           Notification.success('Kontaktna oseba uspešno posodobljen!!');
@@ -116,10 +116,9 @@ angular.module('tpo')
       }
       // create kontaktna oseba
       else {
-          updated_kontaktna.id = $rootScope.uporabnik.id;
+        updated_kontaktna.id = $rootScope.uporabnik.id;
         KontaktnaOseba.save(updated_kontaktna, function(response){
-            console.log(response);
-            $rootScope.uporabnik.kontaktna_oseba.id = response.id;
+          $rootScope.uporabnik.kontaktna_oseba.id = response.id;
           Notification.success('Kontaktna oseba uspešno ustvarjena!!');
         });
       }
@@ -269,14 +268,14 @@ angular.module('tpo')
 
     function replaceZdravnik(nov) {
         var z = $rootScope.uporabnik.zdravnik;
-        //Zdravniki array is empty so we just push 
+        //Zdravniki array is empty so we just push
         if(!z && nov !== -1 && nov !== -2) {
             $rootScope.uporabnik.zdravnik.push(nov);
             return;
         }
         for(var i=0; i<z.length; i++) {
             //Replace
-            if(nov !== -1 && nov !== -2 && (nov.tip !== "zobozdravnik" && z[i].tip !== "zobozdravnik" || 
+            if(nov !== -1 && nov !== -2 && (nov.tip !== "zobozdravnik" && z[i].tip !== "zobozdravnik" ||
                                             nov.tip === "zobozdravnik" && z[i].tip === "zobozdravnik" )) {
                 $rootScope.uporabnik.zdravnik[i] = nov;
                 return;
