@@ -68,7 +68,7 @@ class PreglediViewSet(viewsets.ModelViewSet):
                 user = Uporabnik.objects.get(user_ptr_id = pacient)
         except Exception as e:
             print(e)
-        return Pregled.objects.filter(uporabnik = user)
+        return Pregled.objects.filter(uporabnik = user).order_by('-id')
 
 
 # MERITVE

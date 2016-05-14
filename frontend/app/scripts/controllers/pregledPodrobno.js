@@ -1,7 +1,7 @@
 /**
  * Created by jk on 06/04/2016.
  */
-'use strict';
+'use strict()';
 
 /* Controler za podrobni pogled pregleda*/
 
@@ -11,18 +11,13 @@ angular.module('tpo')
     /* GET pregled */
 
       var pregledID = $stateParams.id;
-      //console.log(pregledID);
-      Pregled.get({ pregledId:pregledID}).$promise.then(function(response){
-        /* shrani pregled v $scope, da lahk dostopaš v view do njega */
-        //console.log(response);
 
+      Pregled.get({ pregledId:pregledID}).$promise.then(function(response){
         $scope.pregled = response;
-          console.log($scope.pregled);
       });
 
       Meritve.query({pregledId: pregledID}).$promise.then(function(response) {
             $scope.meritve = response;
-            console.log(response);
       });
-
+      
   }]);

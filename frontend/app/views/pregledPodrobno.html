@@ -22,8 +22,8 @@
             <tbody>
               <!-- v controllerju moreš met $scope.pregledi tabelo, kjer so noter vsi pregledi ko jih hočeš prikazat, torej moreš naredit Pregledi.ge().$promise.then() itd itd podobn ko pr men v nadzorni-->
               <tr>
-                <td><b>Datum:</b></td>
-                <td>
+                <td class="col-xs-2"><b>Datum:</b></td>
+                <td class="col-xs-10">
                     <span ng-show="pregled.datum.length > 0">{{pregled.datum | date:'dd.MM.yyyy'}}</span>
                     <span ng-show="pregled.datum.length == 0">/</span>
                 </td>
@@ -44,12 +44,7 @@
                 <td><b>Bolezni:</b></td>
                 <td>
                     <span ng-repeat="bolezen in pregled.bolezen">
-                        - {{bolezen.naziv}} <span ng-show="bolezen.alergija"><i>(Alergija)</i></span> - {{bolezen.mkb10}}
-                        <!--
-                        <ul>
-                            <a ng-href="{{bolezen.navodila}}"><i>{{bolezen.navodila}}</i></a>
-                        </ul>
-                        -->
+                        - {{bolezen.naziv}} <span ng-show="bolezen.alergija"><i>(Alergija)</i></span> - <i>{{bolezen.mkb10}}</i><br>
                     </span>
                     <span ng-show="pregled.bolezen.length == 0">/</span>
                 </td>
@@ -58,11 +53,10 @@
                 <td><b>Zdravila:</b></td>
                 <td>
                     <span ng-repeat="zdravilo in pregled.zdravilo">
-                        - {{zdravilo.zdravilo}}
-                        <ul>
-                            <a ng-href="{{zdravilo.navodila}}"><i>{{zdravilo.navodila}}</i></a>
-                        </ul>
+                        - <a ng-href="{{zdravilo.navodila}}">{{zdravilo.zdravilo}}</a>  <!-- <i>(<a ng-href="{{zdravilo.navodila}}">Povezava do navodil</a>)</i> -->
+                        <br>
                     </span>
+                    <span class="pull-right"><u><i>Za podrobna navodila kliknite na ime zdravila</i></u> </span>
                     <span ng-show="pregled.zdravilo.length == 0">/</span>
                 </td>
               </tr>
@@ -71,8 +65,8 @@
                 <td>
                     <span ng-repeat="dieta in pregled.dieta">
                         - {{dieta.naziv}} <br>
-                        <ul ng-repeat="navodilo in dieta.navodila" style="list-style-type:none">
-                            <li><a ng-href="{{navodilo.url}}"><i>{{navodilo.url}}</i></a></li>
+                        <ul ng-repeat="navodilo in dieta.navodila" >
+                          <li><a ng-href="{{navodilo.url}}"><i>{{navodilo.url}}</i></a><br></li>
                         </ul>
                     </span>
                     <span ng-show="pregled.dieta.length == 0">/</span>
@@ -81,7 +75,10 @@
               <tr>
                 <td><b>Navodila:</b></td>
                 <td>
-                    <span ng-repeat="zdravilo in pregled.zdravilo">{{zdravilo.navodila}}</span>
+                    <span ng-repeat="zdravilo in pregled.zdravilo">
+                      - <a ng-href="{{zdravilo.navodila}}">{{zdravilo.navodila}}</a>
+                      <br>
+                    </span>
                     <span ng-show="pregled.zdravilo.length == 0">/</span>
                 </td>
               </tr>

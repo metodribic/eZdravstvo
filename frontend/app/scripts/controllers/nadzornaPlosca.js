@@ -41,7 +41,7 @@ angular.module('tpo')
           if( zdravnikoviPacientiNalozeni ){
 
               clearData();
-              if(  angular.isUndefined(uporabnikZdravnika) || angular.isUndefined(uporabnikZdravnika.ime) || uporabnikZdravnika.ime == "" ){
+              if(  angular.isUndefined(uporabnikZdravnika) || angular.isUndefined(uporabnikZdravnika.ime) || uporabnikZdravnika.ime === "" ){
                   // ni pacienta
                   mojScope.izbranPacient = false;
 
@@ -85,11 +85,14 @@ angular.module('tpo')
                       }
                   }
 
-                  /* metoda za krajšanje linkov, če so predolgi */
-                  $scope.okrajsaj = function (input) {
-                      if (input.length > 40) {
-                          return input.substring(0, 30) + "...";
-                      }
+                  /* metoda za krajšanje texta
+                  *  input == text ki ga krajšamo
+                  *  len+10: maximalna dovoljena dolžina
+                  *  če je txt dalši od len+10, se ga skrajša na len ter doda ...
+                  */
+                  $scope.okrajsaj = function (input, len) {
+                      if (input.length > len+10)
+                          return input.substring(0, len) + "...";
                       return input;
                   };
               }
@@ -118,7 +121,7 @@ angular.module('tpo')
 
               $scope.mojiPacienti = response.results;
 
-              if( $scope.mojiPacienti.length == 0 ){
+              if( $scope.mojiPacienti.length === 0 ){
                   mojScope.jeZdravnik.nimaPac = true;
               }else{
                   mojScope.jeZdravnik.nimaPac = false;
