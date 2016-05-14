@@ -249,8 +249,6 @@ angular.module('tpo')
                 },
                 data: data
             }).then(function successCallback(response) {
-                console.log(response);
-                console.log(data);
                 if(data.zdravnik && data.zdravnik === -1)
                     replaceZdravnik(-1);
                 if(data.zobozdravnik && data.zobozdravnik === -1)

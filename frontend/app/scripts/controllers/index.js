@@ -19,10 +19,10 @@ angular.module('tpo')
       oskrbovanec.$save(function(response){
         // posodobi uporabnika, ker se je dodal nov oskrbovanec
         Uporabniki.get({iduporabnik: $rootScope.user.id}).$promise.then(function(response){
-          Notification.success('Oskrbovanec uspešno ustvarjen!');
+          Notification.success({title:'Oskrbovanec uspešno ustvarjen!', message: 'Prosimo izberite osebo v meniju in dopolnite njen profil!'});
           $rootScope.uporabnik = response;
 
-          // ui-select 
+          // ui-select
           $rootScope.profili = [$rootScope.user];
           $rootScope.profili = $rootScope.profili.concat(response.oskrbovanci);
           $rootScope.selected = { value: $rootScope.profili[0].ime + " " + $rootScope.profili[0].priimek };
