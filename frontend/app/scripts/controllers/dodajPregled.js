@@ -83,11 +83,10 @@ angular.module('tpo')
       //ustvari Uproabnika
       $scope.ustvariPacienta = function (izbranPacient) {
         mojScope.pregled.uporabnik = izbranPacient;
-      }
+      };
 
 
-      mojScope = $scope;
-
+      var mojScope = $scope;
 
       //moj scope, v katerega shranjujem vse kar je v pregledu
       mojScope.pregled = new DodajPregled();
@@ -100,7 +99,12 @@ angular.module('tpo')
 
         a.datum_pregleda = moment(mojScope.datum_pregleda, "DD.MM.YYYY").format("YYYY-MM-DD");
         a.zdravnik = $rootScope.uporabnik.id;
-        a.uporabnik = mojScope.pregled.uporabnik.id;
+        if(mojScope.pregled.uporabnik)
+	        a.uporabnik = mojScope.pregled.uporabnik.id;
+        else {
+	        responseFailedHandler("Prosim, izberite pacienta!");
+	        return;
+		}
         a.meritve = mojScope.pregled.meritve;
         a.vrednost_meritve = mojScope.rezultatiMeritev;
         a.bolezen = mojScope.pregled.bolezen;
@@ -115,53 +119,62 @@ angular.module('tpo')
             var meritev = $scope.test[i];
             if(meritev.tip === "Glukoza") {
                 //ce je v mejah normale, ga sprejmi
-                if (mojScope.glukozaMeritev>= 0 && mojScope.glukozaMeritev<=50) {
+                if (mojScope.glukozaMeritev >= meritev.nemogoce_min && mojScope.glukozaMeritev <= meritev.nemogoce_max) {
                     mojScope.rezultatiMeritev.push({vrednost:mojScope.glukozaMeritev, tip:1});
                 }
                 //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
                 else {
                     shraniPregledBoolean = false;
                     Notification.error({message: "Podatki za GLUKOZO so napačni!"});
+                    break;
                 }
             }else if (meritev.tip === "Krvni pritisk") {
                 //ce je v mejah normale, ga sprejmi
-                if ((mojScope.krvniMeritevSpodnji>= 30 && mojScope.krvniMeritevSpodnji<=300) && (mojScope.krvniMeritevZgornji>= 30 && mojScope.krvniMeritevZgornji<=300)) {
-                     mojScope.rezultatiMeritev.push({vrednost:mojScope.krvniMeritevSpodnji+"/"+mojScope.krvniMeritevZgornji, tip:2});
+                if ((mojScope.krvniMeritevSpodnji >= meritev.nemogoce_min && 
+			                mojScope.krvniMeritevSpodnji<=meritev.nemogoce_max) && 
+		                (mojScope.krvniMeritevZgornji >= meritev.nemogoce_min && 
+		                 mojScope.krvniMeritevZgornji <= meritev.nemogoce_max)) {
+                     mojScope.rezultatiMeritev.push({vrednost:mojScope.krvniMeritevSpodnji +
+	                     "/"+mojScope.krvniMeritevZgornji, tip:2});
                 }
                 //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
                 else {
                     shraniPregledBoolean = false;
                     Notification.error({message: "Podatki za KRVNI PRITISK so napačni!"});
+                    break;
                 }
             }else if (meritev.tip === "Srčni pritisk") {
                 //ce je v mejah normale, ga sprejmi
-                if (mojScope.srcniMeritev>= 30 && mojScope.srcniMeritev<=200) {
+                if (mojScope.srcniMeritev >= meritev.nemogoce_min && mojScope.srcniMeritev <= meritev.nemogoce_max) {
                     mojScope.rezultatiMeritev.push({vrednost:mojScope.srcniMeritev, tip:3});
                 }
                 //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
                 else {
                     shraniPregledBoolean = false;
                     Notification.error({message: "Podatki za SRČNI PRITISK so napačni!"});
+                    break;
                 }
             }else if (meritev.tip === "Teža") {
                 //ce je v mejah normale, ga sprejmi
-                if (mojScope.tezaMeritev>= 15 && mojScope.tezaMeritev<=50) {
+                if (mojScope.tezaMeritev >= meritev.nemogoce_min && mojScope.tezaMeritev <= meritev.nemogoce_max) {
                     mojScope.rezultatiMeritev.push({vrednost:mojScope.tezaMeritev, tip:5});
                 }
                 //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
                 else {
                     shraniPregledBoolean = false;
                     Notification.error({message: "Podatki za TEŽO(BMI) so napačni!"});
+                    break;
                 }
             }else {
                 //ce je v mejah normale, ga sprejmi
-                if (mojScope.tempMeritev>= 34 && mojScope.tempMeritev<=42) {
-                    mojScope.rezultatiMeritev.push({vrednost:mojScope.tempMeritev, tip:4});;
+                if (mojScope.tempMeritev >= meritev.nemogoce_min && mojScope.tempMeritev <= meritev.nemogoce_max) {
+                    mojScope.rezultatiMeritev.push({vrednost:mojScope.tempMeritev, tip:4});
                 }
                 //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
                 else {
                     shraniPregledBoolean = false;
                     Notification.error({message: "Podatki za TEMPERATURO so napačni!"});
+                    break;
                 }
             }
         }
@@ -170,18 +183,16 @@ angular.module('tpo')
             //shranim pregled in pocakam na response
             a.$save( function(){
 
-                Notification.success({message: "Pregled uspešno ustvarjen." });
+                Notification.success({message: "Pregled uspešno ustvarjen." , replaceMessage: true});
 
                 //reloadam stran, da se pobrisejo fieldi
                 $state.reload();
 
             }, function (err) {
                 responseFailedHandler ( $scope, err.data.error );
-                // showFailAlert( $scope );
-                Notification.error({message: "NEKJE JE NAPAKA!" });
             });
         }
-      }
+      };
 
        $scope.test = [];
 
@@ -199,7 +210,12 @@ angular.module('tpo')
            mojScope.rezultatiMeritev = [];
 
         for (var i=0; i<izbranaMeritev.length; i++)  {
+
             var meritev = izbranaMeritev[i];
+            var varname = meritev.tip.toLowerCase().replace(' ', '_').replace('ž', 'z')
+	            .replace('š', 's').replace('č', 'c');
+            //So we have reference for .enota
+            mojScope[varname] = meritev;
             if(meritev.tip === "Glukoza") {
                 mojScope.prikaziGlukozo = true;
             }else if (meritev.tip === "Krvni pritisk") {
@@ -213,43 +229,73 @@ angular.module('tpo')
             }
         }
         mojScope.pregled.meritve = izbranaMeritev;
-      }
-
+      };
 
       //funkcija za pridobivanje zdravil
-      $scope.ustvariBolezen = function (izbraneBolezni) {
-        $scope.izbranaZdravila = [];
+      $scope.ustvariBolezen = function (bolezen) {
+	      //Nafilaj zdravila
+	      for (var i=0; i<bolezen.zdravilo.length; i++) {
+		      mojScope.dodajZdravilo(bolezen.zdravilo[i]);
+	      }
+	      //Dodaj bolezni v pregled.bolezen, da jih na koncu pushas na server
+	      if(!mojScope.pregled.bolezen)
+		      mojScope.pregled.bolezen = [];
+	      mojScope.pregled.bolezen.push(bolezen);
+      };
 
-        for (var i=0; i<izbraneBolezni.length; i++)  {
-            var bolezen = izbraneBolezni[i];
-            for (var j=0; j<bolezen.zdravilo.length; j++) {
-                $scope.izbranaZdravila.push(bolezen.zdravilo[j]);
-            }
-        }
-        
-        mojScope.pregled.bolezen = izbraneBolezni;
-        mojScope.pregled.zdravilo = $scope.izbranaZdravila;
+      $scope.odstraniBolezen = function(bolezen) {
+	      for (var i=0; i<bolezen.zdravilo.length; i++) {
+		      mojScope.odstraniZdravilo(bolezen.zdravilo[i]);
+	      }
+	      var bolezni = mojScope.pregled.bolezen;
+	      if(!bolezni)
+		      return;
+	      var idx = existsInArray(bolezni, 'naziv', bolezen.naziv);
+	      if(idx > -1) {
+		      bolezni = bolezni.splice(i,1);
+		      $scope.izbraneBolezni = bolezni;
+	      }
+      };
 
-      }
+      $scope.dodajZdravilo = function(zdravilo) {
+	      if(!mojScope.pregled.zdravilo)
+		      mojScope.pregled.zdravilo = [];
+	      var idx = existsInArray(mojScope.pregled.zdravilo, 'zdravilo', zdravilo.zdravilo);
+	      if(idx == -1) {
+		      mojScope.pregled.zdravilo.push(zdravilo);
+		      $scope.izbranaZdravila = mojScope.pregled.zdravilo;
+	      }
+      };
+
+
+	  $scope.odstraniZdravilo = function(zdravilo) {
+		  var zdravila = mojScope.pregled.zdravilo;
+		  if(!zdravila)
+			  return;
+		  var idx = existsInArray(zdravila, 'zdravilo', zdravilo.zdravilo);
+		  if(idx > -1) {
+			  zdravila = zdravila.splice(idx,1);
+			  $scope.izbranaZdravila = zdravila;
+	      }
+	  };
+
       
       //funkcija za pridobivanje diete
       $scope.ustvariDieto = function (izbranaDieta) {
         mojScope.pregled.dieta = izbranaDieta;
+      };
+
+
+      function responseFailedHandler (servFail ){
+            console.log(servFail);
+            Notification.error({message: servFail});
       }
 
-
-      function responseFailedHandler ( scope, servFail ){
-
-            console.log(servFail);
-
-          if( servFail === "User with this email already exists"){
-
-              scope.besedZaUpor = "NEKAJ JE NAROBE";
-          }else{
-              // POPRAVI - GLEJ KAJ JE NAROBE, opazil samo pri duplicate entry
-              //scope.besedZaUpor = "WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO";
-              Notification.error({message: "NEKJE JE NAPAKA!" });
-          }
-
-      };
+	  function existsInArray(array, key, val) {
+		  for(var i=0; i<array.length; i++) {
+			  if(array[i][key] === val)
+				  return i;
+		  }
+		  return -1;
+	  }
   }]);
