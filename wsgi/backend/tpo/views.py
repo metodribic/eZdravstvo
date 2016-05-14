@@ -430,7 +430,7 @@ def ustvariPregled(request, format=None):
         izmerjena_vrednost_meritve = request.data['vrednost_meritve']
         bolezen = request.data['bolezen']
         zdravilo = request.data['zdravilo']
-        dieta = request.data['dieta']
+        dieta = request.data.get('dieta', [])
         #datum_naslednjega = request.data['datum_naslednjega']
         opombe = request.data['opombe']
 
