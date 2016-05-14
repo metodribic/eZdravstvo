@@ -130,9 +130,7 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
           <li class="header">Pozdravljeni v eZdravstvu!</li>
-          <!-- Optionally, you can add icons to the links -->
           <li><a ui-sref="nadzornaPlosca"><i class="fa fa-home"></i> <span>Nadzorna plošča</span></a></li>
-          <!-- <li><a href="#"><i class="fa fa-heartbeat"></i> <span>Meritve</span></a></li> -->
           <li><a ui-sref="listPregledov" ng-hide="isSuperU"><i class="fa fa-stethoscope"></i> <span>Pregledi</span></a></li>
 
           <li class="header">Administrativne akcije</li>
@@ -148,28 +146,20 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper" style="height: 2000px;">
-      <!-- Content Header (Page header) -->
-      <!-- <section class="content-header">
-        <h1>
-          NASLOV <small>Opcijski podnaslov</small>
-        </h1>
-      </section> -->
       <!-- Main content -->
       <section class="content">
-        <!-- CONTENT -->
-        <div class="alert alert-warning padding-lr-15" role="alert" ng-show="oskrbovanecAlert">
+        <!-- Alert for letting user know he/she is reviwing oskrbovanec  -->
+        <div class="alert alert-warning margin-lr-15" role="alert" ng-show="oskrbovanecAlert">
           <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
           Preglejujete zdravstveni karton za osebo: <b>{{uporabnik.ime}} {{uporabnik.priimek}}</b>
         </div>
+
+        <!-- CONTENT -->
         <div ui-view></div>
         <!-- END CONTENT -->
       </section>
-
-      <!-- <div style="padding: 10px 0px; text-align: center;"><div class="text-muted">Excuse the ads! We need some help to keep our site up.</div> -->
-
     </div>
     <!-- /.content-wrapper -->
-
     <div class="control-sidebar-bg" style="position: fixed; height: auto;"></div>
   </div>
   <!-- ./wrapper -->
