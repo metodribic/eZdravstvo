@@ -221,19 +221,21 @@
                 <span ng-show="pregled.bolezen.length == 0">/</span>
               </td>
               <td>
-                <span ng-repeat="zdravilo in pregled.zdravilo">
-                    {{zdravilo.zdravilo}}
+                <span ng-repeat="zdravilo in pregled.zdravilo | limitTo: 5">
+                    - {{zdravilo.zdravilo}}<br>
                 </span>
                 <span ng-show="pregled.zdravilo.length == 0">/</span>
+                <span ng-show="pregled.zdravilo.length > 5">- ...</span>
               </td>
               <td>
-                <span ng-repeat="dieta in pregled.dieta">
-                    {{dieta.naziv}} <br>
+                <span ng-repeat="dieta in pregled.dieta | limitTo: 5">
+                    - {{dieta.naziv}} <br>
                 </span>
                 <span ng-show="pregled.dieta.length == 0">/</span>
+                <span ng-show="pregled.dieta.length > 5">- ...</span>
               </td>
               <td>
-                <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega}}</span>
+                <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega | date: 'dd.MM.yyyy, hh:mm'}}</span>
                 <span ng-show="pregled.datum_naslednjega.length == null">Ponoven pregled ni potreben!</span>
               </td>
             </tr>
@@ -324,7 +326,7 @@
             <tbody>
               <tr ng-repeat="zdravilo in zdravila">
                 <td>{{zdravilo.zdravilo}}</td>
-                <td><a ng-href="{{zdravilo.navodila}}">{{okrajsaj(zdravilo.navodila)}}</a></td>
+                <td><a ng-href="{{zdravilo.navodila}}">{{okrajsaj(zdravilo.navodila, 30)}}</a></td>
               </tr><!-- okrajsaj -->
             </tbody>
           </table>
@@ -348,7 +350,7 @@
                 <td class="col-1">{{dieta.sifra}}</td>
                 <td class="col-8">
                   <span ng-repeat="navodilo in dieta.navodila">
-                    <a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url)}}</a>
+                    <a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url, 30)}}</a>
                     <br><!--okrajsaj-->
                   </span>
 
