@@ -80,7 +80,7 @@ angular.module('tpo')
         //console.log(response);
       });
 
-      //ustvari Uproabnika
+      //ustvari Uporabnika
       $scope.ustvariPacienta = function (izbranPacient) {
         mojScope.pregled.uporabnik = izbranPacient;
       };
