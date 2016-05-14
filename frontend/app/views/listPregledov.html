@@ -46,7 +46,7 @@
                         <span ng-show="pregled.dieta.length == 0">/</span>
                       </td>
                       <td>
-                        <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega}}</span>
+                        <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega | date: 'dd.MM.yyyy'}}</span>
                         <span ng-show="pregled.datum_naslednjega.length == null">Ponoven pregled ni potreben!</span>
                       </td>
                     </tr>
