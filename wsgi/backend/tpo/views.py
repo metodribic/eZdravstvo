@@ -426,11 +426,11 @@ def ustvariPregled(request, format=None):
         datum_pregleda = request.data['datum_pregleda']
         zdravnikID = request.data['zdravnik']
         uporabnikID = request.data['uporabnik']
-        meritve = request.data['meritve']
-        izmerjena_vrednost_meritve = request.data['vrednost_meritve']
-        bolezen = request.data['bolezen']
-        zdravilo = request.data['zdravilo']
-        dieta = request.data['dieta']
+        #meritve = request.data.get('meritve', None)
+        izmerjena_vrednost_meritve = request.data.get('vrednost_meritve', [])
+        bolezen = request.data.get('bolezen', [])
+        zdravilo = request.data.get('zdravilo', [])
+        dieta = request.data.get('dieta', [])
         #datum_naslednjega = request.data['datum_naslednjega']
         opombe = request.data['opombe']
 
@@ -476,11 +476,6 @@ def ustvariPregled(request, format=None):
 
         return Response()
 
-    except ValidationError as ve:
-        print ve
-        response = JSONResponse({"error": "WeakPassword"})
-        response.status_code = 400
-        return response
     except IntegrityError as e:
         #Exception raised when the relational integrity of the database
         #is affected, e.g. a foreign key check fails, duplicate key, etc.
@@ -493,7 +488,7 @@ def ustvariPregled(request, format=None):
     except Exception as ex:
         print ex
         traceback.print_exc()
-        response = JSONResponse({"error" : "Usage: {'email':'someone@someplace', 'password':'password'}"})
+        response = JSONResponse({"error" : ex})
         response.status_code = 400 # Bad request
         return response
 
