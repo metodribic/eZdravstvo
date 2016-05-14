@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.hashers import make_password
 from django.core.serializers import json
 from rest_framework import viewsets, status, filters
 from rest_framework.decorators import api_view, permission_classes, list_route
@@ -21,7 +22,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.core.mail import send_mail
 from django.conf import settings
-
+from pprint import pprint
 
 
 # Create your views here.
@@ -33,6 +34,7 @@ from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSeriali
     LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer, SifrantRegistriranihSerializer, \
     VrednostiMeritevSerializer, KontaktnaOsebaSerializer
 
+import random
 
 
 
@@ -83,7 +85,24 @@ class MeritevViewSet(viewsets.ModelViewSet):
         except Exception as e:
             print(e)
 
-        return Meritev.objects.filter(uporabnik=user)
+        if self.request.GET.get('pregledId', -1) != -1:
+            pregledId = self.request.GET.get('pregledId', -1)
+            return Meritev.objects.filter(uporabnik=user, pregled_id=pregledId)
+        else:
+            return Meritev.objects.filter(uporabnik=user)
+
+
+#MERITVE SEZNAM
+class VrednostiMeritevViewSet(viewsets.ModelViewSet):
+    queryset = VrednostiMeritev.objects.all()
+    serializer_class = VrednostiMeritevSerializer
+
+    @list_route(methods=['GET'])
+    def seznam(self, request):
+        queryset = VrednostiMeritev.objects.all()
+        serializer = VrednostiMeritevSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+
 
 # POSTA
 class PostaViewSet(viewsets.ModelViewSet):
@@ -145,6 +164,12 @@ class DietaViewSet(viewsets.ModelViewSet):
     queryset = Dieta.objects.all()
     serializer_class = DietaSerializer
 
+    @list_route(methods=['GET'])
+    def seznam(self, request):
+        queryset = Dieta.objects.all()
+        serializer = DietaSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+
     def get_queryset(self):
         user = self.request.user
         try:
@@ -181,11 +206,18 @@ class BolezniViewSet(viewsets.ModelViewSet):
         return Bolezni.objects.filter(uporabnik = user)
 
 
-@permission_classes((IsAuthenticated,))
+
 # ZDRAVILO
+@permission_classes((IsAuthenticated,))
 class ZdraviloViewSet(viewsets.ModelViewSet):
     queryset = Zdravilo.objects.all()
     serializer_class = ZdraviloSerializer
+
+    @list_route(methods=['GET'])
+    def seznam(self, request):
+        queryset = Zdravilo.objects.all()
+        serializer = ZdraviloSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
 
     def get_queryset(self):
         user = self.request.user
@@ -385,6 +417,89 @@ def registracijaAdmin(request, format=None):
 
 
 @api_view(['POST'])
+def ustvariPregled(request, format=None):
+    """
+    Create PREGLED
+    """
+    try:
+
+        datum_pregleda = request.data['datum_pregleda']
+        zdravnikID = request.data['zdravnik']
+        uporabnikID = request.data['uporabnik']
+        meritve = request.data['meritve']
+        izmerjena_vrednost_meritve = request.data['vrednost_meritve']
+        bolezen = request.data['bolezen']
+        zdravilo = request.data['zdravilo']
+        dieta = request.data['dieta']
+        #datum_naslednjega = request.data['datum_naslednjega']
+        opombe = request.data['opombe']
+
+
+        zdravnik = Zdravnik.objects.get(id=zdravnikID)
+        uporabnik = Uporabnik.objects.get(id=uporabnikID)
+
+
+        pregled = Pregled.objects.create(opombe=opombe,
+                                         datum=datum_pregleda,
+                                         zdravnik=zdravnik,
+                                         datum_naslednjega=datum_pregleda,
+                                         uporabnik=uporabnik)
+
+
+        # pohendlaj diete
+        for d in dieta:
+            pregled.dieta.add(Dieta.objects.get(naziv=d["naziv"], sifra=d["sifra"]))
+
+
+        # pohendlaj bolezni
+        for b in bolezen:
+            pregled.bolezen.add(Bolezni.objects.get(naziv=b["naziv"], mkb10=b["mkb10"], alergija=b["alergija"]))
+
+
+        #pohendlaj zdravila
+        for z in zdravilo:
+            pregled.zdravilo.add(Zdravilo.objects.get(zdravilo=z["zdravilo"]))
+
+
+        #pohendlaj meritve
+
+        for v in izmerjena_vrednost_meritve:
+            vrednostMeritev = VrednostiMeritev.objects.get(id=v["tip"])
+            meritve = Meritev.objects.create(tip_meritve=vrednostMeritev,
+                                             vrednost_meritve=v["vrednost"],
+                                             datum=datum_pregleda,
+                                             uporabnik_id=uporabnikID,
+                                             pregled=pregled)
+
+
+
+
+        return Response()
+
+    except ValidationError as ve:
+        print ve
+        response = JSONResponse({"error": "WeakPassword"})
+        response.status_code = 400
+        return response
+    except IntegrityError as e:
+        #Exception raised when the relational integrity of the database
+        #is affected, e.g. a foreign key check fails, duplicate key, etc.
+
+        traceback.print_exc()
+        respons = JSONResponse({"error": "{'type' : 'Integrity error'}"})
+        respons.status_code = 422
+        return respons
+
+    except Exception as ex:
+        print ex
+        traceback.print_exc()
+        response = JSONResponse({"error" : "Usage: {'email':'someone@someplace', 'password':'password'}"})
+        response.status_code = 400 # Bad request
+        return response
+
+
+
+@api_view(['POST'])
 def registracijaPacient(request, format=None):
     """
     Create new user
@@ -392,8 +507,12 @@ def registracijaPacient(request, format=None):
     try:
         #print(request.data)
         # check if email and password are received or return 400
-        mail = request.data['email']
-        password = request.data['password']
+        if request.data.get('oskrbovanec', "") != "":
+            mail = request.data['email']
+            password = 'pbkdf2_sha256$24000$57Yuhx3LYR5c$/Mnf5vRoMky/AL38imTepBSZunwzNcs74qz5r4SZtsE=';
+        else:
+            mail = request.data['email']
+            password = request.data['password']
 
          #opcijska polja
         ime = request.data.get('ime', "")
@@ -433,16 +552,25 @@ def registracijaPacient(request, format=None):
 
 
             #posljes mail za aktivacijo
-            send_mail('Aktivacija eZdravstvo', 'Uspesno ste se registrirali na portal eZdravstvo. Za aktivacijo profila, kliknite na spodnji naslov: \n\n\n' +
+            if request.data.get('oskrbovanec', "") == "":
+                send_mail('Aktivacija eZdravstvo', 'Uspesno ste se registrirali na portal eZdravstvo. Za aktivacijo profila, kliknite na spodnji naslov: \n\n\n' +
                       settings.API_URL+'/activate/?email='+mail, 'ezdravstvo.tpo7@gmail.com', [mail], fail_silently=False)
+
+            if request.data.get('oskrbovanec', "") != "":
+                lastnik = Uporabnik.objects.get(id = request.data['lastnik'])
+                lastnik.oskrbovanci.add(pacient.pk)
+                lastnik.save()
 
             respons = JSONResponse({"success": "function : {'user created':'Pacient'}"})
             respons.status_code = 201
+            respons.pacient = pacient.pk;
             return respons
+
 
 
         respons = JSONResponse({"success": "function : {'user created':'Pacient'}"})
         respons.status_code = 201
+        respons.pacient = pacient;
         return respons
 
     except ValidationError as ve:
@@ -577,9 +705,11 @@ def changeZdravnik(request, format=None):
             else:  
                 sameZdravnik = False #So we don't add the same relation
                 sameZobozdravnik = False 
+                responseZdravniki = {}
                 
                 # Loop over relations and modify/delete if necessary
                 for r in rels:  #Replace relations
+                    print r
                     if r.zdravnik.id == zobozdravnikId:
                         sameZobozdravnik = True
                     if r.zdravnik.id == zdravnikId:
@@ -596,15 +726,18 @@ def changeZdravnik(request, format=None):
                         r.zdravnik.save()
                         
                 if zobozdravnikId > -1 and sameZobozdravnik == False: #Changing zobozdravnik
-                        UporabnikZdravnik.objects.create(uporabnik_id = id, zdravnik_id = zobozdravnikId)
-                        zobozdravnik.prosta_mesta -= 1
-                        zobozdravnik.save()
+                    UporabnikZdravnik.objects.create(uporabnik_id = id, zdravnik_id = zobozdravnikId)
+                    zobozdravnik.prosta_mesta -= 1
+                    zobozdravnik.save()
+                    serializer = ZdravnikSerializer(zobozdravnik, context={'request': request})
+                    responseZdravniki['zobozdravnik'] = serializer.data
                 if zdravnikId > -1 and sameZdravnik == False: #Changing zobozdravnik
                     UporabnikZdravnik.objects.create(uporabnik_id = id, zdravnik_id = zdravnikId)
                     zdravnik.prosta_mesta -= 1
                     zdravnik.save()
-
-            return Response()
+                    serializer = ZdravnikSerializer(zdravnik, context={'request': request})
+                    responseZdravniki['zdravnik'] = serializer.data
+            return JSONResponse(responseZdravniki)
         except ObjectDoesNotExist:
             response = JSONResponse({"error": "User does not exist"})
             response.status_code = 400
@@ -662,11 +795,6 @@ def changePassword(request, format=None):
 class SifrantRegistriranihViewSet(viewsets.ModelViewSet):
     queryset = SifrantRegistriranih.objects.all()
     serializer_class = SifrantRegistriranihSerializer
-
-
-class VrednostiMeritevViewSet(viewsets.ModelViewSet):
-    queryset = VrednostiMeritev.objects.all()
-    serializer_class = VrednostiMeritevSerializer
 
 
 class KontaktnaOsebaViewSet(viewsets.ModelViewSet):

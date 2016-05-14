@@ -6,6 +6,7 @@ from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Me
 
 """ POSTA """
 class PostaSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField()
     class Meta:
         model = Posta
         fields =('id', 'kraj')
@@ -32,6 +33,7 @@ class UstanovaSerializer(serializers.HyperlinkedModelSerializer):
 class AmbulantaSerializer(serializers.HyperlinkedModelSerializer):
     ustanova = UstanovaSerializer()
     posta = PostaSerializer()
+    id = serializers.IntegerField()
 
     class Meta:
         model = Ambulanta
@@ -39,6 +41,7 @@ class AmbulantaSerializer(serializers.HyperlinkedModelSerializer):
 
 """ OSEBJE/MED. SESTRE """
 class OsebjeSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField()
     class Meta:
         model = Osebje
         exclude = ('password', 'first_name', 'last_name', 'is_superuser', 'is_staff')
@@ -59,6 +62,7 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField()
     sifra = SifrantRegistriranihSerializer()
     ustanova = UstanovaSerializer()
+
     class Meta:
         model = Zdravnik
         exclude = ('password', 'first_name', 'last_name', 'is_superuser', 'is_staff')
@@ -80,6 +84,7 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
 """ ZDRAVILO """
 class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
+
     class Meta:
         model = Zdravilo
 
@@ -173,6 +178,11 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
 
         return instance
 
+    def create(self, validated_data):
+        oskrbovanec = Uporabnik(role_id=4)
+        oskrbovanec.save()
+        return oskrbovanec
+
 
 class UporabnikZdravnik(serializers.HyperlinkedModelSerializer):
     uporabnik = UporabnikSerializer()
@@ -204,7 +214,7 @@ class MeritevSerializer(serializers.HyperlinkedModelSerializer):
 class PregledSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     zdravnik = ZdravnikSerializer()
-    meritve = MeritevSerializer()
+    #meritve = MeritevSerializer()
     bolezen = BolezniSerializer(many=True)
     dieta = DietaSerializer(many=True)
     zdravilo = ZdraviloSerializer(many=True)

@@ -80,7 +80,7 @@ angular.module('tpo')
 
         // preveri če je datum vnesen
         if($rootScope.uporabnik.datum_rojstva !== null){
-          updated_user.datum_rojstva = new Date($rootScope.uporabnik.datum_rojstva).toISOString();
+          updated_user.datum_rojstva = moment($rootScope.uporabnik.datum_rojstva, 'DD.MM.YYYY').toISOString();
         }
         else {
           updated_user.datum_rojstva = null;
@@ -106,9 +106,9 @@ angular.module('tpo')
       };
       updated_kontaktna.sorodstveno_razmerje = $rootScope.uporabnik.kontaktna_oseba.sorodstveno_razmerje;
       updated_kontaktna.telefon = $rootScope.uporabnik.kontaktna_oseba.telefon;
-
       // update kontaktna oseba
-      if( $rootScope.uporabnik.kontaktna_oseba.id !== null ){
+      if($rootScope.uporabnik.kontaktna_oseba.id){
+        console.log('test');
         updated_kontaktna.id = $rootScope.uporabnik.kontaktna_oseba.id;
         updated_kontaktna.$update({kontaktnaId: $rootScope.uporabnik.kontaktna_oseba.id}, function(response){
           Notification.success('Kontaktna oseba uspešno posodobljen!!');
@@ -116,8 +116,10 @@ angular.module('tpo')
       }
       // create kontaktna oseba
       else {
-        updated_kontaktna.id = $rootScope.uporabnik.id;
+          updated_kontaktna.id = $rootScope.uporabnik.id;
         KontaktnaOseba.save(updated_kontaktna, function(response){
+            console.log(response);
+            $rootScope.uporabnik.kontaktna_oseba.id = response.id;
           Notification.success('Kontaktna oseba uspešno ustvarjena!!');
         });
       }
@@ -189,6 +191,8 @@ angular.module('tpo')
           }
 
           for(var i=0; i<response.length; i++) {
+              if(!response[i].sprejema_paciente || response[i].prosta_mesta < 1)
+                  continue;
               if(response[i].tip === "zobozdravnik")
                   zobo.push(response[i]);
               else
@@ -229,8 +233,6 @@ angular.module('tpo')
         var zdravnik = $scope.izbraniZdr;
         var zobozdravnik = $scope.izbranizobozdr;
         var data = {};
-        console.log(zdravnik);
-        console.log(zobozdravnik);
 
         if(zdravnik)
             data.zdravnik = zdravnik;
@@ -248,12 +250,45 @@ angular.module('tpo')
                 },
                 data: data
             }).then(function successCallback(response) {
+                console.log(response);
+                console.log(data);
+                if(data.zdravnik && data.zdravnik === -1)
+                    replaceZdravnik(-1);
+                if(data.zobozdravnik && data.zobozdravnik === -1)
+                    replaceZdravnik(-2);
+                if(response.data.zdravnik)
+                    replaceZdravnik(response.data.zdravnik);
+                if(response.data.zobozdravnik)
+                    replaceZdravnik(response.data.zobozdravnik);
                 addAlert("Shranjeno", 'success');
             }, function errorCallback(response) {
                 addAlert(response.data.error, 'error');
             });
         });
     };
+
+    function replaceZdravnik(nov) {
+        var z = $rootScope.uporabnik.zdravnik;
+        //Zdravniki array is empty so we just push 
+        if(!z && nov !== -1 && nov !== -2) {
+            $rootScope.uporabnik.zdravnik.push(nov);
+            return;
+        }
+        for(var i=0; i<z.length; i++) {
+            //Replace
+            if(nov !== -1 && nov !== -2 && (nov.tip !== "zobozdravnik" && z[i].tip !== "zobozdravnik" || 
+                                            nov.tip === "zobozdravnik" && z[i].tip === "zobozdravnik" )) {
+                $rootScope.uporabnik.zdravnik[i] = nov;
+                return;
+            } else {    //Delete
+                if(nov === -1 && z[i].tip !== "zobozdravnik" || nov === -2 && z[i].tip === "zobozdravnik") {
+                    $rootScope.uporabnik.zdravnik.splice(i, 1);
+                    return;
+                }
+            }
+        }
+        $rootScope.uporabnik.zdravnik.push(nov);
+    }
 
 
     // SPREMENI GESLO
@@ -284,5 +319,5 @@ angular.module('tpo')
     function addAlert(msg, state) {
         Notification({message: msg}, state);
     }
-    
+
   }]);

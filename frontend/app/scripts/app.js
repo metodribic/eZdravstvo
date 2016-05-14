@@ -80,6 +80,11 @@ angular
               controller: 'ProfileCtrl'
           })
 
+          .state('prijavaPregled', {
+              url: '/prijavaPregled',
+              templateUrl: '../views/prijavaPregled.html'
+          })
+
           .state('dodajPregled', {
               url: '/dodajpregled',
               templateUrl: '../views/dodajPregled.html',
@@ -153,6 +158,24 @@ angular
         $rootScope.uporabnik = item;
         $http.defaults.headers.common.pacient = id;
         $rootScope.selected = { value: item.ime + " " + item.priimek };
+
+        // zračuni id od pošte od oskrbovanca
+        if($rootScope.uporabnik.posta !== null && $rootScope.uporabnik.posta.id === undefined){
+          $rootScope.uporabnik.posta.id = $rootScope.uporabnik.posta.url.substring($rootScope.uporabnik.posta.url.length - 4);
+          $rootScope.uporabnik.posta.id = parseInt($rootScope.uporabnik.posta.id);
+        }
+
+        // zračuni id od kontaktne osebe oskrbovanca
+        if($rootScope.uporabnik.kontaktna_oseba !== null && !$rootScope.uporabnik.kontaktna_oseba.id && $rootScope.uporabnik.kontaktna_oseba.url){
+            var a = $rootScope.uporabnik.kontaktna_oseba;
+            a.id = a.url.substring(a.url.lastIndexOf('/')+1);
+        }
+
+        // zračuni id od pošte za kontaktna_oseba od oskrbovanca
+        if($rootScope.uporabnik.kontaktna_oseba !== null && $rootScope.uporabnik.kontaktna_oseba.posta !== null && $rootScope.uporabnik.kontaktna_oseba.posta.id === undefined){
+          $rootScope.uporabnik.kontaktna_oseba.posta.id = $rootScope.uporabnik.kontaktna_oseba.posta.url.substring($rootScope.uporabnik.kontaktna_oseba.posta.url.length - 4);
+          $rootScope.uporabnik.kontaktna_oseba.posta.id = parseInt($rootScope.uporabnik.kontaktna_oseba.posta.id);
+        }
 
         //  preveri če ima profil, če ne ga prisli da ga ustvari
         if($rootScope.selected.value == " "){

@@ -18,6 +18,15 @@ angular.module('tpo.models', ['ngResource', 'config'])
 })
 
 
+.factory('DodajPregled', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/ustvariPregled', {
+		update: {
+			method: 'POST'
+		}
+	});
+})
+
+	
 .factory('Posta', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/posta/:postaId', { postaId: '@postaId' }, {
 		update: {
@@ -33,6 +42,10 @@ angular.module('tpo.models', ['ngResource', 'config'])
 			method: 'UPDATE'
 		}
 	});
+})
+
+.factory('VrednostiMeritevSeznam', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/vrednosti_meritev/seznam');
 })
 
 
@@ -55,9 +68,6 @@ angular.module('tpo.models', ['ngResource', 'config'])
 
 .factory('RegistracijaPacient', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/registracijaPacient', {
-		update: {
-			method: 'PUT'
-		}
 	});
 })
 
@@ -87,6 +97,15 @@ angular.module('tpo.models', ['ngResource', 'config'])
 })
 
 
+.factory('BolezniSeznam', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/bolezni/seznam', { bolezenId: '@bolezenId' }, {
+		update: {
+			method: 'UPDATE'
+		}
+	});
+})
+
+
 .factory('Zdravila', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/zdravila/:zdraviloId', { zdraviloId: '@zdraviloId' }, {
 		update: {
@@ -95,6 +114,13 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
+.factory('ZdravilaSeznam', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/zdravila/seznam', {
+		update: {
+			method: 'UPDATE'
+		}
+	});
+})
 
 .factory('Zdravnik', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/zdravnik/:zdravnikId', { zdravnikId: '@zdravnikId' }, {
@@ -133,6 +159,14 @@ angular.module('tpo.models', ['ngResource', 'config'])
 
 .factory('Diete', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/diete/:dietaId', { dietaId: '@dietaId' }, {
+		update: {
+			method: 'UPDATE'
+		}
+	});
+})
+
+.factory('DieteSeznam', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/diete/seznam', { dietaId: '@dietaId' }, {
 		update: {
 			method: 'UPDATE'
 		}

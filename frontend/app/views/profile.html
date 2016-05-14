@@ -34,6 +34,7 @@
                   </select>
                 </div>
             </div>
+            {{$rootScope.uporabnik.kontaktna_oseba.id}}
 
             <!-- Datum rojstva uporabnika -->
             <div class="form-group">
@@ -267,7 +268,7 @@
 		              <ui-select-match allow-clear="true" placeholder="<Ni izbranega zdravnika>">
 			              <span ng-bind="$select.selected"></span>
 		              </ui-select-match>
-		              <ui-select-choices ui-disable-choice="zdravnik.prosta_mesta < 1" repeat="zdravnik in (zdravniki | filter: $select.search)">
+		              <ui-select-choices repeat="zdravnik in (zdravniki | filter: $select.search)">
 						  <span>{{zdravnik.ime}} {{zdravnik.priimek}} {{zdravnik.naziv}} ({{zdravnik.sifra.sifra}})</span>
 		              </ui-select-choices>
 	              </ui-select>
@@ -282,7 +283,7 @@
 					  <ui-select-match allow-clear="true" placeholder="<Ni izbranega zobozdravnika>">
 			              <span ng-bind="$select.selected"></span>
 		              </ui-select-match>
-		              <ui-select-choices ui-disable-choice="zdravnik.prosta_mesta < 1" repeat="zdravnik in (zobozdravniki | filter: $select.search)">
+		              <ui-select-choices repeat="zdravnik in (zobozdravniki | filter: $select.search)">
 			              <span>{{zdravnik.ime}} {{zdravnik.priimek}} {{zdravnik.naziv}} ({{zdravnik.sifra.sifra}})</span>
 		              </ui-select-choices>
 	              </ui-select>

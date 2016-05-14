@@ -5,13 +5,13 @@
       <h3 class="bottom-border">Dodajanje pregleda</h3>
       <div class="row">
         <div class="col-xs-12">
-          <form class="form-horizontal" role="form">
+          <form class="form-horizontal" role="form"  ng-submit="ustvariPregled()">
 
             <!-- datum pregleda -->
             <div class="form-group">
               <label class="control-label col-sm-2">Datum pregleda:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" disabled ng-model="datum">
+                <input type="text" class="form-control" disabled ng-model="datum_pregleda">
               </div>
             </div>
 
@@ -23,43 +23,148 @@
               </div>
             </div>
 
-            <!-- pacient -->
-            <div class="form-group">
-              <label class="control-label col-sm-2">Pacient:</label>
-              <div class="col-sm-10">
-                <ui-select ng-model="pacienti" theme="bootstrap">
-                  <ui-select-match placeholder="Izberite pacienta iz seznama ...">{{$select.selected.name}}</ui-select-match>
-                  <ui-select-choices repeat="item in pacienti | filter: $select.search">
-                    <div ng-bind-html="item">{{item.ime}} {{item.priimek}}</div>
-                  </ui-select-choices>
-                </ui-select>
-              </div>
+            <!---->
+            <div class="form-group" >
+                <label class="control-label col-sm-2">Pacient:</label>
+                <div class="col-sm-10">
+                    <ui-select ng-model="izbranPacient" on-select="ustvariPacienta(izbranPacient)">
+                        <ui-select-match placeholder="Izberite pacienta...">{{$select.selected.ime}} {{$select.selected.priimek}}</ui-select-match>
+                        <ui-select-choices repeat="pacient in pacienti">
+                            <div ng-bind-html="pacient.ime">{{pacient.ime}} {{pacient.priimek}}</div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
             </div>
+
+            <!-- meritve -->
+            <div class="form-group">
+                <label class="control-label col-sm-2">Meritve:</label>
+                <div class="col-sm-10">
+                    <ui-select  multiple ng-model="izbranaMeritev" on-select="ustvariMeritev(izbranaMeritev)" on-remove="ustvariMeritev(izbranaMeritev)">
+                        <ui-select-match placeholder="Izberite meritev...">{{$item.tip}}</ui-select-match>
+                        <ui-select-choices repeat="meritev in vrednosti_meritev">
+                            <div ng-bind-html="meritev.tip"> {{meritev.tip}} </div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
+
+            <!-- VREDNOSTI MERITEV -->
+            <div class="form-group" ng-show="prikaziGlukozo">
+                <label class="control-label col-sm-2">Glukoza:</label>
+                <div class="col-sm-10">
+                    <input type="number" ng-model="glukozaMeritev"/>
+                </div>
+             </div>
+
+             <div class="form-group" ng-show="prikaziKrvni">
+                <label class="control-label col-sm-2">Krvni pritisk (SPODNJI):</label>
+                <div class="col-sm-3">
+                    <input type="number" ng-model="krvniMeritevSpodnji"/>
+                </div>
+
+                <label class="control-label col-sm-2">Krvni pritisk (ZGORNJI):</label>
+                <div class="col-sm-3">
+                    <input type="number" ng-model="krvniMeritevZgornji"/>
+                </div>
+             </div>
+
+             <div class="form-group" ng-show="prikaziSrcni">
+                <label class="control-label col-sm-2">Srčni pritisk:</label>
+                <div class="col-sm-10">
+                    <input type="number"  ng-model="srcniMeritev"/>
+                </div>
+             </div>
+
+             <div class="form-group" ng-show="prikaziTeza">
+                <label class="control-label col-sm-2">Teža:</label>
+                <div class="col-sm-10">
+                    <input type="number" ng-model="tezaMeritev"/>
+                </div>
+             </div>
+
+             <div class="form-group" ng-show="prikaziTemperatura">
+                <label class="control-label col-sm-2">Telesna temperatura:</label>
+                <div class="col-sm-10">
+                    <input type="number" ng-model="tempMeritev"/>
+                </div>
+             </div>
+
+
+            <!-- bolezni -->
+            <div class="form-group" >
+                <label class="control-label col-sm-2">Bolezni:</label>
+                <div class="col-sm-10">
+                    <ui-select multiple ng-model="izbraneBolezni" on-select="ustvariBolezen(izbraneBolezni)" on-remove="ustvariBolezen(izbraneBolezni)">
+                        <ui-select-match placeholder="Izberite bolezen...">{{$item.naziv}}</ui-select-match>
+                        <ui-select-choices repeat="bolezen in bolezniSeznam">
+                            <div ng-bind-html="bolezen.naziv" > {{bolezen.naziv}} </div> <span ng-show="bolezen.alergija">      <b>ALERGIJA</b></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
+
+            <!-- zdravila -->
+            <div class="form-group" >
+                <label class="control-label col-sm-2">Zdravila:</label>
+                <div class="col-sm-10">
+                    <ui-select multiple ng-model="izbranaZdravila" on-select="ustvariBolezen(izbranaZdravila)" on-remove="ustvariZdravila(izbranaZdravila)">
+                        <ui-select-match placeholder="Izberite zdravila...">{{$item.zdravilo}}</ui-select-match>
+                        <ui-select-choices repeat="zdravilo in izbranaZdravila">
+                            <div ng-bind-html="zdravilo.zdravilo"> {{zdravilo.zdravilo}} </div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
+
+            <!-- dieta -->
+            <div class="form-group" >
+                <label class="control-label col-sm-2">Dieta:</label>
+                <div class="col-sm-10">
+                    <ui-select multiple ng-model="izbranaDieta" on-select="ustvariDieto(izbranaDieta)" on-remove="ustvariDieto(izbranaDieta)">
+                        <ui-select-match placeholder="Izberite dieto...">{{$item.naziv}}</ui-select-match>
+                        <ui-select-choices repeat="dieta in diete">
+                            <div ng-bind-html="dieta.naziv"> {{dieta.naziv}} </div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
 
             <!-- opombe -->
             <div class="form-group">
               <label class="control-label col-sm-2">Opis/opombe:</label>
               <div class="col-sm-10">
-                <textarea class="form-control" rows="5" placeholder="Opombe ali opis pregleda"></textarea>
+                <textarea class="form-control" rows="5" placeholder="Opombe ali opis pregleda" ng-model="opombe"></textarea>
               </div>
             </div>
 
-            <!-- datum naslednjega -->
+            <!-- datum naslednjega
             <div class="form-group">
-              <label class="control-label col-sm-2">Datum nasledenjaga:</label>
+              <label class="control-label col-sm-2">Datum naslednjega:</label>
               <div class="col-sm-10">
                 <div class="dropdown">
-                  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-model="datum_naslednjega">
                     Datum naslednjega pregleda
                     <span class="caret"></span>
                   </button>
-                  <ul class="dropdown-menu">
+                  <ul class="dropdown-menu" ng-model="datum_naslednjega">
                     <li><a ng-click="pregled(null)">Pregled ni potreben</a></li>
                     <li><a href="#">Čez 1 teden</a></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="#">Izberite poljuben datum ...</a></li>
                   </ul>
                 </div>
+              </div>
+            </div>
+            -->
+
+              <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default" ui-sref="prijavaPregled">Prijavi na pregled</button>
               </div>
             </div>
 

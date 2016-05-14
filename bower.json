@@ -12,6 +12,9 @@
     "angular-ui-router": "^0.2.18",
     "ui-select": "angular-ui-select#^0.16.1",
     "angular-ui-notification": "^0.2.0",
+    "jquery": "^2.2.3",
+    "jquery-ui": "^1.11.4",
+    "bootstrap": "^3.3.6",
     "ngDatepicker": "*"
   },
   "devDependencies": {
@@ -29,6 +32,13 @@
         "dist/css/bootstrap.css",
         "dist/js/bootstrap.js"
       ]
+    },
+    "ngDatepicker": {
+      "main": [
+        "src/js/ngDatepicker.js",
+        "src/css/ngDatepicker.css"
+      ]
     }
+
   }
 }
