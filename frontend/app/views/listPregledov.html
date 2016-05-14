@@ -2,7 +2,12 @@
     <div class="box-body">
         <div class="col-12">
             <h3 class="bottom-border header">Pregledi</h3>
-            <table class="table table-stripped table-hover">
+
+            <div class="center-listPregledov" ng-show="pregledi.length == 0">
+              <h4>Na voljo ni nobenega pregleda!</h4>
+            </div>
+
+            <table class="table table-stripped table-hover" ng-show="pregledi.length != 0">
                 <thead>
                     <tr>
                       <th></th>
