@@ -449,20 +449,25 @@ def ustvariPregled(request, format=None):
         # pohendlaj diete
         for d in dieta:
             pregled.dieta.add(Dieta.objects.get(naziv=d["naziv"], sifra=d["sifra"]))
+            #dodaj se uporabniku
+            uporabnik.dieta.add(Dieta.objects.get(naziv=d["naziv"], sifra=d["sifra"]))
 
 
         # pohendlaj bolezni
         for b in bolezen:
             pregled.bolezen.add(Bolezni.objects.get(naziv=b["naziv"], mkb10=b["mkb10"], alergija=b["alergija"]))
+            #dodaj tudi uporabniku
+            uporabnik.bolezni.add(Bolezni.objects.get(naziv=b["naziv"], mkb10=b["mkb10"], alergija=b["alergija"]))
 
 
         #pohendlaj zdravila
         for z in zdravilo:
             pregled.zdravilo.add(Zdravilo.objects.get(zdravilo=z["zdravilo"]))
+            #shranim se v uporabnika
+            uporabnik.zdravila.add(Zdravilo.objects.get(zdravilo=z["zdravilo"]))
 
 
         #pohendlaj meritve
-
         for v in izmerjena_vrednost_meritve:
             vrednostMeritev = VrednostiMeritev.objects.get(id=v["tip"])
             meritve = Meritev.objects.create(tip_meritve=vrednostMeritev,
@@ -470,7 +475,6 @@ def ustvariPregled(request, format=None):
                                              datum=datum_pregleda,
                                              uporabnik_id=uporabnikID,
                                              pregled=pregled)
-
 
 
 
