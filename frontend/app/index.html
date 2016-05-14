@@ -112,7 +112,7 @@
             <a  target="_self">{{uporabnik.role.naziv}}</a>
           </div>
         </div>
-        <div class="izbiraOskrbovanca" ng-show="!isDoctor">
+        <div class="izbiraOskrbovanca" ng-hide="isDoctor || isSuperU">
             <p>Izbrani uporabnik</p>
             <ui-select ng-model="selected.value" on-select="changeUser($item, $model)">
                 <ui-select-match>
@@ -126,25 +126,19 @@
         </div>
         <!-- /.search form -->
 
+        <!-- ########################### MENI LEVO ################################ -->
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
           <li class="header">Pozdravljeni v eZdravstvu!</li>
           <!-- Optionally, you can add icons to the links -->
           <li><a ui-sref="nadzornaPlosca"><i class="fa fa-home"></i> <span>Nadzorna plošča</span></a></li>
           <!-- <li><a href="#"><i class="fa fa-heartbeat"></i> <span>Meritve</span></a></li> -->
+          <li><a ui-sref="listPregledov" ng-hide="isSuperU"><i class="fa fa-stethoscope"></i> <span>Pregledi</span></a></li>
 
-
-          <li ng-show="isSuperU"><a href="#/registracijaAdmin"><i class="fa fa-gear"></i> <span>Registracija osebja</span></a></li>
-            <!--
-            <div ng-show="isSuperU">
-          <li ><a href="#/registracijaAdmin"><i class="fa fa-gear"></i> <span>Registracija</span></a></li>
-            </div> -->
-
-
-          <li><a ui-sref="listPregledov"><i class="fa fa-stethoscope"></i> <span>Pregledi</span></a></li>
           <li class="header">Administrativne akcije</li>
-          <li class="pointer" ng-hide="isDoctor"><a ng-click="ustvariOskrbovanca()"><i class="fa fa-user-plus"></i> <span>Dodaj oskrbovanca</span></a></li>
-          <li ng-show="isDoctor"><a ui-sref="dodajPregled" ><i class="fa fa-file-text-o"></i> <span>Dodaj pregled</span></a></li>
+          <li class="pointer" ng-hide="isDoctor || isSuperU"><a ng-click="ustvariOskrbovanca()"><i class="fa fa-user-plus"></i> <span>Dodaj oskrbovanca</span></a></li>
+          <li ng-show="isDoctor && !isSuperU"><a ui-sref="dodajPregled" ><i class="fa fa-file-text-o"></i> <span>Dodaj pregled</span></a></li>
+          <li ng-show="isSuperU"><a href="#/registracijaAdmin"><i class="fa fa-gear"></i> <span>Registracija osebja</span></a></li>
 
         </ul>
         <!-- /.sidebar-menu -->

@@ -95,19 +95,19 @@ angular.module('tpo')
               }
           }
 
+      };
+
+      if( $scope.uporabnik.role.naziv ===  "Admin"){
+          $scope.omogociIzbiranjePacienta = false;
       }
-
-
-      if( $scope.uporabnik.role.naziv ===  "Pacient"){
+      else if( $scope.uporabnik.role.naziv ===  "Pacient"){
           // ce je uporabnik pacient, prikazi enako kot do sedaj
           $scope.izbranPacient = true;
           $scope.omogociIzbiranjePacienta = false;
-
           zdravnikoviPacientiNalozeni = true;
-
           $scope.posodobiPacienta( $scope.uporabnik );
-
-      }else{
+      }
+      else{
           // je skor zdravnik
           $scope.omogociIzbiranjePacienta = true;
           $scope.izbranPacient = false;
