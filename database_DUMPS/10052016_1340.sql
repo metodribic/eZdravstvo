@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `tpo` /*!40100 DEFAULT CHARACTER SET utf8 */;
+﻿CREATE DATABASE  IF NOT EXISTS `tpo` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `tpo`;
 -- MySQL dump 10.13  Distrib 5.7.9, for osx10.9 (x86_64)
 --
@@ -1053,7 +1053,7 @@ CREATE TABLE `tpo_vrednostimeritev` (
 
 LOCK TABLES `tpo_vrednostimeritev` WRITE;
 /*!40000 ALTER TABLE `tpo_vrednostimeritev` DISABLE KEYS */;
-INSERT INTO `tpo_vrednostimeritev` VALUES (1,'Glukoza','mmol/l','4','6','4','Hipoglikemija ni bolezen temveč akutno stanje','0','50','G1','7-krat na dan, pred in po obrokih in pred spanjem'),(2,'Krvni pritisk','mmHg','100/60','135/80','90/60','140/90','30','300','K2','Zjutraj in zvečer'),(3,'Srčni pritisk','BPM','60','100','60','100','30','200','BPM3','Meri se skupaj z pritiskom'),(4,'Telesna temperatura','°C','35,5','37,5','35,5','37,5','34','42','','Meri se 2 – 3 na dan'),(5,'Teža','kg','BMI > 29','BMI <24','BMI < 20','BMI > 24','15','50','','Meri se običajno enkrat na teden (pri bolnikih s srčnim popuščanjem se meri enkrat na dan)');
+INSERT INTO `tpo_vrednostimeritev` VALUES (1,'Glukoza','mmol/l','4','6','4','Hipoglikemija ni bolezen temveč akutno stanje','0','50','G1','7-krat na dan, pred in po obrokih in pred spanjem'),(2,'Krvni pritisk','mmHg','100/60','135/80','90/60','140/90','30','300','K2','Zjutraj in zvečer'),(3,'Srčni utrip','BPM','60','100','60','100','30','200','BPM3','Meri se skupaj z pritiskom'),(4,'Telesna temperatura','°C','35,5','37,5','35,5','37,5','34','42','','Meri se 2 – 3 na dan'),(5,'ITM','kg/m^2','BMI > 29','BMI <24','BMI < 20','BMI > 24','15','50','','Meri se običajno enkrat na teden (pri bolnikih s srčnim popuščanjem se meri enkrat na dan)');
 /*!40000 ALTER TABLE `tpo_vrednostimeritev` ENABLE KEYS */;
 UNLOCK TABLES;
 
