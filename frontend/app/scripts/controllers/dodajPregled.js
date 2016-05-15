@@ -143,7 +143,7 @@ angular.module('tpo')
                     Notification.error({message: "Podatki za KRVNI PRITISK so napačni!"});
                     break;
                 }
-            }else if (meritev.tip === "Srčni pritisk") {
+            }else if (meritev.tip === "Srčni utrip") {
                 //ce je v mejah normale, ga sprejmi
                 if (mojScope.srcniMeritev >= meritev.nemogoce_min && mojScope.srcniMeritev <= meritev.nemogoce_max) {
                     mojScope.rezultatiMeritev.push({vrednost:mojScope.srcniMeritev, tip:3});
@@ -154,7 +154,7 @@ angular.module('tpo')
                     Notification.error({message: "Podatki za SRČNI UTRIP so napačni!"});
                     break;
                 }
-            }else if (meritev.tip === "Teža") {
+            }else if (meritev.tip === "ITM") {
                 //ce je v mejah normale, ga sprejmi
                 if (mojScope.tezaMeritev >= meritev.nemogoce_min && mojScope.tezaMeritev <= meritev.nemogoce_max) {
                     mojScope.rezultatiMeritev.push({vrednost:mojScope.tezaMeritev, tip:5});
@@ -220,9 +220,9 @@ angular.module('tpo')
                 mojScope.prikaziGlukozo = true;
             }else if (meritev.tip === "Krvni pritisk") {
                 mojScope.prikaziKrvni = true;
-            }else if (meritev.tip === "Srčni pritisk") {
+            }else if (meritev.tip === "Srčni utrip") {
                 mojScope.prikaziSrcni = true;
-            }else if (meritev.tip === "Teža") {
+            }else if (meritev.tip === "ITM") {
                 mojScope.prikaziTeza = true;
             }else {
                 mojScope.prikaziTemperatura = true;
