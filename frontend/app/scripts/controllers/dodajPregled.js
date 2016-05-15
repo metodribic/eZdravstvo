@@ -31,12 +31,25 @@ angular.module('tpo')
       var naziv = '';
       var naslednji_pregled = null;
 
+      mojScope = $scope;
+      $scope.jeZdravnik = {};
+      $scope.jeZdravnik.placeholderBes = "Nalagam paciente...";
+      $scope.jeZdravnik.nimaP = true;
 
       // Pridobi Zdravnikove paciente
       ZdravnikoviPacienti.query().$promise.then(function(response){
-        $scope.pacienti = response;
-        //console.log(response);
+          $scope.pacienti = response;
+          //console.log(response);
+
+          if( $scope.pacienti.length === 0 ){
+              mojScope.jeZdravnik.nimaP = true;
+              mojScope.jeZdravnik.placeholderBes = "Nimate pacientov...";
+          }else{
+              mojScope.jeZdravnik.nimaP = false;
+              mojScope.jeZdravnik.placeholderBes = "Izberite pacienta...";
+          }
       });
+
 
 
       // preveri če je prijavljen uporabnik zdravnik
