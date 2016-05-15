@@ -151,7 +151,7 @@ angular.module('tpo')
                 //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
                 else {
                     shraniPregledBoolean = false;
-                    Notification.error({message: "Podatki za SRČNI PRITISK so napačni!"});
+                    Notification.error({message: "Podatki za SRČNI UTRIP so napačni!"});
                     break;
                 }
             }else if (meritev.tip === "Teža") {
@@ -162,7 +162,7 @@ angular.module('tpo')
                 //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
                 else {
                     shraniPregledBoolean = false;
-                    Notification.error({message: "Podatki za TEŽO(BMI) so napačni!"});
+                    Notification.error({message: "Podatki za TEŽO(ITM) so napačni!"});
                     break;
                 }
             }else {
