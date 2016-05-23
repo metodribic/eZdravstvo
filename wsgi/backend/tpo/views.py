@@ -11,7 +11,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.authtoken.models import Token
 from django.core import serializers
 from django.http import HttpResponse, request
-import traceback, datetime
+import traceback, datetime, hashlib
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 
@@ -27,7 +27,7 @@ from pprint import pprint
 
 # Create your views here.
 from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock, \
-    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, UporabnikZdravnik
+    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, UporabnikZdravnik, IsAlphanumericPasswordValidator
 
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
@@ -318,7 +318,7 @@ def registracijaAdmin(request, format=None):
         ambulanta = request.data.get('izbranaAmbulanta', "")
         ustanova = request.data.get('izbranaUstanova', "")
 
-        sifra = request.data.get('sif', 000001)
+        sifra = request.data.get('sif', '000001')
         sifrantReg = SifrantRegistriranih.objects.get(sifra=sifra)
         try:
             sprejemaPac = (int)(sprejemaPac)
@@ -339,7 +339,7 @@ def registracijaAdmin(request, format=None):
         # izbrane sestre
         sestreUsernames = request.data.get('izbranaSestra', "")
 
-        print sestreUsernames
+        print (sestreUsernames)
 
         if( rola == 'Zdravnik'):
             if (Zdravnik.objects.filter(email=mail).exists() ):
@@ -350,6 +350,7 @@ def registracijaAdmin(request, format=None):
                 return respons
             else:
                 validate_password(password=passw)
+                IsAlphanumericPasswordValidator().validate(passw)
                 # check only ime - same as in login
                 if( ime != "" ):
                     zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw, prosta_mesta=prostaMesta,
@@ -381,6 +382,7 @@ def registracijaAdmin(request, format=None):
             else:
                 #print "NURSE"
                 validate_password(password=passw)
+                IsAlphanumericPasswordValidator().validate(passw)
                 if ime != "":
                     medSest = Osebje.objects.create_user(username=mail, email=mail, is_staff=1, ime=ime,
                               priimek=prii, sifra_id=sifrantReg.pk, telefon=stev, password=passw, role_id=3,
@@ -490,7 +492,7 @@ def ustvariPregled(request, format=None):
         return respons
 
     except Exception as ex:
-        print ex
+        print (ex)
         traceback.print_exc()
         response = JSONResponse({"error" : ex})
         response.status_code = 400 # Bad request
@@ -529,7 +531,7 @@ def registracijaPacient(request, format=None):
                 tmpD = tmpD + 1
                 # dan pride 10, na fieldu pa je 11 (zacne z 0 al neki)
                 datum_rojstva = datetime.date(int(y), int(m), int(tmpD) )
-                print datum_rojstva
+                print (datum_rojstva)
             except ValueError as date_ve:
                 datum_rojstva = datetime.date(2000, 20, 12)
 
@@ -540,6 +542,7 @@ def registracijaPacient(request, format=None):
             return respons
         else:
             validate_password(password=password)
+            IsAlphanumericPasswordValidator().validate(passw)
             # check only ime - same as in login
             if( ime != "" ):
                 pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, role_id="4", is_active=False,
@@ -589,7 +592,7 @@ def registracijaPacient(request, format=None):
         return respons
 
     except ValidationError as ve:
-        print ve
+        print (ve)
         response = JSONResponse({"error": "WeakPassword"})
         response.status_code = 400
         return response
@@ -642,7 +645,7 @@ def aktivacija(request, format=None):
         return respons
 
     except ValidationError as ve:
-        print ve
+        print (ve)
         response = JSONResponse({"error": "WeakPassword"})
         response.status_code = 400
         return response
@@ -724,7 +727,7 @@ def changeZdravnik(request, format=None):
                 
                 # Loop over relations and modify/delete if necessary
                 for r in rels:  #Replace relations
-                    print r
+                    print (r)
                     if r.zdravnik.id == zobozdravnikId:
                         sameZobozdravnik = True
                     if r.zdravnik.id == zdravnikId:
@@ -779,6 +782,7 @@ def changePassword(request, format=None):
             if user.check_password(oldpass):
                 try: 
                     validate_password(newpass)
+                    IsAlphanumericPasswordValidator().validate(newpass)
                     user.set_password(newpass)
                     user.save()
                     response = Response()
@@ -815,4 +819,58 @@ class SifrantRegistriranihViewSet(viewsets.ModelViewSet):
 class KontaktnaOsebaViewSet(viewsets.ModelViewSet):
     queryset = KontaktnaOseba.objects.all()
     serializer_class = KontaktnaOsebaSerializer
+
+@api_view(['POST'])
+def forgotPassword(request, format=None):
+    try:
+        email = request.data.get('email')
+        token = request.data.get('token','')
+        if(token != ''): #Setting new password
+            try:
+                if token == hashlib.md5(email).hexdigest(): #Just for show
+                    password = request.data['password']
+                    user = User.objects.get(email=email)
+                    validate_password(password=password)
+                    IsAlphanumericPasswordValidator().validate(password)
+                    user.set_password(password)
+                    user.save()
+                    return Response()
+                else:
+                    response = JSONResponse({"error":"Neveljaven token."})
+                    response.status_code = 400; # Bad request
+                    return response
+
+            except (KeyError, ValidationError):
+                response = JSONResponse({"error":"Neveljavno geslo."})
+                response.status_code = 400; # Bad request
+                return response
+            except ObjectDoesNotExist as e:
+                response = JSONResponse({"error":"Ne najdem uporabnika s tem e-naslovom"})
+                response.status_code = 400; # Bad request
+                return response
+
+
+        else:   #Requesting new mail
+            try:
+                user = User.objects.get(email=email)
+                send_mail('Pozabljeno geslo', 'Vase geslo lahko spremenite na spodnjem naslovu: \n\n' + 
+                        settings.FE_URL + '/#/pozabljenoGeslo?email=' + email +'&token=' + hashlib.md5(email).hexdigest(),
+                        'ezdravstvo.tpo7@gmail.com', [email], fail_silently=False)
+                return Response()
+
+            except KeyError as e:
+                response = JSONResponse({"error":"Email je obvezen"})
+                response.status_code = 400; # Bad request
+                return response
+
+            except ObjectDoesNotExist as e:
+                response = JSONResponse({"error":"Ne najdem uporabnika s tem e-naslovom"})
+                response.status_code = 400; # Bad request
+                return response
+
+    except Exception as e:
+        traceback.print_exc()
+        response = JSONResponse({"error":"Neznana napaka"})
+        response.status_code = 500; # Bad request
+        return response
 

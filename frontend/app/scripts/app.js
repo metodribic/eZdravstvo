@@ -44,6 +44,12 @@ angular
               controller: 'LoginCtrl'
           })
 
+          .state('pozabljenoGeslo', {
+              url: '/pozabljenoGeslo?email&token',
+              templateUrl: '../views/pozabljenoGeslo.html',
+              controller: 'PozabljenoGesloCtrl'
+          })
+
           .state('registracijaUporabnikaAdmin', {
             url: '/registracijaAdmin',
             templateUrl: '../views/registracijaUporabnikaAdmin.html',
@@ -109,7 +115,7 @@ angular
 
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
 
-        if (toState.url !== '/login' && toState.url !== '/forgotPassword' && toState.url !== '/register' && !AuthService.isAuthenticated()){
+        if (toState.url !== '/login' && toState.url !== '/forgotPassword' && toState.url !== '/register' && toState.name !== 'pozabljenoGeslo' && !AuthService.isAuthenticated()){
           // User isn’t authenticated
           $state.go("login");
           event.preventDefault();

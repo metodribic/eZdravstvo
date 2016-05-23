@@ -154,6 +154,8 @@ class IsAlphanumericPasswordValidator(object):
         num = False
         char = False
         for c in password:
+            if num == True and char == True:
+                break
             if c.isdigit():
                 num = True
             elif c.isalpha():

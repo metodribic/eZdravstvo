@@ -12,7 +12,10 @@
               <input type="password" class="form-control" id="password" placeholder="Geslo" ng-model="uporabniki.geslo" required="required">
             </div>
             <button type="submit" class="btn btn-default">Prijava</button>
-            <a ui-sref="register" style="cursor:pointer; color: #00a65a" class="pull-right" >Registracija</a>
+            <ul class="list-unstyled pull-right">
+                <li><a ui-sref="register" style="cursor:pointer; color: #00a65a">Registracija</a></li>
+                <li><a ui-sref="pozabljenoGeslo" style="cursor:pointer; color: #00a65a">Pozabljeno geslo</a></li>
+            </ul>
           </form>
         </div>
       </div>

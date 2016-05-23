@@ -182,8 +182,7 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
         oskrbovanec = Uporabnik(role_id=4)
         oskrbovanec.save()
         return oskrbovanec
-
-
+    
 class UporabnikZdravnik(serializers.HyperlinkedModelSerializer):
     uporabnik = UporabnikSerializer()
     zdravnik = ZdravnikSerializer()

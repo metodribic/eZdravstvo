@@ -113,6 +113,47 @@ angular.module('tpo.services', ['ngResource', 'config'])
     return (isAuthenticated && authorizedRoles.indexOf(role) !== -1);
   };
 
+  var resetGesla = function(email) {
+      return $q(function(resolve, reject) {
+            $http({
+                method: 'POST',
+                url: 'http://' + API_URL + '/pozabljeno-geslo',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {"email": email}
+            }).then(function successCallback(response) {
+                resolve('Uspešno poslano!');
+            }, function errorCallback(response) {
+                var error = "Strežnik se ne odziva";
+                if(response.data && response.data.error)
+                    error = response.data.error;
+                reject(error);
+            });
+        });
+  }
+  
+  var menjavaGesla = function(email, token, password) {
+      return $q(function(resolve, reject) {
+            $http({
+                method: 'POST',
+                url: 'http://' + API_URL + '/pozabljeno-geslo',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {"email": email, "token": token, "password": password}
+            }).then(function successCallback(response) {
+                resolve('Uspešno spremenjeno!');
+            }, function errorCallback(response) {
+                var error = "Strežnik se ne odziva";
+                if(response.data && response.data.error)
+                    error = response.data.error;
+                reject(error);
+            });
+        });
+  }
+
+
   loadUserCredentials();
 
   return {
@@ -123,6 +164,8 @@ angular.module('tpo.services', ['ngResource', 'config'])
     isAuthenticated: function() {return isAuthenticated;},
     username: function() {return username;},
     role: function() {return role;},
-    getCurrentUser: getCurrentUser
+    getCurrentUser: getCurrentUser,
+    menjavaGesla: menjavaGesla,
+    resetGesla: resetGesla
   };
 });
