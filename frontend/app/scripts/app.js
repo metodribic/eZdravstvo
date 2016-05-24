@@ -97,6 +97,12 @@ angular
               controller: 'MeritevPodrobnoCtrl'
           })
 
+          .state('dodajMeritev', {
+              url: '/dodajMeritev',
+              templateUrl: '../views/dodajMeritev.html',
+              controller: 'dodajMeritevCtrl'
+          })
+
           .state('dodajPregled', {
               url: '/dodajpregled',
               templateUrl: '../views/dodajPregled.html',
