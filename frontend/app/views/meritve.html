@@ -1,0 +1,47 @@
+<div class="box">
+    <div class="box-body">
+        <div class="col-12">
+            <h3 class="bottom-border header">Meritve</h3>
+
+            <div class="center-listPregledov" ng-show="pregledi.length == 0">
+              <h4>Na voljo ni nobene meritve!</h4>
+            </div>
+
+            <table class="table table-stripped table-hover" ng-show="meritve.length != 0">
+                <thead>
+                    <tr>
+                      <th></th>
+                      <th>Datum</th>
+                      <th>Tip meritve</th>
+                      <th>Normalne vrednosti</th>
+                      <th>Vrednost meritve</th>
+                      <th>Briši/Spremeni</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="meritev in meritve" >
+                      <td ui-sref="meritevPodrobno({id:meritev.id})"><i class="fa fa-search" style="cursor:pointer"></i></td>
+                      <td>{{meritev.datum | date:'dd.MM.yyyy, hh:mm'}}</td>
+                      <td>{{meritev.tip_meritve.tip}}</td>
+                      <td>od {{meritev.tip_meritve.normalno_min}} do {{meritev.tip_meritve.normalno_max}}</td>
+                      <td><b>{{meritev.vrednost_meritve}}</b></td>
+                      <!-- <td ng-class="{ 'red-meritev': meritev.tip_meritve.normalno_min > meritev.vrednost_meritve || meritev.tip_meritve.normalno_max < meritev.vrednost_meritve}"><b>{{meritev.vrednost_meritve}}</b></td> -->
+                      <td>
+                        <!-- Button za brisat -->
+                        <button type="button" class="btn btn-default btn-xs" ng-click="deleteMeritev(meritev.id)">
+                          <span class="fa fa-trash" aria-hidden="true"></span> Briši
+                        </button>
+
+                        <!-- button za spreminjat -->
+                        <button type="button" class="btn btn-default btn-xs">
+                          <span class="fa fa-pencil" aria-hidden="true"></span> Spremeni
+                        </button>
+                      </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

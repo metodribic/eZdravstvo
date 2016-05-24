@@ -85,6 +85,18 @@ angular
               templateUrl: '../views/prijavaPregled.html'
           })
 
+          .state('meritve', {
+              url: '/meritve',
+              templateUrl: '../views/meritve.html',
+              controller: 'MeritveCtrl'
+          })
+
+          .state('meritevPodrobno', {
+              url: '/meritev:id',
+              templateUrl: '../views/meritevPodrobno.html',
+              controller: 'MeritevPodrobnoCtrl'
+          })
+
           .state('dodajPregled', {
               url: '/dodajpregled',
               templateUrl: '../views/dodajPregled.html',
