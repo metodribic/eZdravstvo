@@ -287,6 +287,19 @@ angular.module('tpo')
         $rootScope.uporabnik.zdravnik.push(nov);
     }
 
+    $scope.deleteAccount = function() {
+        var u = $rootScope.uporabnik;
+        var _$state = $state;
+        Uporabniki.delete({iduporabnik: u.id, password_confirm: $scope.passwordConfirm }).$promise.then(function(msg) {
+            addAlert(msg, 'success');
+            AuthService.logout();
+            $rootScope.logged_out = true;
+            $state.go('login');
+        }, function(error) {
+            addAlert(error.data.error, 'error');
+        });
+    };
+
 
     // SPREMENI GESLO
     $scope.changePassword = function(user) {

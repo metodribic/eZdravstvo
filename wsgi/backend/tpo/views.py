@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.core.serializers import json
 from rest_framework import viewsets, status, filters
 from rest_framework.decorators import api_view, permission_classes, list_route
@@ -53,6 +53,30 @@ class JSONResponse(HttpResponse):
 class UporabnikiViewSet(viewsets.ModelViewSet):
     queryset = Uporabnik.objects.all().order_by('-date_joined')
     serializer_class = UporabnikSerializer
+
+    def destroy(self, request, pk):
+        password = request.query_params.get('password_confirm', '')
+        try:
+            instance = Uporabnik.objects.get(user_ptr_id = pk)
+        except Exception as e:
+            response = JSONResponse({"error":"Uporabnik ne obstaja."})
+            response.status_code = 404
+            return response
+
+        if password != '' and check_password(password, instance.password):
+            instance.is_deleted = True
+            instance.is_active = False
+            instance.save()
+            response = JSONResponse({"message":"Uporabnik izbrisan."})
+            return response
+        else:
+            response = JSONResponse({"error":"Nepravilno geslo."})
+            response.status_code = 403
+            return response
+
+        response = JSONResponse({"error":"Neznana napaka."})
+        response.status_code = 500
+        return response
 
 
 # PREGLED
@@ -269,7 +293,7 @@ def login(request, format=None):
                         OsebjeInst = Osebje.objects.get(user_ptr_id = user.id) 
                         return JSONResponse(LoginOsebjeSerializer({'token':token[0], 'osebje':OsebjeInst}, context={'request': request}).data)
             else:
-                response = JSONResponse({"error": "Uporabnik se ni aktiviran ali pa je IP zaklenjen"})
+                response = JSONResponse({"error": "Uporabnik se ni aktiviran, je izbrisan ali pa je IP zaklenjen"})
                 response.status_code = 400
                 return response
         else:

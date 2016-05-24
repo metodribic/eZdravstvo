@@ -4,6 +4,9 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	return $resource('http://' + API_URL + '/uporabniki/:iduporabnik', { iduporabnik: '@iduporabnik' }, {
 		update: {
 			method: 'PATCH'
+		},
+        delete: {
+			method: 'DELETE'
 		}
 	});
 })
