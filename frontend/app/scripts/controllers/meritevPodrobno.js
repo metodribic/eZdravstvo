@@ -24,7 +24,7 @@ angular.module('tpo')
                     endDate.format('DD.MM.YYYY'), values: []}];
                 for(var i=0; i<response.length; i++) {
                     data[0].values.push({"label": moment(response[i].datum, 'YYYY-MM-DD').format('DD.MM.YYYY'),
-                                     "value": response[i].vrednost_meritve});
+                                     "value": parseFloat(response[i].vrednost_meritve)});
                 }
                 $scope.data = data;
             }, function(error) {
