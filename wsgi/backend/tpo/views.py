@@ -108,11 +108,19 @@ class MeritevViewSet(viewsets.ModelViewSet):
                 user = Uporabnik.objects.get(user_ptr_id = pacient)
         except Exception as e:
             print(e)
+            
+        startDate = self.request.query_params.get('startDate', None)
+        endDate = self.request.query_params.get('endDate', None)
 
         if self.request.GET.get('pregledId', -1) != -1:
             pregledId = self.request.GET.get('pregledId', -1)
-            return Meritev.objects.filter(uporabnik=user, pregled_id=pregledId)
+            if startDate is not None and endDate is not None:
+                return Meritev.objects.filter(uporabnik=user, pregled_id=pregledId, datum__range=[startDate, endDate])
+            else:
+                return Meritev.objects.filter(uporabnik=user, pregled_id=pregledId)
         else:
+            if startDate is not None and endDate is not None:
+                return Meritev.objects.filter(uporabnik=user, datum__range=[startDate, endDate])
             return Meritev.objects.filter(uporabnik=user)
 
 

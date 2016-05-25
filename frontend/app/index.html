@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../bower_components/angular-ui-notification/dist/angular-ui-notification.css" />
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="../bower_components/ngDatepicker/src/css/ngDatepicker.css" />
+    <link rel="stylesheet" href="../bower_components/nvd3/build/nv.d3.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -133,9 +134,11 @@
           <li><a ui-sref="nadzornaPlosca"><i class="fa fa-home"></i> <span>Nadzorna plošča</span></a></li>
           <li><a ui-sref="profile" ng-hide="isSuperU"><i class="fa fa-user"></i> <span>Profil</span></a></li>
           <li><a ui-sref="listPregledov" ng-hide="isSuperU"><i class="fa fa-stethoscope"></i> <span>Pregledi</span></a></li>
+          <li><a ui-sref="meritve" ng-hide="isSuperU"><i class="fa fa-bar-chart"></i> <span>Meritve</span></a></li>
 
           <li class="header">Administrativne akcije</li>
           <li class="pointer" ng-hide="isDoctor || isSuperU"><a ng-click="ustvariOskrbovanca()"><i class="fa fa-user-plus"></i> <span>Dodaj oskrbovanca</span></a></li>
+          <li ng-hide="isDoctor || isSuperU"><a ui-sref="dodajMeritev"><i class="fa fa-plus"></i> <span>Dodaj meritev</span></a></li>
           <li ng-show="isDoctor && !isSuperU"><a ui-sref="dodajPregled" ><i class="fa fa-file-text-o"></i> <span>Dodaj pregled</span></a></li>
           <li ng-show="isSuperU"><a href="#/registracijaAdmin"><i class="fa fa-gear"></i> <span>Registracija osebja</span></a></li>
 
@@ -187,6 +190,9 @@
   <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
   <script src="../bower_components/moment/moment.js"></script>
   <script src="../bower_components/ngDatepicker/src/js/ngDatepicker.js"></script>
+  <script src="../bower_components/d3/d3.js"></script>
+  <script src="../bower_components/nvd3/build/nv.d3.js"></script>
+  <script src="../bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 
@@ -206,6 +212,9 @@
   <script src="scripts/controllers/dodajPregled.js"></script>
   <script src="scripts/controllers/index.js"></script>
   <script src="scripts/controllers/pozabljenoGeslo.js"></script>
+  <script src="scripts/controllers/meritve.js"></script>
+  <script src="scripts/controllers/meritevPodrobno.js"></script>
+  <script src="scripts/controllers/dodajMeritev.js"></script>
   <!-- endbuild -->
 
 

@@ -21,7 +21,8 @@ angular
     'tpo.services',
     'tpo.models',
     'ui-notification',
-    'jkuri.datepicker'
+    'jkuri.datepicker',
+    'nvd3'
 
   ])
   .config(['$resourceProvider','$stateProvider', '$urlRouterProvider',
@@ -89,6 +90,24 @@ angular
           .state('prijavaPregled', {
               url: '/prijavaPregled',
               templateUrl: '../views/prijavaPregled.html'
+          })
+
+          .state('meritve', {
+              url: '/meritve',
+              templateUrl: '../views/meritve.html',
+              controller: 'MeritveCtrl'
+          })
+
+          .state('meritevPodrobno', {
+              url: '/meritev:id',
+              templateUrl: '../views/meritevPodrobno.html',
+              controller: 'MeritevPodrobnoCtrl'
+          })
+
+          .state('dodajMeritev', {
+              url: '/dodajMeritev',
+              templateUrl: '../views/dodajMeritev.html',
+              controller: 'dodajMeritevCtrl'
           })
 
           .state('dodajPregled', {

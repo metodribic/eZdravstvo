@@ -15,10 +15,8 @@
     "jquery": "^2.2.3",
     "jquery-ui": "^1.11.4",
     "bootstrap": "^3.3.6",
-    "ngDatepicker": "*"
-  },
-  "devDependencies": {
-    "angular-mocks": "^1.4.0"
+    "ngDatepicker": "*",
+    "angular-nvd3": "^1.0.7"
   },
   "resolutions": {
     "angular": "^1.4.0"
@@ -39,6 +37,5 @@
         "src/css/ngDatepicker.css"
       ]
     }
-
   }
 }
