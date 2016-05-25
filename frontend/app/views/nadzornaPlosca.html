@@ -263,7 +263,8 @@
           </thead>
           <tbody>
             <tr ng-repeat="meritev in meritve">
-              <td ui-sref="#">{{meritev.datum | date:'dd.MM.yyyy, HH:mm'}}</td>
+                <td ui-sref="meritevPodrobno({id:meritev.id})"><i class="fa fa-search" style="cursor:pointer"></i></td>
+                <td>{{meritev.datum | date:'dd.MM.yyyy, HH:mm'}}</td>
               <td>{{meritev.tip_meritve.tip}}</td>
               <td>{{meritev.tip_meritve.sifra}}</td>
               <td>

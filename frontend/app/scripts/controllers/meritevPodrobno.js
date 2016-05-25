@@ -17,7 +17,8 @@ angular.module('tpo')
     $scope.drawChart = function() {
         startDate = moment($scope.chart.start, 'DD.MM.YYYY')
         endDate = moment($scope.chart.end, 'DD.MM.YYYY')
-        Meritve.query({tip: $scope.meritev.tip, startDate: startDate.format('YYYY-MM-DD'), 
+        tipMeritveId = $scope.meritev.tip_meritve.id;
+        Meritve.query({tipMeritveId: tipMeritveId, startDate: startDate.format('YYYY-MM-DD'), 
             endDate: endDate.format('YYYY-MM-DD')}).$promise.then(function(response) {
                 data = [{key: "Graf meritev od " + startDate.format('DD.MM.YYYY') + ' - ' + 
                     endDate.format('DD.MM.YYYY'), values: []}];
