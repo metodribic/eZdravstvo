@@ -2,12 +2,30 @@
 
 angular.module('tpo')
   .controller('MeritevPodrobnoCtrl', ['$scope','AuthService', '$state', '$rootScope','Meritve','Notification','$stateParams', function ($scope, AuthService, $state, $rootScope, Meritve, Notification, $stateParams) {
+    var scope = $scope;
+
     Meritve.get({ meritevId:$stateParams.id}).$promise.then(function(response){
       $scope.meritev = response;
-      $scope.data = [{
-		key: "Graf za trenutno meritev",
-		values: [{"label": "Trenutna meritev", "value": $scope.meritev.vrednost_meritve}]
-	}]
+      if($scope.meritev.tip_meritve.tip === "Krvni pritisk") {
+          scope.config.visible = true;
+          var spodnji = parseFloat($scope.meritev.vrednost_meritve.split("/")[0]);
+          var zgornji = parseFloat($scope.meritev.vrednost_meritve.split("/")[1]);
+          $scope.data = [{
+              key: "Graf za trenutno meritev",
+              values: [{"label": "Trenutna meritev", "value": spodnji}]
+          }]
+          
+          $scope.data2 = [{
+              key: "Graf za trenutno meritev",
+              values: [{"label": "Trenutna meritev", "value": zgornji}]
+          }]
+
+      } else {
+          $scope.data = [{
+              key: "Graf za trenutno meritev",
+              values: [{"label": "Trenutna meritev", "value": $scope.meritev.vrednost_meritve}]
+          }]
+      }
 
     });
 
@@ -23,8 +41,18 @@ angular.module('tpo')
                 data = [{key: "Graf meritev od " + startDate.format('DD.MM.YYYY') + ' - ' + 
                     endDate.format('DD.MM.YYYY'), values: []}];
                 for(var i=0; i<response.length; i++) {
-                    data[0].values.push({"label": moment(response[i].datum, 'YYYY-MM-DD').format('DD.MM.YYYY'),
+                    if(response[i].tip_meritve.tip === "Krvni pritisk") {
+                        scope.config.visible = true;
+                        var spodnji = parseFloat(response[i].vrednost_meritve.split("/")[0]);
+                        var zgornji = parseFloat(response[i].vrednost_meritve.split("/")[1]);
+                        data[0].values.push({"label": moment(response[i].datum, 'YYYY-MM-DD').format('DD.MM.YYYY'),
+                                     "value": spodnji});
+                        data2[0].values.push({"label": moment(response[i].datum, 'YYYY-MM-DD').format('DD.MM.YYYY'),
+                                     "value": zgornji});
+                    } else {
+                        data[0].values.push({"label": moment(response[i].datum, 'YYYY-MM-DD').format('DD.MM.YYYY'),
                                      "value": parseFloat(response[i].vrednost_meritve)});
+                    }
                 }
                 $scope.data = data;
             }, function(error) {
@@ -36,6 +64,12 @@ angular.module('tpo')
 		key: "",
 		values: []
 	}]
+    
+    $scope.data2 = [{
+		key: "",
+		values: []
+	}]
+
 
     $scope.options = {
         chart: {
@@ -63,5 +97,10 @@ angular.module('tpo')
             }
         }
     };
+
+    $scope.config = {
+        visible: false
+    }
+
 
 }]);
