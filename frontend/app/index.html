@@ -138,7 +138,7 @@
 
           <li class="header">Administrativne akcije</li>
           <li class="pointer" ng-hide="isDoctor || isSuperU"><a ng-click="ustvariOskrbovanca()"><i class="fa fa-user-plus"></i> <span>Dodaj oskrbovanca</span></a></li>
-          <li ng-hide="isDoctor || isSuperU"><a ui-sref="dodajMeritev"><i class="fa fa-plus"></i> <span>Dodaj meritev</span></a></li>
+          <li ng-hide="isDoctor || isSuperU"><a ui-sref="meritve"><i class="fa fa-plus"></i> <span>Dodaj meritev</span></a></li>
           <li ng-show="isDoctor && !isSuperU"><a ui-sref="dodajPregled" ><i class="fa fa-file-text-o"></i> <span>Dodaj pregled</span></a></li>
           <li ng-show="isSuperU"><a href="#/registracijaAdmin"><i class="fa fa-gear"></i> <span>Registracija osebja</span></a></li>
 

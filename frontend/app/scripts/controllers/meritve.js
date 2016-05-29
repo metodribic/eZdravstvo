@@ -1,23 +1,43 @@
 'use strict()';
 
 angular.module('tpo')
-  .controller('MeritveCtrl', ['$scope','AuthService', '$state', '$rootScope','Meritve','Notification', function ($scope, AuthService, $state, $rootScope, Meritve, Notification) {
+  .controller('MeritveCtrl', ['$scope','AuthService', '$state', '$rootScope','Meritve','Notification','VrednostiMeritevSeznam','$interval', function ($scope, AuthService, $state, $rootScope, Meritve, Notification,VrednostiMeritevSeznam, $interval) {
+
+
+    // update clock
+    $scope.datum = moment().format("DD.MM.YYYY, HH:mm");
+    $interval(function () {
+      $scope.datum = moment().format("DD.MM.YYYY, HH:mm");
+    }, 1000);
+
+    //  get all meritev
     Meritve.query({uporabnikId: $rootScope.uporabnik.id}).$promise.then(function(response){
       $scope.meritve = response;
     });
 
-    // $scope.meritev_normalna = function(input){
-    //   if(input.tip_meritve.normalno_min <= input.vrednost_meritve && input.tip_meritve.normalno_max >= input.vrednost_meritve){
-    //     console.log('red-meritev');
-    //     return "red-meritev";
-    //   }
-    // };
-
+    // delete meritev
     $scope.deleteMeritev = function(id){
       Meritve.delete({meritevId: id}).$promise.then(function(response){
         Notification.success('Meritev uspešno izbrisana!');
-        $state.go($state.current, {}, {reload: true});
+        $scope.reloadState();
       });
     };
+
+    // get all types of meritve
+    VrednostiMeritevSeznam.query().$promise.then(function(response) {
+      $scope.vrednosti_meritev = response;
+      console.log(response);
+    });
+
+    // select meritev tip
+    $scope.izberiMeritev = function(item){
+      $scope.izbranaMeritev = item;
+    };
+
+    // reload state
+    $scope.reloadState = function(){
+      $state.go($state.current, {}, {reload: true});
+    };
+
 
   }]);

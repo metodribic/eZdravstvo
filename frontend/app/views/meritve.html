@@ -1,3 +1,99 @@
+  <!-- DODAJ MERITEV -->
+  <div class="box">
+    <div class="box-header with-border">
+      <h3 class="header">Dodaj meritev</h3>
+
+      <!-- COLLAPSE -->
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+
+      </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <form name="meritev-form">
+
+        <div class="form-group margin-top-15">
+            <label class="control-label col-sm-2">Datum:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" disabled ng-model="datum">
+            </div>
+        </div>
+
+        <div class="form-group margin-top-15">
+            <label class="control-label col-sm-2 margin-top-15">Tip meritve:</label>
+            <div class="col-sm-10 margin-top-15">
+                <ui-select ng-model="$item" on-select="izberiMeritev($item)">
+                    <ui-select-match placeholder="Izberite meritev...">{{$item.tip}}</ui-select-match>
+                    <ui-select-choices repeat="meritev in vrednosti_meritev | filter: $select.search track by meritev.tip">
+                        <div ng-bind-html="meritev.tip | highlight: $select.search"> {{meritev.tip}} </div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+
+        <!-- VNESI MERITEV: telesna temperatura -->
+        <div class="form-group margin-top-15" ng-show="izbranaMeritev.tip == 'Telesna temperatura'">
+          <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
+          <div class="col-sm-10 margin-top-15">
+            <input type="number" step="0.1" required/> &nbsp;{{izbranaMeritev.enota}}
+          </div>
+        </div>
+
+        <!-- VNESI MERITEV: glukoza -->
+        <div class="form-group margin-top-15" ng-show="izbranaMeritev.tip == 'Glukoza'">
+          <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
+          <div class="col-sm-10 margin-top-15">
+            <input type="number" step="1" required/> &nbsp;{{izbranaMeritev.enota}}
+          </div>
+        </div>
+
+        <!-- VNESI MERITEV: ITM -->
+        <div class="form-group margin-top-15" ng-show="izbranaMeritev.tip == 'ITM'">
+          <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
+          <div class="col-sm-10 margin-top-15">
+            <input type="number" step="1" required/> &nbsp;{{izbranaMeritev.enota}}
+          </div>
+        </div>
+
+        <!-- VNESI MERITEV: Srčni utrip -->
+        <div class="form-group margin-top-15" ng-show="izbranaMeritev.tip == 'Srčni pritisk'">
+          <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
+          <div class="col-sm-10 margin-top-15">
+            <input type="number" step="1" required/> &nbsp;{{izbranaMeritev.enota}} <i>(Udarcev na sekundo)</i>
+          </div>
+        </div>
+
+        <!-- VNESI MERITEV: krvni prisik -->
+        <div class="form-group margin-top-15" ng-show="izbranaMeritev.tip == 'Krvni pritisk'">
+
+
+          <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
+          <div class="col-sm-10 margin-top-15">
+            <input type="number" step="1" placeholder="sistolični" required/> /
+            <input type="number" step="1" placeholder="diastolični" required/> &nbsp;{{izbranaMeritev.enota}}
+          </div>
+
+          <!-- utrip -->
+          <label class="control-label col-sm-2 margin-top-15">Utrip:</label>
+          <div class="col-sm-10 margin-top-15">
+            <input type="number" step="1" placeholder="sistolični"/>&nbsp;BPM
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-success pull-right margin-15">Shrani</button>
+        <button class="btn btn-default pull-right margin-15" ng-click="reloadState()">Pobriši</button>
+
+    </form>
+
+
+    </div>
+  </div>
+
+
+<!-- LIST MERITEV -->
 <div class="box">
     <div class="box-body">
         <div class="col-12">
