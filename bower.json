@@ -16,7 +16,10 @@
     "jquery-ui": "^1.11.4",
     "bootstrap": "^3.3.6",
     "ngDatepicker": "*",
-    "angular-nvd3": "^1.0.7"
+    "angular-nvd3": "^1.0.7",
+    "ng-table": "^0.8.3",
+    "jspdf": "^1.2.61",
+    "jspdf-autotable": "^2.0.26"
   },
   "resolutions": {
     "angular": "^1.4.0"
@@ -35,6 +38,11 @@
       "main": [
         "src/js/ngDatepicker.js",
         "src/css/ngDatepicker.css"
+      ]
+    },
+    "jspdf": {
+      "main": [
+        "dist/jspdf.min.js"
       ]
     }
   }
