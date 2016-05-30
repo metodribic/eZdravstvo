@@ -110,6 +110,12 @@ angular
               controller: 'dodajMeritevCtrl'
           })
 
+          .state('urediVrednostiMeritev', {
+              url: '/urediVrednostiMeritev',
+              templateUrl: '../views/urediVrednostiMeritev.html',
+              controller: 'UrediVrednostiMeritevCtrl'
+          })
+
           .state('dodajPregled', {
               url: '/dodajpregled',
               templateUrl: '../views/dodajPregled.html',
