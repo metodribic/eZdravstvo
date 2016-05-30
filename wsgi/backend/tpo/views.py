@@ -100,6 +100,7 @@ class MeritevViewSet(viewsets.ModelViewSet):
     queryset = Meritev.objects.all()
     serializer_class = MeritevSerializer
 
+
     def get_queryset(self):
         user = self.request.user
         tipMeritve = None

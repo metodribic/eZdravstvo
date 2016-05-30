@@ -208,6 +208,10 @@ class MeritevSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Meritev
 
+    def create(self, validated_data):
+        print('test')
+        return 'nope'
+
 
 """ PREGLED """
 class PregledSerializer(serializers.HyperlinkedModelSerializer):

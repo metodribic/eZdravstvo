@@ -3,7 +3,7 @@
 angular.module('tpo')
   .controller('MeritveCtrl', ['$scope','AuthService', '$state', '$rootScope','Meritve','Notification','VrednostiMeritevSeznam','$interval', function ($scope, AuthService, $state, $rootScope, Meritve, Notification,VrednostiMeritevSeznam, $interval) {
 
-
+    $scope.vrednostMeritve = null;
     // update clock
     $scope.datum = moment().format("DD.MM.YYYY, HH:mm");
     $interval(function () {
@@ -32,11 +32,56 @@ angular.module('tpo')
     // select meritev tip
     $scope.izberiMeritev = function(item){
       $scope.izbranaMeritev = item;
+      $scope.vrednostMeritve = null;
     };
 
     // reload state
     $scope.reloadState = function(){
       $state.go($state.current, {}, {reload: true});
+    };
+
+    $scope.saveMeritev = function(){
+      if($scope.izbranaMeritev.tip == 'Krvni pritisk'){
+        console.log('Test');
+      }
+      else{
+        var novaMeritev = new Meritve();
+        console.log($scope.izbranaMeritev);
+        novaMeritev.tip_meritve = $scope.izbranaMeritev;
+        novaMeritev.vrednost_meritve = $scope.vrednostMeritve;
+        console.log($rootScope.uporabnik);
+        novaMeritev.uporabnik = $rootScope.uporabnik;
+        novaMeritev.id = -1;
+
+        novaMeritev.pregled = null;
+        novaMeritev.datum = moment().format("YYYY-MM-DD");
+        novaMeritev.$save(function(response){
+          console.log(response);
+        });
+      }
+
+    //   switch($scope.izbranaMeritev.tip) {
+    //     case 'Telesna temperatura':
+    //         // save telesna temperatura
+    //         console.log('Saving telesna temperatura');
+    //         break;
+    //     case 'Glukoza':
+    //         // save glukoza
+    //         console.log('Saving glukoza');
+    //         break;
+    //     case 'ITM':
+    //         // save ITM
+    //         console.log('Saving itm');
+    //         break;
+    //     case 'Srčni pritisk':
+    //         // save utrip
+    //         console.log('Saving utrip');
+    //         break;
+    //     case 'Krvni pritisk':
+    //         // save pritisk
+    //         console.log('Saving pritisk + utrip');
+    //         break;
+    //   }
     };
 
 
