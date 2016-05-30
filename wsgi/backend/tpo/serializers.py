@@ -198,6 +198,11 @@ class VrednostiMeritevSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = VrednostiMeritev
 
+    def update(self, instance, validated_data):
+        print('testgit s')
+
+        return instance
+
 
 """ MERITEV """
 class MeritevSerializer(serializers.HyperlinkedModelSerializer):
@@ -208,9 +213,6 @@ class MeritevSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Meritev
 
-    def create(self, validated_data):
-        print('test')
-        return 'nope'
 
 
 """ PREGLED """

@@ -141,6 +141,7 @@
           <li ng-hide="isDoctor || isSuperU"><a ui-sref="meritve"><i class="fa fa-plus"></i> <span>Dodaj meritev</span></a></li>
           <li ng-show="isDoctor && !isSuperU"><a ui-sref="dodajPregled" ><i class="fa fa-file-text-o"></i> <span>Dodaj pregled</span></a></li>
           <li ng-show="isSuperU"><a href="#/registracijaAdmin"><i class="fa fa-gear"></i> <span>Registracija osebja</span></a></li>
+          <li ng-show="isSuperU"><a ui-sref="urediVrednostiMeritev"><i class="fa fa-gear"></i> <span>Uredi meritve</span></a></li>
 
         </ul>
         <!-- /.sidebar-menu -->
