@@ -49,10 +49,7 @@ angular.module('tpo')
         console.log($scope.izbranaMeritev);
         novaMeritev.tip_meritve = $scope.izbranaMeritev;
         novaMeritev.vrednost_meritve = $scope.vrednostMeritve;
-        console.log($rootScope.uporabnik);
         novaMeritev.uporabnik = $rootScope.uporabnik;
-        novaMeritev.id = -1;
-
         novaMeritev.pregled = null;
         novaMeritev.datum = moment().format("YYYY-MM-DD");
         novaMeritev.$save(function(response){

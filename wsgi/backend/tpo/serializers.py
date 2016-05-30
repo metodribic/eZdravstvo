@@ -221,6 +221,10 @@ class MeritevSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Meritev
 
+    def create(self, validated_data):
+        print('test')
+
+
 
 
 """ PREGLED """

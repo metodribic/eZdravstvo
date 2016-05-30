@@ -136,7 +136,6 @@ class Meritev(models.Model):
     tip_meritve = models.ForeignKey('VrednostiMeritev')
     vrednost_meritve = models.CharField(max_length=100)
     datum = models.DateField()
-    models.DateTimeField
     uporabnik = models.ForeignKey('Uporabnik')
     pregled = models.ForeignKey('Pregled', null=True)
 

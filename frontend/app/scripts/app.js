@@ -104,12 +104,6 @@ angular
               controller: 'MeritevPodrobnoCtrl'
           })
 
-          .state('dodajMeritev', {
-              url: '/dodajMeritev',
-              templateUrl: '../views/dodajMeritev.html',
-              controller: 'dodajMeritevCtrl'
-          })
-
           .state('urediVrednostiMeritev', {
               url: '/urediVrednostiMeritev',
               templateUrl: '../views/urediVrednostiMeritev.html',

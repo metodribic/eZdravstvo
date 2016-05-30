@@ -33,13 +33,13 @@
                 </ui-select>
             </div>
         </div>
-        
+
         <!-- VNESI MERITEV: telesna temperatura -->
         <form name="form-temperatura" ng-show="izbranaMeritev.tip == 'Telesna temperatura'" ng-submit="saveMeritev()">
           <div class="form-group margin-top-15">
             <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
             <div class="col-sm-10 margin-top-15">
-              <input id="temperatura" type="number" step="0.1" ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}}
+              <input id="temperatura" type="text" ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}}
             </div>
           </div>
           <button type="submit" class="btn btn-success pull-right margin-15" >Shrani</button>
@@ -51,7 +51,7 @@
           <div class="form-group margin-top-15">
             <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
             <div class="col-sm-10 margin-top-15">
-              <input id="glukoza" type="number" step="1" ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}}
+              <input id="glukoza" type="text"  ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}}
             </div>
           </div>
           <button type="submit" class="btn btn-success pull-right margin-15"  >Shrani</button>
@@ -63,7 +63,7 @@
           <div class="form-group margin-top-15">
             <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
             <div class="col-sm-10 margin-top-15">
-              <input id="itm" type="number" step="1" ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}}
+              <input id="itm" type="text"  ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}}
             </div>
           </div>
           <button type="submit" class="btn btn-success pull-right margin-15">Shrani</button>
@@ -75,7 +75,7 @@
           <div class="form-group margin-top-15" >
             <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
             <div class="col-sm-10 margin-top-15">
-              <input id="utrip1" type="number" step="1" ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}} <i>(Udarcev na sekundo)</i>
+              <input id="utrip1" type="text"  ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}} <i>(Udarcev na sekundo)</i>
             </div>
           </div>
           <button type="submit" class="btn btn-success pull-right margin-15" >Shrani</button>
@@ -87,14 +87,14 @@
           <div class="form-group margin-top-15">
             <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
             <div class="col-sm-10 margin-top-15">
-              <input id="sistolicni" type="number" step="1" placeholder="sistolični" required/> /
-              <input id="diastolicni" type="number" step="1" placeholder="diastolični" required/> &nbsp;{{izbranaMeritev.enota}}
+              <input id="sistolicni" type="text"  placeholder="sistolični" required/> /
+              <input id="diastolicni" type="text"  placeholder="diastolični" required/> &nbsp;{{izbranaMeritev.enota}}
             </div>
 
             <!-- utrip -->
             <label class="control-label col-sm-2 margin-top-15">Utrip:</label>
             <div class="col-sm-10 margin-top-15">
-              <input id="utrip2" type="number" step="1"/>&nbsp;BPM
+              <input id="utrip2" type="text" />&nbsp;BPM
             </div>
 
           </div>
