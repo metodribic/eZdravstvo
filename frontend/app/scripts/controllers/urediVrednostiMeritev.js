@@ -7,7 +7,6 @@ angular.module('tpo')
 
     VrednostiMeritevSeznam.query().$promise.then(function(response){
       $scope.vrednosti_meritev = response;
-      console.log(response);
     });
 
     // select meritev tip
@@ -23,8 +22,8 @@ angular.module('tpo')
         original = $scope.izbranaMeritev;
 
         // shrani nove vrednosti
-        VrednostiMeritev.update({meritevId: $scope.izbranaMeritev.id}).$promise.then(function(response){
-          console.log(response);
+        VrednostiMeritev.update({meritevId: original.id, objekt: original}, function(response){
+          Notification.success('Vrednosti meritve '+$scope.izbranaMeritev.tip+ ' so bile uspešno posodobljene!');
         });
       });
     };
@@ -35,6 +34,7 @@ angular.module('tpo')
         $scope.izbranaMeritev = response;
       });
     };
+
 
 
   }]);

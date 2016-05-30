@@ -199,8 +199,16 @@ class VrednostiMeritevSerializer(serializers.HyperlinkedModelSerializer):
         model = VrednostiMeritev
 
     def update(self, instance, validated_data):
-        print('testgit s')
-
+        instance.nemogoce_min = self._kwargs['data']['objekt']['nemogoce_min']
+        instance.nemogoce_max = self._kwargs['data']['objekt']['nemogoce_max']
+        instance.nenormalno_min = self._kwargs['data']['objekt']['nenormalno_min']
+        instance.nenormalno_max = self._kwargs['data']['objekt']['nenormalno_max']
+        instance.normalno_min = self._kwargs['data']['objekt']['normalno_min']
+        instance.normalno_max = self._kwargs['data']['objekt']['normalno_max']
+        instance.sifra = self._kwargs['data']['objekt']['sifra']
+        instance.tip = self._kwargs['data']['objekt']['tip']
+        instance.kdaj_se_meri = self._kwargs['data']['objekt']['kdaj_se_meri']
+        instance.save()
         return instance
 
 

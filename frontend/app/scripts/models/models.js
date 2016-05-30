@@ -54,7 +54,7 @@ angular.module('tpo.models', ['ngResource', 'config'])
 .factory('VrednostiMeritev', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/vrednosti_meritev/:meritevId', { meritevId: '@meritevId' }, {
 		update: {
-			method: 'UPDATE'
+			method: 'PATCH'
 		}
 	});
 })
