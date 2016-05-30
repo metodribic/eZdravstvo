@@ -21,8 +21,6 @@ angular.module('tpo')
           $state.go("nadzornaPlosca");
       }
 
-      // datepicker...
-      
 
       // init table numbs
       $scope.tableSet = [];
