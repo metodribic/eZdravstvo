@@ -73,7 +73,7 @@ angular.module('tpo')
         }
         // preveri veljavnost vpisanih podatkov
         else if(!checkValidInput()){
-          Notification.warning({message: 'Mogoče vrednosti so: <br> pritisk: od '+$scope.izbranaMeritev.nemogoce_min+' do '+$scope.izbranaMeritev.nemogoce_max+'<br> utrip: od '+$scope.vrednostiZaUtrip.nemogoce_min+' do '+$scope.vrednostiZaUtrip.nemogoce_max, title: '<b>Vrednosti meritve so zunaj dovoljenih vrednosti!</b>'});
+          Notification.warning({message: 'Mogoče vrednosti so: <br> pritisk: od <b>'+$scope.izbranaMeritev.nemogoce_min+'</b> do <b>'+$scope.izbranaMeritev.nemogoce_max+'</b><br> utrip: od <b>'+$scope.vrednostiZaUtrip.nemogoce_min+'</b> do <b>'+$scope.vrednostiZaUtrip.nemogoce_max+'</b>', title: '<b>Vrednosti meritve so zunaj dovoljenih vrednosti!</b>'});
         }
         else{
           console.log('Shrani krvni pritisk');
@@ -86,7 +86,7 @@ angular.module('tpo')
         }
         // preveri veljavnost vpisanih podatkov
         else if(!checkValidInput()){
-          Notification.warning({message: 'Mogoče vrednosti so od '+$scope.izbranaMeritev.nemogoce_min+' do '+$scope.izbranaMeritev.nemogoce_max, title: '<b>Vrednosti meritve so zunaj dovoljenih vrednosti!</b>'});
+          Notification.warning({message: 'Mogoče vrednosti so od <b>'+$scope.izbranaMeritev.nemogoce_min+'</b> do <b>'+$scope.izbranaMeritev.nemogoce_max+'</b>', title: '<b>Vrednosti meritve so zunaj dovoljenih vrednosti!</b>'});
         }
         // če je potem shrani meritev
         else{
