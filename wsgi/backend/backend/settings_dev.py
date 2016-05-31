@@ -4,6 +4,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 API_URL = 'http://localhost:8000'
+FE_URL = 'http://localhost:9000'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/

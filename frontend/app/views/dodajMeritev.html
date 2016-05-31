@@ -1,0 +1,76 @@
+<div class="col-md-12">
+  <!-- box: osebni podatki -->
+  <div class="box">
+    <div class="box-header with-border">
+      <h3 class="box-title">Dodaj meritev</h3>
+
+      <!-- COLLAPSE -->
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+
+      </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- TABLE: PODATKI O PREGLEDU -->
+          <table class="table table-hover">
+            <thead>
+            </thead>
+            <tbody>
+              <!-- v controllerju moreš met $scope.pregledi tabelo, kjer so noter vsi pregledi ko jih hočeš prikazat, torej moreš naredit Pregledi.ge().$promise.then() itd itd podobn ko pr men v nadzorni-->
+              <tr>
+                <td class="col-xs-2"><b>Datum:</b></td>
+                <td class="col-xs-10">
+                    <input type="text" class="form-control" disabled ng-model="meritev.datum">
+                </td>
+              </tr>
+              <tr>
+                <td><b>Tip meritve:</b></td>
+                <td>
+                  <!-- <div class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Glukoza</a></li>
+                        <li><a href="#">Krvni pritisk</a></li>
+                        <li><a href="#">Srčni utrip</a></li>
+                        <li><a href="#">Telesna temperatura</a></li>
+                        <li><a href="#">Telesna teža/ITM</a></li>
+                    </ul>
+                  </div> -->
+
+                  <div class="form-group">
+
+                          <ui-select ng-model="izbranaMeritev" on-select="ustvariMeritev(izbranaMeritev)" on-remove="ustvariMeritev(izbranaMeritev)">
+                              <ui-select-match placeholder="Izberite meritev...">{{$item.tip}}</ui-select-match>
+                              <ui-select-choices repeat="meritev in vrednosti_meritev | filter: $select.search track by meritev.tip">
+                                  <div ng-bind-html="meritev.tip | highlight: $select.search"> {{meritev.tip}} </div>
+                              </ui-select-choices>
+                          </ui-select>
+
+                  </div>
+
+                </td>
+              </tr>
+
+              <tr>
+                <td class="col-xs-2"><b>Izmerjena vrednost:</b></td>
+                <td class="col-xs-10">
+                    <input type="number" step="0.01" class="form-control" ng-model="meritev.vrednost_meritve">
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- ./box-body -->
+  </div>
+  <!-- /.box -->
+</div>

@@ -21,7 +21,8 @@ angular
     'tpo.services',
     'tpo.models',
     'ui-notification',
-    'jkuri.datepicker'
+    'jkuri.datepicker',
+    'nvd3'
 
   ])
   .config(['$resourceProvider','$stateProvider', '$urlRouterProvider',
@@ -42,6 +43,12 @@ angular
               url: '/login',
               templateUrl: '../views/login.html',
               controller: 'LoginCtrl'
+          })
+
+          .state('pozabljenoGeslo', {
+              url: '/pozabljenoGeslo?email&token',
+              templateUrl: '../views/pozabljenoGeslo.html',
+              controller: 'PozabljenoGesloCtrl'
           })
 
           .state('registracijaUporabnikaAdmin', {
@@ -91,6 +98,30 @@ angular
               templateUrl: '../views/prijavaPregled.html'
           })
 
+          .state('meritve', {
+              url: '/meritve',
+              templateUrl: '../views/meritve.html',
+              controller: 'MeritveCtrl'
+          })
+
+          .state('meritevPodrobno', {
+              url: '/meritev:id',
+              templateUrl: '../views/meritevPodrobno.html',
+              controller: 'MeritevPodrobnoCtrl'
+          })
+
+          .state('dodajMeritev', {
+              url: '/dodajMeritev',
+              templateUrl: '../views/dodajMeritev.html',
+              controller: 'dodajMeritevCtrl'
+          })
+
+          .state('urediVrednostiMeritev', {
+              url: '/urediVrednostiMeritev',
+              templateUrl: '../views/urediVrednostiMeritev.html',
+              controller: 'UrediVrednostiMeritevCtrl'
+          })
+
           .state('dodajPregled', {
               url: '/dodajpregled',
               templateUrl: '../views/dodajPregled.html',
@@ -115,7 +146,7 @@ angular
 
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
 
-        if (toState.url !== '/login' && toState.url !== '/forgotPassword' && toState.url !== '/register' && !AuthService.isAuthenticated()){
+        if (toState.url !== '/login' && toState.url !== '/forgotPassword' && toState.url !== '/register' && toState.name !== 'pozabljenoGeslo' && !AuthService.isAuthenticated()){
           // User isn’t authenticated
           $state.go("login");
           event.preventDefault();

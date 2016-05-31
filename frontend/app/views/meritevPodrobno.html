@@ -1,0 +1,82 @@
+<div class="col-md-12">
+  <!-- box: osebni podatki -->
+  <div class="box">
+    <div class="box-header with-border">
+      <h3 class="box-title">Podatki o meritvi</h3>
+
+      <!-- COLLAPSE -->
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+
+      </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- TABLE: PODATKI O PREGLEDU -->
+          <table class="table table-hover">
+            <thead>
+            </thead>
+            <tbody>
+              <!-- v controllerju moreš met $scope.pregledi tabelo, kjer so noter vsi pregledi ko jih hočeš prikazat, torej moreš naredit Pregledi.ge().$promise.then() itd itd podobn ko pr men v nadzorni-->
+              <tr>
+                <td class="col-xs-2"><b>Datum:</b></td>
+                <td class="col-xs-10">
+                    <span ng-show="meritev.datum.length > 0">{{meritev.datum | date:'dd.MM.yyyy, hh:mm'}}</span>
+                    <span ng-show="meritev.datum.length == 0">/</span>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Tip meritve:</b></td>
+                <td>
+                    <span>{{meritev.tip_meritve.tip}}</span>
+                </td>
+              </tr>
+
+              <tr>
+                <td><b>Normalne vrednosti:</b></td>
+                <td>
+                    <span>od {{meritev.tip_meritve.normalno_min}} do {{meritev.tip_meritve.normalno_max}}</span>
+                </td>
+              </tr>
+
+              <tr>
+                <td><b>Izmerjena vrednost:</b></td>
+                <td>
+                    <span><b>{{meritev.vrednost_meritve}}</b></span>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- ./box-body -->
+    <div class="box-body">
+        <h3 class="box-title">Graf rezultatov za obdobje</h3>
+        <div class="col-md-1 pull-left">
+            <p>
+                <label>Začetek: </label>
+                <ng-datepicker ng-model="chart.start" locale="sl" format="DD.MM.YYYY" view-format="DD.MM.YYYY"></ng-datepicker>
+            </p>
+            <p>
+                <label>Konec: </label>
+                <ng-datepicker ng-model="chart.end" locale="sl" format="DD.MM.YYYY" view-format="DD.MM.YYYY"></ng-datepicker>
+            </p>
+            <button class="btn btn-default"  ng-click="drawChart()">Prikaži</button>
+        </div>
+        <!-- /.col -->
+        <div class="col-md-10 pull-right">
+            <nvd3 options="options" data="data"></nvd3>
+        </div>
+    </div>
+    <!-- ./box-body -->
+
+  </div>
+  <!-- /.box -->
+</div>

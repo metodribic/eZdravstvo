@@ -4,6 +4,9 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	return $resource('http://' + API_URL + '/uporabniki/:iduporabnik', { iduporabnik: '@iduporabnik' }, {
 		update: {
 			method: 'PATCH'
+		},
+        delete: {
+			method: 'DELETE'
 		}
 	});
 })
@@ -26,7 +29,7 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
-	
+
 .factory('Posta', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/posta/:postaId', { postaId: '@postaId' }, {
 		update: {
@@ -46,6 +49,14 @@ angular.module('tpo.models', ['ngResource', 'config'])
 
 .factory('VrednostiMeritevSeznam', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/vrednosti_meritev/seznam');
+})
+
+.factory('VrednostiMeritev', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/vrednosti_meritev/:meritevId', { meritevId: '@meritevId' }, {
+		update: {
+			method: 'PATCH'
+		}
+	});
 })
 
 

@@ -136,8 +136,9 @@ class Meritev(models.Model):
     tip_meritve = models.ForeignKey('VrednostiMeritev')
     vrednost_meritve = models.CharField(max_length=100)
     datum = models.DateField()
+    models.DateTimeField
     uporabnik = models.ForeignKey('Uporabnik')
-    pregled = models.ForeignKey('Pregled')
+    pregled = models.ForeignKey('Pregled', null=True)
 
 
 class IPLock(models.Model):
@@ -154,6 +155,8 @@ class IsAlphanumericPasswordValidator(object):
         num = False
         char = False
         for c in password:
+            if num == True and char == True:
+                break
             if c.isdigit():
                 num = True
             elif c.isalpha():

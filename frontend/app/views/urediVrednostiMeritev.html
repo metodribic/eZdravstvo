@@ -1,0 +1,95 @@
+<div class="col-md-6 col-md-offset-3">
+  <div class="box">
+      <div class="box-body">
+          <div class="col-12">
+              <h3 class="bottom-border header">Uredi vrednosti meritev</h3>
+
+        <!-- Choose type of meritev -->
+        <div class="form-group margin-top-15">
+            <label class="control-label col-sm-4 margin-top-15">Tip meritve:</label>
+            <div class="col-sm-8 margin-top-15">
+                <ui-select ng-model="$item" on-select="izberiMeritev($item)">
+                    <ui-select-match placeholder="Izberite meritev...">{{$item.tip}}</ui-select-match>
+                    <ui-select-choices repeat="meritev in vrednosti_meritev | filter: $select.search track by meritev.tip">
+                        <div ng-bind-html="meritev.tip | highlight: $select.search"> {{meritev.tip}} </div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+
+
+        <form name="form-temperatura" ng-show="izbranaMeritev.length != 0" ng-submit="saveMeritev()">
+
+          <div class="form-group margin-top-15">
+            <label class="control-label col-sm-4 margin-top-15">Šifra:</label>
+            <div class="col-sm-8 margin-top-15">
+              <input class="col-sm-12" type="text" ng-model="izbranaMeritev.sifra" required/>
+            </div>
+          </div>
+
+          <div class="form-group margin-top-15">
+            <label class="control-label col-sm-4 margin-top-15">Tip:</label>
+            <div class="col-sm-8 margin-top-15">
+              <input class="col-sm-12" type="text" ng-model="izbranaMeritev.tip" required/>
+            </div>
+          </div>
+
+          <div class="form-group margin-top-15">
+            <label class="control-label col-sm-4 margin-top-15">Kdaj se meri:</label>
+            <div class="col-sm-8 margin-top-15">
+              <input class="col-sm-12" type="text" ng-model="izbranaMeritev.kdaj_se_meri" required/>
+            </div>
+          </div>
+
+
+          <div class="form-group margin-top-15">
+            <label class="control-label col-sm-4 margin-top-15">Minimalna še normalna vrednost:</label>
+            <div class="col-sm-8 margin-top-15">
+              <input class="col-sm-12" type="text" ng-model="izbranaMeritev.normalno_min" required/>
+            </div>
+          </div>
+
+          <div class="form-group margin-top-15">
+            <label class="control-label col-sm-4 margin-top-15">Maximalna še normalna vrednost:</label>
+            <div class="col-sm-8 margin-top-15">
+              <input class="col-sm-12" type="text" ng-model="izbranaMeritev.normalno_max" required/>
+            </div>
+          </div>
+
+          <div class="form-group margin-top-15">
+            <label class="control-label col-sm-4 margin-top-15">Nenormalne vrednosti so pod:</label>
+            <div class="col-sm-8 margin-top-15">
+              <input class="col-sm-12" type="text" ng-model="izbranaMeritev.nenormalno_min" required/>
+            </div>
+          </div>
+
+          <div class="form-group margin-top-15">
+            <label class="control-label col-sm-4 margin-top-15">Nenormalne vrednosti so nad:</label>
+            <div class="col-sm-8 margin-top-15">
+              <input class="col-sm-12" type="text" ng-model="izbranaMeritev.nenormalno_max" required/>
+            </div>
+          </div>
+
+          <div class="form-group margin-top-15">
+            <label class="control-label col-sm-4 margin-top-15">Nemogoče vrednosti so pod:</label>
+            <div class="col-sm-8 margin-top-15">
+              <input class="col-sm-12" type="text" ng-model="izbranaMeritev.nemogoce_min" required/>
+            </div>
+          </div>
+
+          <div class="form-group margin-top-15">
+            <label class="control-label col-sm-4 margin-top-15">Nemogoče vrednosti so nad:</label>
+            <div class="col-sm-8 margin-top-15">
+              <input class="col-sm-12" type="text" ng-model="izbranaMeritev.nemogoce_max" required/>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-success pull-right margin-15" >Shrani</button>
+          <button class="btn btn-default pull-right margin-15" ng-click="ponastavi()">Prekliči</button>
+        </form>
+
+    </div>
+  </div>
+  </div>
+
+</div>

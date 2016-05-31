@@ -31,12 +31,25 @@ angular.module('tpo')
       var naziv = '';
       var naslednji_pregled = null;
 
+      mojScope = $scope;
+      $scope.jeZdravnik = {};
+      $scope.jeZdravnik.placeholderBes = "Nalagam paciente...";
+      $scope.jeZdravnik.nimaP = true;
 
       // Pridobi Zdravnikove paciente
       ZdravnikoviPacienti.query().$promise.then(function(response){
-        $scope.pacienti = response;
-        //console.log(response);
+          $scope.pacienti = response;
+          //console.log(response);
+
+          if( $scope.pacienti.length === 0 ){
+              mojScope.jeZdravnik.nimaP = true;
+              mojScope.jeZdravnik.placeholderBes = "Nimate pacientov...";
+          }else{
+              mojScope.jeZdravnik.nimaP = false;
+              mojScope.jeZdravnik.placeholderBes = "Izberite pacienta...";
+          }
       });
+
 
 
       // preveri če je prijavljen uporabnik zdravnik
@@ -104,7 +117,8 @@ angular.module('tpo')
         else {
 	        responseFailedHandler("Prosim, izberite pacienta!");
 	        return;
-		}
+		    }
+        
         a.meritve = mojScope.pregled.meritve;
         a.vrednost_meritve = mojScope.rezultatiMeritev;
         a.bolezen = mojScope.pregled.bolezen;
@@ -130,9 +144,9 @@ angular.module('tpo')
                 }
             }else if (meritev.tip === "Krvni pritisk") {
                 //ce je v mejah normale, ga sprejmi
-                if ((mojScope.krvniMeritevSpodnji >= meritev.nemogoce_min && 
-			                mojScope.krvniMeritevSpodnji<=meritev.nemogoce_max) && 
-		                (mojScope.krvniMeritevZgornji >= meritev.nemogoce_min && 
+                if ((mojScope.krvniMeritevSpodnji >= meritev.nemogoce_min &&
+			                mojScope.krvniMeritevSpodnji<=meritev.nemogoce_max) &&
+		                (mojScope.krvniMeritevZgornji >= meritev.nemogoce_min &&
 		                 mojScope.krvniMeritevZgornji <= meritev.nemogoce_max)) {
                      mojScope.rezultatiMeritev.push({vrednost:mojScope.krvniMeritevSpodnji +
 	                     "/"+mojScope.krvniMeritevZgornji, tip:2});
@@ -279,7 +293,7 @@ angular.module('tpo')
 	      }
 	  };
 
-      
+
       //funkcija za pridobivanje diete
       $scope.ustvariDieto = function (izbranaDieta) {
         mojScope.pregled.dieta = izbranaDieta;

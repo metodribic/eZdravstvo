@@ -28,6 +28,7 @@ ALLOWED_HOSTS = [
 ]
 
 API_URL = 'http://tpo-yoyosan.rhcloud.com'
+FE_URL = 'http://tpof-yoyosan.rhcloud.com'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
