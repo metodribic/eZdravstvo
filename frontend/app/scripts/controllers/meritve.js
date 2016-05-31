@@ -78,6 +78,8 @@ angular.module('tpo')
         else{
           var pritisk = $scope.vrednostMeritveSistolicni+'/'+$scope.vrednostMeritveDiastolicni;
           console.log(pritisk);
+          // TODO: SHRANI pritisk
+          // TODO: SHRANI utrip
         }
       }
       else{
