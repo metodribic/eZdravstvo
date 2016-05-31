@@ -7,6 +7,9 @@ angular.module('tpo')
     $scope.vrednostMeritveSistolicni = null;
     $scope.vrednostMeritveDiastolicni = null;
     $scope.vrednostMeritveUtrip = null;
+    $scope.uredi = false;
+
+
     // update clock
     $scope.datum = moment().format("DD.MM.YYYY, HH:mm");
     $interval(function () {
@@ -130,6 +133,68 @@ angular.module('tpo')
           return false;
       }
     }
+
+    $scope.urediMeritev = function(index, oldValue){
+      $scope.oldValue = oldValue;
+      var name1 = 'a'+index;
+      var name2 = 'b'+index;
+      var save = 'shrani'+index;
+      var brisi = 'brisi'+index;
+      var spremeni = 'spremeni'+index;
+      var preklic = 'preklici'+index;
+
+      var element1 = document.getElementById(name1);
+      var element2 = document.getElementById(name2);
+      var element3 = document.getElementById(save);
+      var element4 = document.getElementById(brisi);
+      var element5 = document.getElementById(spremeni);
+      var element6 = document.getElementById(preklic);
+
+      element1.style.display = 'none';
+      element2.style.display = 'inline';
+      element2.style="visibility: visible";
+      element3.style.display = 'inline';
+      element3.style="visibility: visible";
+      element4.style.display = 'none';
+      element5.style.display = 'none';
+      element6.style.display = 'inline';
+      element6.style="visibility: visible";
+      $scope.uredi = true;
+    };
+
+    $scope.prekliciUrejanje = function(index, input){
+      var name1 = 'a'+index;
+      var name2 = 'b'+index;
+      var save = 'shrani'+index;
+      var brisi = 'brisi'+index;
+      var spremeni = 'spremeni'+index;
+      var preklic = 'preklici'+index;
+
+      var element1 = document.getElementById(name1);
+      var element2 = document.getElementById(name2);
+      var element3 = document.getElementById(save);
+      var element4 = document.getElementById(brisi);
+      var element5 = document.getElementById(spremeni);
+      var element6 = document.getElementById(preklic);
+
+      element1.style.display = 'inline';
+      element2.style.display = 'none';
+      element2.style="visibility: hidden";
+      element3.style.display = 'none';
+      element3.style="visibility: hidden";
+      element4.style.display = 'inline';
+      element5.style.display = 'inline';
+      element6.style.display = 'none';
+      element6.style="visibility: hidden";
+      $scope.uredi = false;
+    };
+
+    $scope.posodobiMeritev = function(meritev){
+      console.log('Shrani meritev');
+      meritev.$update({meritevId: meritev.id}, function(response){
+        console.log(response);
+      });
+    };
 
 
   }]);

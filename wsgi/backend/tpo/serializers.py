@@ -224,6 +224,9 @@ class MeritevSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
         print('test')
 
+    def update(self, instance, validated_data):
+        print('update')
+
 
 
 
