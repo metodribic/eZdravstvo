@@ -290,10 +290,11 @@ angular.module('tpo')
     $scope.deleteAccount = function() {
         var u = $rootScope.uporabnik;
         var _$state = $state;
+
         Uporabniki.delete({iduporabnik: u.id, password_confirm: $scope.passwordConfirm }).$promise.then(function(msg) {
-            addAlert(msg, 'success');
-            AuthService.logout();
+            addAlert(msg.message, 'info');
             $rootScope.logged_out = true;
+            AuthService.logout();
             $state.go('login');
         }, function(error) {
             addAlert(error.data.error, 'error');
