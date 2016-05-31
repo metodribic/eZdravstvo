@@ -34,72 +34,32 @@
             </div>
         </div>
 
-        <!-- VNESI MERITEV: telesna temperatura -->
-        <form name="form-temperatura" ng-show="izbranaMeritev.tip == 'Telesna temperatura'" ng-submit="saveMeritev()">
-          <div class="form-group margin-top-15">
+        <!-- FORM MERITEV -->
+        <form name="form-temperatura" ng-submit="saveMeritev()">
+          <div class="form-group margin-top-15" ng-hide="izbranaMeritev.tip == 'Krvni pritisk'">
             <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
             <div class="col-sm-10 margin-top-15">
-              <input id="temperatura" type="text" ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}}
+              <input id="vrednost" type="text" ng-model="vrednostMeritve"/> &nbsp;{{izbranaMeritev.enota}}
             </div>
           </div>
-          <button type="submit" class="btn btn-success pull-right margin-15" >Shrani</button>
-          <button class="btn btn-default pull-right margin-15" ng-click="reloadState()">Pobriši</button>
-        </form>
 
-        <!-- VNESI MERITEV: glukoza -->
-        <form name="form-glukoza" ng-show="izbranaMeritev.tip == 'Glukoza'" ng-submit="saveMeritev()">
-          <div class="form-group margin-top-15">
+          <!-- forma za krvni pritisk -->
+          <div class="form-group margin-top-15" ng-show="izbranaMeritev.tip == 'Krvni pritisk'">
             <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
             <div class="col-sm-10 margin-top-15">
-              <input id="glukoza" type="text"  ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}}
-            </div>
-          </div>
-          <button type="submit" class="btn btn-success pull-right margin-15"  >Shrani</button>
-          <button class="btn btn-default pull-right margin-15" ng-click="reloadState()">Pobriši</button>
-        </form>
-
-        <!-- VNESI MERITEV: ITM -->
-        <form name="form-itm" ng-show="izbranaMeritev.tip == 'ITM'" ng-submit="saveMeritev()">
-          <div class="form-group margin-top-15">
-            <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
-            <div class="col-sm-10 margin-top-15">
-              <input id="itm" type="text"  ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}}
-            </div>
-          </div>
-          <button type="submit" class="btn btn-success pull-right margin-15">Shrani</button>
-          <button class="btn btn-default pull-right margin-15" ng-click="reloadState()">Pobriši</button>
-        </form>
-
-        <!-- VNESI MERITEV: Srčni utrip -->
-        <form name="formUtrip" ng-show="izbranaMeritev.tip == 'Srčni pritisk'" ng-submit="saveMeritev()">
-          <div class="form-group margin-top-15" >
-            <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
-            <div class="col-sm-10 margin-top-15">
-              <input id="utrip1" type="text"  ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}} <i>(Udarcev na sekundo)</i>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-success pull-right margin-15" >Shrani</button>
-          <button class="btn btn-default pull-right margin-15" ng-click="reloadState()">Pobriši</button>
-        </form>
-
-        <!-- VNESI MERITEV: krvni prisik -->
-        <form name="form-pritisk" ng-show="izbranaMeritev.tip == 'Krvni pritisk'" ng-submit="saveMeritev()">
-          <div class="form-group margin-top-15">
-            <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
-            <div class="col-sm-10 margin-top-15">
-              <input id="sistolicni" type="text"  placeholder="sistolični" required/> /
-              <input id="diastolicni" type="text"  placeholder="diastolični" required/> &nbsp;{{izbranaMeritev.enota}}
+              <input id="sistolicni" type="text"  placeholder="sistolični" ng-model="vrednostMeritveSistolicni"/> /
+              <input id="diastolicni" type="text"  placeholder="diastolični" ng-model="vrednostMeritveDiastolicni"/> &nbsp;{{izbranaMeritev.enota}}
             </div>
 
-            <!-- utrip -->
+            <!-- utrip  -->
             <label class="control-label col-sm-2 margin-top-15">Utrip:</label>
             <div class="col-sm-10 margin-top-15">
-              <input id="utrip2" type="text" />&nbsp;BPM
+              <input id="utrip" type="text" ng-model="vrednostMeritveUtrip" />&nbsp;BPM
             </div>
-
           </div>
+
           <button type="submit" class="btn btn-success pull-right margin-15">Shrani</button>
-          <button class="btn btn-default pull-right margin-15" ng-click="reloadState()">Pobriši</button>
+          <button type="reset" class="btn btn-default pull-right margin-15" ng-click="resetForm()">Pobriši</button>
         </form>
 
     </div>
