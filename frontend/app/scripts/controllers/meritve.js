@@ -26,7 +26,6 @@ angular.module('tpo')
     // get all types of meritve
     VrednostiMeritevSeznam.query().$promise.then(function(response) {
       $scope.vrednosti_meritev = response;
-      console.log(response);
     });
 
     // select meritev tip
@@ -46,7 +45,6 @@ angular.module('tpo')
       }
       else{
         var novaMeritev = new Meritve();
-        console.log($scope.izbranaMeritev);
         novaMeritev.tip_meritve = $scope.izbranaMeritev;
         novaMeritev.vrednost_meritve = $scope.vrednostMeritve;
         novaMeritev.uporabnik = $rootScope.uporabnik;
