@@ -313,12 +313,11 @@
       <!-- TABELA: ZDRAVIL IN DIET -->
       <h3 class="bottom-border header">Zdravila in diete</h3>
       <div class="row">
-
+<!--
         <div class="col-md-6">
           <div class="center" ng-show="zdravila.length == 0">
             <h4>Na voljo ni nobenega zdravila!</h4>
           </div>
-          <!-- TABLE: ZDRAVILA  -->
           <table class="table table-striped" ng-show="zdravila.length != 0">
             <thead>
               <tr>
@@ -330,15 +329,15 @@
               <tr ng-repeat="zdravilo in zdravila">
                 <td>{{zdravilo.zdravilo}}</td>
                 <td><a ng-href="{{zdravilo.navodila}}">{{okrajsaj(zdravilo.navodila, 30)}}</a></td>
-              </tr><!-- okrajsaj -->
+              </tr>
             </tbody>
           </table>
         </div>
+
         <div class="col-md-6">
           <div class="center" ng-show="diete.length == 0">
             <h4>Na voljo ni nobene diete!</h4>
           </div>
-          <!-- TABLE: DIETA -->
           <table class="table table-striped" ng-show="diete.length != 0">
             <thead>
               <tr>
@@ -354,19 +353,55 @@
                 <td class="col-8">
                   <span ng-repeat="navodilo in dieta.navodila">
                     <a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url, 30)}}</a>
-                    <br><!--okrajsaj-->
+                    <br>
                   </span>
 
-                  <!-- <ul ng-repeat="navodilo in dieta.navodila" style="list-style-type:none">
-                    <li><a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url)}}</a></li>
-                  </ul> -->
                 </td>
-                <!-- <td ng-href="{{dieta.url}}">{{dieta.url}}</td> -->
               </tr>
             </tbody>
           </table>
         </div>
+        -->
         <!-- /.col -->
+
+                    <!-- new table: for ZDRAVILA -->
+
+    <div class="col-md-6">
+    <table ng-table="tablePar" class="table" id="tabelcaUpor">
+        <tr ng-repeat="zdravilo in $data track by $index" >
+            <!--<td title="'-'">{{ ((tableSet.perPage-1)*tableSet.perCou) + $index+1 }}</td>-->
+            <td title="'Zdravilo'"  >{{zdravilo.zdravilo}}</td>
+            <td title="'Navodilo'" ><a ng-href="{{zdravilo.navodila}}" > {{okrajsaj(zdravilo.navodila, 30)}} </a></td>
+
+        </tr>
+        <!--
+        <tr ng-show="$data.length == 0" >
+            <td></td>
+            <td style="color: #00a65a" >Ni uporabnikov.</td>
+        </tr>-->
+    </table>
+
+
+    </div>
+
+          <div class="col-md-6">
+    <table ng-table="tableParDieta" class="table " id="tabelcaUpor">
+        <tr ng-repeat="dieta in $data track by $index" >
+            <td class="col-3" title="'Naziv'"  >{{dieta.naziv}}</td>
+            <td class="col-1" title="'Šifra'" >{{dieta.sifra}}</td>
+            <td class="col-8" title="'Navodilo'" >
+                <!--{{ dieta.navodila }}-->
+                <span ng-repeat="navodilo in dieta.navodila">
+                    <a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url, 30)}}</a>
+                    <br>
+
+                </span>
+            </td>
+
+        </tr>
+    </table>
+    </div>
+
 
       </div>
       <!-- /.row -->
