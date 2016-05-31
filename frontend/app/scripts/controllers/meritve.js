@@ -24,7 +24,7 @@ angular.module('tpo')
 
       for (var el in response){
         // tega rabiš posebi, da lahko pri pritisku preveriš če je input v mejah...
-        if(response[el].tip === "Srčni pritisk"){
+        if(response[el].tip === "Srčni utrip"){
           $scope.vrednostiZaUtrip = response[el];
           break;
         }
