@@ -5,22 +5,21 @@ angular.module('tpo')
     Meritve.get({ meritevId:$stateParams.id}).$promise.then(function(response){
       $scope.meritev = response;
       $scope.data = [{
-		key: "Graf za trenutno meritev",
-		values: [{"label": "Trenutna meritev", "value": $scope.meritev.vrednost_meritve}]
-	}]
-
+    		key: "Graf za trenutno meritev",
+    		values: [{"label": "Trenutna meritev", "value": $scope.meritev.vrednost_meritve}]
+    	}];
     });
 
 
-    $scope.chart = {'start': moment(), 'end': moment()}
+    $scope.chart = {'start': moment(), 'end': moment()};
 
     $scope.drawChart = function() {
-        startDate = moment($scope.chart.start, 'DD.MM.YYYY')
-        endDate = moment($scope.chart.end, 'DD.MM.YYYY')
+        startDate = moment($scope.chart.start, 'DD.MM.YYYY');
+        endDate = moment($scope.chart.end, 'DD.MM.YYYY');
         tipMeritveId = $scope.meritev.tip_meritve.id;
-        Meritve.query({tipMeritveId: tipMeritveId, startDate: startDate.format('YYYY-MM-DD'), 
+        Meritve.query({tipMeritveId: tipMeritveId, startDate: startDate.format('YYYY-MM-DD'),
             endDate: endDate.format('YYYY-MM-DD')}).$promise.then(function(response) {
-                data = [{key: "Graf meritev od " + startDate.format('DD.MM.YYYY') + ' - ' + 
+                data = [{key: "Graf meritev od " + startDate.format('DD.MM.YYYY') + ' - ' +
                     endDate.format('DD.MM.YYYY'), values: []}];
                 for(var i=0; i<response.length; i++) {
                     data[0].values.push({"label": moment(response[i].datum, 'YYYY-MM-DD').format('DD.MM.YYYY'),
@@ -30,12 +29,12 @@ angular.module('tpo')
             }, function(error) {
                 console.log(error);
             });
-    }
+    };
 
-	$scope.data = [{
-		key: "",
-		values: []
-	}]
+  	$scope.data = [{
+  		key: "",
+  		values: []
+  	}];
 
     $scope.options = {
         chart: {
