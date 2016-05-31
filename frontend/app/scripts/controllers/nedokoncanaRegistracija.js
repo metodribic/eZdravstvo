@@ -60,7 +60,7 @@ angular.module('tpo')
                   data = (data.slice(($scope.tableSet.perPage-1)*$scope.tableSet.perCou,
                       $scope.tableSet.perPage*$scope.tableSet.perCou));
 
-                  Notification.success('Uporabniki posodobljeni!');
+                  //Notification.success('Uporabniki posodobljeni!');
                   return data;
               });
 
