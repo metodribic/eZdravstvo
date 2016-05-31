@@ -76,7 +76,8 @@ angular.module('tpo')
           Notification.warning({message: 'Mogoče vrednosti so: <br> pritisk: od <b>'+$scope.izbranaMeritev.nemogoce_min+'</b> do <b>'+$scope.izbranaMeritev.nemogoce_max+'</b><br> utrip: od <b>'+$scope.vrednostiZaUtrip.nemogoce_min+'</b> do <b>'+$scope.vrednostiZaUtrip.nemogoce_max+'</b>', title: '<b>Vrednosti meritve so zunaj dovoljenih vrednosti!</b>'});
         }
         else{
-          console.log('Shrani krvni pritisk');
+          var pritisk = $scope.vrednostMeritveSistolicni+'/'+$scope.vrednostMeritveDiastolicni;
+          console.log(pritisk);
         }
       }
       else{
@@ -106,15 +107,15 @@ angular.module('tpo')
     // preveri če je vpisana vrednsot znotraj meja
     function checkValidInput(){
       if($scope.izbranaMeritev.tip == 'Krvni pritisk'){
-        var defaultMin = $scope.izbranaMeritev.nemogoce_min;
-        var defaultMax = $scope.izbranaMeritev.nemogoce_max;
-
-        if(parseInt($scope.vrednostMeritveSistolicni) >= defaultMin && parseInt($scope.vrednostMeritveSistolicni <= defaultMax) &&
-        parseInt($scope.vrednostMeritveDiastolicni) >= defaultMin && parseInt($scope.vrednostMeritveDiastolicni <= defaultMax)){
+        var defaultMin = parseInt($scope.izbranaMeritev.nemogoce_min);
+        var defaultMax = parseInt($scope.izbranaMeritev.nemogoce_max);
+        if(parseInt($scope.vrednostMeritveSistolicni) >= defaultMin && parseInt($scope.vrednostMeritveSistolicni) <= defaultMax &&
+        parseInt($scope.vrednostMeritveDiastolicni) >= defaultMin && parseInt($scope.vrednostMeritveDiastolicni) <= defaultMax){
           // preveri še utrip
           if(parseInt($scope.vrednostMeritveUtrip) >= parseInt($scope.vrednostiZaUtrip.nemogoce_min) &&
-          parseInt($scope.vrednostMeritveUtrip) <= parseInt($scope.vrednostiZaUtrip.nemogoce_max))
+          parseInt($scope.vrednostMeritveUtrip) <= parseInt($scope.vrednostiZaUtrip.nemogoce_max)){
             return true;
+          }
         }
         else
           return false;
