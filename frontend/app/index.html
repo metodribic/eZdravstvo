@@ -138,6 +138,7 @@
           <li class="pointer" ng-hide="isDoctor || isSuperU"><a ng-click="ustvariOskrbovanca()"><i class="fa fa-user-plus"></i> <span>Dodaj oskrbovanca</span></a></li>
           <li ng-show="isDoctor && !isSuperU"><a ui-sref="dodajPregled" ><i class="fa fa-file-text-o"></i> <span>Dodaj pregled</span></a></li>
           <li ng-show="isSuperU"><a href="#/registracijaAdmin"><i class="fa fa-gear"></i> <span>Registracija osebja</span></a></li>
+          <li ng-show="isSuperU"><a href="#/zdravilaAdmin"><i class="fa fa-gear"></i> <span>Urejanje zdravil</span></a></li>
 
         </ul>
         <!-- /.sidebar-menu -->
@@ -202,6 +203,7 @@
   <script src="scripts/controllers/profile.js"></script>
   <script src="scripts/models/models.js"></script>
   <script src="scripts/controllers/registracijaUporabnikaAdmin.js"></script>
+  <script src="scripts/controllers/urejanjeZdravilAdmin.js"></script>
   <script src="scripts/services/services.js"></script>
   <script src="scripts/controllers/dodajPregled.js"></script>
   <script src="scripts/controllers/index.js"></script>

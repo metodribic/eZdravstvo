@@ -66,6 +66,14 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
+.factory('UrejanjeZdravilAdmin', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/zdravilaAdmin', {
+		update: {
+			method: 'PUT'
+		}
+	});
+})
+
 .factory('RegistracijaPacient', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/registracijaPacient', {
 	});
