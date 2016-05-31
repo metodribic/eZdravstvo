@@ -1,15 +1,7 @@
 <div class="col-md-12">
   <!-- box: osebni podatki -->
   <div class="box">
-    <!-- <div class="box-header with-border">
-      <h3 class="box-title">Osnovni podatki</h3>
 
-      <div class="box-tools pull-right">
-        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-        </button>
-
-      </div>
-    </div> -->
     <!-- /.box-header -->
     <div class="box-body">
         <!-- IZBIRA PACIENTA -->
@@ -197,55 +189,7 @@
         <div class="center" ng-show="pregledi.length == 0">
           <h4>Na voljo ni nobenega pregleda!</h4>
         </div>
-          <!--
-        <table class="table table-striped" ng-show="pregledi.length != 0">
-          <thead>
-            <tr>
-              <th></th>
-              <th>Datum pregleda</th>
-              <th>Opombe</th>
-              <th>Zdravnik</th>
-              <th>Bolezni</th>
-              <th>Zdravilo</th>
-              <th>Dieta</th>
-              <th>Datum naslednjega pregleda</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="pregled in pregledi" >
-              <td ui-sref="pregledPodrobno({id:pregled.id})"><i class="fa fa-search" style="cursor:pointer"></i></td>
-              <td>{{pregled.datum | date:'dd.MM.yyyy'}}</td>
-              <td>{{okrajsaj(pregled.opombe, 120)}}</td>
-              <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
-              <td>
-                <span ng-repeat="bolezen in pregled.bolezen">
-                    - {{okrajsaj(bolezen.naziv,30)}} <span ng-show="bolezen.alergija"><i>(Alergija)</i></span><br>
-                </span>
-                <span ng-show="pregled.bolezen.length == 0">/</span>
-              </td>
-              <td>
-                <span ng-repeat="zdravilo in pregled.zdravilo | limitTo: 4">
-                    - {{zdravilo.zdravilo}}<br>
-                </span>
-                <span ng-show="pregled.zdravilo.length == 0">/</span>
-                <span ng-show="pregled.zdravilo.length > 4">- ...</span>
-              </td>
-              <td>
-                <span ng-repeat="dieta in pregled.dieta | limitTo: 4">
-                    - {{dieta.naziv}} <br>
-                </span>
-                <span ng-show="pregled.dieta.length == 0">/</span>
-                <span ng-show="pregled.dieta.length > 4">- ...</span>
-              </td>
-              <td>
-                <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega | date: 'dd.MM.yyyy, hh:mm'}}</span>
-                <span ng-show="pregled.datum_naslednjega.length == null">Ponoven pregled ni potreben!</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
 
--->
               <table ng-table="tableParPregledi" class="table" ng-show="pregledi.length != 0" >
                   <tr class="col-12" ng-repeat="pregled in $data track by $index" >
                       <td ui-sref="pregledPodrobno({id:pregled.id})"><i class="fa fa-search" style="cursor:pointer"></i></td>
@@ -295,31 +239,6 @@
           <h4>Na voljo ni nobene meritve!</h4>
         </div>
         <!-- TABLE: OSEBNI PODATKI -->
-          <!--
-        <table class="table table-striped" ng-show="meritve.length != 0">
-          <thead>
-            <tr>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="meritev in meritve">
-                <td ui-sref="meritevPodrobno({id:meritev.id})"><i class="fa fa-search" style="cursor:pointer"></i></td>
-                <td>{{meritev.datum | date:'dd.MM.yyyy, HH:mm'}}</td>
-              <td>{{meritev.tip_meritve.tip}}</td>
-              <td>{{meritev.tip_meritve.sifra}}</td>
-              <td>
-                <b>{{meritev.vrednost_meritve}}</b>&nbsp;
-                <i>(Normalno med: {{meritev.tip_meritve.normalno_min}} in {{meritev.tip_meritve.normalno_max}})</i>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-          -->
 
               <table ng-table="tableParMeritve" class="table"  ng-show="meritve.length != 0">
                   <tr class="col-12" ng-repeat="meritev in $data track by $index" >
@@ -343,34 +262,6 @@
         <div class="center" ng-show="bolezni.length == 0">
           <h4>Na voljo ni nobene bolezni!</h4>
         </div>
-
-<!--
-        <table class="table table-striped" ng-show="bolezni.length != 0">
-          <thead>
-            <tr class="col-12">
-              <th class="col-1">mkb10</th>
-              <th class="col-4">Naziv</th>
-              <th class="col-6">Zdravila</th>
-              <th class="col-1">Alergija</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="bolezen in bolezni" class="col-12">
-              <td class="col-1" >{{bolezen.mkb10}}</td>
-              <td class="col-4" ui-sref="#">{{bolezen.naziv}}</td>
-              <td class="col-6">
-                <span ng-repeat="zdravilo in bolezen.zdravilo">
-                  <span>{{zdravilo.zdravilo}}, </span>
-                </span>
-              </td>
-              <td class="col-1" >
-                <i ng-show="bolezen.alergija" class="fa fa-check"></i>
-                <i ng-show="!bolezen.alergija" class="fa fa-times"></i>
-              </td>
-            </tr>
-          </tbody>
-        </table>
--->
 
               <table ng-table="tableParBolezni" class="table" ng-show="bolezni.length != 0" >
                   <tr class="col-12" ng-repeat="bolezen in $data track by $index" >
@@ -398,57 +289,14 @@
           <div class="center" ng-show="zdravila.length == 0">
             <h4>Na voljo ni nobenega zdravila!</h4>
           </div>
-<!--
-          <table class="table table-striped" ng-show="zdravila.length != 0">
-            <thead>
-              <tr>
-                <th>Zdravilo</th>
-                <th>Navodilo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="zdravilo in zdravila">
-                <td>{{zdravilo.zdravilo}}</td>
-                <td><a ng-href="{{zdravilo.navodila}}">{{okrajsaj(zdravilo.navodila, 30)}}</a></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
 
-        <div class="col-md-6">
-          <div class="center" ng-show="diete.length == 0">
-            <h4>Na voljo ni nobene diete!</h4>
-          </div>
-          <table class="table table-striped" ng-show="diete.length != 0">
-            <thead>
-              <tr>
-                <th class="col-3">Naziv</th>
-                <th class="col-1">Šifra</th>
-                <th class="col-8">Navodilo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="dieta in diete">
-                <td class="col-3">{{dieta.naziv}}</td>
-                <td class="col-1">{{dieta.sifra}}</td>
-                <td class="col-8">
-                  <span ng-repeat="navodilo in dieta.navodila">
-                    <a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url, 30)}}</a>
-                    <br>
-                  </span>
-
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        -->
         <!-- /.col -->
 
-                    <!-- new table: for ZDRAVILA -->
 
-          <div class="col-md-6">
-              <table ng-table="tablePar" class="table"  ng-show="zdravila.length != 0">
+            <!-- new table: for ZDRAVILA -->
+
+          <div class="col-md-6" ng-show="zdravila.length != 0">
+              <table ng-table="tablePar" class="table"  >
                   <tr ng-repeat="zdravilo in $data track by $index" >
                       <!--<td title="'-'">{{ ((tableSet.perPage-1)*tableSet.perCou) + $index+1 }}</td>-->
                       <td title="'Zdravilo'"  >{{zdravilo.zdravilo}}</td>
@@ -458,7 +306,7 @@
 
           </div>
 
-          <div class="col-md-6">
+          <div class="col-md-6" ng-show="zdravila.length != 0">
               <table ng-table="tableParDieta" class="table " id="tabelcaUpor">
                   <tr ng-repeat="dieta in $data track by $index" >
                       <td class="col-3" title="'Naziv'"  >{{dieta.naziv}}</td>
