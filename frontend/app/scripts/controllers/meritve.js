@@ -121,8 +121,8 @@ angular.module('tpo')
           return false;
       }
       else{
-        if(parseInt($scope.vrednost_meritve) >= parseInt($scope.izbranaMeritev.nemogoce_min) &&
-        parseInt($scope.vrednost_meritve) <= parseInt($scope.izbranaMeritev.nemogoce_max))
+        if(parseInt($scope.vrednostMeritve) >= parseInt($scope.izbranaMeritev.nemogoce_min) &&
+        parseInt($scope.vrednostMeritve) <= parseInt($scope.izbranaMeritev.nemogoce_max))
           return true;
         else
           return false;
