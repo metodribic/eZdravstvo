@@ -20,7 +20,32 @@ angular.module('tpo')
       if( $scope.uporabnik.role.naziv !== "Admin" ){
           $state.go("nadzornaPlosca");
       }
+      
+      // dates
+      $scope.chart = {'start': moment(), 'end': moment()}
+      $scope.startDate = moment($scope.chart.start, 'DD.MM.YYYY');
+      $scope.endDate = moment($scope.chart.end, 'DD.MM.YYYY');
 
+
+///   DATES
+      $scope.filtrirejDatum = function( dat ){
+
+          return function( dat ){
+              /*
+              if( moment(dat.date_joined).isAfter($scope.startDate)
+                  && moment($scope.endDate).isAfter(dat.date_joined)) {
+
+                  return true;
+              }*/
+              // dat.date_joined with format "dd.mm.yyyy" doesnt work
+              if( $scope.startDate <= moment(dat.date_joined,"YYYY-MM-DD"  )
+                  && $scope.endDate >= moment(dat.date_joined,"YYYY-MM-DD" )  ){
+                  return true;
+              }
+
+              return false;
+          };
+      };
 
       // init table numbs
       $scope.tableSet = [];
@@ -44,9 +69,11 @@ angular.module('tpo')
                   // order data
                   data = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
 
+                  // filter data by dates
+                  data = data.filter($scope.filtrirejDatum( data ));
+
                   // filter data by input
                   data = params.filter() ? $filter('filter')(data, params.filter()) : data;
-
 
                   // set len AFTER filtering!
                   params.total(data.length);
@@ -57,13 +84,32 @@ angular.module('tpo')
                   // paginacija
                   data = (data.slice(($scope.tableSet.perPage-1)*$scope.tableSet.perCou,
                       $scope.tableSet.perPage*$scope.tableSet.perCou));
+                  Notification.success('Uporabniki posodobljeni!');
+
                   return data;
               });
 
           }});
 
       $scope.tablePar = tp;
+      
+      $scope.naloziDatumInReload = function() {
+          
+          //$scope.izbranDatum = true;
+          $scope.startDate = moment($scope.chart.start, 'DD.MM.YYYY');
+          $scope.endDate = moment($scope.chart.end, 'DD.MM.YYYY');
+          
+          // validate
+          if( $scope.startDate > $scope.endDate ){
+              // NI KUL
+              $scope.errDatumEnd = true;
+              Notification.error("Začetni datum mora biti pred koncem.");
+          }else{
+              $scope.errDatumEnd = false;
+              $scope.tablePar.reload();
+          }
 
+      }
 
 ///   PDF
       $scope.showPdf = function () {
@@ -81,17 +127,21 @@ angular.module('tpo')
 
           var doc = handlePdfFormatting();
           // save
-          doc.save("seznamNedokoncanihRegistracij.pdf");
+          doc.save("seznamNovihUporabnikov.pdf");
       }
+
 
       function handlePdfFormatting(){
 
           var doc = new jsPDF('p', 'pt');
 
+
           // title + dataKey -> heading
           var columns = [
               {title:'#',key:'index'},
               {title:'Uporabniško ime',key:'username'},
+              {title:'Ime',key:'ime'},
+              {title:'Priimek',key:'priimek'},
               {title:'Vloga', key:'rola'},
               {title:'Datum registracije', key:'date_joined'},
               {title:'Zadnji dostop', key:'last_login'},
@@ -105,6 +155,18 @@ angular.module('tpo')
               rows[i] = {};
               rows[i].index = i+1;
               rows[i].username = $scope.saveDataForPdf[i].username;
+
+              if( $scope.saveDataForPdf[i].ime == "" ){
+                  rows[i].ime = "/";
+              }else{
+                  rows[i].ime = $scope.saveDataForPdf[i].ime;
+              }
+              if( $scope.saveDataForPdf[i].priimek == "" ){
+                  rows[i].priimek = "/";
+              }else{
+                  rows[i].priimek = $scope.saveDataForPdf[i].priimek;
+              }
+
               rows[i].rola=$scope.saveDataForPdf[i].role.naziv;
 
               if($scope.saveDataForPdf[i].date_joined != null){
@@ -125,74 +187,67 @@ angular.module('tpo')
               }
           }
 
-          // duplicate for more data !
-          var j = $scope.saveDataForPdf.length;
-          for ( var i = 0; i < $scope.saveDataForPdf.length; i++){
-              rows[j] = {};
-              rows[j].index = i+1;
-              rows[j].username = $scope.saveDataForPdf[i].username;
-              rows[j].rola=$scope.saveDataForPdf[i].role.naziv;
 
-              if($scope.saveDataForPdf[i].date_joined != null){
-                  rows[j].date_joined= $filter('date')($scope.saveDataForPdf[i].date_joined,'dd.MM.yyyy');
-              }else{
-                  rows[j].date_joined="/";
-              }
+          var totalPagesExp = "{total_pages_count_string}";
 
-              if($scope.saveDataForPdf[i].last_login != null){
-                  rows[j].last_login=$filter('date')($scope.saveDataForPdf[i].last_login,'dd.MM.yyyy');
-              }else{
-                  rows[j].last_login="/";
+          var footer = function (data) {
+              var str = "Stran " + data.pageCount;
+              // Total page number plugin only available in jspdf v1.0+
+
+              if (typeof doc.putTotalPages === 'function') {
+                  str = str + " od " + totalPagesExp;
               }
-              if( $scope.saveDataForPdf[i].is_active ){
-                  rows[j].is_active="Da";
-              }else{
-                  rows[j].is_active="Ne";
+              doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 30);
+          };
+
+          var header = function(data){
+
+              if(data.pageCount < 2 ){
+                  //FIRST PAGE
+                  //&#268; -> č
+                  doc.setFontSize(16);
+                  doc.text("Uporabniki registrirani med " + moment($scope.startDate).format("DD.MM.YYYY") +
+                      " in " + moment($scope.endDate).format("DD.MM.YYYY") ,40,75);
+
               }
-              j = j+1;
+              doc.setFontSize(12);
+              doc.text("eZdravstvo",40,30);
+              doc.setFontSize(10);
+              doc.text(getTodaysDate(), 510, 30);
           }
 
-          $scope.pdfPageNum = 1;
+          var options = {
 
-          doc.autoTable(columns, rows, {
+
+              beforePageContent: header,
+              afterPageContent: footer,
+
               theme: 'striped',
               styles : {
                   halign:'left',
                   fontStyle:'normal',
-                  font:'helvetica'
+                  font:'helvetica',
+                  overflow:'linebreak'
               },
-              headerStyles:{},
+              headerStyles:{fontStyle:'bold'},
               bodyStyles:{},
               columnStyles:{},
               margin: {top:60},
-
-              startY:false,
+              startY:100,
               pageBreak: 'auto',
 
-              beforePageContent:function(data){
-                  if($scope.pdfPageNum < 2 ){
-                      //FIRST PAGE
-                      doc.setFontSize(16);
-                      doc.text("eZdravstvo",40,30);
-                      doc.setFontSize(12);
-                      //&#268; -> č
-                      doc.text("Seznam nedokoncanih postopkov registracije",60,50);
-                  }else{
-                      doc.setFontSize(12);
-                      doc.text("eZdravstvo",40,30);
-                  }
-                  doc.setFontSize(10);
-                  doc.text(getTodaysDate(), 510, 30);
-                  doc.text("stran "+$scope.pdfPageNum, 510, 45);
-                  $scope.pdfPageNum += 1;
-              },
-              afterPageContent: function (data) {
-              }
+          };
 
-          });
+          doc.autoTable(columns, rows, options );
+
+          // Total page number plugin only available in jspdf v1.0+
+          if (typeof doc.putTotalPages === 'function') {
+              doc.putTotalPages(totalPagesExp);
+          }
 
           return doc;
       }
+
 
 ///   END-PDF
       function getTodaysDate(){

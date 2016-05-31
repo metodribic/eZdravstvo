@@ -4,19 +4,43 @@
 <div class="box">
 
     <div class="box-body" >
-        <h3 class="bottom-border header">Uporabniki brez profila</h3>
-        <ul class="list-unstyled">
-            <li><a href="" ng-click="showPdf()" style="cursor:pointer; color: #00a65a">Prikaži pdf</a></li>
-            <li><a href="" ng-click="shraniPdf()" style="cursor:pointer; color: #00a65a">Shrani pdf</a></li>
-        </ul>
+        <h3 class="bottom-border header">Uporabniki brez profila
+            <ul class="list-inline pull-right">
+                <li><a class="fa fa-arrows-alt" aria-hidden="true" href="" ng-click="showPdf()" style="cursor:pointer; color: #00a65a"></a></li>
 
-        <div class="row">
+                <li><a class="fa fa-floppy-o" aria-hidden="true" href="" ng-click="shraniPdf()" style="cursor:pointer; color: #00a65a"></a></li>
+            </ul>
+        </h3>
+
+        <div class="col-md-6 ">
+            <div class="col-md-4 " >
+                <label class="pull-left" style="color: #00a65a; margin-top: 4%">Začetek: </label>
+                <ng-datepicker class="pull-right" ng-model="chart.start" ng-change="naloziDatumInReload()"
+                               locale="sl" format="DD.MM.YYYY" view-format="DD.MM.YYYY"></ng-datepicker>
+            </div>
+            <div class="col-md-4">
+                <label class="pull-left" style="color: #00a65a; margin-top: 4%">Konec: </label>
+                <ng-datepicker class="pull-right" ng-model="chart.end" ng-change="naloziDatumInReload()"
+                               locale="sl" format="DD.MM.YYYY" view-format="DD.MM.YYYY" ></ng-datepicker>
+
+                <span style="color:red" ng-show="errDatumEnd" >Izberite datum, ki je za začetnim.</span>
+            </div>
+        </div>
+        <br><br>
+        <br><br>
+
+        <!-- /.col -->
+        <div class="col-md-10 pull-right">
+            <nvd3 options="options" data="data"></nvd3>
+        </div>
+
+        <div class="row" >
             <div class="col-md-12">
 
                 <table ng-table="tablePar" class="table" show-filter="true" id="tabelcaUpor">
-                    <tr ng-repeat="u in $data track by $index ">
+                    <tr ng-repeat="u in $data track by $index" >
                         <td>{{ ((tableSet.perPage-1)*tableSet.perCou) + $index+1 }}</td>
-                        <td title="'Uporabniško ime'" sortable="username" filter="{username:'text'}" >{{u.username}}</td>
+                        <td title="'Uporabniško ime'" sortable="'username'" filter="{username:'text'}" >{{u.username}}</td>
                         <td title="'Ime'" sortable="'ime'" filter="{ime:'text'}" >{{u.ime}}</td>
                         <td title="'Priimek'" sortable="'priimek'" filter="{priimek:'text'}" >{{u.priimek}}</td>
                         <td title="'Uporabniška vloga'" sortable="'role.naziv'" >{{u.role.naziv}}</td>
@@ -26,6 +50,10 @@
                             <div ng-show="u.is_active == 0">Ne</div>
                             <div ng-show="u.is_active == 1">Da</div>
                         </td>
+                    </tr>
+                    <tr ng-show="$data.length == 0" >
+                        <td></td>
+                        <td style="color: #00a65a" >Ni uporabnikov.</td>
                     </tr>
                 </table>
 

@@ -59,6 +59,8 @@ angular.module('tpo')
                   // paginacija
                   data = (data.slice(($scope.tableSet.perPage-1)*$scope.tableSet.perCou,
                       $scope.tableSet.perPage*$scope.tableSet.perCou));
+
+                  Notification.success('Uporabniki posodobljeni!');
                   return data;
               });
 
@@ -169,7 +171,8 @@ angular.module('tpo')
               styles : {
                   halign:'left',
                   fontStyle:'normal',
-                  font:'helvetica'
+                  font:'helvetica',
+                  overflow:'linebreak'
               },
               headerStyles:{fontStyle:'bold'},
               bodyStyles:{},
