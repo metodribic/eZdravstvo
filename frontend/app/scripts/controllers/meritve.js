@@ -143,7 +143,6 @@ angular.module('tpo')
             return true;
           }
           else{
-            console.log('pritisk ni ok');
             return false;
           }
         }
@@ -159,8 +158,9 @@ angular.module('tpo')
       }
     }
 
-    $scope.urediMeritev = function(index, oldValue){
-      console.log(oldValue);
+
+    $scope.urediMeritev = function(index, oldMeritev){
+      $scope.staraMeritev = oldMeritev;
       var name1 = 'a'+index;
       var name2 = 'b'+index;
       var save = 'shrani'+index;
@@ -216,10 +216,50 @@ angular.module('tpo')
     };
 
     $scope.posodobiMeritev = function(meritev, index){
-      meritev.$update({meritevId: meritev.id}, function(response){
-        Notification.success('Meritev uspešno posodobljena!');
-        $scope.prekliciUrejanje(index);
-      });
+        meritev.$update({meritevId: meritev.id}, function(response){
+          Notification.success('Meritev uspešno posodobljena!');
+          $scope.prekliciUrejanje(index);
+        });
+    };
+
+    $scope.preveriSpremenjenoVrednost = function(input,index){
+        console.log(input);
+        $scope.izbranaMeritev = input;
+        var isOk = false;
+
+        if($scope.izbranaMeritev.tip_meritve.tip == 'Krvni pritisk'){
+          var defaultMin = parseInt($scope.izbranaMeritev.tip_meritve.nemogoce_min);
+          var defaultMax = parseInt($scope.izbranaMeritev.tip_meritve.nemogoce_max);
+          index = $scope.izbranaMeritev.vrednost_meritve.indexOf("/");
+          $scope.vrednostMeritveSistolicni = $scope.izbranaMeritev.vrednost_meritve.substring(0,index);
+          $scope.vrednostMeritveDiastolicni = $scope.izbranaMeritev.vrednost_meritve.substring(index+1);
+
+          if(parseInt($scope.vrednostMeritveSistolicni) >= defaultMin && parseInt($scope.vrednostMeritveSistolicni) <= defaultMax &&
+          parseInt($scope.vrednostMeritveDiastolicni) >= defaultMin && parseInt($scope.vrednostMeritveDiastolicni) <= defaultMax){
+            isOk = true;
+          }
+          else
+            isOk = false;
+        }
+        else{
+          if(parseInt($scope.izbranaMeritev.vrednost_meritve) >= parseInt($scope.izbranaMeritev.tip_meritve.nemogoce_min) &&
+          parseInt($scope.izbranaMeritev.vrednost_meritve) <= parseInt($scope.izbranaMeritev.tip_meritve.nemogoce_max))
+            isOk = true;
+          else
+            isOk = false;
+        }
+
+        if(isOk){
+          $scope.posodobiMeritev(input, index);
+        }
+        else {
+          if($scope.izbranaMeritev.tip_meritve.tip == 'Krvni pritisk')
+            Notification.warning({message: 'Mogoče vrednosti so: <br> pritisk: od <b>'+$scope.izbranaMeritev.tip_meritve.nemogoce_min+'</b> do <b>'+$scope.izbranaMeritev.tip_meritve.nemogoce_max+'</b><br> utrip: od <b>'+$scope.vrednostiZaUtrip.nemogoce_min+'</b> do <b>'+$scope.vrednostiZaUtrip.nemogoce_max+'</b>', title: '<b>Vrednosti meritve so zunaj dovoljenih vrednosti!</b>'});
+          else
+            Notification.warning({message: 'Mogoče vrednosti so od <b>'+$scope.izbranaMeritev.tip_meritve.nemogoce_min+'</b> do <b>'+$scope.izbranaMeritev.tip_meritve.nemogoce_max+'</b>', title: '<b>Vrednosti meritve so zunaj dovoljenih vrednosti!</b>'});
+
+        }
+
     };
 
 
