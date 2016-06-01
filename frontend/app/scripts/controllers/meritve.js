@@ -99,11 +99,12 @@ angular.module('tpo')
           var novaMeritev = new Meritve();
           novaMeritev.tip_meritve = $scope.izbranaMeritev;
           novaMeritev.vrednost_meritve = $scope.vrednostMeritve;
-          novaMeritev.uporabnik = $rootScope.uporabnik.url;
+          novaMeritev.uporabnik = $rootScope.uporabnik.id;
           novaMeritev.pregled = null;
           novaMeritev.datum = moment().format("YYYY-MM-DD");
           novaMeritev.$save(function(response){
-            console.log(response);
+            Notification.success('Meritev uspešno dodana!');
+            $scope.reloadState();
           });
         }
       }
@@ -189,10 +190,10 @@ angular.module('tpo')
       $scope.uredi = false;
     };
 
-    $scope.posodobiMeritev = function(meritev){
-      console.log('Shrani meritev');
+    $scope.posodobiMeritev = function(meritev, index){
       meritev.$update({meritevId: meritev.id}, function(response){
-        console.log(response);
+        Notification.success('Meritev uspešno posodobljena!');
+        $scope.prekliciUrejanje(index);
       });
     };
 

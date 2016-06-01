@@ -229,10 +229,18 @@ class MeritevSerializer(serializers.HyperlinkedModelSerializer):
         depth = 1
 
     def create(self, validated_data):
-        print('test')
+        meritev = Meritev(  tip_meritve_id=validated_data['tip_meritve']['id'],
+                            vrednost_meritve = validated_data['vrednost_meritve'],
+                            datum = validated_data['datum'],
+                            uporabnik_id = self._kwargs['data']['uporabnik'],
+                            pregled_id = None)
+        meritev.save()
+        return meritev
 
     def update(self, instance, validated_data):
-        print('update')
+        instance.vrednost_meritve = validated_data['vrednost_meritve']
+        instance.save()
+        return instance
 
 
 """ PREGLED """
