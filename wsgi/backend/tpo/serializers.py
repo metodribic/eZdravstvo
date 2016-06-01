@@ -534,3 +534,11 @@ class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
         depth = 3   # izpise nested fielde (diete, bolezni,..)
 
 
+class BolezniZdravila(serializers.HyperlinkedModelSerializer):
+    bolezen = BolezniSerializer()
+    zdravilo = ZdraviloSerializer()
+
+    class Meta:
+        db_table = "tpo_bolezni_zdravilo"
+
+

@@ -193,7 +193,7 @@ class PersonalizacijaNadzornePlosce(models.Model):
 
 
 class BolezniZdravila(models.Model):
-   bolezen = models.ForeignKey('Bolezni')
+   bolezni = models.ForeignKey('Bolezni')
    zdravilo = models.ForeignKey('Zdravilo')
    zbrisano = models.NullBooleanField(default=False)
 

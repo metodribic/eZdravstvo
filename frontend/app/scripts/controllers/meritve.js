@@ -118,7 +118,7 @@ angular.module('tpo')
         parseInt($scope.vrednostMeritveDiastolicni) >= defaultMin && parseInt($scope.vrednostMeritveDiastolicni) <= defaultMax){
           // preveri še utrip
           if(parseInt($scope.vrednostMeritveUtrip) >= parseInt($scope.vrednostiZaUtrip.nemogoce_min) &&
-          parseInt($scope.vrednostMeritveUtrip) <= parseInt($scope.vrednostiZaUtrip.nemogoce_max)){
+          parseInt($scope.vredanostMeritveUtrip) <= parseInt($scope.vrednostiZaUtrip.nemogoce_max)){
             return true;
           }
         }
