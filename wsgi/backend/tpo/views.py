@@ -27,12 +27,12 @@ from pprint import pprint
 
 # Create your views here.
 from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock, \
-    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, UporabnikZdravnik, IsAlphanumericPasswordValidator
+    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, UporabnikZdravnik, IsAlphanumericPasswordValidator, PersonalizacijaNadzornePlosce
 
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
     LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer, SifrantRegistriranihSerializer, \
-    VrednostiMeritevSerializer, KontaktnaOsebaSerializer
+    VrednostiMeritevSerializer, KontaktnaOsebaSerializer, PersonalizacijaNadzornePlosceSerializer
 
 import random
 
@@ -46,6 +46,11 @@ class JSONResponse(HttpResponse):
         content = JSONRenderer().render(data)
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
+
+@permission_classes((IsAuthenticated,))
+class PersonalizacijaViewSet(viewsets.ModelViewSet):
+    queryset = PersonalizacijaNadzornePlosce.objects.all()
+    serializer_class = PersonalizacijaNadzornePlosceSerializer
 
 
 @permission_classes((IsAuthenticated,))
