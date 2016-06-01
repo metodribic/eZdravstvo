@@ -80,9 +80,26 @@ angular.module('tpo')
         }
         else{
           var pritisk = $scope.vrednostMeritveSistolicni+'/'+$scope.vrednostMeritveDiastolicni;
-          console.log(pritisk);
+
           // TODO: SHRANI pritisk
-          // TODO: SHRANI utrip
+          var novaMeritev = new Meritve();
+          novaMeritev.tip_meritve = $scope.izbranaMeritev;
+          novaMeritev.vrednost_meritve = pritisk;
+          novaMeritev.uporabnik = $rootScope.uporabnik.id;
+          novaMeritev.pregled = null;
+          novaMeritev.datum = moment().format("YYYY-MM-DD");
+          novaMeritev.$save(function(response){
+
+            novaMeritev.tip_meritve = $scope.vrednostiZaUtrip;
+            novaMeritev.vrednost_meritve = $scope.vrednostMeritveUtrip;
+            novaMeritev.uporabnik = $rootScope.uporabnik.id;
+            novaMeritev.pregled = null;
+            novaMeritev.datum = moment().format("YYYY-MM-DD");
+            novaMeritev.$save(function(response){
+              Notification.success('Meritev uspešno dodana!');
+              $scope.reloadState();
+            });
+          });
         }
       }
       else{
@@ -115,12 +132,19 @@ angular.module('tpo')
       if($scope.izbranaMeritev.tip == 'Krvni pritisk'){
         var defaultMin = parseInt($scope.izbranaMeritev.nemogoce_min);
         var defaultMax = parseInt($scope.izbranaMeritev.nemogoce_max);
+
         if(parseInt($scope.vrednostMeritveSistolicni) >= defaultMin && parseInt($scope.vrednostMeritveSistolicni) <= defaultMax &&
         parseInt($scope.vrednostMeritveDiastolicni) >= defaultMin && parseInt($scope.vrednostMeritveDiastolicni) <= defaultMax){
           // preveri še utrip
+          // console.log(parseInt($scope.vrednostMeritveUtrip) +'>='+ parseInt($scope.vrednostiZaUtrip.nemogoce_min));
+          // console.log(parseInt($scope.vrednostMeritveUtrip) +'<='+ parseInt($scope.vrednostiZaUtrip.nemogoce_max));
           if(parseInt($scope.vrednostMeritveUtrip) >= parseInt($scope.vrednostiZaUtrip.nemogoce_min) &&
-          parseInt($scope.vredanostMeritveUtrip) <= parseInt($scope.vrednostiZaUtrip.nemogoce_max)){
+          parseInt($scope.vrednostMeritveUtrip) <= parseInt($scope.vrednostiZaUtrip.nemogoce_max)){
             return true;
+          }
+          else{
+            console.log('pritisk ni ok');
+            return false;
           }
         }
         else
@@ -136,7 +160,7 @@ angular.module('tpo')
     }
 
     $scope.urediMeritev = function(index, oldValue){
-      $scope.oldValue = oldValue;
+      console.log(oldValue);
       var name1 = 'a'+index;
       var name2 = 'b'+index;
       var save = 'shrani'+index;
@@ -188,6 +212,7 @@ angular.module('tpo')
       element6.style.display = 'none';
       element6.style="visibility: hidden";
       $scope.uredi = false;
+      $scope.reloadState();
     };
 
     $scope.posodobiMeritev = function(meritev, index){
