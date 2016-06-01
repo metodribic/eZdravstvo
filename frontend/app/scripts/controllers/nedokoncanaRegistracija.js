@@ -8,7 +8,9 @@
 angular.module('tpo')
   .controller('nedokoncanaRegistracijaCtrl', ['$scope','AuthService', '$state', '$rootScope',
       'Uporabniki','Notification', '$http', '$q', 'API_URL', 'NgTableParams', '$filter',
-  function ($scope, AuthService, $state, $rootScope, Uporabniki, Notification, $http, $q, API_URL, NgTableParams, $filter ) {
+      'Zdravnik', 'Osebje',
+  function ($scope, AuthService, $state, $rootScope, Uporabniki, Notification, $http, $q, API_URL, NgTableParams,
+            $filter, Zdravnik, Osebje ) {
 
       /*GET USER FROM LOCAL STORAGE*/
       $scope.uporabnik = AuthService.getCurrentUser();
@@ -36,32 +38,45 @@ angular.module('tpo')
           getData: function( $defer, params ){
 
               return Uporabniki.query( params.url() ).$promise.then(function(data){
+                  return Zdravnik.query(params.url() ).$promise.then(function (data2) {
+                      return Osebje.query(params.url() ).$promise.then(function (data3) {
 
-                  $scope.tableSet.perPage = params.page();
-                  $scope.tableSet.perCou = params.count();
+                          $scope.tableSet.perPage = params.page();
+                          $scope.tableSet.perCou = params.count();
 
-                  // order data
-                  data = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
+                          data = data.concat(data2);
+                          data = data.concat(data3);
+                          
+                          for (var i = 0; i < data.length; i++){
+                              data[i].uporVloga = data[i].role.naziv;
+                          }
 
-                  // filter data if names are typed in
-                  data = data.filter($scope.filterEmptyNames(data));
+                          // order data
+                          data = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
 
-                  // filter data by input
-                  data = params.filter() ? $filter('filter')(data, params.filter()) : data;
+                          // filter data if names are typed in
+                          data = data.filter($scope.filterEmptyNames(data));
+
+                          // filter data by input
+                          data = params.filter() ? $filter('filter')(data, params.filter()) : data;
 
 
-                  // set len AFTER filtering!
-                  params.total(data.length);
-                  //data = ($filter('orderBy')(data, params.orderBy()));
+                          // set len AFTER filtering!
+                          params.total(data.length);
+                          //data = ($filter('orderBy')(data, params.orderBy()));
 
-                  $scope.saveDataForPdf = data; // save it without pagination!
+                          $scope.saveDataForPdf = data; // save it without pagination!
 
-                  // paginacija
-                  data = (data.slice(($scope.tableSet.perPage-1)*$scope.tableSet.perCou,
-                      $scope.tableSet.perPage*$scope.tableSet.perCou));
+                          // paginacija
+                          data = (data.slice(($scope.tableSet.perPage-1)*$scope.tableSet.perCou,
+                              $scope.tableSet.perPage*$scope.tableSet.perCou));
 
-                  //Notification.success('Uporabniki posodobljeni!');
-                  return data;
+                          //Notification.success('Uporabniki posodobljeni!');
+                          return data;
+
+                      });
+
+                  });
               });
 
           }});

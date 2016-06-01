@@ -1,3 +1,4 @@
+import itertools
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.serializers import json
@@ -913,4 +914,5 @@ def forgotPassword(request, format=None):
         response = JSONResponse({"error":"Neznana napaka"})
         response.status_code = 500; # Bad request
         return response
+
 

@@ -43,7 +43,7 @@
                         <td title="'Uporabniško ime'" sortable="'username'" filter="{username:'text'}" >{{u.username}}</td>
                         <td title="'Ime'" sortable="'ime'" filter="{ime:'text'}" >{{u.ime}}</td>
                         <td title="'Priimek'" sortable="'priimek'" filter="{priimek:'text'}" >{{u.priimek}}</td>
-                        <td title="'Uporabniška vloga'" sortable="'role.naziv'" >{{u.role.naziv}}</td>
+                        <td title="'Uporabniška vloga'" sortable="'role.naziv'" filter="'uporVloga':'text'">{{u.role.naziv}}</td>
                         <td title="'Datum registracije'" sortable="'date_joined'" >{{u.date_joined | date:'dd.MM.yyyy'}}</td>
                         <td title="'Zadnji dostop'" sortable="'last_login'" >{{u.last_login | date:'dd.MM.yyyy'}}</td>
                         <td title="'Aktiviran'" sortable="'is_acitve'" >
