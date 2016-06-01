@@ -22,7 +22,7 @@ angular.module('tpo')
             }
 
 
-            //moj scope, v katerega shranjujem vse kar je v pregledu
+            //moj scope, v katerega shranjujem vse spremembe
             mojScope.sprememba = new UrejanjeZdravilAdmin();
 
             //pridobi vse bolezni za izbiro
@@ -33,14 +33,21 @@ angular.module('tpo')
 
             //pridobi vsa zdravila za izbiro
             ZdravilaSeznam.query().$promise.then(function(response) {
-            $scope.zdravila = response;
+            $scope.zdravilaSeznam = response;
             //console.log(response);
             });
 
-
-            
             
             /*FUNKCIJE*/
+
+            /*
+            //funkcija, ki shrani spremembe
+            $scope.shraniSpremembe=function () {
+                $scope.besedZaUpor = "";
+
+
+            }
+            */
 
             //funkcija za pridobivanje zdravil
             $scope.ustvariBolezen = function (bolezen) {
@@ -50,7 +57,7 @@ angular.module('tpo')
                 }
             };
 
-            /*
+
             $scope.dodajZdravilo = function(zdravilo) {
                 if(!mojScope.sprememba.zdravilo)
                     mojScope.sprememba.zdravilo = [];
@@ -60,16 +67,22 @@ angular.module('tpo')
                     $scope.izbranaZdravila = mojScope.sprememba.zdravilo;
                 }
             };
-            */
+
 
             $scope.odstraniZdravilo = function(zdravilo) {
+                //tukaj dobim vsa izbrana zdravila
                 var zdravila = mojScope.sprememba.zdravilo;
+                console.log(zdravila);
+
+                //ce niso prazna
                 if(!zdravila)
                     return;
+                //ce je >-1, potem obstaja v tabeli
                 var idx = existsInArray(zdravila, 'zdravilo', zdravilo.zdravilo);
+                console.log(idx);
                 if(idx > -1) {
                     zdravila = zdravila.splice(idx,1);
-                    $scope.izbranaZdravila = zdravila;
+                    $scope.zdravila = zdravila;
                 }
             };
 

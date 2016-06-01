@@ -5,7 +5,7 @@
       <h3 class="bottom-border">Urejanje zdravil</h3>
       <div class="row">
         <div class="col-xs-12">
-          <form class="form-horizontal" role="form"  ng-submit="ustvariPregled()">
+          <form class="form-horizontal" role="form"  ng-submit="shraniSpremembe()">
 
             <!-- bolezni -->
             <div class="form-group" >
@@ -22,13 +22,13 @@
             </div>
 
 
-            <!-- zdravila -->
+            <!-- VSA ZDRAVILA ZA IZBIRO -->
             <div class="form-group" >
-                <label class="control-label col-sm-2">Zdravila za to bolezen:</label>
+                <label class="control-label col-sm-2">Vsa zdravila:</label>
                 <div class="col-sm-10">
-                    <ui-select multiple ng-model="sprememba.zdravilo" on-select="dodajZdravilo($item)" on-remove="odstraniZdravilo($item)">
+                    <ui-select multiple ng-model="test" on-select="dodajZdravilo($item)" on-remove="odstraniZdravilo($item)">
                         <ui-select-match placeholder="Izberite zdravila...">{{$item.zdravilo}}</ui-select-match>
-                        <ui-select-choices repeat="zdravilo in zdravila | filter: $select.search track by zdravilo.zdravilo">
+                        <ui-select-choices repeat="zdravilo in zdravilaSeznam | filter: $select.search track by zdravilo.zdravilo">
                             <div ng-bind-html="zdravilo.zdravilo | highlight: $select.search"> {{zdravilo.zdravilo}} </div>
                         </ui-select-choices>
                     </ui-select>
@@ -36,7 +36,29 @@
             </div>
 
 
-            <!-- shrani formo -->
+            <!-- TABELA VSEH IZBRANIH ZDRAVIL -->
+            <table class="table table-stripped table-hover" ng-show="zdravila.length != 0">
+                <thead>
+                    <tr>
+                      <th>Ime zdravila</th>
+                      <th>Briši</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="zdravilo in izbranaZdravila">
+                        <td>{{zdravilo.zdravilo}}</td>
+                        <!-- Button za brisat -->
+                        <td>
+                            <button type="button" class="btn btn-default btn-xs" ng-click="odstraniZdravilo(zdravilo)" ng-attr-id="{{'brisi'+$index}}">
+                              <span class="fa fa-trash" aria-hidden="true"></span> Briši
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- shrani spremembe -->
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-success">Shrani</button>
