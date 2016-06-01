@@ -51,20 +51,6 @@ angular.module('tpo')
             };
 
             /*
-            $scope.odstraniBolezen = function(bolezen) {
-                for (var i=0; i<bolezen.zdravilo.length; i++) {
-                    mojScope.odstraniZdravilo(bolezen.zdravilo[i]);
-                }
-                var bolezni = mojScope.sprememba.bolezen;
-                if(!bolezni)
-                    return;
-                var idx = existsInArray(bolezni, 'naziv', bolezen.naziv);
-                if(idx > -1) {
-                    bolezni = bolezni.splice(i,1);
-                    $scope.izbraneBolezni = bolezni;
-                }
-            };*/
-
             $scope.dodajZdravilo = function(zdravilo) {
                 if(!mojScope.sprememba.zdravilo)
                     mojScope.sprememba.zdravilo = [];
@@ -74,7 +60,7 @@ angular.module('tpo')
                     $scope.izbranaZdravila = mojScope.sprememba.zdravilo;
                 }
             };
-
+            */
 
             $scope.odstraniZdravilo = function(zdravilo) {
                 var zdravila = mojScope.sprememba.zdravilo;

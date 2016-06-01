@@ -99,6 +99,14 @@ class Zdravilo(models.Model):
     zdravilo = models.CharField(max_length=100)
     navodila = models.CharField(max_length=1024)
 
+class BolezniZdravila(models.Model):
+    bolezni = models.ForeignKey('Bolezni')
+    zdravilo = models.ForeignKey('Zdravilo')
+    zbrisano = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'tpo_bolezni_zdravilo'
+
 
 class Pregled(models.Model):
     opombe = models.CharField(max_length=2048)

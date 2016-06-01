@@ -11,10 +11,11 @@
             <div class="form-group" >
                 <label class="control-label col-sm-2">Bolezen:</label>
                 <div class="col-sm-10">
-                    <ui-select ng-model="izbraneBolezni" on-select="ustvariBolezen($select.selected)" >
+                    <ui-select ng-model="izbranaBolezen" on-select="ustvariBolezen($select.selected)" >
                         <ui-select-match placeholder="Izberite bolezen...">{{$select.selected.naziv}}</ui-select-match>
-                        <ui-select-choices repeat="bolezen in bolezniSeznam | filter: $select.search track by bolezen.naziv">
-                            <div ng-bind-html="bolezen.naziv | highlight: $select.search" > {{bolezen.naziv}} </div> <span ng-show="bolezen.alergija">      <b>ALERGIJA</b></span>
+                        <ui-select-choices repeat="bolezen in bolezniSeznam">
+                            <div ng-bind-html="bolezen.naziv"> </div>
+                            <span ng-show="bolezen.alergija"><b>ALERGIJA</b></span>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -23,9 +24,9 @@
 
             <!-- zdravila -->
             <div class="form-group" >
-                <label class="control-label col-sm-2">Zdravila:</label>
+                <label class="control-label col-sm-2">Zdravila za to bolezen:</label>
                 <div class="col-sm-10">
-                    <ui-select multiple ng-model="zdravilo" on-select="dodajZdravilo($item)" on-remove="odstraniZdravilo($item)">
+                    <ui-select multiple ng-model="sprememba.zdravilo" on-select="dodajZdravilo($item)" on-remove="odstraniZdravilo($item)">
                         <ui-select-match placeholder="Izberite zdravila...">{{$item.zdravilo}}</ui-select-match>
                         <ui-select-choices repeat="zdravilo in zdravila | filter: $select.search track by zdravilo.zdravilo">
                             <div ng-bind-html="zdravilo.zdravilo | highlight: $select.search"> {{zdravilo.zdravilo}} </div>
@@ -34,10 +35,11 @@
                 </div>
             </div>
 
+
             <!-- shrani formo -->
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">Shrani</button>
+                <button type="submit" class="btn btn-success">Shrani</button>
               </div>
             </div>
 

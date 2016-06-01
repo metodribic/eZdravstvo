@@ -96,6 +96,15 @@ class BolezniSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Bolezni
 
+""" BOLEZNIZDRAVILO """
+class BolezniZdravilo(serializers.HyperlinkedModelSerializer):
+    bolezen = BolezniSerializer()
+    zdravilo = ZdraviloSerializer()
+
+    class Meta:
+        db_table = "tpo_bolezni_zdravilo"
+
+
 
 """ DIETA NAVODILA """
 class NavodilaDietaSerializer(serializers.HyperlinkedModelSerializer):
