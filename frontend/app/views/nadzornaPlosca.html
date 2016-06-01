@@ -46,15 +46,15 @@
                 <td><b>Priimek:</b></td>
                 <td>{{uporabnik.priimek}}</td>
               </tr>
-              <tr>
+              <tr ng-show="uporabnik.personalizacija.datum_rojstva != false">
                 <td><b>Datum rojstva:</b></td>
                 <td>{{uporabnik.datum_rojstva | date: 'dd.MM.yyyy'}}</td>
               </tr>
-              <tr>
+              <tr ng-show="uporabnik.personalizacija.kraj_rojstva != false">
                 <td><b>Kraj rojstva:</b></td>
                 <td>{{uporabnik.kraj_rojstva}}</td>
               </tr>
-              <tr>
+              <tr ng-show="uporabnik.personalizacija.naslov != false">
                 <td><b>Naslov:</b></td>
                 <td>
                   {{uporabnik.naslov}}<br>&nbsp;
@@ -62,7 +62,7 @@
                   {{uporabnik.posta.kraj}}
                 </td>
               </tr>
-              <tr>
+              <tr ng-show="uporabnik.personalizacija.stevilka_zzzs != false">
                 <td><b>Številka ZZZS</b></td>
                 <td>{{uporabnik.st_zzzs}}</td>
               </tr>
@@ -71,7 +71,7 @@
         </div>
         <div class="col-md-4">
           <!-- TABLE: OSEBNI PODATKI -->
-          <table class="table table-hover">
+          <table class="table table-hover" ng-show="uporabnik.personalizacija.zdravnik != false">
             <thead>
               <tr>
                 <td>
@@ -126,7 +126,7 @@
 
         <div class="col-md-4">
           <!-- TABLE: OSEBNI PODATKI -->
-          <table class="table table-hover">
+          <table class="table table-hover" ng-show="uporabnik.personalizacija.zobozdravnik != false">
             <thead>
               <tr>
                 <td>
