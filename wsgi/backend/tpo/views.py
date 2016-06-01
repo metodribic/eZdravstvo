@@ -27,12 +27,12 @@ from pprint import pprint
 
 # Create your views here.
 from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock, \
-    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, UporabnikZdravnik, IsAlphanumericPasswordValidator
+    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, UporabnikZdravnik, IsAlphanumericPasswordValidator, PersonalizacijaNadzornePlosce
 
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
     LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer, SifrantRegistriranihSerializer, \
-    VrednostiMeritevSerializer, KontaktnaOsebaSerializer
+    VrednostiMeritevSerializer, KontaktnaOsebaSerializer, PersonalizacijaNadzornePlosceSerializer
 
 import random
 
@@ -46,6 +46,11 @@ class JSONResponse(HttpResponse):
         content = JSONRenderer().render(data)
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
+
+@permission_classes((IsAuthenticated,))
+class PersonalizacijaViewSet(viewsets.ModelViewSet):
+    queryset = PersonalizacijaNadzornePlosce.objects.all()
+    serializer_class = PersonalizacijaNadzornePlosceSerializer
 
 
 @permission_classes((IsAuthenticated,))
@@ -64,8 +69,7 @@ class UporabnikiViewSet(viewsets.ModelViewSet):
             return response
 
         if password != '' and check_password(password, instance.password):
-            instance.is_deleted = True
-            instance.is_active = False
+            instance.is_staff = True
             instance.save()
             response = JSONResponse({"message":"Uporabnik izbrisan."})
             return response
@@ -114,7 +118,8 @@ class MeritevViewSet(viewsets.ModelViewSet):
         startDate = self.request.query_params.get('startDate', None)
         endDate = self.request.query_params.get('endDate', None)
         tipMeritveId = self.request.query_params.get('tipMeritveId', None)
-        tipMeritve = VrednostiMeritev.objects.filter(id=tipMeritveId);
+        if tipMeritveId is not None:
+            tipMeritve = VrednostiMeritev.objects.filter(id=tipMeritveId);
 
         if self.request.GET.get('pregledId', -1) != -1:
             pregledId = self.request.GET.get('pregledId', -1)
@@ -285,6 +290,10 @@ def login(request, format=None):
         clientIp = request.META['REMOTE_ADDR']
         user = authenticate(username=email, password=password) # Returns User or None
         if user is not None:
+            if user.is_staff:
+                response = JSONResponse({'error': 'Uporabnik je izbrisan.'})
+                response.status_code = 403
+                return response
             if user.is_active:
                 token = Token.objects.get_or_create(user=user)
                 try:
@@ -390,12 +399,12 @@ def registracijaAdmin(request, format=None):
                 # check only ime - same as in login
                 if( ime != "" ):
                     zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw, prosta_mesta=prostaMesta,
-                            sifra_id=sifrantReg.pk, sprejema_paciente=sprejemaPac, ambulanta_id=ambul_id, role_id=2, is_staff=1,
+                            sifra_id=sifrantReg.pk, sprejema_paciente=sprejemaPac, ambulanta_id=ambul_id, role_id=2, is_staff=0,
                             ime=ime, priimek=prii,naziv=naziv, tip=tip, ustanova_id=ustan_id, telefon=stev )
                     # medicinske_sestre=sestra_id,
                 else:
                     zdr = Zdravnik.objects.create_user(username=mail, email=mail, password=passw, prosta_mesta=10,
-                        sifra_id=sifrantReg.pk, sprejema_paciente=1, ambulanta_id=ambul_id, role_id=2, is_staff=1 )
+                        sifra_id=sifrantReg.pk, sprejema_paciente=1, ambulanta_id=ambul_id, role_id=2, is_staff=0 )
 
                 #  set sifra to is_used
                 sifrantReg.is_used = True
@@ -420,11 +429,11 @@ def registracijaAdmin(request, format=None):
                 validate_password(password=passw)
                 IsAlphanumericPasswordValidator().validate(passw)
                 if ime != "":
-                    medSest = Osebje.objects.create_user(username=mail, email=mail, is_staff=1, ime=ime,
+                    medSest = Osebje.objects.create_user(username=mail, email=mail, is_staff=0, ime=ime,
                               priimek=prii, sifra_id=sifrantReg.pk, telefon=stev, password=passw, role_id=3,
                               ustanova_id=ustan_id )
                 else:
-                    medSest = Osebje.objects.create_user(username=mail, email=mail, is_staff=1, password=passw,
+                    medSest = Osebje.objects.create_user(username=mail, email=mail, is_staff=0, password=passw,
                                 sifra_id=sifrantReg.pk, role_id=3 )
 
                 #  set sifra to is_used

@@ -22,7 +22,8 @@ angular
     'tpo.models',
     'ui-notification',
     'jkuri.datepicker',
-    'nvd3'
+    'nvd3',
+    'ngTable'
 
   ])
   .config(['$resourceProvider','$stateProvider', '$urlRouterProvider',
@@ -110,12 +111,6 @@ angular
               controller: 'MeritevPodrobnoCtrl'
           })
 
-          .state('dodajMeritev', {
-              url: '/dodajMeritev',
-              templateUrl: '../views/dodajMeritev.html',
-              controller: 'dodajMeritevCtrl'
-          })
-
           .state('urediVrednostiMeritev', {
               url: '/urediVrednostiMeritev',
               templateUrl: '../views/urediVrednostiMeritev.html',
@@ -126,6 +121,18 @@ angular
               url: '/dodajpregled',
               templateUrl: '../views/dodajPregled.html',
               controller: 'DodajPregledCtrl'
+          })
+
+          .state('nedokoncanaRegistracija', {
+              url: '/nedokoncanaRegistracija',
+              templateUrl: '../views/nedokoncanaRegistracija.html',
+              controller: 'nedokoncanaRegistracijaCtrl'
+          })
+          
+          .state('noveRegistracije', {
+              url: '/noveRegistracije',
+              templateUrl: '../views/noveRegistracije.html',
+              controller: 'noveRegistracijeCtrl'
           });
   }])
 

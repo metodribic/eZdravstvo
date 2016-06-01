@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="../bower_components/ngDatepicker/src/css/ngDatepicker.css" />
     <link rel="stylesheet" href="../bower_components/nvd3/build/nv.d3.css" />
+    <link rel="stylesheet" href="../bower_components/ng-table/dist/ng-table.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -142,7 +143,9 @@
           <li ng-show="isDoctor && !isSuperU"><a ui-sref="dodajPregled" ><i class="fa fa-file-text-o"></i> <span>Dodaj pregled</span></a></li>
           <li ng-show="isSuperU"><a href="#/registracijaAdmin"><i class="fa fa-gear"></i> <span>Registracija osebja</span></a></li>
           <li ng-show="isSuperU"><a href="#/zdravilaAdmin"><i class="fa fa-gear"></i> <span>Urejanje zdravil</span></a></li>
-            <li ng-show="isSuperU"><a href="#/navodilaAdmin"><i class="fa fa-gear"></i> <span>Vzdrževanje navodil</span></a></li>
+          <li ng-show="isSuperU"><a href="#/navodilaAdmin"><i class="fa fa-gear"></i> <span>Vzdrževanje navodil</span></a></li>
+          <li ng-show="isSuperU"><a href="#/nedokoncanaRegistracija"><i class="fa fa-list-ol"></i> <span>Nedokončane registracije</span></a></li>
+          <li ng-show="isSuperU"><a href="#/noveRegistracije"><i class="fa fa-clock-o" ></i> <span>Nove registracije</span></a></li>
           <li ng-show="isSuperU"><a ui-sref="urediVrednostiMeritev"><i class="fa fa-gear"></i> <span>Uredi meritve</span></a></li>
 
         </ul>
@@ -196,6 +199,9 @@
   <script src="../bower_components/d3/d3.js"></script>
   <script src="../bower_components/nvd3/build/nv.d3.js"></script>
   <script src="../bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
+  <script src="../bower_components/ng-table/dist/ng-table.min.js"></script>
+  <script src="../bower_components/jspdf/dist/jspdf.min.js"></script>
+  <script src="../bower_components/jspdf-autotable/dist/jspdf.plugin.autotable.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 
@@ -218,7 +224,8 @@
   <script src="scripts/controllers/pozabljenoGeslo.js"></script>
   <script src="scripts/controllers/meritve.js"></script>
   <script src="scripts/controllers/meritevPodrobno.js"></script>
-  <script src="scripts/controllers/dodajMeritev.js"></script>
+  <script src="scripts/controllers/nedokoncanaRegistracija.js"></script>
+  <script src="scripts/controllers/noveRegistracije.js"></script>
   <script src="scripts/controllers/urediVrednostiMeritev.js"></script>
   <!-- endbuild -->
 

@@ -92,3 +92,17 @@ $default-green: #00A65A;
 .red-meritev {
   color: #cc0000;
 }
+.ng-table th {
+  text-align: left !important;
+  color:black !important;
+}
+
+.pagination > .active > a {
+  background-color: $default-green;
+  border-color: $default-green;
+
+  &:hover{
+    background-color: $default-green;
+    border-color: $default-green;
+  }
+}

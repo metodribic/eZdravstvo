@@ -18,9 +18,9 @@
 
 angular.module('tpo')
   .controller('NadzornaPloscaCtrl', ['$scope','$state','Uporabniki','$rootScope','AuthService',
-      'Pregled','Meritve','Bolezni','Zdravila','Diete', 'ZdravnikoviPacienti', '$http',
+      'Pregled','Meritve','Bolezni','Zdravila','Diete', 'ZdravnikoviPacienti', '$http', 'NgTableParams', '$filter',
       function ($scope,$state, Uporabniki, $rootScope, AuthService, Pregled,
-                Meritve, Bolezni, Zdravila, Diete, ZdravnikoviPacienti, $http ) {
+                Meritve, Bolezni, Zdravila, Diete, ZdravnikoviPacienti, $http, NgTableParams, $filter ) {
 
       mojScope = $scope;
 
@@ -97,6 +97,222 @@ angular.module('tpo')
                   };
               }
           }
+
+          // table
+
+      // init table numbs
+      $scope.zdravilaData = [];
+      $scope.tableSet = [];
+      $scope.tableSet.perPage = 1;
+      $scope.tableSet.perCou = 5;
+
+      var tp = new NgTableParams({
+          page : $scope.tableSet.perPage,     // show first page
+          count : $scope.tableSet.perCou,    // count per page
+          data : $scope.zdravilaData
+      }, {
+          total:0,
+          counts: [5,10,20],
+
+          getData: function( $defer, params ){
+
+              return Zdravila.query( params.url() ).$promise.then(function(data){
+
+                  $scope.tableSet.perPage = params.page();
+                  $scope.tableSet.perCou = params.count();
+
+                  // order data
+                  data = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
+
+                  // filter data by input
+                  data = params.filter() ? $filter('filter')(data, params.filter()) : data;
+
+                  // set len AFTER filtering!
+                  params.total(data.length);
+
+                  // paginacija
+                  data = (data.slice(($scope.tableSet.perPage-1)*$scope.tableSet.perCou,
+                      $scope.tableSet.perPage*$scope.tableSet.perCou));
+                  //Notification.success('Uporabniki posodobljeni!');
+
+                  return data;
+              });
+
+          }});
+
+      $scope.tablePar = tp;
+
+          // init table numbs
+      $scope.dieteData = [];
+      $scope.tableSet = [];
+      $scope.tableSet.perPage = 1;
+      $scope.tableSet.perCou = 5;
+
+      var tpDieta = new NgTableParams({
+          page : $scope.tableSet.perPage,     // show first page
+          count : $scope.tableSet.perCou,    // count per page
+          data : $scope.dieteData
+      }, {
+          total:0,
+          counts: [5,10,20],
+
+          getData: function( $defer, params ){
+
+              return Diete.query( params.url() ).$promise.then(function(data){
+                  $scope.tableSet.perPage = params.page();
+                  $scope.tableSet.perCou = params.count();
+
+                  // order data
+                  data = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
+
+                  // filter data by input
+                  data = params.filter() ? $filter('filter')(data, params.filter()) : data;
+
+                  // set len AFTER filtering!
+                  params.total(data.length);
+
+                  // paginacija
+                  data = (data.slice(($scope.tableSet.perPage-1)*$scope.tableSet.perCou,
+                      $scope.tableSet.perPage*$scope.tableSet.perCou));
+                  //Notification.success('Uporabniki posodobljeni!');
+
+                  return data;
+              });
+
+          }});
+
+      $scope.tableParDieta = tpDieta;
+
+
+
+          // init table numbs
+      $scope.bolezniData = [];
+      $scope.tableSet = [];
+      $scope.tableSet.perPage = 1;
+      $scope.tableSet.perCou = 5;
+
+      var tpBolez = new NgTableParams({
+          page : $scope.tableSet.perPage,     // show first page
+          count : $scope.tableSet.perCou,    // count per page
+          data : $scope.bolezniData
+      }, {
+          total:0,
+          counts: [5,10,20],
+
+          getData: function( $defer, params ){
+
+              return Bolezni.query( params.url() ).$promise.then(function(data){
+                  $scope.tableSet.perPage = params.page();
+                  $scope.tableSet.perCou = params.count();
+
+                  // order data
+                  data = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
+
+                  // filter data by input
+                  data = params.filter() ? $filter('filter')(data, params.filter()) : data;
+
+                  // set len AFTER filtering!
+                  params.total(data.length);
+
+                  // paginacija
+                  data = (data.slice(($scope.tableSet.perPage-1)*$scope.tableSet.perCou,
+                      $scope.tableSet.perPage*$scope.tableSet.perCou));
+                  //Notification.success('Uporabniki posodobljeni!');
+
+                  return data;
+              });
+
+          }});
+
+      $scope.tableParBolezni = tpBolez;
+
+
+
+          // init table numbs
+      $scope.meritveData = [];
+      $scope.tableSet = [];
+      $scope.tableSet.perPage = 1;
+      $scope.tableSet.perCou = 5;
+
+      var tpMeritve = new NgTableParams({
+          page : $scope.tableSet.perPage,     // show first page
+          count : $scope.tableSet.perCou,    // count per page
+          data : $scope.meritveData
+      }, {
+          total:0,
+          counts: [5,10,20],
+
+          getData: function( $defer, params ){
+
+              return Meritve.query( params.url() ).$promise.then(function(data){
+                  $scope.tableSet.perPage = params.page();
+                  $scope.tableSet.perCou = params.count();
+
+                  // order data
+                  data = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
+
+                  // filter data by input
+                  data = params.filter() ? $filter('filter')(data, params.filter()) : data;
+
+                  // set len AFTER filtering!
+                  params.total(data.length);
+
+                  // paginacija
+                  data = (data.slice(($scope.tableSet.perPage-1)*$scope.tableSet.perCou,
+                      $scope.tableSet.perPage*$scope.tableSet.perCou));
+                  //Notification.success('Uporabniki posodobljeni!');
+
+                  return data;
+              });
+
+          }});
+
+      $scope.tableParMeritve = tpMeritve;
+
+
+
+          // init table numbs
+      $scope.preglediData = [];
+      $scope.tableSet = [];
+      $scope.tableSet.perPage = 1;
+      $scope.tableSet.perCou = 5;
+
+      var tpPregledi = new NgTableParams({
+          page : $scope.tableSet.perPage,     // show first page
+          count : $scope.tableSet.perCou,    // count per page
+          data : $scope.preglediData
+      }, {
+          total:0,
+          counts: [5,10,20],
+
+          getData: function( $defer, params ){
+
+              return Pregled.query( params.url() ).$promise.then(function(data){
+                  $scope.tableSet.perPage = params.page();
+                  $scope.tableSet.perCou = params.count();
+
+                  // order data
+                  data = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
+
+                  // filter data by input
+                  data = params.filter() ? $filter('filter')(data, params.filter()) : data;
+
+                  // set len AFTER filtering!
+                  params.total(data.length);
+
+                  // paginacija
+                  data = (data.slice(($scope.tableSet.perPage-1)*$scope.tableSet.perCou,
+                      $scope.tableSet.perPage*$scope.tableSet.perCou));
+                  //Notification.success('Uporabniki posodobljeni!');
+
+                  return data;
+              });
+
+          }});
+
+      $scope.tableParPregledi = tpPregledi;
+          
+
 
       };
 

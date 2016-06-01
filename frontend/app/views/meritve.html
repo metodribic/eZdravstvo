@@ -33,73 +33,33 @@
                 </ui-select>
             </div>
         </div>
-        
-        <!-- VNESI MERITEV: telesna temperatura -->
-        <form name="form-temperatura" ng-show="izbranaMeritev.tip == 'Telesna temperatura'" ng-submit="saveMeritev()">
-          <div class="form-group margin-top-15">
+
+        <!-- FORM MERITEV -->
+        <form name="form-temperatura" ng-submit="saveMeritev()">
+          <div class="form-group margin-top-15" ng-hide="izbranaMeritev.tip == 'Krvni pritisk'">
             <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
             <div class="col-sm-10 margin-top-15">
-              <input id="temperatura" type="number" step="0.1" ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}}
+              <input id="vrednost" type="text" ng-model="vrednostMeritve"/> &nbsp;{{izbranaMeritev.enota}}
             </div>
           </div>
-          <button type="submit" class="btn btn-success pull-right margin-15" >Shrani</button>
-          <button class="btn btn-default pull-right margin-15" ng-click="reloadState()">Pobriši</button>
-        </form>
 
-        <!-- VNESI MERITEV: glukoza -->
-        <form name="form-glukoza" ng-show="izbranaMeritev.tip == 'Glukoza'" ng-submit="saveMeritev()">
-          <div class="form-group margin-top-15">
+          <!-- forma za krvni pritisk -->
+          <div class="form-group margin-top-15" ng-show="izbranaMeritev.tip == 'Krvni pritisk'">
             <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
             <div class="col-sm-10 margin-top-15">
-              <input id="glukoza" type="number" step="1" ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}}
-            </div>
-          </div>
-          <button type="submit" class="btn btn-success pull-right margin-15"  >Shrani</button>
-          <button class="btn btn-default pull-right margin-15" ng-click="reloadState()">Pobriši</button>
-        </form>
-
-        <!-- VNESI MERITEV: ITM -->
-        <form name="form-itm" ng-show="izbranaMeritev.tip == 'ITM'" ng-submit="saveMeritev()">
-          <div class="form-group margin-top-15">
-            <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
-            <div class="col-sm-10 margin-top-15">
-              <input id="itm" type="number" step="1" ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}}
-            </div>
-          </div>
-          <button type="submit" class="btn btn-success pull-right margin-15">Shrani</button>
-          <button class="btn btn-default pull-right margin-15" ng-click="reloadState()">Pobriši</button>
-        </form>
-
-        <!-- VNESI MERITEV: Srčni utrip -->
-        <form name="formUtrip" ng-show="izbranaMeritev.tip == 'Srčni pritisk'" ng-submit="saveMeritev()">
-          <div class="form-group margin-top-15" >
-            <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
-            <div class="col-sm-10 margin-top-15">
-              <input id="utrip1" type="number" step="1" ng-model="vrednostMeritve" required/> &nbsp;{{izbranaMeritev.enota}} <i>(Udarcev na sekundo)</i>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-success pull-right margin-15" >Shrani</button>
-          <button class="btn btn-default pull-right margin-15" ng-click="reloadState()">Pobriši</button>
-        </form>
-
-        <!-- VNESI MERITEV: krvni prisik -->
-        <form name="form-pritisk" ng-show="izbranaMeritev.tip == 'Krvni pritisk'" ng-submit="saveMeritev()">
-          <div class="form-group margin-top-15">
-            <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
-            <div class="col-sm-10 margin-top-15">
-              <input id="sistolicni" type="number" step="1" placeholder="sistolični" required/> /
-              <input id="diastolicni" type="number" step="1" placeholder="diastolični" required/> &nbsp;{{izbranaMeritev.enota}}
+              <input id="sistolicni" type="text"  placeholder="sistolični" ng-model="vrednostMeritveSistolicni"/> /
+              <input id="diastolicni" type="text"  placeholder="diastolični" ng-model="vrednostMeritveDiastolicni"/> &nbsp;{{izbranaMeritev.enota}}
             </div>
 
-            <!-- utrip -->
+            <!-- utrip  -->
             <label class="control-label col-sm-2 margin-top-15">Utrip:</label>
             <div class="col-sm-10 margin-top-15">
-              <input id="utrip2" type="number" step="1"/>&nbsp;BPM
+              <input id="utrip" type="text" ng-model="vrednostMeritveUtrip" />&nbsp;BPM
             </div>
-
           </div>
+
           <button type="submit" class="btn btn-success pull-right margin-15">Shrani</button>
-          <button class="btn btn-default pull-right margin-15" ng-click="reloadState()">Pobriši</button>
+          <button type="reset" class="btn btn-default pull-right margin-15" ng-click="resetForm()">Pobriši</button>
         </form>
 
     </div>
@@ -129,22 +89,35 @@
                 </thead>
 
                 <tbody>
-                    <tr ng-repeat="meritev in meritve" >
+                    <tr ng-repeat="meritev in meritve track by $index" >
                       <td ui-sref="meritevPodrobno({id:meritev.id})"><i class="fa fa-search" style="cursor:pointer"></i></td>
                       <td>{{meritev.datum | date:'dd.MM.yyyy, hh:mm'}}</td>
                       <td>{{meritev.tip_meritve.tip}}</td>
                       <td>od {{meritev.tip_meritve.normalno_min}} do {{meritev.tip_meritve.normalno_max}}</td>
-                      <td><b>{{meritev.vrednost_meritve}}</b></td>
+                      <td>
+                        <span ng-attr-id="{{'a'+$index}}"><b>{{meritev.vrednost_meritve}}</b></span>
+                        <input ng-attr-id="{{'b'+$index}}" type="text" ng-model="meritev.vrednost_meritve" style="visibility: hidden"/>
+                      </td>
                       <!-- <td ng-class="{ 'red-meritev': meritev.tip_meritve.normalno_min > meritev.vrednost_meritve || meritev.tip_meritve.normalno_max < meritev.vrednost_meritve}"><b>{{meritev.vrednost_meritve}}</b></td> -->
                       <td>
                         <!-- Button za brisat -->
-                        <button type="button" class="btn btn-default btn-xs" ng-click="deleteMeritev(meritev.id)">
+                        <button type="button" class="btn btn-default btn-xs" ng-click="deleteMeritev(meritev.id)" ng-attr-id="{{'brisi'+$index}}">
                           <span class="fa fa-trash" aria-hidden="true"></span> Briši
                         </button>
 
                         <!-- button za spreminjat -->
-                        <button type="button" class="btn btn-default btn-xs">
+                        <button type="button" class="btn btn-default btn-xs" ng-click="urediMeritev($index, meritev.vrednost_meritve)" ng-attr-id="{{'spremeni'+$index}}">
                           <span class="fa fa-pencil" aria-hidden="true"></span> Spremeni
+                        </button>
+
+                        <!-- button za shranit spremembe  -->
+                        <button type="button" class="btn btn-default btn-xs" ng-attr-id="{{'shrani'+$index}}" style="visibility: hidden" ng-click="posodobiMeritev(meritev)">
+                          <span class="fa fa-floppy-o" aria-hidden="true"></span> Shrani
+                        </button>
+
+                        <!-- button za preklicat spremembe -->
+                        <button type="button" class="btn btn-default btn-xs" ng-attr-id="{{'preklici'+$index}}" style="visibility: hidden" ng-click="prekliciUrejanje($index)">
+                          <span class="fa fa-ban" aria-hidden="true"></span> Prekliči
                         </button>
                       </td>
 
