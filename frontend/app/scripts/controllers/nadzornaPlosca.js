@@ -102,18 +102,32 @@ angular.module('tpo')
 
         // set default numbers
       if( angular.isUndefined($rootScope.uporabnik.personalizacija) || $rootScope.uporabnik.personalizacija === null ){
-          $rootScope.uporabnik.personalizacija.zdravila = 10;
-          $rootScope.uporabnik.personalizacija.pregledi = 10;
-          $rootScope.uporabnik.personalizacija.meritve = 10;
-          $rootScope.uporabnik.personalizacija.bolezni = 10;
+          // doc || not set for pacient
+          $scope.uporPersonal = [];
+          $scope.uporPersonal.zdravila = 10;
+          $scope.uporPersonal.pregledi = 10;
+          $scope.uporPersonal.meritve = 10;
+          $scope.uporPersonal.bolezni = 10;
+      }else{
+          $scope.uporPersonal = $rootScope.uporabnik.personalizacija;
+          /*
+          $scope.uporPersonal.zdravila = $rootScope.uporabnik.personalizacija;
+          $scope.uporPersonal.pregledi = 10;
+          $scope.uporPersonal.meritve = 10;
+          $scope.uporPersonal.bolezni = 10;*/
       }
-      $scope.zdravilaCounts = [5,$rootScope.uporabnik.personalizacija.zdravila,20].sort(function(a, b){return a-b});
+
+      if( $scope.uporPersonal.zdravila === 5 || $scope.uporPersonal.zdravila === 20 ){
+          $scope.zdravilaCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.zdravilaCounts = [5,$scope.uporPersonal.zdravila,20].sort(function(a, b){return a-b});
+      }
 
       // init table numbs
       $scope.zdravilaData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = $rootScope.uporabnik.personalizacija.zdravila;
+      $scope.tableSet.perCou = $scope.uporPersonal.zdravila;
           
       var tp = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -151,11 +165,18 @@ angular.module('tpo')
 
       $scope.tablePar = tp;
 
+
+
+      if( $scope.uporPersonal.zdravila === 5 || $scope.uporPersonal.zdravila === 20 ){
+          $scope.dieteCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.dieteCounts = [5,$scope.uporPersonal.zdravila,20].sort(function(a, b){return a-b});
+      }
           // init table numbs
       $scope.dieteData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = $rootScope.uporabnik.personalizacija.zdravila;
+      $scope.tableSet.perCou = $scope.uporPersonal.zdravila;
 
       var tpDieta = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -163,7 +184,7 @@ angular.module('tpo')
           data : $scope.dieteData
       }, {
           total:0,
-          counts: $scope.zdravilaCounts, //[5,10,20],
+          counts: $scope.dieteCounts, //[5,10,20],
 
           getData: function( $defer, params ){
 
@@ -194,12 +215,17 @@ angular.module('tpo')
 
 
 
-      $scope.preglediCounts = [5,$rootScope.uporabnik.personalizacija.pregledi,20].sort(function(a, b){return a-b});
-          // init table numbs
+      if( $scope.uporPersonal.bolezni === 5 || $scope.uporPersonal.bolezni === 20 ){
+          $scope.bolezniCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.bolezniCounts = [5,$scope.uporPersonal.bolezni,20].sort(function(a, b){return a-b});
+      }
+
+      // init table numbs
       $scope.bolezniData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = $rootScope.uporabnik.personalizacija.pregledi;
+      $scope.tableSet.perCou = $scope.uporPersonal.bolezni;
 
       var tpBolez = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -207,7 +233,7 @@ angular.module('tpo')
           data : $scope.bolezniData
       }, {
           total:0,
-          counts: $scope.preglediCounts,// [5,10,20],
+          counts: $scope.bolezniCounts,// [5,10,20],
 
           getData: function( $defer, params ){
 
@@ -237,12 +263,17 @@ angular.module('tpo')
       $scope.tableParBolezni = tpBolez;
 
 
-      $scope.meritveCounts = [5,$rootScope.uporabnik.personalizacija.meritve,20].sort(function(a, b){return a-b});
-          // init table numbs
+      if( $scope.uporPersonal.meritve === 5 || $scope.uporPersonal.meritve === 20 ){
+          $scope.meritveCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.meritveCounts = [5,$scope.uporPersonal.meritve,20].sort(function(a, b){return a-b});
+      }
+
+      // init table numbs
       $scope.meritveData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = $rootScope.uporabnik.personalizacija.meritve;
+      $scope.tableSet.perCou = $scope.uporPersonal.meritve;
 
       var tpMeritve = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -280,13 +311,17 @@ angular.module('tpo')
       $scope.tableParMeritve = tpMeritve;
 
 
+      if( $scope.uporPersonal.pregledi === 5 || $scope.uporPersonal.pregledi === 20 ){
+          $scope.preglediCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.preglediCounts = [5,$scope.uporPersonal.pregledi,20].sort(function(a, b){return a-b});
+      }
 
-      $scope.bolezniCounts = [5,$rootScope.uporabnik.personalizacija.bolezni,20].sort(function(a, b){return a-b});
-          // init table numbs
+      // init table numbs
       $scope.preglediData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = $rootScope.uporabnik.personalizacija.bolezni;
+      $scope.tableSet.perCou = $scope.uporPersonal.pregledi;
 
       var tpPregledi = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -294,7 +329,7 @@ angular.module('tpo')
           data : $scope.preglediData
       }, {
           total:0,
-          counts: $scope.bolezniCounts,// [5,10,20],
+          counts: $scope.preglediCounts,// [5,10,20],
 
           getData: function( $defer, params ){
 
