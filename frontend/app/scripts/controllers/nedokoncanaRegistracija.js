@@ -47,10 +47,11 @@ angular.module('tpo')
                           data = data.concat(data2);
                           data = data.concat(data3);
                           
+                          data.uporVloga = "";
                           for (var i = 0; i < data.length; i++){
                               data[i].uporVloga = data[i].role.naziv;
                           }
-
+                          
                           // order data
                           data = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
 
