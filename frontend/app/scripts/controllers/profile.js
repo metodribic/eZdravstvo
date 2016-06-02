@@ -346,6 +346,19 @@ angular.module('tpo')
         personalizacija = new Personalizacija(forma);
         Personalizacija.save(personalizacija).$promise.then(function(personalizacija) {
             $rootScope.uporabnik.personalizacija = personalizacija;
+            var user = JSON.parse(window.localStorage.getItem('user'));
+            if(user.id === $rootScope.uporabnik.id)
+                user.personalizacija = personalizacija;
+            else {
+                var os = user.oskrbovanci;
+                for(o in os) {
+                    if(os[o].url.substring(os[o].url.lastIndexOf('/')+1) == $rootScope.uporabnik.id) {
+                        os[o].personalizacija = personalizacija;
+                        break;
+                    }
+                }
+            }
+            window.localStorage.setItem('user', JSON.stringify(user));
             addAlert("Shranjeno", 'success');
         }, function(error) {
             addAlert(error.error, 'error');
