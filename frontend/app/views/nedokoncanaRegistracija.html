@@ -36,12 +36,11 @@
                             <div ng-show="u.is_active == 1">Da</div>
                         </td>
                     </tr>
-
-                    <tr ng-show="$data.length == 0" >
-                        <td></td>
-                        <td style="color: #00a65a" >Ni uporabnikov.</td>
-                    </tr>
                 </table>
+
+                <div class="center" ng-show="niPacientov">
+                    <h3>Na voljo ni uporabnikov!</h3>
+                </div>
 
             </div>
         </div>

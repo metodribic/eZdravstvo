@@ -72,6 +72,12 @@ angular.module('tpo')
                           data = (data.slice(($scope.tableSet.perPage-1)*$scope.tableSet.perCou,
                               $scope.tableSet.perPage*$scope.tableSet.perCou));
 
+                          if( data.length == 0 ){
+                              $scope.niPacientov = true;
+                          }else{
+                              $scope.niPacientov = false;
+                          }
+                          
                           //Notification.success('Uporabniki posodobljeni!');
                           return data;
 
