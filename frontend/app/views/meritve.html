@@ -91,7 +91,7 @@
                 <tbody>
                     <tr ng-repeat="meritev in meritve track by $index" >
                       <td ui-sref="meritevPodrobno({id:meritev.id})"><i class="fa fa-search" style="cursor:pointer"></i></td>
-                      <td>{{meritev.datum | date:'dd.MM.yyyy, hh:mm'}}</td>
+                      <td>{{meritev.datum | date:'dd.MM.yyyy, HH:mm'}}</td>
                       <td>{{meritev.tip_meritve.tip}}</td>
                       <td>od {{meritev.tip_meritve.normalno_min}} do {{meritev.tip_meritve.normalno_max}}</td>
                       <td>

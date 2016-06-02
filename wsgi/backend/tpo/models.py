@@ -29,6 +29,7 @@ class Uporabnik(User):
     oskrbovanci = models.ManyToManyField('self', blank=True)
     personalizacija = models.ForeignKey('PersonalizacijaNadzornePlosce', null=True, blank=True)
 
+
 class Zdravnik(User):
     ime = models.CharField(max_length=100, blank=True)
     priimek = models.CharField(max_length=100, blank=True)
@@ -50,6 +51,7 @@ class UporabnikZdravnik(models.Model):
     
     class Meta:
         db_table = 'tpo_uporabnik_zdravnik'
+
 
 class Osebje(User):
     ime = models.CharField(max_length=100, blank=True, null=True)
@@ -136,7 +138,7 @@ class VrednostiMeritev(models.Model):
 class Meritev(models.Model):
     tip_meritve = models.ForeignKey('VrednostiMeritev')
     vrednost_meritve = models.CharField(max_length=100)
-    datum = models.DateField()
+    datum = models.DateTimeField()
     uporabnik = models.ForeignKey('Uporabnik')
     pregled = models.ForeignKey('Pregled', null=True)
 
@@ -178,6 +180,7 @@ class KontaktnaOseba(models.Model):
     posta = models.ForeignKey('Posta')
     sorodstveno_razmerje = models.CharField(max_length=100)
     telefon = models.CharField(max_length=100)
+
 
 class PersonalizacijaNadzornePlosce(models.Model):
     datum_rojstva = models.BooleanField(default=True)
