@@ -58,9 +58,8 @@ class PersonalizacijaViewSet(viewsets.ModelViewSet):
             userId = request.user.id
         try:
             user = Uporabnik.objects.get(user_ptr_id = userId)
-            if hasattr(user, 'personalizacija'):
+            if hasattr(user, 'personalizacija') and user.personalizacija is not None:
                 p = user.personalizacija
-                print('Aye!')
             else:
                 p = PersonalizacijaNadzornePlosce.objects.create()
             for k,v in request.data.iteritems():
