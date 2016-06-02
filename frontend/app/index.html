@@ -135,7 +135,7 @@
           <li><a ui-sref="nadzornaPlosca"><i class="fa fa-home"></i> <span>Nadzorna plošča</span></a></li>
           <li><a ui-sref="profile" ng-hide="isSuperU"><i class="fa fa-user"></i> <span>Profil</span></a></li>
           <li><a ui-sref="listPregledov" ng-hide="isSuperU"><i class="fa fa-stethoscope"></i> <span>Pregledi</span></a></li>
-          <li><a ui-sref="meritve" ng-hide="isSuperU"><i class="fa fa-bar-chart"></i> <span>Meritve</span></a></li>
+          <li><a ui-sref="meritve" ng-hide="isDoctor || isSuperU"><i class="fa fa-bar-chart"></i> <span>Meritve</span></a></li>
 
           <li class="header">Administrativne akcije</li>
           <li class="pointer" ng-hide="isDoctor || isSuperU"><a ng-click="ustvariOskrbovanca()"><i class="fa fa-user-plus"></i> <span>Dodaj oskrbovanca</span></a></li>
