@@ -106,12 +106,12 @@
                         </button>
 
                         <!-- button za spreminjat -->
-                        <button type="button" class="btn btn-default btn-xs" ng-click="urediMeritev($index, meritev.vrednost_meritve)" ng-attr-id="{{'spremeni'+$index}}">
+                        <button type="button" class="btn btn-default btn-xs" ng-click="urediMeritev($index, meritev)" ng-attr-id="{{'spremeni'+$index}}">
                           <span class="fa fa-pencil" aria-hidden="true"></span> Spremeni
                         </button>
 
                         <!-- button za shranit spremembe  -->
-                        <button type="button" class="btn btn-default btn-xs" ng-attr-id="{{'shrani'+$index}}" style="visibility: hidden" ng-click="posodobiMeritev(meritev)">
+                        <button type="button" class="btn btn-default btn-xs" ng-attr-id="{{'shrani'+$index}}" style="visibility: hidden" ng-click="preveriSpremenjenoVrednost(meritev, $index)">
                           <span class="fa fa-floppy-o" aria-hidden="true"></span> Shrani
                         </button>
 
