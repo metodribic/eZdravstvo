@@ -27,7 +27,8 @@ from pprint import pprint
 
 # Create your views here.
 from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock, \
-    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, UporabnikZdravnik, IsAlphanumericPasswordValidator, PersonalizacijaNadzornePlosce
+    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, UporabnikZdravnik, IsAlphanumericPasswordValidator, \
+    PersonalizacijaNadzornePlosce, BolezniZdravila
 
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
@@ -244,7 +245,21 @@ class BolezniViewSet(viewsets.ModelViewSet):
         except Exception as e:
             print(e)
 
-        return Bolezni.objects.filter(uporabnik = user)
+        bolezni = Bolezni.objects.filter(uporabnik = user)
+
+        for bolezen in bolezni:
+            print bolezen
+
+            for i in xrange(0,len(bolezen.zdravilo)):
+                zdravilo = bolezen.zdravilo[i]
+                tmp = BolezniZdravila.objects.filter(zdravilo_id=zdravilo.id, bolezen_id=bolezen.id)
+
+                if(tmp!=None):
+                    zdravilo.zbrisano=tmp[0].zbrisano
+
+
+        return bolezni
+
 
 
 
@@ -462,6 +477,28 @@ def registracijaAdmin(request, format=None):
         response.status_code = 400 # Bad request
         return response
 
+
+@api_view(['POST'])
+def urejanjeZdravilAdmin(request, format=None):
+
+    tabelaAdded = request.data['tabelaDodanih']
+    tabelaDeleted = request.data['tabelaZbrisanih']
+    izbranaBolezen = request.data['izbranaBolezen']['id']
+
+    for a in tabelaAdded:
+        BolezniZdravila.objects.create(bolezni_id=izbranaBolezen, zdravilo_id=a['id'], zbrisano=False)
+
+    for d in tabelaDeleted:
+        bolezniZdravila = BolezniZdravila.objects.get(bolezni_id=izbranaBolezen, zdravilo_id=d['id'])
+        bolezniZdravila.zbrisano=True
+        bolezniZdravila.save()
+
+
+    bolezen = Bolezni.objects.get(id=izbranaBolezen)
+
+
+    serializer = BolezniSerializer(bolezen, context={'request': request})
+    return  Response(serializer.data)
 
 @api_view(['POST'])
 def ustvariPregled(request, format=None):

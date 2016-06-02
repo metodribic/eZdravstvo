@@ -135,21 +135,22 @@ class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
         model = Zdravilo
 
 
-""" BOLEZNI """
-class BolezniSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField()
-    zdravilo = ZdraviloSerializer(many=True)
-    class Meta:
-        model = Bolezni
-
 """ BOLEZNIZDRAVILO """
 class BolezniZdravilo(serializers.HyperlinkedModelSerializer):
-    bolezen = BolezniSerializer()
     zdravilo = ZdraviloSerializer()
 
     class Meta:
         db_table = "tpo_bolezni_zdravilo"
 
+
+""" BOLEZNI """
+class BolezniSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
+    zdravilo = ZdraviloSerializer(many=True)
+    bolezenZdravilo = BolezniZdravilo()
+
+    class Meta:
+        model = Bolezni
 
 
 """ DIETA NAVODILA """

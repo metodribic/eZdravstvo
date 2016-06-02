@@ -4,10 +4,11 @@
 
 
 angular.module('tpo')
-    .controller('urejanjeZdravilAdminCtrl', ['$scope', '$state', 'Uporabniki', 'BolezniSeznam', 'ZdravilaSeznam', 'UrejanjeZdravilAdmin', '$resource', '$rootScope', 'AuthService', 'Notification',
-        function ($scope, $state, Uporabniki, BolezniSeznam, ZdravilaSeznam, UrejanjeZdravilAdmin, $resource, $rootScope, AuthService, Notification) {
+    .controller('urejanjeZdravilAdminCtrl', ['$scope', '$state', 'Uporabniki', 'BolezniSeznam', 'ZdravilaSeznam', 'Zdravila', 'UrejanjeZdravilAdmin', '$resource', '$rootScope', 'AuthService', 'Notification',
+        function ($scope, $state, Uporabniki, BolezniSeznam, ZdravilaSeznam, Zdravila, UrejanjeZdravilAdmin, $resource, $rootScope, AuthService, Notification) {
 
             var mojScope = $scope;
+            $scope.izbranaBolezen = {};
 
             /*GET USER FROM LOCAL STORAGE*/
             $scope.uporabnik = AuthService.getCurrentUser();
@@ -25,6 +26,9 @@ angular.module('tpo')
             //moj scope, v katerega shranjujem vse spremembe
             mojScope.sprememba = new UrejanjeZdravilAdmin();
 
+            $scope.obstojecaZbrisana = [];
+            $scope.tabelaDodanih = [];
+
             //pridobi vse bolezni za izbiro
             BolezniSeznam.query().$promise.then(function(response){
             $scope.bolezniSeznam = response;
@@ -40,17 +44,35 @@ angular.module('tpo')
             
             /*FUNKCIJE*/
 
-            /*
+            req = new UrejanjeZdravilAdmin();
+
             //funkcija, ki shrani spremembe
             $scope.shraniSpremembe=function () {
-                $scope.besedZaUpor = "";
 
+                req.tabelaDodanih = $scope.tabelaDodanih;
+                req.tabelaZbrisanih = $scope.obstojecaZbrisana;
 
+                req.izbranaBolezen = $scope.izbranaBolezen;
+
+                req.$save( function(response){
+                    Notification.success({message: "Zdravila posodobljena." , replaceMessage: true});
+                    $scope.izbranaZdravila = response.zdravilo;
+                    console.log($scope.izbranaZdravila);
+                    $scope.vsaZdr = "";
+                    //$state.reload();
+
+                }, function (err) {
+                    responseFailedHandler ( $scope, err.data.error );
+                });
             }
-            */
+
 
             //funkcija za pridobivanje zdravil
             $scope.ustvariBolezen = function (bolezen) {
+                $scope.izbranaBolezen = bolezen;
+                //tukaj dobis stevilo zdravil, ki jih ima bolezen
+                //console.log(bolezen.zdravilo.length);
+
                 //Nafilaj zdravila
                 for (var i=0; i<bolezen.zdravilo.length; i++) {
                     mojScope.dodajZdravilo(bolezen.zdravilo[i]);
@@ -67,6 +89,17 @@ angular.module('tpo')
                     $scope.izbranaZdravila = mojScope.sprememba.zdravilo;
                 }
             };
+            
+            $scope.dodajZdraviloVSA = function(zdravilo) {
+                if(!mojScope.sprememba.zdravilo)
+                    mojScope.sprememba.zdravilo = [];
+                var idx = existsInArray(mojScope.sprememba.zdravilo, 'zdravilo', zdravilo.zdravilo);
+                if(idx == -1) {
+                    mojScope.tabelaDodanih.push(zdravilo);
+                    $scope.izbranaZdravila = mojScope.sprememba.zdravilo;
+                }
+            };
+
 
 
             $scope.odstraniZdravilo = function(zdravilo) {
@@ -74,17 +107,30 @@ angular.module('tpo')
                 var zdravila = mojScope.sprememba.zdravilo;
                 console.log(zdravila);
 
-                //ce niso prazna
+                //ce so prazna
                 if(!zdravila)
                     return;
-                //ce je >-1, potem obstaja v tabeli
+
+                //ce obstaja, vrne njegov indeks, drugace vrne -1
                 var idx = existsInArray(zdravila, 'zdravilo', zdravilo.zdravilo);
-                console.log(idx);
+
                 if(idx > -1) {
-                    zdravila = zdravila.splice(idx,1);
-                    $scope.zdravila = zdravila;
+                    if(existsInArray($scope.izbranaZdravila, 'zdravilo', zdravila[idx]) == -1) {
+                         //console.log($scope.izbrisanaZdravila);
+                        zdravila = zdravila.splice(idx,1);
+                        $scope.zdravila = zdravila;
+                    }
+
+                    //pobrisano zdravilo dodam v tabeloZbrisanih
+                    $scope.obstojecaZbrisana.push(zdravila[idx]);
                 }
             };
+
+
+            function responseFailedHandler (servFail ){
+                console.log(servFail);
+                Notification.error({message: servFail});
+            }
 
             function existsInArray(array, key, val) {
                 for(var i=0; i<array.length; i++) {
