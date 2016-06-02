@@ -100,19 +100,28 @@ angular.module('tpo')
 
           // table
 
+        // set default numbers
+      if( angular.isUndefined($rootScope.uporabnik.personalizacija) || $rootScope.uporabnik.personalizacija === null ){
+          $rootScope.uporabnik.personalizacija.zdravila = 10;
+          $rootScope.uporabnik.personalizacija.pregledi = 10;
+          $rootScope.uporabnik.personalizacija.meritve = 10;
+          $rootScope.uporabnik.personalizacija.bolezni = 10;
+      }
+      $scope.zdravilaCounts = [5,$rootScope.uporabnik.personalizacija.zdravila,20].sort(function(a, b){return a-b});
+
       // init table numbs
       $scope.zdravilaData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = 5;
-
+      $scope.tableSet.perCou = $rootScope.uporabnik.personalizacija.zdravila;
+          
       var tp = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
           count : $scope.tableSet.perCou,    // count per page
           data : $scope.zdravilaData
       }, {
           total:0,
-          counts: [5,10,20],
+          counts: $scope.zdravilaCounts, //[5,10,20],
 
           getData: function( $defer, params ){
 
@@ -146,7 +155,7 @@ angular.module('tpo')
       $scope.dieteData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = 5;
+      $scope.tableSet.perCou = $rootScope.uporabnik.personalizacija.zdravila;
 
       var tpDieta = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -154,7 +163,7 @@ angular.module('tpo')
           data : $scope.dieteData
       }, {
           total:0,
-          counts: [5,10,20],
+          counts: $scope.zdravilaCounts, //[5,10,20],
 
           getData: function( $defer, params ){
 
@@ -185,11 +194,12 @@ angular.module('tpo')
 
 
 
+      $scope.preglediCounts = [5,$rootScope.uporabnik.personalizacija.pregledi,20].sort(function(a, b){return a-b});
           // init table numbs
       $scope.bolezniData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = 5;
+      $scope.tableSet.perCou = $rootScope.uporabnik.personalizacija.pregledi;
 
       var tpBolez = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -197,7 +207,7 @@ angular.module('tpo')
           data : $scope.bolezniData
       }, {
           total:0,
-          counts: [5,10,20],
+          counts: $scope.preglediCounts,// [5,10,20],
 
           getData: function( $defer, params ){
 
@@ -227,12 +237,12 @@ angular.module('tpo')
       $scope.tableParBolezni = tpBolez;
 
 
-
+      $scope.meritveCounts = [5,$rootScope.uporabnik.personalizacija.meritve,20].sort(function(a, b){return a-b});
           // init table numbs
       $scope.meritveData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = 5;
+      $scope.tableSet.perCou = $rootScope.uporabnik.personalizacija.meritve;
 
       var tpMeritve = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -240,7 +250,7 @@ angular.module('tpo')
           data : $scope.meritveData
       }, {
           total:0,
-          counts: [5,10,20],
+          counts: $scope.meritveCounts, //[5,10,20],
 
           getData: function( $defer, params ){
 
@@ -271,11 +281,12 @@ angular.module('tpo')
 
 
 
+      $scope.bolezniCounts = [5,$rootScope.uporabnik.personalizacija.bolezni,20].sort(function(a, b){return a-b});
           // init table numbs
       $scope.preglediData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = 5;
+      $scope.tableSet.perCou = $rootScope.uporabnik.personalizacija.bolezni;
 
       var tpPregledi = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -283,7 +294,7 @@ angular.module('tpo')
           data : $scope.preglediData
       }, {
           total:0,
-          counts: [5,10,20],
+          counts: $scope.bolezniCounts,// [5,10,20],
 
           getData: function( $defer, params ){
 
