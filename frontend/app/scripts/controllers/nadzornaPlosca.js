@@ -116,7 +116,12 @@ angular.module('tpo')
           $scope.uporPersonal.meritve = 10;
           $scope.uporPersonal.bolezni = 10;*/
       }
-      $scope.zdravilaCounts = [5,$scope.uporPersonal.zdravila,20].sort(function(a, b){return a-b});
+
+      if( $scope.uporPersonal.zdravila === 5 || $scope.uporPersonal.zdravila === 20 ){
+          $scope.zdravilaCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.zdravilaCounts = [5,$scope.uporPersonal.zdravila,20].sort(function(a, b){return a-b});
+      }
 
       // init table numbs
       $scope.zdravilaData = [];
@@ -160,12 +165,18 @@ angular.module('tpo')
 
       $scope.tablePar = tp;
 
+
+
+      if( $scope.uporPersonal.zdravila === 5 || $scope.uporPersonal.zdravila === 20 ){
+          $scope.dieteCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.dieteCounts = [5,$scope.uporPersonal.zdravila,20].sort(function(a, b){return a-b});
+      }
           // init table numbs
       $scope.dieteData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
       $scope.tableSet.perCou = $scope.uporPersonal.zdravila;
-      $scope.dieteCounts = [5,$scope.uporPersonal.zdravila,20].sort(function(a, b){return a-b});
 
       var tpDieta = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -204,8 +215,13 @@ angular.module('tpo')
 
 
 
-      $scope.bolezniCounts = [5,$scope.uporPersonal.bolezni,20].sort(function(a, b){return a-b});
-          // init table numbs
+      if( $scope.uporPersonal.bolezni === 5 || $scope.uporPersonal.bolezni === 20 ){
+          $scope.bolezniCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.bolezniCounts = [5,$scope.uporPersonal.bolezni,20].sort(function(a, b){return a-b});
+      }
+
+      // init table numbs
       $scope.bolezniData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
@@ -247,8 +263,13 @@ angular.module('tpo')
       $scope.tableParBolezni = tpBolez;
 
 
-      $scope.meritveCounts = [5,$scope.uporPersonal.meritve,20].sort(function(a, b){return a-b});
-          // init table numbs
+      if( $scope.uporPersonal.meritve === 5 || $scope.uporPersonal.meritve === 20 ){
+          $scope.meritveCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.meritveCounts = [5,$scope.uporPersonal.meritve,20].sort(function(a, b){return a-b});
+      }
+
+      // init table numbs
       $scope.meritveData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
@@ -290,9 +311,13 @@ angular.module('tpo')
       $scope.tableParMeritve = tpMeritve;
 
 
+      if( $scope.uporPersonal.pregledi === 5 || $scope.uporPersonal.pregledi === 20 ){
+          $scope.preglediCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.preglediCounts = [5,$scope.uporPersonal.pregledi,20].sort(function(a, b){return a-b});
+      }
 
-      $scope.preglediCounts = [5,$scope.uporPersonal.pregledi,20].sort(function(a, b){return a-b});
-          // init table numbs
+      // init table numbs
       $scope.preglediData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
