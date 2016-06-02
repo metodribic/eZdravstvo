@@ -52,6 +52,31 @@ class PersonalizacijaViewSet(viewsets.ModelViewSet):
     queryset = PersonalizacijaNadzornePlosce.objects.all()
     serializer_class = PersonalizacijaNadzornePlosceSerializer
 
+    def create(self, request):
+        userId = request.META.get('HTTP_PACIENT', None)
+        if userId == None:
+            userId = request.user.id
+        try:
+            user = Uporabnik.objects.get(user_ptr_id = userId)
+            if hasattr(user, 'personalizacija'):
+                p = user.personalizacija
+                print('Aye!')
+            else:
+                p = PersonalizacijaNadzornePlosce.objects.create()
+            for k,v in request.data.iteritems():
+                setattr(p, k, v)
+            p.save()
+            user.personalizacija = p
+            user.save()
+            ps = PersonalizacijaNadzornePlosceSerializer(p, context={'request': request})
+            return Response(ps.data)
+        except ObjectDoesNotExist as e:
+            print(e)
+            response = JSONResponse({"error":"Uporabnik ne obstaja."})
+            response.status_code = 404
+            return response
+
+
 
 @permission_classes((IsAuthenticated,))
 #UPORABNIK
@@ -587,7 +612,7 @@ def registracijaPacient(request, format=None):
             return respons
         else:
             validate_password(password=password)
-            IsAlphanumericPasswordValidator().validate(passw)
+            IsAlphanumericPasswordValidator().validate(password)
             # check only ime - same as in login
             if( ime != "" ):
                 pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, role_id="4", is_active=False,

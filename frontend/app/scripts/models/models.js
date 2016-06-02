@@ -59,7 +59,6 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
-
 .factory('Ustanova', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/ustanova/:ustanovaId', { ustanovaId: '@ustanovaId' }, {
 		update: {
@@ -68,6 +67,10 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
+.factory('Personalizacija', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/personalizacija', {
+	});
+})
 
 .factory('RegistracijaUporAdmin', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/registracijaAdmin', {

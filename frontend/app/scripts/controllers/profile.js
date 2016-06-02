@@ -2,8 +2,8 @@
 
 
 angular.module('tpo')
-  .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik','Notification', 'Ustanova', 'KontaktnaOseba',  '$http', '$q', 'API_URL',
-  function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik, Notification, Ustanova, KontaktnaOseba, $http, $q, API_URL) {
+  .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik','Notification', 'Ustanova', 'KontaktnaOseba',  '$http', '$q', 'API_URL', 'Personalizacija',
+  function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik, Notification, Ustanova, KontaktnaOseba, $http, $q, API_URL, Personalizacija) {
 
     // shrani uporabnika, ki je trenutno prijavljen
     var trenutniUporabnik = $rootScope.uporabnik;
@@ -13,6 +13,21 @@ angular.module('tpo')
     if(trenutniUporabnik.role.naziv == 'Pacient') {
       $scope.tipUporabnika = 'Pacient';
       pridobi_zdravnike();
+
+      $scope.forma = trenutniUporabnik.personalizacija;
+      if(!trenutniUporabnik.personalizacija || trenutniUporabnik.personalizacija === null)
+          $scope.forma = {
+              "datum_rojstva" : true,
+              "kraj_rojstva": true,
+              "naslov": true,
+              "stevilka_zzzs": true,
+              "zdravnik": true,
+              "zobozdravnik": true,
+              "pregledi": 10,
+              "meritve": 10,
+              "bolezni": 10,
+              "zdravila": 10
+          }
 	  }
     else if(trenutniUporabnik.role.naziv == 'Zdravnik'){
       $scope.tipUporabnika = 'Zdravnik';
@@ -326,6 +341,16 @@ angular.module('tpo')
             addAlert(error, "error");
         });
     };
+
+    $scope.personalizacija = function(forma) {
+        personalizacija = new Personalizacija(forma);
+        Personalizacija.save(personalizacija).$promise.then(function(personalizacija) {
+            $rootScope.uporabnik.personalizacija = personalizacija;
+            addAlert("Shranjeno", 'success');
+        }, function(error) {
+            addAlert(error.error, 'error');
+        });
+    }
 
     function addAlert(msg, state) {
         Notification({message: msg}, state);
