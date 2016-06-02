@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni, Dieta, \
-    Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba
+    Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, PersonalizacijaNadzornePlosce
 
 """ POSTA """
 class PostaSerializer(serializers.HyperlinkedModelSerializer):
@@ -144,6 +144,11 @@ class KontaktnaOsebaSerializer(serializers.HyperlinkedModelSerializer):
         uporabnik.save()
         return kontaktna
 
+class PersonalizacijaNadzornePlosceSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField()
+    class Meta:
+        model = PersonalizacijaNadzornePlosce
+
 
 """ UPORABNIK """
 class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
@@ -157,6 +162,7 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField()
     is_superuser = serializers.BooleanField()
     kontaktna_oseba = KontaktnaOsebaSerializer()
+    personalizacija = PersonalizacijaNadzornePlosceSerializer()
 
     class Meta:
         model = Uporabnik
@@ -182,11 +188,11 @@ class UporabnikSerializer(serializers.HyperlinkedModelSerializer):
         oskrbovanec = Uporabnik(role_id=4)
         oskrbovanec.save()
         return oskrbovanec
-    
+
 class UporabnikZdravnik(serializers.HyperlinkedModelSerializer):
     uporabnik = UporabnikSerializer()
     zdravnik = ZdravnikSerializer()
-    
+
     class Meta:
         db_table = "tpo_uporabnik_zdravnik"
 
@@ -216,15 +222,25 @@ class VrednostiMeritevSerializer(serializers.HyperlinkedModelSerializer):
 class MeritevSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     tip_meritve = VrednostiMeritevSerializer()
-    uporabnik = UporabnikSerializer()
+    #uporabnik = UporabnikSerializer()
 
     class Meta:
         model = Meritev
+        depth = 1
 
     def create(self, validated_data):
-        print('test')
+        meritev = Meritev(  tip_meritve_id=validated_data['tip_meritve']['id'],
+                            vrednost_meritve = validated_data['vrednost_meritve'],
+                            datum = validated_data['datum'],
+                            uporabnik_id = self._kwargs['data']['uporabnik'],
+                            pregled_id = None)
+        meritev.save()
+        return meritev
 
-
+    def update(self, instance, validated_data):
+        instance.vrednost_meritve = validated_data['vrednost_meritve']
+        instance.save()
+        return instance
 
 
 """ PREGLED """
@@ -247,7 +263,7 @@ class LoginSerializer(serializers.Serializer):
 class LoginZdravnikSerializer(serializers.Serializer):
     zdravnik = ZdravnikSerializer()
     token = serializers.CharField(max_length=50)
-    
+
 class LoginOsebjeSerializer(serializers.Serializer):
     osebje = OsebjeSerializer()
     token = serializers.CharField(max_length=50)
@@ -264,4 +280,13 @@ class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Uporabnik
         depth = 3   # izpise nested fielde (diete, bolezni,..)
+
+
+class BolezniZdravila(serializers.HyperlinkedModelSerializer):
+    bolezen = BolezniSerializer()
+    zdravilo = ZdraviloSerializer()
+
+    class Meta:
+        db_table = "tpo_bolezni_zdravilo"
+
 
