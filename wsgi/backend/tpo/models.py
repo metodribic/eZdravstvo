@@ -119,6 +119,11 @@ class Bolezni(models.Model):
     mkb10 = models.CharField(max_length=45)
     alergija = models.BooleanField()
     zdravilo = models.ManyToManyField('Zdravilo')
+    clanki = models.ManyToManyField('ClanekBolezni')
+
+
+class ClanekBolezni(models.Model):
+    clanek = models.CharField(max_length=5000, blank=True)
 
 
 # Dovoljene(max,min,nemogoce) vrednosti za doloceno meritev
