@@ -560,8 +560,6 @@ def ustvariPregled(request, format=None):
                                              uporabnik_id=uporabnikID,
                                              pregled=pregled)
 
-
-
         return Response()
 
     except IntegrityError as e:
