@@ -11,7 +11,7 @@
             <div class="form-group" >
                 <label class="control-label col-sm-2">Vse bolezni:</label>
                 <div class="col-sm-10">
-                    <ui-select multiple ng-model="vseBolezni">
+                    <ui-select multiple ng-model="izbranaBolezen" on-select="izberiBolezen(izbranaBolezen)">
                         <ui-select-match placeholder="Izberite bolezen...">{{$item.naziv}}</ui-select-match>
                         <ui-select-choices repeat="bolezen in bolezniSeznam | filter: $select.search track by bolezen.naziv">
                             <div ng-bind-html="bolezen.naziv | highlight: $select.search"> {{bolezen.naziv}} </div>
@@ -19,6 +19,40 @@
                     </ui-select>
                 </div>
             </div>
+
+            <div class="form-group" >
+                <label class="control-label col-sm-2">Nov clanek:</label>
+                <div class="col-sm-8">
+                    <input type="text" ng-model="novClanekBolezen" class="col-xs-12"/>
+                </div>
+                <button type="submit" class="btn btn-default btn-xs">Shrani</button>
+            </div>
+
+
+            <!-- TABELA NAVODIL BOLEZNI -->
+            <table class="table table-stripped table-hover" ng-show="bolezni.length != 0">
+                <thead>
+                    <tr>
+                      <th>Ime bolezni</th>
+                      <th>Briši</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr  ng-repeat="clanek in clankiBolezni[0].clanki">
+                        <td><a ng-href="{{clanek.clanek}}">{{clanek.clanek}}</a>
+                            <!-- Button za brisat -->
+                            <td>
+                                <button type="button" class="btn btn-default btn-xs" ng-click="odstraniClanek(clanek)">
+                                  <span class="fa fa-trash" aria-hidden="true"></span> Briši
+                                </button>
+                            </td>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
 
             <!-- VSA ZDRAVILA ZA IZBIRO -->
             <div class="form-group" >
@@ -31,6 +65,14 @@
                         </ui-select-choices>
                     </ui-select>
                 </div>
+            </div>
+
+            <div class="form-group" >
+                <label class="control-label col-sm-2">Nov clanek:</label>
+                <div class="col-sm-8">
+                    <input type="text" ng-model="novClanekZdravila" class="col-xs-12"/>
+                </div>
+                <button type="submit" class="btn btn-default btn-xs">Shrani</button>
             </div>
 
             <!-- TABELA NAVODIL ZDRAVIL -->
@@ -67,6 +109,14 @@
                         </ui-select-choices>
                     </ui-select>
                 </div>
+            </div>
+
+            <div class="form-group" >
+                <label class="control-label col-sm-2">Nov clanek:</label>
+                <div class="col-sm-8">
+                    <input type="text" ng-model="novClanekDiete" class="col-xs-12"/>
+                </div>
+                <button type="submit" class="btn btn-default btn-xs">Shrani</button>
             </div>
 
 

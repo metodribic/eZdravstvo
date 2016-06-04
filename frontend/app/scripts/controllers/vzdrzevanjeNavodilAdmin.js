@@ -3,8 +3,11 @@
  */
 
 angular.module('tpo')
-    .controller('vzdrzevanjeNavodilAdmin', ['$scope', '$state', 'Uporabniki', 'BolezniSeznam', 'ZdravilaSeznam', 'DieteSeznam', 'Zdravila', 'UrejanjeZdravilAdmin', '$resource', '$rootScope', 'AuthService', 'Notification',
-        function ($scope, $state, Uporabniki, BolezniSeznam, ZdravilaSeznam, DieteSeznam, Zdravila, UrejanjeZdravilAdmin, $resource, $rootScope, AuthService, Notification) {
+    .controller('vzdrzevanjeNavodilAdmin', ['$scope', '$state', 'Uporabniki', 'BolezniSeznam', 'ZdravilaSeznam', 'DieteSeznam',
+        'Zdravila', 'UrejanjeZdravilAdmin', '$resource', '$rootScope', 'AuthService', 'Notification', 'BolezniBrisiClanek',
+        function ($scope, $state, Uporabniki, BolezniSeznam, ZdravilaSeznam, DieteSeznam,
+                  Zdravila, UrejanjeZdravilAdmin, $resource, $rootScope, AuthService, Notification, BolezniBrisiClanek) {
+
 
 
             /*GET USER FROM LOCAL STORAGE*/
@@ -40,7 +43,26 @@ angular.module('tpo')
 
             /*FUNKCIJE*/
 
+            $scope.izberiBolezen = function (bolezen) {
+                $scope.clankiBolezni = bolezen;
+                console.log(bolezen);
+            }
             
+            $scope.odstraniClanek=function (clanek) {
+                console.log(clanek);
+                bolezen = $scope.clankiBolezni[0].id
+                clanek = clanek.id
+                BolezniBrisiClanek.delete({data: clanek, bolezen: bolezen}).$promise.then(function (response) {
+                    console.log(response);
+                });
+
+                /*
+                req = clanek;
+                req.delete(function (response) {
+                    console.log(response);
+                });
+                */
+            }
 
 
 

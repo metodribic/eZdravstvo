@@ -207,11 +207,3 @@ class PersonalizacijaNadzornePlosce(models.Model):
     bolezni = models.IntegerField(default = 10)
     zdravila = models.IntegerField(default = 10)
 
-
-class BolezniZdravila(models.Model):
-   bolezni = models.ForeignKey('Bolezni')
-   zdravilo = models.ForeignKey('Zdravilo')
-   zbrisano = models.NullBooleanField(default=False)
-
-   class Meta:
-       db_table = 'tpo_bolezni_zdravilo'
