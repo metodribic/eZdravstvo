@@ -8,19 +8,18 @@ angular.module('tpo')
       $scope.meritev = response;
     });
 
-    $scope.chart = {'start': moment(), 'end': moment()};
+    $scope.chart = {'start': moment().subtract(1, 'weeks'), 'end': moment()};
 
     $scope.drawChart = function() {
         startDate = moment($scope.chart.start, 'DD.MM.YYYY');
         endDate = moment($scope.chart.end, 'DD.MM.YYYY');
         tipMeritveId = $scope.meritev.tip_meritve.id;
         Meritve.query({tipMeritveId: tipMeritveId, startDate: startDate.format('YYYY-MM-DD'),
-            endDate: endDate.format('YYYY-MM-DD')}).$promise.then(function(response) {
-                data = [{values: []}]
+            endDate: endDate.format('YYYY-MM-DD'), ordering: 'datum'}).$promise.then(function(response) {
+                data = [{values: []}];
                 scope.config.visible = true;
 
                 for(var i=0; i<response.length; i++) {
-                        console.log(response[i].datum)
                     if(i === 0)
                         data[0].key = response[i].tip_meritve.tip;
                     if(response[i].tip_meritve.tip === "Krvni pritisk") {
@@ -32,18 +31,18 @@ angular.module('tpo')
                         var zgornji = parseFloat(response[i].vrednost_meritve.split("/")[1]);
 
                         data[0].values.push({
-							x: moment(response[i].datum, 'YYYY-MM-DD ').valueOf(),
+							x: moment(response[i].datum, 'YYYY-MM-DD %H:%m:%s').valueOf(),
 							y: spodnji
                         });
 
                         data[1].values.push({
-							x: moment(response[i].datum, 'YYYY-MM-DD ').valueOf(),
+							x: moment(response[i].datum, 'YYYY-MM-DD %H:%m:%s').valueOf(),
 							y: zgornji
                         });
 
                     } else {
                         data[0].values.push({
-							x: moment(response[i].datum, 'YYYY-MM-DD ').valueOf(),
+							x: moment(response[i].datum, 'YYYY-MM-DD %H:%m:%s').valueOf(),
 							y: parseFloat(response[i].vrednost_meritve),
                         });
                     }
@@ -56,26 +55,24 @@ angular.module('tpo')
 
     $scope.options = {
             chart: {
-                type: 'scatterChart',
-                height: 450,
+                type: 'lineChart',
+                height: 350,
                 color: d3.scale.category10().range(),
-                scatter: {
-                    onlyCircles: true
-                },
-                showDistX: true,
-                showDistY: true,
                 tooltipContent: function(key) {
                     return '<h3>' + key + '</h3>';
                 },
+				useInteractiveGuideline: true,
                 duration: 350,
                 xAxis: {
                     axisLabel: 'Datum',
                     tickFormat: function(d){
-                        return d3.time.format('%d.%m.%Y')(new Date(d));
+                        return d3.time.format('%d.%m.%Y %H:%M')(new Date(d));
                     },
                     axisLabelDistance: 30
                 },
                 yAxis: {
+					useNiceScale: true,
+					tickSize: 30,
                     axisLabel: 'Y Axis',
                     tickFormat: function(d){
                         return d3.format('.02f')(d);
@@ -86,7 +83,7 @@ angular.module('tpo')
         };
     $scope.config = {
         visible: false
-    }
+    };
 
 
 }]);

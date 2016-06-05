@@ -128,6 +128,7 @@ class PreglediViewSet(viewsets.ModelViewSet):
 class MeritevViewSet(viewsets.ModelViewSet):
     queryset = Meritev.objects.all()
     serializer_class = MeritevSerializer
+    filter_backends = (filters.OrderingFilter,)
 
 
     def get_queryset(self):
