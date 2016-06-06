@@ -126,6 +126,10 @@ class Bolezni(models.Model):
     alergija = models.BooleanField()
     zdravilo = models.ManyToManyField('Zdravilo')
 
+    @property
+    def title(self):
+        return self._title
+
 
 # Dovoljene(max,min,nemogoce) vrednosti za doloceno meritev
 class VrednostiMeritev(models.Model):
@@ -144,7 +148,7 @@ class VrednostiMeritev(models.Model):
 class Meritev(models.Model):
     tip_meritve = models.ForeignKey('VrednostiMeritev')
     vrednost_meritve = models.CharField(max_length=100)
-    datum = models.DateField()
+    datum = models.DateTimeField()
     uporabnik = models.ForeignKey('Uporabnik')
     pregled = models.ForeignKey('Pregled', null=True)
 

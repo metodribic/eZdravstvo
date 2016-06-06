@@ -147,7 +147,7 @@ class BolezniZdravilo(serializers.HyperlinkedModelSerializer):
 class BolezniSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     zdravilo = ZdraviloSerializer(many=True)
-    bolezenZdravilo = BolezniZdravilo()
+    something = serializers.BooleanField()
 
     class Meta:
         model = Bolezni

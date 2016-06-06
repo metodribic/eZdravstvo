@@ -248,20 +248,15 @@ class BolezniViewSet(viewsets.ModelViewSet):
         bolezni = Bolezni.objects.filter(uporabnik = user)
 
         for bolezen in bolezni:
-            print bolezen
+            bolezen.bla += 'test'
+            for zdravilo in bolezen.zdravilo.all():
+                    tmp = BolezniZdravila.objects.filter(zdravilo_id=zdravilo.id, bolezni_id=bolezen.id)
+                    print(tmp[0])
 
-            for i in xrange(0,len(bolezen.zdravilo)):
-                zdravilo = bolezen.zdravilo[i]
-                tmp = BolezniZdravila.objects.filter(zdravilo_id=zdravilo.id, bolezen_id=bolezen.id)
-
-                if(tmp!=None):
-                    zdravilo.zbrisano=tmp[0].zbrisano
-
-
+                    if(tmp != None):
+                        zdravilo.zdravilo += ' ' + str(tmp[0].zbrisano)
+        serializer = BolezniSerializer(bolezni, many=True, context={'request': self.request})
         return bolezni
-
-
-
 
 # ZDRAVILO
 @permission_classes((IsAuthenticated,))
