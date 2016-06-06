@@ -64,6 +64,12 @@ angular
             controller: 'urejanjeZdravilAdminCtrl'
           })
 
+          .state('vzdrzevanjeNavodilAdmin', {
+            url: '/navodilaAdmin',
+            templateUrl: '../views/vzdrzevanjeNavodilAdmin.html',
+            controller: 'vzdrzevanjeNavodilAdmin'
+          })
+
            .state('listPregledov', {
             url: '/listPregledov',
             templateUrl: '../views/listPregledov.html',

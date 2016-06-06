@@ -28,12 +28,12 @@ from pprint import pprint
 # Create your views here.
 from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock, \
     NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, UporabnikZdravnik, IsAlphanumericPasswordValidator, \
-    PersonalizacijaNadzornePlosce, BolezniZdravila
+    PersonalizacijaNadzornePlosce, BolezniZdravila, ClanekBolezni
 
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
     LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer, SifrantRegistriranihSerializer, \
-    VrednostiMeritevSerializer, KontaktnaOsebaSerializer, PersonalizacijaNadzornePlosceSerializer
+    VrednostiMeritevSerializer, KontaktnaOsebaSerializer, PersonalizacijaNadzornePlosceSerializer, ClanekBolezniSerializer
 
 import random
 
@@ -228,6 +228,14 @@ class DietaViewSet(viewsets.ModelViewSet):
 class BolezniViewSet(viewsets.ModelViewSet):
     queryset = Bolezni.objects.all()
     serializer_class = BolezniSerializer
+
+    @list_route(methods=['DELETE'])
+    def brisiClanek(self, request):
+        print request.query_params['bolezen']
+        bolezen = Bolezni.objects.get(id=int(request.query_params['bolezen']))
+        clanekB = ClanekBolezni.objects.get(id=int(request.query_params['data']))
+        bolezen.clanki_set.remove(clanekB)
+        print bolezen
    
     @list_route(methods=['GET'])
     def seznam(self, request):
@@ -554,8 +562,6 @@ def ustvariPregled(request, format=None):
                                              datum=datum_pregleda,
                                              uporabnik_id=uporabnikID,
                                              pregled=pregled)
-
-
 
         return Response()
 
@@ -951,3 +957,8 @@ def forgotPassword(request, format=None):
         response.status_code = 500; # Bad request
         return response
 
+
+# CLANKI
+class ClanekBolezniViewSet(viewsets.ModelViewSet):
+    queryset = ClanekBolezni.objects.all()
+    serializer_class = ClanekBolezniSerializer

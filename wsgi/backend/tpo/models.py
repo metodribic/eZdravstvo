@@ -29,6 +29,7 @@ class Uporabnik(User):
     oskrbovanci = models.ManyToManyField('self', blank=True)
     personalizacija = models.ForeignKey('PersonalizacijaNadzornePlosce', null=True, blank=True)
 
+
 class Zdravnik(User):
     ime = models.CharField(max_length=100, blank=True)
     priimek = models.CharField(max_length=100, blank=True)
@@ -50,6 +51,7 @@ class UporabnikZdravnik(models.Model):
     
     class Meta:
         db_table = 'tpo_uporabnik_zdravnik'
+
 
 class Osebje(User):
     ime = models.CharField(max_length=100, blank=True, null=True)
@@ -125,6 +127,11 @@ class Bolezni(models.Model):
     mkb10 = models.CharField(max_length=45)
     alergija = models.BooleanField()
     zdravilo = models.ManyToManyField('Zdravilo')
+    clanki = models.ManyToManyField('ClanekBolezni')
+
+
+class ClanekBolezni(models.Model):
+    clanek = models.CharField(max_length=5000, blank=True)
 
     @property
     def title(self):
@@ -191,6 +198,7 @@ class KontaktnaOseba(models.Model):
     sorodstveno_razmerje = models.CharField(max_length=100)
     telefon = models.CharField(max_length=100)
 
+
 class PersonalizacijaNadzornePlosce(models.Model):
     datum_rojstva = models.BooleanField(default=True)
     kraj_rojstva = models.BooleanField(default=True)
@@ -203,11 +211,3 @@ class PersonalizacijaNadzornePlosce(models.Model):
     bolezni = models.IntegerField(default = 10)
     zdravila = models.IntegerField(default = 10)
 
-
-class BolezniZdravila(models.Model):
-   bolezni = models.ForeignKey('Bolezni')
-   zdravilo = models.ForeignKey('Zdravilo')
-   zbrisano = models.NullBooleanField(default=False)
-
-   class Meta:
-       db_table = 'tpo_bolezni_zdravilo'
