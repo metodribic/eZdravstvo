@@ -92,6 +92,7 @@ class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
 """ CLANKI OD BOLEZNI """
 class ClanekBolezniSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField()
+    clanek = serializers.CharField()
 
     class Meta:
         model = ClanekBolezni

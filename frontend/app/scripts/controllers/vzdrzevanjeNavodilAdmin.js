@@ -4,11 +4,11 @@
 
 angular.module('tpo')
     .controller('vzdrzevanjeNavodilAdmin', ['$scope', '$state', 'Uporabniki', 'BolezniSeznam', 'ZdravilaSeznam', 'DieteSeznam',
-        'Zdravila', 'UrejanjeZdravilAdmin', '$resource', '$rootScope', 'AuthService', 'Notification', 'BolezniBrisiClanek',
+        'Zdravila', 'UrejanjeZdravilAdmin', '$resource', '$rootScope', 'AuthService', 'Notification', 'BrisiBolezniClanek','DodajBolezniClanek',
         function ($scope, $state, Uporabniki, BolezniSeznam, ZdravilaSeznam, DieteSeznam,
-                  Zdravila, UrejanjeZdravilAdmin, $resource, $rootScope, AuthService, Notification, BolezniBrisiClanek) {
+                  Zdravila, UrejanjeZdravilAdmin, $resource, $rootScope, AuthService, Notification, BrisiBolezniClanek, DodajBolezniClanek) {
 
-
+            $scope.novClanekBolezen = "";
 
             /*GET USER FROM LOCAL STORAGE*/
             $scope.uporabnik = AuthService.getCurrentUser();
@@ -26,7 +26,7 @@ angular.module('tpo')
             //pridobi vse bolezni za izbiro
             BolezniSeznam.query().$promise.then(function(response){
                 $scope.bolezniSeznam = response;
-                //console.log(response);
+                // console.log(response);
             });
 
             //pridobi vsa zdravila za izbiro
@@ -39,35 +39,42 @@ angular.module('tpo')
             DieteSeznam.query().$promise.then(function (response) {
                 $scope.dieteSeznam = response;
                 //console.log(response);
-            })
+            });
 
             /*FUNKCIJE*/
 
+            $scope.dodajClanekBolezen = function(){
+              novClanek = new DodajBolezniClanek();
+              novClanek.clanek = $scope.novClanekBolezen;
+              novClanek.bolezen = $scope.clankiBolezni.id;
+              novClanek.$save(function(response){
+                Notification.success('Članek uspešno dodan!');
+                $scope.clankiBolezni.clanki.push({'clanek':response.clanek.clanek, 'id': response.clanek.id});
+                $scope.novClanekBolezen = "";
+              });
+            };
+
             $scope.izberiBolezen = function (bolezen) {
                 $scope.clankiBolezni = bolezen;
-                console.log(bolezen);
-            }
-            
+            };
+
             $scope.odstraniClanek=function (clanek) {
-                console.log(clanek);
-                bolezen = $scope.clankiBolezni[0].id
-                clanek = clanek.id
-                BolezniBrisiClanek.delete({data: clanek, bolezen: bolezen}).$promise.then(function (response) {
-                    console.log(response);
-                });
+                bolezenId = $scope.clankiBolezni.id;
+                clanekId = clanek.id;
+                BrisiBolezniClanek.delete({data: clanekId, bolezen: bolezenId}).$promise.then(function (response) {
+                    Notification.success('Članek uspešno odstranjen');
 
-                /*
-                req = clanek;
-                req.delete(function (response) {
-                    console.log(response);
+                    // odstrani clanek iz tabele
+                    for(i = 0; i< $scope.clankiBolezni.clanki.length; i++){
+                      if($scope.clankiBolezni.clanki[i].id === clanekId){
+                        $scope.clankiBolezni.clanki.splice(i, 1);
+                      }
+                    }
                 });
-                */
-            }
-
+            };
 
 
             function responseFailedHandler (servFail ){
-                console.log(servFail);
                 Notification.error({message: servFail});
             }
 
@@ -80,4 +87,3 @@ angular.module('tpo')
             }
 
         }]);
-

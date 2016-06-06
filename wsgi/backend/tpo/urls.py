@@ -39,5 +39,6 @@ urlpatterns = [
     url(r'registracijaPacient', registracijaPacient),
     url(r'menjava_zdravnika', changeZdravnik),
     url(r'ustvariPregled', ustvariPregled),
-    url(r'zdravilaAdmin', urejanjeZdravilAdmin)
+    url(r'zdravilaAdmin', urejanjeZdravilAdmin),
+    url(r'ustvariPregled', ustvariPregled)
 ]

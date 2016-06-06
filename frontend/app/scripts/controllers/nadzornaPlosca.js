@@ -100,19 +100,42 @@ angular.module('tpo')
 
           // table
 
+        // set default numbers
+      if( angular.isUndefined($rootScope.uporabnik.personalizacija) || $rootScope.uporabnik.personalizacija === null ){
+          // doc || not set for pacient
+          $scope.uporPersonal = [];
+          $scope.uporPersonal.zdravila = 10;
+          $scope.uporPersonal.pregledi = 10;
+          $scope.uporPersonal.meritve = 10;
+          $scope.uporPersonal.bolezni = 10;
+      }else{
+          $scope.uporPersonal = $rootScope.uporabnik.personalizacija;
+          /*
+          $scope.uporPersonal.zdravila = $rootScope.uporabnik.personalizacija;
+          $scope.uporPersonal.pregledi = 10;
+          $scope.uporPersonal.meritve = 10;
+          $scope.uporPersonal.bolezni = 10;*/
+      }
+
+      if( $scope.uporPersonal.zdravila === 5 || $scope.uporPersonal.zdravila === 20 ){
+          $scope.zdravilaCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.zdravilaCounts = [5,$scope.uporPersonal.zdravila,20].sort(function(a, b){return a-b});
+      }
+
       // init table numbs
       $scope.zdravilaData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = 5;
-
+      $scope.tableSet.perCou = $scope.uporPersonal.zdravila;
+          
       var tp = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
           count : $scope.tableSet.perCou,    // count per page
           data : $scope.zdravilaData
       }, {
           total:0,
-          counts: [5,10,20],
+          counts: $scope.zdravilaCounts, //[5,10,20],
 
           getData: function( $defer, params ){
 
@@ -142,11 +165,18 @@ angular.module('tpo')
 
       $scope.tablePar = tp;
 
+
+
+      if( $scope.uporPersonal.zdravila === 5 || $scope.uporPersonal.zdravila === 20 ){
+          $scope.dieteCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.dieteCounts = [5,$scope.uporPersonal.zdravila,20].sort(function(a, b){return a-b});
+      }
           // init table numbs
       $scope.dieteData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = 5;
+      $scope.tableSet.perCou = $scope.uporPersonal.zdravila;
 
       var tpDieta = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -154,7 +184,7 @@ angular.module('tpo')
           data : $scope.dieteData
       }, {
           total:0,
-          counts: [5,10,20],
+          counts: $scope.dieteCounts, //[5,10,20],
 
           getData: function( $defer, params ){
 
@@ -185,11 +215,17 @@ angular.module('tpo')
 
 
 
-          // init table numbs
+      if( $scope.uporPersonal.bolezni === 5 || $scope.uporPersonal.bolezni === 20 ){
+          $scope.bolezniCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.bolezniCounts = [5,$scope.uporPersonal.bolezni,20].sort(function(a, b){return a-b});
+      }
+
+      // init table numbs
       $scope.bolezniData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = 5;
+      $scope.tableSet.perCou = $scope.uporPersonal.bolezni;
 
       var tpBolez = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -197,7 +233,7 @@ angular.module('tpo')
           data : $scope.bolezniData
       }, {
           total:0,
-          counts: [5,10,20],
+          counts: $scope.bolezniCounts,// [5,10,20],
 
           getData: function( $defer, params ){
 
@@ -227,12 +263,17 @@ angular.module('tpo')
       $scope.tableParBolezni = tpBolez;
 
 
+      if( $scope.uporPersonal.meritve === 5 || $scope.uporPersonal.meritve === 20 ){
+          $scope.meritveCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.meritveCounts = [5,$scope.uporPersonal.meritve,20].sort(function(a, b){return a-b});
+      }
 
-          // init table numbs
+      // init table numbs
       $scope.meritveData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = 5;
+      $scope.tableSet.perCou = $scope.uporPersonal.meritve;
 
       var tpMeritve = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -240,13 +281,23 @@ angular.module('tpo')
           data : $scope.meritveData
       }, {
           total:0,
-          counts: [5,10,20],
+          counts: $scope.meritveCounts, //[5,10,20],
 
           getData: function( $defer, params ){
 
               return Meritve.query( params.url() ).$promise.then(function(data){
                   $scope.tableSet.perPage = params.page();
                   $scope.tableSet.perCou = params.count();
+                  
+                  
+                  // sort & filter
+                  data.tipMeritveSifra = "";
+                  data.tipMeritveTip = "";
+                  
+                  for (var i = 0; i < data.length; i++){
+                      data[i].tipMeritveTip = data[i].tip_meritve.tip;
+                      data[i].tipMeritveSifra = data[i].tip_meritve.sifra;
+                  }
 
                   // order data
                   data = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
@@ -270,12 +321,17 @@ angular.module('tpo')
       $scope.tableParMeritve = tpMeritve;
 
 
+      if( $scope.uporPersonal.pregledi === 5 || $scope.uporPersonal.pregledi === 20 ){
+          $scope.preglediCounts = [5,20].sort(function(a, b){return a-b});
+      }else{
+          $scope.preglediCounts = [5,$scope.uporPersonal.pregledi,20].sort(function(a, b){return a-b});
+      }
 
-          // init table numbs
+      // init table numbs
       $scope.preglediData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = 5;
+      $scope.tableSet.perCou = $scope.uporPersonal.pregledi;
 
       var tpPregledi = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -283,7 +339,7 @@ angular.module('tpo')
           data : $scope.preglediData
       }, {
           total:0,
-          counts: [5,10,20],
+          counts: $scope.preglediCounts,// [5,10,20],
 
           getData: function( $defer, params ){
 

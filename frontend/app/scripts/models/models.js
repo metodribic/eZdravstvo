@@ -59,7 +59,6 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
-
 .factory('Ustanova', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/ustanova/:ustanovaId', { ustanovaId: '@ustanovaId' }, {
 		update: {
@@ -68,6 +67,10 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
+.factory('Personalizacija', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/personalizacija', {
+	});
+})
 
 .factory('RegistracijaUporAdmin', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/registracijaAdmin', {
@@ -125,10 +128,18 @@ angular.module('tpo.models', ['ngResource', 'config'])
 })
 
 
-.factory('BolezniBrisiClanek', function($resource, API_URL) {
+.factory('BrisiBolezniClanek', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/bolezni/brisiClanek', { bolezenId: '@bolezenId' }, {
 		update: {
-			method: 'UPDATE'
+			method: 'PATCH'
+		}
+	});
+})
+
+.factory('DodajBolezniClanek', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/bolezni/dodajClanek', { bolezenId: '@bolezenId' }, {
+		update: {
+			method: 'PATCH'
 		}
 	});
 })

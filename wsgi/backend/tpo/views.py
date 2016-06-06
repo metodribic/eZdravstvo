@@ -1,3 +1,4 @@
+import itertools
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.serializers import json
@@ -53,6 +54,30 @@ class PersonalizacijaViewSet(viewsets.ModelViewSet):
     queryset = PersonalizacijaNadzornePlosce.objects.all()
     serializer_class = PersonalizacijaNadzornePlosceSerializer
 
+    def create(self, request):
+        userId = request.META.get('HTTP_PACIENT', None)
+        if userId == None:
+            userId = request.user.id
+        try:
+            user = Uporabnik.objects.get(user_ptr_id = userId)
+            if hasattr(user, 'personalizacija') and user.personalizacija is not None:
+                p = user.personalizacija
+            else:
+                p = PersonalizacijaNadzornePlosce.objects.create()
+            for k,v in request.data.iteritems():
+                setattr(p, k, v)
+            p.save()
+            user.personalizacija = p
+            user.save()
+            ps = PersonalizacijaNadzornePlosceSerializer(p, context={'request': request})
+            return Response(ps.data)
+        except ObjectDoesNotExist as e:
+            print(e)
+            response = JSONResponse({"error":"Uporabnik ne obstaja."})
+            response.status_code = 404
+            return response
+
+
 
 @permission_classes((IsAuthenticated,))
 #UPORABNIK
@@ -104,6 +129,7 @@ class PreglediViewSet(viewsets.ModelViewSet):
 class MeritevViewSet(viewsets.ModelViewSet):
     queryset = Meritev.objects.all()
     serializer_class = MeritevSerializer
+    filter_backends = (filters.OrderingFilter,)
 
 
     def get_queryset(self):
@@ -229,14 +255,30 @@ class BolezniViewSet(viewsets.ModelViewSet):
     queryset = Bolezni.objects.all()
     serializer_class = BolezniSerializer
 
+    @list_route(methods=['POST'])
+    def dodajClanek(self, request):
+        bolezen = Bolezni.objects.get(id=int(request.data['bolezen']))
+        clanek = ClanekBolezni(clanek=request.data['clanek'])
+        clanek.save()
+        bolezen.clanki.add(clanek)
+
+        responseClanek = {}
+        serializer = ClanekBolezniSerializer(clanek, context={'request': request})
+        responseClanek['clanek'] = serializer.data
+        return JSONResponse(responseClanek)
+
+
+
     @list_route(methods=['DELETE'])
     def brisiClanek(self, request):
         print request.query_params['bolezen']
         bolezen = Bolezni.objects.get(id=int(request.query_params['bolezen']))
         clanekB = ClanekBolezni.objects.get(id=int(request.query_params['data']))
-        bolezen.clanki_set.remove(clanekB)
-        print bolezen
-   
+        bolezen.clanki.remove(clanekB)
+        response = Response()
+        response.status_code = 204
+        return response
+
     @list_route(methods=['GET'])
     def seznam(self, request):
         queryset = Bolezni.objects.all()
@@ -256,7 +298,7 @@ class BolezniViewSet(viewsets.ModelViewSet):
         bolezni = Bolezni.objects.filter(uporabnik = user)
 
         for bolezen in bolezni:
-            bolezen.bla += 'test'
+            #bolezen.bla += 'test'
             for zdravilo in bolezen.zdravilo.all():
                     tmp = BolezniZdravila.objects.filter(zdravilo_id=zdravilo.id, bolezni_id=bolezen.id)
                     print(tmp[0])
@@ -625,7 +667,7 @@ def registracijaPacient(request, format=None):
             return respons
         else:
             validate_password(password=password)
-            IsAlphanumericPasswordValidator().validate(passw)
+            IsAlphanumericPasswordValidator().validate(password)
             # check only ime - same as in login
             if( ime != "" ):
                 pacient = Uporabnik.objects.create_user(username=mail, email=mail, password=password, role_id="4", is_active=False,
@@ -868,9 +910,6 @@ def changePassword(request, format=None):
                     IsAlphanumericPasswordValidator().validate(newpass)
                     user.set_password(newpass)
                     user.save()
-                    response = Response()
-                    response.status_code = 200
-                    return response
                 except ValidationError as e:
                     print(e)
                     response = JSONResponse({"error": "Please choose better password. It should be at least 8 characters long and contain mixed letters and numbers. "
@@ -962,3 +1001,4 @@ def forgotPassword(request, format=None):
 class ClanekBolezniViewSet(viewsets.ModelViewSet):
     queryset = ClanekBolezni.objects.all()
     serializer_class = ClanekBolezniSerializer
+
