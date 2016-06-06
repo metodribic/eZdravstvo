@@ -22,20 +22,25 @@
                         -->
                         <td>{{ ((tableSet.perPage-1)*tableSet.perCou) + $index+1 }}</td>
                         <td title="'Uporabniško ime'" sortable="'username'" filter="{username:'text'}" >{{u.username}}</td>
-                        <td title="'Uporabniška vloga'" sortable="'role.naziv'" >{{u.role.naziv}}</td>
-                        <td title="'Datum registracije'" sortable="'date_joined'" >{{u.date_joined | date:'dd.MM.yyyy'}}</td>
-                        <td title="'Zadnji dostop'" sortable="'last_login'"  >{{u.last_login | date:'dd.MM.yyyy'}}</td>
+                        <td title="'Uporabniška vloga'" sortable="'role.naziv'" filter="{'uporVloga':'text'}">{{u.role.naziv}}</td>
+                        <td title="'Datum registracije'" sortable="'date_joined'" >
+                            <div ng-show="u.date_joined.length == 0">/</div>
+                            <div ng-show="u.date_joined.length != 0">{{u.date_joined | date:'dd.MM.yyyy'}}</div>
+                        </td>
+                        <td title="'Zadnji dostop'" sortable="'last_login'"  >
+                            <div ng-show="u.last_login == null">/</div>
+                            <div ng-show="u.last_login != null ">{{u.last_login | date:'dd.MM.yyyy'}}</div>
+                        </td>
                         <td title="'Aktiviran'" sortable="'is_acitve'" >
                             <div ng-show="u.is_active == 0">Ne</div>
                             <div ng-show="u.is_active == 1">Da</div>
                         </td>
                     </tr>
-
-                    <tr ng-show="$data.length == 0" >
-                        <td></td>
-                        <td style="color: #00a65a" >Ni uporabnikov.</td>
-                    </tr>
                 </table>
+
+                <div class="center" ng-show="niPacientov">
+                    <h3>Na voljo ni uporabnikov!</h3>
+                </div>
 
             </div>
         </div>
