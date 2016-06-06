@@ -102,6 +102,7 @@ class BolezniSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     zdravilo = ZdraviloSerializer(many=True)
     clanki = ClanekBolezniSerializer(many=True)
+
     class Meta:
         model = Bolezni
 
@@ -294,6 +295,7 @@ class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
 class BolezniZdravila(serializers.HyperlinkedModelSerializer):
     bolezen = BolezniSerializer()
     zdravilo = ZdraviloSerializer()
+    zbrisano = serializers.ReadOnlyField()
 
     class Meta:
         db_table = "tpo_bolezni_zdravilo"

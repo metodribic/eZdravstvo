@@ -89,7 +89,8 @@ angular.module('tpo')
                     $scope.izbranaZdravila = mojScope.sprememba.zdravilo;
                 }
             };
-            
+
+            /*
             $scope.dodajZdraviloVSA = function(zdravilo) {
                 if(!mojScope.sprememba.zdravilo)
                     mojScope.sprememba.zdravilo = [];
@@ -99,7 +100,7 @@ angular.module('tpo')
                     $scope.izbranaZdravila = mojScope.sprememba.zdravilo;
                 }
             };
-
+            */
 
 
             $scope.odstraniZdravilo = function(zdravilo) {
