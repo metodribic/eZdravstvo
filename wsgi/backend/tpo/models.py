@@ -133,6 +133,10 @@ class Bolezni(models.Model):
 class ClanekBolezni(models.Model):
     clanek = models.CharField(max_length=5000, blank=True)
 
+    @property
+    def title(self):
+        return self._title
+
 
 # Dovoljene(max,min,nemogoce) vrednosti za doloceno meritev
 class VrednostiMeritev(models.Model):

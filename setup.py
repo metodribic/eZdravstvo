@@ -21,7 +21,7 @@ setup(
         'djangorestframework==3.3.2',
         'mysqlclient==1.3.6',
         'django-cors-headers',
-        'django-filter',
+        'django-filter >= 0.11.0',
         'djangorestframework-filters'
     ],
     #dependency_links=[
