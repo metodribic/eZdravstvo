@@ -240,13 +240,13 @@
         </div>
         <!-- TABLE: OSEBNI PODATKI -->
 
-              <table ng-table="tableParMeritve" class="table"  ng-show="meritve.length != 0">
+              <table ng-table="tableParMeritve" class="table" show-filter="true" ng-show="meritve.length != 0">
                   <tr class="col-12" ng-repeat="meritev in $data" >
 
                 <td ui-sref="meritevPodrobno({id:meritev.id})"><i class="fa fa-search" style="cursor:pointer"></i></td>
-                      <td class="col-1" title="'Datum'" >{{meritev.datum | date:'dd.MM.yyyy, HH:mm'}}</td>
-                      <td class="col-4" title="'Tip meritve'" >{{meritev.tip_meritve.tip}}</td>
-                      <td class="col-6" title="'Šifra meritve'"  >{{meritev.tip_meritve.sifra}}</td>
+                      <td class="col-1" title="'Datum'" sortable="'datum'" >{{meritev.datum | date:'dd.MM.yyyy, HH:mm'}}</td>
+                      <td class="col-4" title="'Tip meritve'" filter="{tipMeritveTip:'text'}" >{{meritev.tip_meritve.tip}}</td>
+                      <td class="col-6" title="'Šifra meritve'" filter="{tipMeritveSifra:'text'}" >{{meritev.tip_meritve.sifra}}</td>
                       <td class="col-1" title="'Vrednost meritve'" >
                           <b>{{meritev.vrednost_meritve}}</b>&nbsp;
                 <i>(Normalno med: {{meritev.tip_meritve.normalno_min}} in {{meritev.tip_meritve.normalno_max}})</i>
