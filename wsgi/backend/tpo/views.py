@@ -235,11 +235,11 @@ class BolezniViewSet(viewsets.ModelViewSet):
         clanek = ClanekBolezni(clanek=request.data['clanek'])
         clanek.save()
         bolezen.clanki.add(clanek)
-        response = Response()
 
-        response['clanek'] = clanek
-        response.status_code = 201
-        return response
+        responseClanek = {}
+        serializer = ClanekBolezniSerializer(clanek, context={'request': request})
+        responseClanek['clanek'] = serializer.data
+        return JSONResponse(responseClanek)
 
 
 

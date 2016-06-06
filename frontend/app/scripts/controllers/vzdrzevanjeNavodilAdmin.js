@@ -48,20 +48,17 @@ angular.module('tpo')
               novClanek.clanek = $scope.novClanekBolezen;
               novClanek.bolezen = $scope.clankiBolezni.id;
               novClanek.$save(function(response){
-                console.log(response);
                 Notification.success('Članek uspešno dodan!');
-                $scope.clankiBolezni.clanki.push({'clanek':response.clanek, 'id': response.id});
+                $scope.clankiBolezni.clanki.push({'clanek':response.clanek.clanek, 'id': response.clanek.id});
                 $scope.novClanekBolezen = "";
               });
             };
 
             $scope.izberiBolezen = function (bolezen) {
                 $scope.clankiBolezni = bolezen;
-                console.log($scope.clankiBolezni);
             };
 
             $scope.odstraniClanek=function (clanek) {
-                console.log(clanek);
                 bolezenId = $scope.clankiBolezni.id;
                 clanekId = clanek.id;
                 BrisiBolezniClanek.delete({data: clanekId, bolezen: bolezenId}).$promise.then(function (response) {
@@ -78,7 +75,6 @@ angular.module('tpo')
 
 
             function responseFailedHandler (servFail ){
-                console.log(servFail);
                 Notification.error({message: servFail});
             }
 
