@@ -125,10 +125,18 @@ angular.module('tpo.models', ['ngResource', 'config'])
 })
 
 
-.factory('BolezniBrisiClanek', function($resource, API_URL) {
+.factory('BrisiBolezniClanek', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/bolezni/brisiClanek', { bolezenId: '@bolezenId' }, {
 		update: {
-			method: 'UPDATE'
+			method: 'PATCH'
+		}
+	});
+})
+
+.factory('DodajBolezniClanek', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/bolezni/dodajClanek', { bolezenId: '@bolezenId' }, {
+		update: {
+			method: 'PATCH'
 		}
 	});
 })

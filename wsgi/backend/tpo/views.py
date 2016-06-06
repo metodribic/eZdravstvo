@@ -229,14 +229,30 @@ class BolezniViewSet(viewsets.ModelViewSet):
     queryset = Bolezni.objects.all()
     serializer_class = BolezniSerializer
 
+    @list_route(methods=['POST'])
+    def dodajClanek(self, request):
+        bolezen = Bolezni.objects.get(id=int(request.data['bolezen']))
+        clanek = ClanekBolezni(clanek=request.data['clanek'])
+        clanek.save()
+        bolezen.clanki.add(clanek)
+        response = Response()
+
+        response['clanek'] = clanek
+        response.status_code = 201
+        return response
+
+
+
     @list_route(methods=['DELETE'])
     def brisiClanek(self, request):
         print request.query_params['bolezen']
         bolezen = Bolezni.objects.get(id=int(request.query_params['bolezen']))
         clanekB = ClanekBolezni.objects.get(id=int(request.query_params['data']))
-        bolezen.clanki_set.remove(clanekB)
-        print bolezen
-   
+        bolezen.clanki.remove(clanekB)
+        response = Response()
+        response.status_code = 204
+        return response
+
     @list_route(methods=['GET'])
     def seznam(self, request):
         queryset = Bolezni.objects.all()
@@ -256,7 +272,7 @@ class BolezniViewSet(viewsets.ModelViewSet):
         bolezni = Bolezni.objects.filter(uporabnik = user)
 
         for bolezen in bolezni:
-            bolezen.bla += 'test'
+            #bolezen.bla += 'test'
             for zdravilo in bolezen.zdravilo.all():
                     tmp = BolezniZdravila.objects.filter(zdravilo_id=zdravilo.id, bolezni_id=bolezen.id)
                     print(tmp[0])
@@ -868,9 +884,6 @@ def changePassword(request, format=None):
                     IsAlphanumericPasswordValidator().validate(newpass)
                     user.set_password(newpass)
                     user.save()
-                    response = Response()
-                    response.status_code = 200
-                    return response
                 except ValidationError as e:
                     print(e)
                     response = JSONResponse({"error": "Please choose better password. It should be at least 8 characters long and contain mixed letters and numbers. "
