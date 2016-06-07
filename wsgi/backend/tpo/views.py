@@ -576,20 +576,29 @@ def urejanjeZdravilAdmin(request, format=None):
     tabelaDeleted = request.data['tabelaZbrisanih']
     izbranaBolezen = request.data['izbranaBolezen']['id']
 
+    # dodaj zdravilo
     for a in tabelaAdded:
-        BolezniZdravila.objects.create(bolezni_id=izbranaBolezen, zdravilo_id=a['id'], zbrisano=False)
+        try:
+            bolezniZdravila = BolezniZdravila.objects.get(bolezni_id=izbranaBolezen, zdravilo_id=a['id'])
+            bolezniZdravila.zbrisano = False
+            bolezniZdravila.save()
 
+        except ObjectDoesNotExist:
+            BolezniZdravila.objects.create(bolezni_id=izbranaBolezen, zdravilo_id=a['id'], zbrisano=False)
+
+    # brisi zdravilo
     for d in tabelaDeleted:
-        bolezniZdravila = BolezniZdravila.objects.get(bolezni_id=izbranaBolezen, zdravilo_id=d['id'])
+        bolezniZdravila = BolezniZdravila.objects.get(bolezni_id=izbranaBolezen, zdravilo_id=d['zdravilo']['id'])
         bolezniZdravila.zbrisano=True
         bolezniZdravila.save()
 
-
     bolezen = Bolezni.objects.get(id=izbranaBolezen)
-
-
+    tmp = BolezniZdravila.objects.filter(bolezni_id=bolezen.id)
+    bolezen.deleted = BolezniZdravilaSerializer(tmp, many=True, context={'request': request}).data
     serializer = BolezniSerializer(bolezen, context={'request': request})
+
     return  Response(serializer.data)
+
 
 @api_view(['POST'])
 def ustvariPregled(request, format=None):
@@ -608,12 +617,8 @@ def ustvariPregled(request, format=None):
         dieta = request.data.get('dieta', [])
         #datum_naslednjega = request.data['datum_naslednjega']
         opombe = request.data['opombe']
-
-
         zdravnik = Zdravnik.objects.get(id=zdravnikID)
         uporabnik = Uporabnik.objects.get(id=uporabnikID)
-
-
         pregled = Pregled.objects.create(opombe=opombe,
                                          datum=datum_pregleda,
                                          zdravnik=zdravnik,
