@@ -3,7 +3,7 @@ from rest_framework.authtoken.models import Token
 
 from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni, Dieta, \
     Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, \
-    PersonalizacijaNadzornePlosce, ClanekBolezni
+    PersonalizacijaNadzornePlosce, ClanekBolezni, BolezniZdravila
 
 """ POSTA """
 class PostaSerializer(serializers.HyperlinkedModelSerializer):
@@ -85,9 +85,17 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
 """ ZDRAVILO """
 class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
+    deleted = serializers.SerializerMethodField('is_deleted')
 
     class Meta:
         model = Zdravilo
+
+    def is_deleted(self, obj):
+        try:
+            return obj.deleted
+        except Exception:
+            return None
+
 
 """ CLANKI OD BOLEZNI """
 class ClanekBolezniSerializer(serializers.HyperlinkedModelSerializer):
@@ -103,9 +111,16 @@ class BolezniSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     zdravilo = ZdraviloSerializer(many=True)
     clanki = ClanekBolezniSerializer(many=True)
+    deleted = serializers.SerializerMethodField('is_deleted')
 
     class Meta:
         model = Bolezni
+
+    def is_deleted(self, obj):
+        try:
+            return obj.deleted
+        except Exception:
+            return None
 
 
 """ DIETA NAVODILA """
@@ -295,14 +310,15 @@ class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
         model = Uporabnik
         depth = 3   # izpise nested fielde (diete, bolezni,..)
 
-
-class BolezniZdravila(serializers.HyperlinkedModelSerializer):
-    bolezen = BolezniSerializer()
+class BolezniZdravilaSerializer(serializers.ModelSerializer):
+    bolezni = serializers.IntegerField(source='bolezni.id')
+    zbrisano = serializers.BooleanField()
     zdravilo = ZdraviloSerializer()
-    zbrisano = serializers.ReadOnlyField()
 
     class Meta:
+        fields = ('bolezni', 'zbrisano', 'zdravilo',)
+        depth = 1
+        model = BolezniZdravila
         db_table = "tpo_bolezni_zdravilo"
-
 
 

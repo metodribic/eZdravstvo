@@ -248,8 +248,9 @@ angular.module('tpo')
       //funkcija za pridobivanje zdravil
       $scope.ustvariBolezen = function (bolezen) {
 	      //Nafilaj zdravila
-	      for (var i=0; i<bolezen.zdravilo.length; i++) {
-		      mojScope.dodajZdravilo(bolezen.zdravilo[i]);
+	      for (var i=0; i<bolezen.deleted.length; i++) {
+              if(bolezen.deleted[i].zbrisano !== true)
+		        mojScope.dodajZdravilo(bolezen.deleted[i].zdravilo);
 	      }
 	      //Dodaj bolezni v pregled.bolezen, da jih na koncu pushas na server
 	      if(!mojScope.pregled.bolezen)
@@ -258,8 +259,8 @@ angular.module('tpo')
       };
 
       $scope.odstraniBolezen = function(bolezen) {
-	      for (var i=0; i<bolezen.zdravilo.length; i++) {
-		      mojScope.odstraniZdravilo(bolezen.zdravilo[i]);
+	      for (var i=0; i<bolezen.deleted.length; i++) {
+		      mojScope.odstraniZdravilo(bolezen.deleted.zdravilo[i]);
 	      }
 	      var bolezni = mojScope.pregled.bolezen;
 	      if(!bolezni)

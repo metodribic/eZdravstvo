@@ -1,4 +1,4 @@
-import itertools
+import itertools, json as jsonn
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.serializers import json
@@ -34,7 +34,7 @@ from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik,
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
     LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer, SifrantRegistriranihSerializer, \
-    VrednostiMeritevSerializer, KontaktnaOsebaSerializer, PersonalizacijaNadzornePlosceSerializer, ClanekBolezniSerializer
+    VrednostiMeritevSerializer, KontaktnaOsebaSerializer, PersonalizacijaNadzornePlosceSerializer, ClanekBolezniSerializer, BolezniZdravilaSerializer
 
 import random
 
@@ -305,6 +305,11 @@ class BolezniViewSet(viewsets.ModelViewSet):
     @list_route(methods=['GET'])
     def seznam(self, request):
         queryset = Bolezni.objects.all()
+
+        for bolezen in queryset:
+            tmp = BolezniZdravila.objects.filter(bolezni_id=bolezen.id)
+            bolezen.deleted = BolezniZdravilaSerializer(tmp, many=True, context={'request': self.request}).data
+
         serializer = BolezniSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
  
@@ -319,15 +324,9 @@ class BolezniViewSet(viewsets.ModelViewSet):
             print(e)
 
         bolezni = Bolezni.objects.filter(uporabnik = user)
-
         for bolezen in bolezni:
-            #bolezen.bla += 'test'
-            for zdravilo in bolezen.zdravilo.all():
-                    tmp = BolezniZdravila.objects.filter(zdravilo_id=zdravilo.id, bolezni_id=bolezen.id)
-                    print(tmp[0])
-
-                    if(tmp != None):
-                        zdravilo.zdravilo += ' ' + str(tmp[0].zbrisano)
+            tmp = BolezniZdravila.objects.filter(bolezni_id=bolezen.id)
+            bolezen.deleted = BolezniZdravilaSerializer(tmp, many=True, context={'request': self.request}).data
         serializer = BolezniSerializer(bolezni, many=True, context={'request': self.request})
         return bolezni
 
@@ -1031,4 +1030,3 @@ def forgotPassword(request, format=None):
 class ClanekBolezniViewSet(viewsets.ModelViewSet):
     queryset = ClanekBolezni.objects.all()
     serializer_class = ClanekBolezniSerializer
-
