@@ -44,23 +44,21 @@ angular.module('tpo')
 
             /*FUNKCIJE*/
 
-            req = new UrejanjeZdravilAdmin();
 
             //funkcija, ki shrani spremembe
-            $scope.shraniSpremembe=function () {
-
+            $scope.shraniSpremembe = function () {
+                console.log($scope.obstojecaZbrisana);
+                req = new UrejanjeZdravilAdmin();
                 req.tabelaDodanih = $scope.tabelaDodanih;
                 req.tabelaZbrisanih = $scope.obstojecaZbrisana;
-
                 req.izbranaBolezen = $scope.izbranaBolezen;
-
-                req.$save( function(response){
+                console.log(req);
+                req.$save(function(response){
+                    console.log(response);
                     Notification.success({message: "Zdravila posodobljena." , replaceMessage: true});
-                    $scope.izbranaZdravila = response.zdravilo;
-                    console.log($scope.izbranaZdravila);
+                    $scope.izbranaZdravila = response.deleted;
                     $scope.vsaZdr = "";
                     //$state.reload();
-
                 }, function (err) {
                     responseFailedHandler ( $scope, err.data.error );
                 });
@@ -69,14 +67,16 @@ angular.module('tpo')
 
             //funkcija za pridobivanje zdravil
             $scope.ustvariBolezen = function (bolezen) {
+                $scope.izbranaZdravila = [];
+                mojScope.sprememba.zdravilo = [];
                 $scope.izbranaBolezen = bolezen;
                 //tukaj dobis stevilo zdravil, ki jih ima bolezen
                 //console.log(bolezen.zdravilo.length);
 
                 //Nafilaj zdravila
                 for (var i=0; i<bolezen.deleted.length; i++) {
-                    if(bolezen.deleted[i].zbrisano !== true)
-                        mojScope.dodajZdravilo(bolezen.deleted[i].zdravilo);
+                    // if(bolezen.deleted[i].zbrisano !== true)
+                    mojScope.dodajZdravilo(bolezen.deleted[i]);
                 }
                 console.log($scope.izbranaZdravila);
             };
@@ -92,23 +92,26 @@ angular.module('tpo')
                 }
             };
 
-            /*
-            $scope.dodajZdraviloVSA = function(zdravilo) {
+            $scope.dodajZdraviloSelect = function(zdravilo) {
+                // console.log(zdravilo);
                 if(!mojScope.sprememba.zdravilo)
                     mojScope.sprememba.zdravilo = [];
-                var idx = existsInArray(mojScope.sprememba.zdravilo, 'zdravilo', zdravilo.zdravilo);
+                console.log(mojScope.sprememba.zdravilo);
+                var idx = existsInArray(mojScope.sprememba.zdravilo, 'zdravilo', zdravilo);
                 if(idx == -1) {
-                    mojScope.tabelaDodanih.push(zdravilo);
+                    tmp = {
+                      'zdravilo': zdravilo
+                    };
+                    mojScope.sprememba.zdravilo.push(tmp);
                     $scope.izbranaZdravila = mojScope.sprememba.zdravilo;
+                    $scope.tabelaDodanih.push(zdravilo);
                 }
             };
-            */
 
 
             $scope.odstraniZdravilo = function(zdravilo) {
                 //tukaj dobim vsa izbrana zdravila
                 var zdravila = mojScope.sprememba.zdravilo;
-                console.log(zdravila);
 
                 //ce so prazna
                 if(!zdravila)
@@ -123,12 +126,13 @@ angular.module('tpo')
                         zdravila = zdravila.splice(idx,1);
                         $scope.zdravila = zdravila;
                     }
-
                     //pobrisano zdravilo dodam v tabeloZbrisanih
-                    $scope.obstojecaZbrisana.push(zdravila[idx]);
+                    console.log(idx);
+                    console.log(zdravila);
+                    $scope.obstojecaZbrisana.push(zdravila[0]);
+                    console.log($scope.obstojecaZbrisana);
                 }
             };
-
 
             function responseFailedHandler (servFail ){
                 console.log(servFail);
@@ -142,5 +146,17 @@ angular.module('tpo')
                 }
                 return -1;
             }
+
+            /*
+            $scope.dodajZdraviloVSA = function(zdravilo) {
+                if(!mojScope.sprememba.zdravilo)
+                    mojScope.sprememba.zdravilo = [];
+                var idx = existsInArray(mojScope.sprememba.zdravilo, 'zdravilo', zdravilo.zdravilo);
+                if(idx == -1) {
+                    mojScope.tabelaDodanih.push(zdravilo);
+                    $scope.izbranaZdravila = mojScope.sprememba.zdravilo;
+                }
+            };
+            */
 
         }]);
