@@ -41,7 +41,7 @@ angular.module('tpo')
             //console.log(response);
             });
 
-            
+
             /*FUNKCIJE*/
 
             req = new UrejanjeZdravilAdmin();
@@ -64,7 +64,7 @@ angular.module('tpo')
                 }, function (err) {
                     responseFailedHandler ( $scope, err.data.error );
                 });
-            }
+            };
 
 
             //funkcija za pridobivanje zdravil
@@ -78,6 +78,7 @@ angular.module('tpo')
                     if(bolezen.deleted[i].zbrisano !== true)
                         mojScope.dodajZdravilo(bolezen.deleted[i].zdravilo);
                 }
+                console.log($scope.izbranaZdravila);
             };
 
 
@@ -143,4 +144,3 @@ angular.module('tpo')
             }
 
         }]);
-

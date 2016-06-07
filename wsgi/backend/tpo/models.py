@@ -100,7 +100,8 @@ class NavodilaDieta(models.Model):
 
 class Zdravilo(models.Model):
     zdravilo = models.CharField(max_length=100)
-    navodila = models.ManyToManyField('NavodilaZdravila', blank=True)
+    navodila = models.CharField(max_length=1024)
+    #navodila = models.ManyToManyField('NavodilaZdravila', blank=True)
 
 class NavodilaZdravila(models.Model):
     navodilo = models.CharField(max_length=512)

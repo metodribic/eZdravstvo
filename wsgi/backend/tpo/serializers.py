@@ -3,7 +3,7 @@ from rest_framework.authtoken.models import Token
 
 from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni, Dieta, \
     Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, \
-    PersonalizacijaNadzornePlosce, ClanekBolezni, BolezniZdravila
+    PersonalizacijaNadzornePlosce, ClanekBolezni, BolezniZdravila, NavodilaZdravila
 
 """ POSTA """
 class PostaSerializer(serializers.HyperlinkedModelSerializer):
@@ -318,7 +318,14 @@ class BolezniZdravilaSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('bolezni', 'zbrisano', 'zdravilo',)
         depth = 1
+        depth = 1
         model = BolezniZdravila
         db_table = "tpo_bolezni_zdravilo"
+
+class NavodilaZdravilaSerializer(serializers.ModelSerializer):
+    navodilo = serializers.CharField(max_length=512)
+
+    class Meta:
+        model = NavodilaZdravila
 
 

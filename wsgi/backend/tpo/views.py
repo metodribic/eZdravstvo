@@ -29,12 +29,13 @@ from pprint import pprint
 # Create your views here.
 from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock, \
     NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, UporabnikZdravnik, IsAlphanumericPasswordValidator, \
-    PersonalizacijaNadzornePlosce, BolezniZdravila, ClanekBolezni
+    PersonalizacijaNadzornePlosce, BolezniZdravila, ClanekBolezni, NavodilaZdravila
 
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
     LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer, SifrantRegistriranihSerializer, \
-    VrednostiMeritevSerializer, KontaktnaOsebaSerializer, PersonalizacijaNadzornePlosceSerializer, ClanekBolezniSerializer, BolezniZdravilaSerializer
+    VrednostiMeritevSerializer, KontaktnaOsebaSerializer, PersonalizacijaNadzornePlosceSerializer, ClanekBolezniSerializer, BolezniZdravilaSerializer, \
+    NavodilaZdravilaSerializer
 
 import random
 
@@ -1030,3 +1031,9 @@ def forgotPassword(request, format=None):
 class ClanekBolezniViewSet(viewsets.ModelViewSet):
     queryset = ClanekBolezni.objects.all()
     serializer_class = ClanekBolezniSerializer
+
+
+# CLANKI
+class NavodilaZdravilaViewSet(viewsets.ModelViewSet):
+    queryset = NavodilaZdravila.objects.all()
+    serializer_class = NavodilaZdravilaSerializer

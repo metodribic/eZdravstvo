@@ -5,7 +5,7 @@ from tpo.views import UporabnikiViewSet, PreglediViewSet, PostaViewSet, Ambulant
     OsebjeViewSet, MeritevViewSet, DietaViewSet, BolezniViewSet, ZdraviloViewSet, RolesViewSet, login,\
     NavodiloDietaViewSet, changePassword, ZdravnikUporabnikiViewSet, registracijaAdmin, registracijaPacient, aktivacija, \
     SifrantRegistriranihViewSet, VrednostiMeritevViewSet, KontaktnaOsebaViewSet, changeZdravnik, ustvariPregled, forgotPassword, \
-    PersonalizacijaViewSet, urejanjeZdravilAdmin, ClanekBolezniViewSet
+    PersonalizacijaViewSet, urejanjeZdravilAdmin, ClanekBolezniViewSet, NavodilaZdravilaViewSet
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'uporabniki', UporabnikiViewSet)
@@ -27,6 +27,7 @@ router.register(r'sifrant_registriranih', SifrantRegistriranihViewSet)
 router.register(r'vrednosti_meritev', VrednostiMeritevViewSet)
 router.register(r'kontaktna_oseba', KontaktnaOsebaViewSet)
 router.register(r'clanki_bolezni', ClanekBolezniViewSet)
+router.register(r'zdravila_navodila', NavodilaZdravilaViewSet)
 
 
 urlpatterns = [
