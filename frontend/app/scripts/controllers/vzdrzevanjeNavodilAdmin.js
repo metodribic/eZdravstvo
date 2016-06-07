@@ -28,23 +28,22 @@ angular.module('tpo')
             //pridobi vse bolezni za izbiro
             BolezniSeznam.query().$promise.then(function(response){
                 $scope.bolezniSeznam = response;
-                // console.log(response);
             });
 
             //pridobi vsa zdravila za izbiro
             ZdravilaSeznam.query().$promise.then(function(response) {
                 $scope.zdravilaSeznam = response;
-                //console.log(response);
             });
 
             //pridobi vse diete za izbiro
             DieteSeznam.query().$promise.then(function (response) {
                 $scope.dieteSeznam = response;
-                //console.log(response);
             });
+
 
             /*FUNKCIJE*/
 
+            //doda clanek bolezni
             $scope.dodajClanekBolezen = function(){
               novClanek = new DodajBolezniClanek();
               novClanek.clanek = $scope.novClanekBolezen;
@@ -56,10 +55,14 @@ angular.module('tpo')
               });
             };
 
+
+            //vrne izbrano bolezen
             $scope.izberiBolezen = function (bolezen) {
                 $scope.clankiBolezni = bolezen;
             };
 
+
+            //odstrani clanek bolezni
             $scope.odstraniClanek=function (clanek) {
                 bolezenId = $scope.clankiBolezni.id;
                 clanekId = clanek.id;
@@ -85,41 +88,41 @@ angular.module('tpo')
                     $scope.novClanekZdravilo = "";
                 });
                 
-                console.log($scope.clankiZdravila.id);
+                //console.log($scope.clankiZdravila.id);
                 //
 
             };
 
+            //vrne izbrano zdravilo
             $scope.izberiZdravilo = function (zdravilo) {
                 $scope.clankiZdravila = zdravilo;
             };
 
 
+            //doda navodilo dieti
             $scope.dodajClanekDieta = function () {
                 novoNavodilo = new DodajDietiClanek();
                 novoNavodilo.url = $scope.novClanekDiete;
                 novoNavodilo.dieta = $scope.clankiDiete.id;
-                //console.log(novoNavodilo.dieta);
                 novoNavodilo.$save(function(response){
                     Notification.success('Navodilo uspešno dodano!');
-                    console.log(response.navodilo);
                     $scope.clankiDiete.navodila.push({'url':response.navodilo.url, 'id': response.navodilo.id})
                 });
             };
 
+
+            //vrne izbrano dieto
             $scope.izberiDieto = function (dieta) {
                 $scope.clankiDiete = dieta;
-                 //console.log($scope.clankiDiete.navodila);
             };
 
 
-            
+            //odstrani navodilo diete
             $scope.odstraniNavodilo=function (navodilo) {
                 dietaId = $scope.clankiDiete.id;
                 navodiloId = navodilo.id;
                 BrisiDietiClanek.delete({data: navodiloId, dieta: dietaId}).$promise.then(function (response) {
                     Notification.success('Navodilo uspešno odstranjeno');
-
                     // odstrani navodilo iz tabele
                     for(i = 0; i< $scope.clankiDiete.navodila.length; i++){
                       if($scope.clankiDiete.navodila[i].id === navodiloId){
