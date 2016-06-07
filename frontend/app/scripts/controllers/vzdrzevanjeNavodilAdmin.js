@@ -102,8 +102,8 @@ angular.module('tpo')
                 //console.log(novoNavodilo.dieta);
                 novoNavodilo.$save(function(response){
                     Notification.success('Navodilo uspešno dodano!');
-                    console.log(response);
-                    //$scope.clankiDiete.navodila.push({'url':response.url.clanek, 'id': response.clanek.id})
+                    console.log(response.navodilo);
+                    $scope.clankiDiete.navodila.push({'url':response.navodilo.url, 'id': response.navodilo.id})
                 });
             };
 

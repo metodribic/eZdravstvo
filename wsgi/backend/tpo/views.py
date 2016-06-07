@@ -236,19 +236,18 @@ class DietaViewSet(viewsets.ModelViewSet):
     def dodajClanekDieta(self, request):
         dieta = Dieta.objects.get(id=int(request.data['dieta']))
         navodilaD = NavodilaDieta(url=(request.data['url']))
-        print navodilaD
         navodilaD.save()
         dieta.navodila.add(navodilaD)
 
         responseNavodilo = {}
-        serializer = NavodilaDietaSerializer(url, context={'request': request})
+        serializer = NavodilaDietaSerializer(navodilaD, context={'request': request})
         responseNavodilo['navodilo'] = serializer.data
         return JSONResponse(responseNavodilo)
 
 
     @list_route(methods=['DELETE'])
     def brisiClanekDieta(self, request):
-        print request.query_params['dieta']
+        print request
         dieta = Dieta.objects.get(id=int(request.query_params['dieta']))
         navodilaD = NavodilaDieta.objects.get(id=int(request.query_params['data']))
         dieta.navodila.remove(navodilaD)
