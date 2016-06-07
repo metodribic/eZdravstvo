@@ -125,6 +125,7 @@ angular.module('tpo')
                 novoNavodilo.$save(function(response){
                     Notification.success('Navodilo uspešno dodano!');
                     $scope.clankiDiete.navodila.push({'url':response.navodilo.url, 'id': response.navodilo.id})
+                    $scope.novClanekDieta = "";
                 });
             };
 
