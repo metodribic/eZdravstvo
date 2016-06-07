@@ -121,7 +121,7 @@ angular.module('tpo')
                     Notification.success('Navodilo uspešno odstranjeno');
 
                     // odstrani navodilo iz tabele
-                    for(i = 0; i< $scope.clankiDiete.url.length; i++){
+                    for(i = 0; i< $scope.clankiDiete.navodila.length; i++){
                       if($scope.clankiDiete.navodila[i].id === navodiloId){
                         $scope.clankiDiete.navodila.splice(i, 1);
                       }
