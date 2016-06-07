@@ -74,8 +74,9 @@ angular.module('tpo')
                 //console.log(bolezen.zdravilo.length);
 
                 //Nafilaj zdravila
-                for (var i=0; i<bolezen.zdravilo.length; i++) {
-                    mojScope.dodajZdravilo(bolezen.zdravilo[i]);
+                for (var i=0; i<bolezen.deleted.length; i++) {
+                    if(bolezen.deleted[i].zbrisano !== true)
+                        mojScope.dodajZdravilo(bolezen.deleted[i].zdravilo);
                 }
             };
 
