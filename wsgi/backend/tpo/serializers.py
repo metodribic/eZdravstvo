@@ -81,20 +81,21 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
         return instance
 
 
+class NavodilaZdravilaSerializer(serializers.ModelSerializer):
+    url = serializers.CharField(max_length=512)
+
+    class Meta:
+        model = NavodilaZdravila
+
+
 
 """ ZDRAVILO """
 class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
-    deleted = serializers.SerializerMethodField('is_deleted')
+    navodila = NavodilaZdravilaSerializer(many=True)
 
     class Meta:
         model = Zdravilo
-
-    def is_deleted(self, obj):
-        try:
-            return obj.deleted
-        except Exception:
-            return None
 
 
 """ CLANKI OD BOLEZNI """
@@ -321,11 +322,5 @@ class BolezniZdravilaSerializer(serializers.ModelSerializer):
         depth = 1
         model = BolezniZdravila
         db_table = "tpo_bolezni_zdravilo"
-
-class NavodilaZdravilaSerializer(serializers.ModelSerializer):
-    navodilo = serializers.CharField(max_length=512)
-
-    class Meta:
-        model = NavodilaZdravila
 
 

@@ -338,11 +338,27 @@ class ZdraviloViewSet(viewsets.ModelViewSet):
     serializer_class = ZdraviloSerializer
 
     @list_route(methods=['POST'])
-    def dodajClanek(self, request):
+    def dodajClanekZdravilo(self, request):
+        print request
         zdravilo = Zdravilo.objects.get(id=int(request.data['zdravilo']))
-        zdravilo.navodila.add(request.data['navodila'])
+        navodiloZ = NavodilaZdravila(url=(request.data['url']))
+        navodiloZ.save()
+        zdravilo.navodila.add(navodiloZ)
 
+        responseNavodilo = {}
+        serializer = NavodilaZdravilaSerializer(navodiloZ, context={'request': request})
+        responseNavodilo['navodilo'] = serializer.data
+        return JSONResponse(responseNavodilo)
 
+    @list_route(methods=['DELETE'])
+    def brisiClanekZdravilo(self, request):
+        print request
+        zdravilo = Zdravilo.objects.get(id=int(request.query_params['zdravilo']))
+        navodilaZ = NavodilaZdravila.objects.get(id=int(request.query_params['data']))
+        zdravilo.navodila.remove(navodilaZ)
+        response = Response()
+        response.status_code = 204
+        return response
 
     @list_route(methods=['GET'])
     def seznam(self, request):

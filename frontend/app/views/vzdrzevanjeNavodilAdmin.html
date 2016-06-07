@@ -113,11 +113,11 @@
                 </thead>
 
                 <tbody>
-                    <tr ng-repeat="navodilo in clankiZdravila.navodila track by $index">
-                        <td><a ng-href="{{navodilo.navodila}}">{{navodilo.navodila}}</a>
+                    <tr ng-repeat="navo in clankiZdravila.navodila">
+                        <td><a ng-href="{{navo.url}}">{{navo.url}}</a>
                         <!-- Button za brisat -->
                         <td>
-                            <button type="button" class="btn btn-default btn-xs" ng-click="odstraniNavodilo(navodilo)">
+                            <button type="button" class="btn btn-default btn-xs" ng-click="odstraniNavodiloZdravilo(navo)">
                               <span class="fa fa-trash" aria-hidden="true"></span> Briši
                             </button>
                         </td>
