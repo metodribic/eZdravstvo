@@ -47,6 +47,7 @@ angular.module('tpo')
                         });
                     }
                 }
+                $scope.api.clearElement();
                 $scope.data = data;
             }, function(error) {
                 console.log(error);
