@@ -66,6 +66,7 @@ angular.module('tpo')
             $scope.odstraniClanek=function (clanek) {
                 bolezenId = $scope.clankiBolezni.id;
                 clanekId = clanek.id;
+
                 BrisiBolezniClanek.delete({data: clanekId, bolezen: bolezenId}).$promise.then(function (response) {
                     Notification.success('Članek uspešno odstranjen');
 
@@ -77,27 +78,44 @@ angular.module('tpo')
                     }
                 });
             };
-            
+
+
+            //dodaj navodilo zdravila
             $scope.dodajClanekZdravilo = function () {
                 novClanekZdravilo = new DodajZdraviluClanek();
-                novClanekZdravilo.navodila = $scope.novClanekZdravila;
+                novClanekZdravilo.url = $scope.novClanekZdravila;
                 novClanekZdravilo.zdravilo = $scope.clankiZdravila.id;
+
                 novClanekZdravilo.$save(function (response) {
                    Notification.success('Navodilo uspešno dodano!');
-                    $scope.clankiZdravila.navodila.push({'navodila':response.navodila, 'id': response.navodila.id});
+                    $scope.clankiZdravila.navodila.push({'url':response.navodilo.url, 'id': response.navodilo.id});
                     $scope.novClanekZdravilo = "";
                 });
-                
-                //console.log($scope.clankiZdravila.id);
-                //
-
             };
 
+            
             //vrne izbrano zdravilo
             $scope.izberiZdravilo = function (zdravilo) {
                 $scope.clankiZdravila = zdravilo;
             };
 
+
+            //izbrise navodilo zdravila
+            $scope.odstraniNavodiloZdravilo=function (navodilo) {
+                zdraviloId = $scope.clankiZdravila.id;
+                navodiloZdraviloId = navodilo.id;
+
+                BrisiZdraviluClanek.delete({data: navodiloZdraviloId, zdravilo: zdraviloId}).$promise.then(function (response) {
+                    Notification.success('Članek uspešno odstranjen');
+
+                    // odstrani clanek iz tabele
+                    for(i = 0; i< $scope.clankiZdravila.navodila.length; i++){
+                      if($scope.clankiZdravila.navodila[i].id === navodiloZdraviloId){
+                        $scope.clankiZdravila.navodila.splice(i, 1);
+                      }
+                    }
+                });
+            }
 
             //doda navodilo dieti
             $scope.dodajClanekDieta = function () {
@@ -107,6 +125,7 @@ angular.module('tpo')
                 novoNavodilo.$save(function(response){
                     Notification.success('Navodilo uspešno dodano!');
                     $scope.clankiDiete.navodila.push({'url':response.navodilo.url, 'id': response.navodilo.id})
+                    $scope.novClanekDieta = "";
                 });
             };
 
