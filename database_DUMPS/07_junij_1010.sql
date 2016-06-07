@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `tpo` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+USE `tpo`;
 -- MySQL dump 10.16  Distrib 10.1.13-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: tpo
@@ -1306,4 +1308,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-07 18:35:15
+-- Dump completed on 2016-06-07 18:41:16
