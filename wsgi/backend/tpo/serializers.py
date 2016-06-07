@@ -111,6 +111,8 @@ class BolezniSerializer(serializers.HyperlinkedModelSerializer):
 """ DIETA NAVODILA """
 class NavodilaDietaSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
+    url = serializers.CharField()
+
     class Meta:
         model = NavodilaDieta
 
@@ -119,6 +121,7 @@ class NavodilaDietaSerializer(serializers.HyperlinkedModelSerializer):
 class DietaSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     navodila = NavodilaDietaSerializer(many=True)
+
     class Meta:
         model = Dieta
 

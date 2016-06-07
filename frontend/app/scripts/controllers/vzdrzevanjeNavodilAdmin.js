@@ -5,8 +5,10 @@
 angular.module('tpo')
     .controller('vzdrzevanjeNavodilAdmin', ['$scope', '$state', 'Uporabniki', 'BolezniSeznam', 'ZdravilaSeznam', 'DieteSeznam',
         'Zdravila', 'UrejanjeZdravilAdmin', '$resource', '$rootScope', 'AuthService', 'Notification', 'BrisiBolezniClanek','DodajBolezniClanek',
+        'DodajZdraviluClanek', 'BrisiZdraviluClanek', 'DodajDietiClanek', 'BrisiDietiClanek',
         function ($scope, $state, Uporabniki, BolezniSeznam, ZdravilaSeznam, DieteSeznam,
-                  Zdravila, UrejanjeZdravilAdmin, $resource, $rootScope, AuthService, Notification, BrisiBolezniClanek, DodajBolezniClanek) {
+                  Zdravila, UrejanjeZdravilAdmin, $resource, $rootScope, AuthService, Notification, BrisiBolezniClanek, DodajBolezniClanek,
+                  DodajZdraviluClanek, BrisiZdraviluClanek, DodajDietiClanek, BrisiDietiClanek) {
 
             $scope.novClanekBolezen = "";
 
@@ -68,6 +70,60 @@ angular.module('tpo')
                     for(i = 0; i< $scope.clankiBolezni.clanki.length; i++){
                       if($scope.clankiBolezni.clanki[i].id === clanekId){
                         $scope.clankiBolezni.clanki.splice(i, 1);
+                      }
+                    }
+                });
+            };
+            
+            $scope.dodajClanekZdravilo = function () {
+                novClanekZdravilo = new DodajZdraviluClanek();
+                novClanekZdravilo.navodila = $scope.novClanekZdravila;
+                novClanekZdravilo.zdravilo = $scope.clankiZdravila.id;
+                novClanekZdravilo.$save(function (response) {
+                   Notification.success('Navodilo uspešno dodano!');
+                    $scope.clankiZdravila.navodila.push({'navodila':response.navodila, 'id': response.navodila.id});
+                    $scope.novClanekZdravilo = "";
+                });
+                
+                console.log($scope.clankiZdravila.id);
+                //
+
+            };
+
+            $scope.izberiZdravilo = function (zdravilo) {
+                $scope.clankiZdravila = zdravilo;
+            };
+
+
+            $scope.dodajClanekDieta = function () {
+                novoNavodilo = new DodajDietiClanek();
+                novoNavodilo.url = $scope.novClanekDiete;
+                novoNavodilo.dieta = $scope.clankiDiete.id;
+                //console.log(novoNavodilo.dieta);
+                novoNavodilo.$save(function(response){
+                    Notification.success('Navodilo uspešno dodano!');
+                    console.log(response);
+                    //$scope.clankiDiete.navodila.push({'url':response.url.clanek, 'id': response.clanek.id})
+                });
+            };
+
+            $scope.izberiDieto = function (dieta) {
+                $scope.clankiDiete = dieta;
+                 //console.log($scope.clankiDiete.navodila);
+            };
+
+
+            
+            $scope.odstraniNavodilo=function (navodilo) {
+                dietaId = $scope.clankiDiete.id;
+                navodiloId = navodilo.id;
+                BrisiDietiClanek.delete({data: navodiloId, dieta: dietaId}).$promise.then(function (response) {
+                    Notification.success('Navodilo uspešno odstranjeno');
+
+                    // odstrani navodilo iz tabele
+                    for(i = 0; i< $scope.clankiDiete.url.length; i++){
+                      if($scope.clankiDiete.navodila[i].id === navodiloId){
+                        $scope.clankiDiete.navodila.splice(i, 1);
                       }
                     }
                 });

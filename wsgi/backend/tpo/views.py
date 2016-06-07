@@ -232,6 +232,30 @@ class DietaViewSet(viewsets.ModelViewSet):
     queryset = Dieta.objects.all()
     serializer_class = DietaSerializer
 
+    @list_route(methods=['POST'])
+    def dodajClanekDieta(self, request):
+        dieta = Dieta.objects.get(id=int(request.data['dieta']))
+        navodilaD = NavodilaDieta(url=(request.data['url']))
+        print navodilaD
+        navodilaD.save()
+        dieta.navodila.add(navodilaD)
+
+        responseNavodilo = {}
+        serializer = NavodilaDietaSerializer(url, context={'request': request})
+        responseNavodilo['navodilo'] = serializer.data
+        return JSONResponse(responseNavodilo)
+
+
+    @list_route(methods=['DELETE'])
+    def brisiClanekDieta(self, request):
+        print request.query_params['dieta']
+        dieta = Dieta.objects.get(id=int(request.query_params['dieta']))
+        navodilaD = NavodilaDieta.objects.get(id=int(request.query_params['data']))
+        dieta.navodila.remove(navodilaD)
+        response = Response()
+        response.status_code = 204
+        return response
+
     @list_route(methods=['GET'])
     def seznam(self, request):
         queryset = Dieta.objects.all()
@@ -313,6 +337,13 @@ class BolezniViewSet(viewsets.ModelViewSet):
 class ZdraviloViewSet(viewsets.ModelViewSet):
     queryset = Zdravilo.objects.all()
     serializer_class = ZdraviloSerializer
+
+    @list_route(methods=['POST'])
+    def dodajClanek(self, request):
+        zdravilo = Zdravilo.objects.get(id=int(request.data['zdravilo']))
+        zdravilo.navodila.add(request.data['navodila'])
+
+
 
     @list_route(methods=['GET'])
     def seznam(self, request):

@@ -161,6 +161,22 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
+.factory('BrisiZdraviluClanek', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/zdravila/brisiClanekZdravilo', { zdraviloId: '@zdraviloId' }, {
+		update: {
+			method: 'PATCH'
+		}
+	});
+})
+
+.factory('DodajZdraviluClanek', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/zdravila/dodajClanekZdravilo', { zdraviloId: '@zdraviloId' }, {
+		update: {
+			method: 'PATCH'
+		}
+	});
+})
+
 .factory('Zdravnik', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/zdravnik/:zdravnikId', { zdravnikId: '@zdravnikId' }, {
 		update: {
@@ -208,6 +224,22 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	return $resource('http://' + API_URL + '/diete/seznam', { dietaId: '@dietaId' }, {
 		update: {
 			method: 'UPDATE'
+		}
+	});
+})
+
+.factory('BrisiDietiClanek', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/diete/brisiClanekDieta', { dietaId: '@dietaId' }, {
+		update: {
+			method: 'PATCH'
+		}
+	});
+})
+
+.factory('DodajDietiClanek', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/diete/dodajClanekDieta', { dietaId: '@dietaId' }, {
+		update: {
+			method: 'PATCH'
 		}
 	});
 });

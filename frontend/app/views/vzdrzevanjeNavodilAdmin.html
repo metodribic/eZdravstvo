@@ -25,7 +25,6 @@
                 <div class="col-sm-10">
                     <input type="text" ng-model="novClanekBolezen" class="col-xs-12" required/>
                 </div>
-
             </div>
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
@@ -38,7 +37,7 @@
               <table class="table table-stripped table-hover" ng-show="clankiBolezni.clanki.length !== 0 && clankiBolezni.clanki.length !== undefined">
                   <thead>
                       <tr>
-                        <th>Ime bolezni</th>
+                        <th>URL do članka</th>
                         <th>Briši</th>
                       </tr>
                   </thead>
@@ -73,18 +72,18 @@
   <!-- box: osebni podatki -->
   <div class="box">
     <div class="box-body">
-      <h3 class="bottom-border">Vzdrževanje navodil</h3>
+      <h3 class="bottom-border">Vzdrževanje člankov za zdravila</h3>
       <div class="row">
         <div class="col-xs-12">
-          <form class="form-horizontal" role="form"  ng-submit="shraniSpremembe()">
+          <form class="form-horizontal" role="form"  ng-submit="dodajClanekZdravilo()">
 
 
             <!-- VSA ZDRAVILA ZA IZBIRO -->
             <div class="form-group" >
                 <label class="control-label col-sm-2">Vsa zdravila:</label>
                 <div class="col-sm-10">
-                        <ui-select multiple ng-model="vsaZdr" on-select="dodajZdraviloVSA($item)" on-remove="odstraniZdravilo($item)">
-                        <ui-select-match placeholder="Izberite zdravilo...">{{$item.zdravilo}}</ui-select-match>
+                        <ui-select ng-model="izbranoZdravilo" on-select="izberiZdravilo($select.selected)">
+                        <ui-select-match placeholder="Izberite zdravilo...">{{$select.selected.zdravilo}}</ui-select-match>
                         <ui-select-choices repeat="zdravilo in zdravilaSeznam | filter: $select.search track by zdravilo.zdravilo">
                             <div ng-bind-html="zdravilo.zdravilo | highlight: $select.search"> {{zdravilo.zdravilo}} </div>
                         </ui-select-choices>
@@ -93,28 +92,32 @@
             </div>
 
             <div class="form-group" >
-                <label class="control-label col-sm-2">Nov clanek:</label>
-                <div class="col-sm-8">
-                    <input type="text" ng-model="novClanekZdravila" class="col-xs-12"/>
+                <label class="control-label col-sm-2">Dodaj članek:</label>
+                <div class="col-sm-10">
+                    <input type="text" ng-model="novClanekZdravila" class="col-xs-12" required/>
                 </div>
-                <button type="submit" class="btn btn-default btn-xs">Shrani</button>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-success">Shrani</button>
+              </div>
             </div>
 
             <!-- TABELA NAVODIL ZDRAVIL -->
-            <table class="table table-stripped table-hover" ng-show="zdravila.length != 0">
+            <table class="table table-stripped table-hover" ng-show="clankiZdravila.navodila.length !== 0 && clankiZdravila.navodila.length !== undefined">
                 <thead>
                     <tr>
-                      <th>Ime zdravila</th>
+                      <th>URL do članka</th>
                       <th>Briši</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr ng-repeat="zdravilo in izbranaZdravila" ng-class="{'deletedRow':zdravilo.zbrisano}">
-                        <td>{{zdravilo.navodilo}}</td>
+                    <tr ng-repeat="navodilo in clankiZdravila.navodila track by $index">
+                        <td><a ng-href="{{navodilo.navodila}}">{{navodilo.navodila}}</a>
                         <!-- Button za brisat -->
                         <td>
-                            <button type="button" class="btn btn-default btn-xs" ng-click="odstraniZdravilo(zdravilo)" ng-attr-id="{{'brisi'+$index}}">
+                            <button type="button" class="btn btn-default btn-xs" ng-click="odstraniNavodilo(navodilo)">
                               <span class="fa fa-trash" aria-hidden="true"></span> Briši
                             </button>
                         </td>
@@ -137,16 +140,16 @@
   <!-- box: osebni podatki -->
   <div class="box">
     <div class="box-body">
-      <h3 class="bottom-border">Vzdrževanje navodil</h3>
+      <h3 class="bottom-border">Vzdrževanje člankov za diete</h3>
       <div class="row">
         <div class="col-xs-12">
-            <form class="form-horizontal" role="form"  ng-submit="shraniSpremembe()">
+            <form class="form-horizontal" role="form"  ng-submit="dodajClanekDieta()">
             <!-- VSE DIETE ZA IZBIRO -->
             <div class="form-group" >
                 <label class="control-label col-sm-2">Vse diete:</label>
                 <div class="col-sm-10">
-                    <ui-select multiple ng-model="vseDiete">
-                        <ui-select-match placeholder="Izberite dieto...">{{$item.naziv}}</ui-select-match>
+                    <ui-select ng-model="izbranaDieta"on-select="izberiDieto($select.selected)">
+                        <ui-select-match placeholder="Izberite dieto...">{{$select.selected.naziv}}</ui-select-match>
                         <ui-select-choices repeat="dieta in dieteSeznam | filter: $select.search track by dieta.naziv">
                             <div ng-bind-html="dieta.naziv | highlight: $select.search"> {{dieta.naziv}} </div>
                         </ui-select-choices>
@@ -155,20 +158,42 @@
             </div>
 
             <div class="form-group" >
-                <label class="control-label col-sm-2">Nov clanek:</label>
-                <div class="col-sm-8">
-                    <input type="text" ng-model="novClanekDiete" class="col-xs-12"/>
+                <label class="control-label col-sm-2">Dodaj članek:</label>
+                <div class="col-sm-10">
+                    <input type="text" ng-model="novClanekDiete" class="col-xs-12" required/>
                 </div>
-                <button type="submit" class="btn btn-default btn-xs">Shrani</button>
             </div>
 
-
-            <!-- shrani spremembe -->
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-success">Shrani</button>
               </div>
             </div>
+
+
+            <!-- TABELA NAVODIL DIET -->
+            <table class="table table-stripped table-hover" ng-show="clankiDiete.navodila.length !== 0 && clankiDiete.navodila.length !== undefined">
+                <thead>
+                    <tr>
+                      <th>URL do članka</th>
+                      <th>Briši</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="navodilo in clankiDiete.navodila">
+                       <td><a ng-href="{{navodilo.url}}">{{navodilo.url}}</a>
+                        <!-- Button za brisat -->
+                        <td>
+                            <button type="button" class="btn btn-default btn-xs" ng-click="odstraniNavodilo(navodilo)">
+                              <span class="fa fa-trash" aria-hidden="true"></span> Briši
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
           </form>
         </div>
         <!-- end: col-12 -->
