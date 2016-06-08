@@ -270,13 +270,17 @@
                       <td class="col-2" title="'Naziv'" >{{bolezen.naziv}}</td>
                       <td class="col-4" title="'Zdravila'"  >
                           <span ng-repeat="zdravilo in bolezen.deleted ">
-                              <span ng-hide="zdravilo.zbrisano">{{zdravilo.zdravilo.zdravilo}}, </span>
+                              <span ng-hide="zdravilo.zbrisano">{{zdravilo.zdravilo.zdravilo}} <br> </span>
                           </span>
                       </td>
                       <td class="col-4" title="'Navodila'" >
-                            {{bolezen.deleted}}
+                          <span ng-repeat="zdravilo in bolezen.deleted ">
+                              <span ng-repeat="navodilo in zdravilo.zdravilo.navodila">
+                                  <a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url, 30)}}</a>
+                                  <br>
+                              </span>
+                          </span>
                       </td>
-
                       <td class="col-1" title="'Alergija'" >
                           <i ng-show="bolezen.alergija" class="fa fa-check"></i>
                           <i ng-show="!bolezen.alergija" class="fa fa-times"></i>
