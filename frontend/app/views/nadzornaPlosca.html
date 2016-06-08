@@ -269,8 +269,8 @@
                       <td class="col-1" title="'mkb10'" >{{bolezen.mkb10}}</td>
                       <td class="col-4" title="'Naziv'" >{{bolezen.naziv}}</td>
                       <td class="col-6" title="'Zdravila'"  >
-                          <span ng-repeat="zdravilo in bolezen.zdravilo ">
-                              <span>{{zdravilo.zdravilo}}, </span>
+                          <span ng-repeat="zdravilo in bolezen.deleted ">
+                              <span ng-hide="zdravilo.zbrisano">{{zdravilo.zdravilo.zdravilo}}, </span>
                           </span>
                       </td>
                       <td class="col-1" title="'Alergija'" >
@@ -298,7 +298,13 @@
               <table ng-table="tablePar" class="table"  >
                   <tr ng-repeat="zdravilo in $data " >
                       <td title="'Zdravilo'"  >{{zdravilo.zdravilo}}</td>
-                      <td title="'Navodilo'" ><a ng-href="{{zdravilo.navodila}}" > {{okrajsaj(zdravilo.navodila, 30)}} </a></td>
+                      <td class="col-8" title="'Navodilo'" >
+                          <!--{{ dieta.navodila }}-->
+                          <span ng-repeat="navodilo in zdravilo.navodila">
+                              <a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url, 30)}}</a>
+                              <br>
+                          </span>
+                      </td>
                   </tr>
               </table>
 

@@ -53,7 +53,10 @@
                 <td><b>Zdravila:</b></td>
                 <td>
                     <span ng-repeat="zdravilo in pregled.zdravilo">
-                        - <a ng-href="{{zdravilo.navodila}}">{{zdravilo.zdravilo}}</a>  <!-- <i>(<a ng-href="{{zdravilo.navodila}}">Povezava do navodil</a>)</i> -->
+                        - <a>{{zdravilo.zdravilo}}</a>  <!-- <i>(<a ng-href="{{zdravilo.navodila}}">Povezava do navodil</a>)</i> -->
+                        <ul ng-repeat="navodilo in zdravilo.navodila" >
+                          <li><a ng-href="{{navodilo.url}}"><i>{{navodilo.url}}</i></a><br></li>
+                        </ul>
                         <br>
                     </span>
                     <span class="pull-right"><u><i>Za podrobna navodila kliknite na ime zdravila</i></u> </span>
@@ -76,10 +79,10 @@
                 <td><b>Navodila:</b></td>
                 <td>
                     <span ng-repeat="zdravilo in pregled.zdravilo">
+                      - {{zdravilo.zdravilo}} <br>
                         <ul ng-repeat="navodilo in zdravilo.navodila" >
-                            <li><a ng-href="{{navodilo.url}}">{{navodilo.url}}</a></li>
+                          <li><a ng-href="{{navodilo.url}}"><i>{{navodilo.url}}</i></a><br></li>
                         </ul>
-                      <br>
                     </span>
                     <span ng-show="pregled.zdravilo.length == 0">/</span>
                 </td>
