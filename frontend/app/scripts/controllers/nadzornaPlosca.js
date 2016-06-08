@@ -128,7 +128,7 @@ angular.module('tpo')
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
       $scope.tableSet.perCou = $scope.uporPersonal.zdravila;
-          
+
       var tp = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
           count : $scope.tableSet.perCou,    // count per page
@@ -288,12 +288,12 @@ angular.module('tpo')
               return Meritve.query( params.url() ).$promise.then(function(data){
                   $scope.tableSet.perPage = params.page();
                   $scope.tableSet.perCou = params.count();
-                  
-                  
+
+
                   // sort & filter
                   data.tipMeritveSifra = "";
                   data.tipMeritveTip = "";
-                  
+
                   for (var i = 0; i < data.length; i++){
                       data[i].tipMeritveTip = data[i].tip_meritve.tip;
                       data[i].tipMeritveSifra = data[i].tip_meritve.sifra;
@@ -367,7 +367,7 @@ angular.module('tpo')
           }});
 
       $scope.tableParPregledi = tpPregledi;
-          
+
 
 
       };

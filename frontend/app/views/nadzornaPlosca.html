@@ -269,8 +269,8 @@
                       <td class="col-1" title="'mkb10'" >{{bolezen.mkb10}}</td>
                       <td class="col-4" title="'Naziv'" >{{bolezen.naziv}}</td>
                       <td class="col-6" title="'Zdravila'"  >
-                          <span ng-repeat="zdravilo in bolezen.zdravilo ">
-                              <span>{{zdravilo.zdravilo}}, </span>
+                          <span ng-repeat="zdravilo in bolezen.deleted ">
+                              <span ng-hide="zdravilo.zbrisano">{{zdravilo.zdravilo.zdravilo}}, </span>
                           </span>
                       </td>
                       <td class="col-1" title="'Alergija'" >
