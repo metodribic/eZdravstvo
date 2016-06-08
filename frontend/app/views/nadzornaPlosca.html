@@ -298,7 +298,13 @@
               <table ng-table="tablePar" class="table"  >
                   <tr ng-repeat="zdravilo in $data " >
                       <td title="'Zdravilo'"  >{{zdravilo.zdravilo}}</td>
-                      <td title="'Navodilo'" ><a ng-href="{{zdravilo.navodila}}" > {{okrajsaj(zdravilo.navodila, 30)}} </a></td>
+                      <td class="col-8" title="'Navodilo'" >
+                          <!--{{ dieta.navodila }}-->
+                          <span ng-repeat="navodilo in zdravilo.navodila">
+                              <a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url, 30)}}</a>
+                              <br>
+                          </span>
+                      </td>
                   </tr>
               </table>
 
