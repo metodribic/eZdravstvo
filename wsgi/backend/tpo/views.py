@@ -1,4 +1,4 @@
-import itertools
+import itertools, json as jsonn
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.serializers import json
@@ -28,12 +28,14 @@ from pprint import pprint
 
 # Create your views here.
 from tpo.models import Pregled, Uporabnik, Posta, Ambulanta, Ustanova, Zdravnik, Osebje, Meritev, Dieta, Bolezni, Zdravilo, Roles, User, IPLock, \
-    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, UporabnikZdravnik, IsAlphanumericPasswordValidator, PersonalizacijaNadzornePlosce
+    NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, UporabnikZdravnik, IsAlphanumericPasswordValidator, \
+    PersonalizacijaNadzornePlosce, BolezniZdravila, ClanekBolezni, NavodilaZdravila
 
 from tpo.serializers import UporabnikSerializer, PregledSerializer, PostaSerializer, AmbulantaSerializer, UstanovaSerializer,ZdravnikSerializer, \
     OsebjeSerializer, MeritevSerializer, DietaSerializer, BolezniSerializer, ZdraviloSerializer, VlogaSerializer, LoginSerializer, ErrorSerializer, \
     LoginZdravnikSerializer, NavodilaDietaSerializer, ZdravnikUporabnikiSerializer, LoginOsebjeSerializer, SifrantRegistriranihSerializer, \
-    VrednostiMeritevSerializer, KontaktnaOsebaSerializer, PersonalizacijaNadzornePlosceSerializer
+    VrednostiMeritevSerializer, KontaktnaOsebaSerializer, PersonalizacijaNadzornePlosceSerializer, ClanekBolezniSerializer, BolezniZdravilaSerializer, \
+    NavodilaZdravilaSerializer
 
 import random
 
@@ -231,6 +233,29 @@ class DietaViewSet(viewsets.ModelViewSet):
     queryset = Dieta.objects.all()
     serializer_class = DietaSerializer
 
+    @list_route(methods=['POST'])
+    def dodajClanekDieta(self, request):
+        dieta = Dieta.objects.get(id=int(request.data['dieta']))
+        navodilaD = NavodilaDieta(url=(request.data['url']))
+        navodilaD.save()
+        dieta.navodila.add(navodilaD)
+
+        responseNavodilo = {}
+        serializer = NavodilaDietaSerializer(navodilaD, context={'request': request})
+        responseNavodilo['navodilo'] = serializer.data
+        return JSONResponse(responseNavodilo)
+
+
+    @list_route(methods=['DELETE'])
+    def brisiClanekDieta(self, request):
+        print request
+        dieta = Dieta.objects.get(id=int(request.query_params['dieta']))
+        navodilaD = NavodilaDieta.objects.get(id=int(request.query_params['data']))
+        dieta.navodila.remove(navodilaD)
+        response = Response()
+        response.status_code = 204
+        return response
+
     @list_route(methods=['GET'])
     def seznam(self, request):
         queryset = Dieta.objects.all()
@@ -253,10 +278,39 @@ class DietaViewSet(viewsets.ModelViewSet):
 class BolezniViewSet(viewsets.ModelViewSet):
     queryset = Bolezni.objects.all()
     serializer_class = BolezniSerializer
-   
+
+    @list_route(methods=['POST'])
+    def dodajClanek(self, request):
+        bolezen = Bolezni.objects.get(id=int(request.data['bolezen']))
+        clanek = ClanekBolezni(clanek=request.data['clanek'])
+        clanek.save()
+        bolezen.clanki.add(clanek)
+
+        responseClanek = {}
+        serializer = ClanekBolezniSerializer(clanek, context={'request': request})
+        responseClanek['clanek'] = serializer.data
+        return JSONResponse(responseClanek)
+
+
+
+    @list_route(methods=['DELETE'])
+    def brisiClanek(self, request):
+        print request.query_params['bolezen']
+        bolezen = Bolezni.objects.get(id=int(request.query_params['bolezen']))
+        clanekB = ClanekBolezni.objects.get(id=int(request.query_params['data']))
+        bolezen.clanki.remove(clanekB)
+        response = Response()
+        response.status_code = 204
+        return response
+
     @list_route(methods=['GET'])
     def seznam(self, request):
         queryset = Bolezni.objects.all()
+
+        for bolezen in queryset:
+            tmp = BolezniZdravila.objects.filter(bolezni_id=bolezen.id)
+            bolezen.deleted = BolezniZdravilaSerializer(tmp, many=True, context={'request': self.request}).data
+
         serializer = BolezniSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
  
@@ -270,15 +324,41 @@ class BolezniViewSet(viewsets.ModelViewSet):
         except Exception as e:
             print(e)
 
-        return Bolezni.objects.filter(uporabnik = user)
-
-
+        bolezni = Bolezni.objects.filter(uporabnik = user)
+        for bolezen in bolezni:
+            tmp = BolezniZdravila.objects.filter(bolezni_id=bolezen.id)
+            bolezen.deleted = BolezniZdravilaSerializer(tmp, many=True, context={'request': self.request}).data
+        serializer = BolezniSerializer(bolezni, many=True, context={'request': self.request})
+        return bolezni
 
 # ZDRAVILO
 @permission_classes((IsAuthenticated,))
 class ZdraviloViewSet(viewsets.ModelViewSet):
     queryset = Zdravilo.objects.all()
     serializer_class = ZdraviloSerializer
+
+    @list_route(methods=['POST'])
+    def dodajClanekZdravilo(self, request):
+        print request
+        zdravilo = Zdravilo.objects.get(id=int(request.data['zdravilo']))
+        navodiloZ = NavodilaZdravila(url=(request.data['url']))
+        navodiloZ.save()
+        zdravilo.navodila.add(navodiloZ)
+
+        responseNavodilo = {}
+        serializer = NavodilaZdravilaSerializer(navodiloZ, context={'request': request})
+        responseNavodilo['navodilo'] = serializer.data
+        return JSONResponse(responseNavodilo)
+
+    @list_route(methods=['DELETE'])
+    def brisiClanekZdravilo(self, request):
+        print request
+        zdravilo = Zdravilo.objects.get(id=int(request.query_params['zdravilo']))
+        navodilaZ = NavodilaZdravila.objects.get(id=int(request.query_params['data']))
+        zdravilo.navodila.remove(navodilaZ)
+        response = Response()
+        response.status_code = 204
+        return response
 
     @list_route(methods=['GET'])
     def seznam(self, request):
@@ -490,6 +570,37 @@ def registracijaAdmin(request, format=None):
 
 
 @api_view(['POST'])
+def urejanjeZdravilAdmin(request, format=None):
+
+    tabelaAdded = request.data['tabelaDodanih']
+    tabelaDeleted = request.data['tabelaZbrisanih']
+    izbranaBolezen = request.data['izbranaBolezen']['id']
+
+    # dodaj zdravilo
+    for a in tabelaAdded:
+        try:
+            bolezniZdravila = BolezniZdravila.objects.get(bolezni_id=izbranaBolezen, zdravilo_id=a['id'])
+            bolezniZdravila.zbrisano = False
+            bolezniZdravila.save()
+
+        except ObjectDoesNotExist:
+            BolezniZdravila.objects.create(bolezni_id=izbranaBolezen, zdravilo_id=a['id'], zbrisano=False)
+
+    # brisi zdravilo
+    for d in tabelaDeleted:
+        bolezniZdravila = BolezniZdravila.objects.get(bolezni_id=izbranaBolezen, zdravilo_id=d['zdravilo']['id'])
+        bolezniZdravila.zbrisano=True
+        bolezniZdravila.save()
+
+    bolezen = Bolezni.objects.get(id=izbranaBolezen)
+    tmp = BolezniZdravila.objects.filter(bolezni_id=bolezen.id)
+    bolezen.deleted = BolezniZdravilaSerializer(tmp, many=True, context={'request': request}).data
+    serializer = BolezniSerializer(bolezen, context={'request': request})
+
+    return  Response(serializer.data)
+
+
+@api_view(['POST'])
 def ustvariPregled(request, format=None):
     """
     Create PREGLED
@@ -506,12 +617,8 @@ def ustvariPregled(request, format=None):
         dieta = request.data.get('dieta', [])
         #datum_naslednjega = request.data['datum_naslednjega']
         opombe = request.data['opombe']
-
-
         zdravnik = Zdravnik.objects.get(id=zdravnikID)
         uporabnik = Uporabnik.objects.get(id=uporabnikID)
-
-
         pregled = Pregled.objects.create(opombe=opombe,
                                          datum=datum_pregleda,
                                          zdravnik=zdravnik,
@@ -548,8 +655,6 @@ def ustvariPregled(request, format=None):
                                              datum=datum_pregleda,
                                              uporabnik_id=uporabnikID,
                                              pregled=pregled)
-
-
 
         return Response()
 
@@ -856,9 +961,6 @@ def changePassword(request, format=None):
                     IsAlphanumericPasswordValidator().validate(newpass)
                     user.set_password(newpass)
                     user.save()
-                    response = Response()
-                    response.status_code = 200
-                    return response
                 except ValidationError as e:
                     print(e)
                     response = JSONResponse({"error": "Please choose better password. It should be at least 8 characters long and contain mixed letters and numbers. "
@@ -946,3 +1048,13 @@ def forgotPassword(request, format=None):
         return response
 
 
+# CLANKI
+class ClanekBolezniViewSet(viewsets.ModelViewSet):
+    queryset = ClanekBolezni.objects.all()
+    serializer_class = ClanekBolezniSerializer
+
+
+# CLANKI
+class NavodilaZdravilaViewSet(viewsets.ModelViewSet):
+    queryset = NavodilaZdravila.objects.all()
+    serializer_class = NavodilaZdravilaSerializer

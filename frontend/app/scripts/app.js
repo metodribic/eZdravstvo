@@ -58,6 +58,18 @@ angular
             controller: 'registracijaUporAdminCtrl'
           })
 
+          .state('urejanjeZdravilAdmin', {
+            url: '/zdravilaAdmin',
+            templateUrl: '../views/urejanjeZdravilAdmin.html',
+            controller: 'urejanjeZdravilAdminCtrl'
+          })
+
+          .state('vzdrzevanjeNavodilAdmin', {
+            url: '/navodilaAdmin',
+            templateUrl: '../views/vzdrzevanjeNavodilAdmin.html',
+            controller: 'vzdrzevanjeNavodilAdmin'
+          })
+
            .state('listPregledov', {
             url: '/listPregledov',
             templateUrl: '../views/listPregledov.html',

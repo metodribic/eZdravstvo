@@ -80,6 +80,14 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	});
 })
 
+.factory('UrejanjeZdravilAdmin', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/zdravilaAdmin', {
+		update: {
+			method: 'PUT'
+		}
+	});
+})
+
 .factory('RegistracijaPacient', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/registracijaPacient', {
 	});
@@ -120,6 +128,23 @@ angular.module('tpo.models', ['ngResource', 'config'])
 })
 
 
+.factory('BrisiBolezniClanek', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/bolezni/brisiClanek', { bolezenId: '@bolezenId' }, {
+		update: {
+			method: 'PATCH'
+		}
+	});
+})
+
+.factory('DodajBolezniClanek', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/bolezni/dodajClanek', { bolezenId: '@bolezenId' }, {
+		update: {
+			method: 'PATCH'
+		}
+	});
+})
+
+
 .factory('Zdravila', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/zdravila/:zdraviloId', { zdraviloId: '@zdraviloId' }, {
 		update: {
@@ -132,6 +157,22 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	return $resource('http://' + API_URL + '/zdravila/seznam', {
 		update: {
 			method: 'UPDATE'
+		}
+	});
+})
+
+.factory('BrisiZdraviluClanek', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/zdravila/brisiClanekZdravilo', { zdraviloId: '@zdraviloId' }, {
+		update: {
+			method: 'PATCH'
+		}
+	});
+})
+
+.factory('DodajZdraviluClanek', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/zdravila/dodajClanekZdravilo', { zdraviloId: '@zdraviloId' }, {
+		update: {
+			method: 'PATCH'
 		}
 	});
 })
@@ -183,6 +224,22 @@ angular.module('tpo.models', ['ngResource', 'config'])
 	return $resource('http://' + API_URL + '/diete/seznam', { dietaId: '@dietaId' }, {
 		update: {
 			method: 'UPDATE'
+		}
+	});
+})
+
+.factory('BrisiDietiClanek', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/diete/brisiClanekDieta', { dietaId: '@dietaId' }, {
+		update: {
+			method: 'PATCH'
+		}
+	});
+})
+
+.factory('DodajDietiClanek', function($resource, API_URL) {
+	return $resource('http://' + API_URL + '/diete/dodajClanekDieta', { dietaId: '@dietaId' }, {
+		update: {
+			method: 'PATCH'
 		}
 	});
 });

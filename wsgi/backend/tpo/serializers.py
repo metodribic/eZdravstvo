@@ -2,7 +2,8 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 from tpo.models import Pregled, Uporabnik, Posta, Roles, Ambulanta, Zdravnik, Meritev, Zdravilo, Bolezni, Dieta, \
-    Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, PersonalizacijaNadzornePlosce
+    Ustanova, Osebje, NavodilaDieta, SifrantRegistriranih, VrednostiMeritev, KontaktnaOseba, \
+    PersonalizacijaNadzornePlosce, ClanekBolezni, BolezniZdravila, NavodilaZdravila
 
 """ POSTA """
 class PostaSerializer(serializers.HyperlinkedModelSerializer):
@@ -80,26 +81,54 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
         return instance
 
 
+class NavodilaZdravilaSerializer(serializers.ModelSerializer):
+    url = serializers.CharField(max_length=512)
+
+    class Meta:
+        model = NavodilaZdravila
+
+
 
 """ ZDRAVILO """
 class ZdraviloSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
+    navodila = NavodilaZdravilaSerializer(many=True)
 
     class Meta:
         model = Zdravilo
+
+
+""" CLANKI OD BOLEZNI """
+class ClanekBolezniSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField()
+    clanek = serializers.CharField()
+
+    class Meta:
+        model = ClanekBolezni
 
 
 """ BOLEZNI """
 class BolezniSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     zdravilo = ZdraviloSerializer(many=True)
+    clanki = ClanekBolezniSerializer(many=True)
+    deleted = serializers.SerializerMethodField('is_deleted')
+
     class Meta:
         model = Bolezni
+
+    def is_deleted(self, obj):
+        try:
+            return obj.deleted
+        except Exception:
+            return None
 
 
 """ DIETA NAVODILA """
 class NavodilaDietaSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
+    url = serializers.CharField()
+
     class Meta:
         model = NavodilaDieta
 
@@ -108,6 +137,7 @@ class NavodilaDietaSerializer(serializers.HyperlinkedModelSerializer):
 class DietaSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     navodila = NavodilaDietaSerializer(many=True)
+
     class Meta:
         model = Dieta
 
@@ -281,12 +311,16 @@ class ZdravnikUporabnikiSerializer(serializers.HyperlinkedModelSerializer):
         model = Uporabnik
         depth = 3   # izpise nested fielde (diete, bolezni,..)
 
-
-class BolezniZdravila(serializers.HyperlinkedModelSerializer):
-    bolezen = BolezniSerializer()
+class BolezniZdravilaSerializer(serializers.ModelSerializer):
+    bolezni = serializers.IntegerField(source='bolezni.id')
+    zbrisano = serializers.BooleanField()
     zdravilo = ZdraviloSerializer()
 
     class Meta:
+        fields = ('bolezni', 'zbrisano', 'zdravilo',)
+        depth = 1
+        depth = 1
+        model = BolezniZdravila
         db_table = "tpo_bolezni_zdravilo"
 
 

@@ -100,7 +100,19 @@ class NavodilaDieta(models.Model):
 
 class Zdravilo(models.Model):
     zdravilo = models.CharField(max_length=100)
-    navodila = models.CharField(max_length=1024)
+    #navodila = models.CharField(max_length=1024)
+    navodila = models.ManyToManyField('NavodilaZdravila', blank=True)
+
+class NavodilaZdravila(models.Model):
+    url = models.CharField(max_length=512)
+
+class BolezniZdravila(models.Model):
+    bolezni = models.ForeignKey('Bolezni')
+    zdravilo = models.ForeignKey('Zdravilo')
+    zbrisano = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'tpo_bolezni_zdravilo'
 
 
 class Pregled(models.Model):
@@ -119,6 +131,15 @@ class Bolezni(models.Model):
     mkb10 = models.CharField(max_length=45)
     alergija = models.BooleanField()
     zdravilo = models.ManyToManyField('Zdravilo')
+    clanki = models.ManyToManyField('ClanekBolezni')
+
+
+class ClanekBolezni(models.Model):
+    clanek = models.CharField(max_length=5000, blank=True)
+
+    @property
+    def title(self):
+        return self._title
 
 
 # Dovoljene(max,min,nemogoce) vrednosti za doloceno meritev
@@ -194,11 +215,3 @@ class PersonalizacijaNadzornePlosce(models.Model):
     bolezni = models.IntegerField(default = 10)
     zdravila = models.IntegerField(default = 10)
 
-
-class BolezniZdravila(models.Model):
-   bolezni = models.ForeignKey('Bolezni')
-   zdravilo = models.ForeignKey('Zdravilo')
-   zbrisano = models.NullBooleanField(default=False)
-
-   class Meta:
-       db_table = 'tpo_bolezni_zdravilo'
