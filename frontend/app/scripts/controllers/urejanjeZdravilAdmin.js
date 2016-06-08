@@ -47,14 +47,11 @@ angular.module('tpo')
 
             //funkcija, ki shrani spremembe
             $scope.shraniSpremembe = function () {
-                console.log($scope.obstojecaZbrisana);
                 req = new UrejanjeZdravilAdmin();
                 req.tabelaDodanih = $scope.tabelaDodanih;
                 req.tabelaZbrisanih = $scope.obstojecaZbrisana;
                 req.izbranaBolezen = $scope.izbranaBolezen;
-                console.log(req);
                 req.$save(function(response){
-                    console.log(response);
                     Notification.success({message: "Zdravila posodobljena." , replaceMessage: true});
                     $scope.izbranaZdravila = response.deleted;
                     $scope.vsaZdr = "";
@@ -78,7 +75,6 @@ angular.module('tpo')
                     // if(bolezen.deleted[i].zbrisano !== true)
                     mojScope.dodajZdravilo(bolezen.deleted[i]);
                 }
-                console.log($scope.izbranaZdravila);
             };
 
 
@@ -96,13 +92,13 @@ angular.module('tpo')
                 // console.log(zdravilo);
                 if(!mojScope.sprememba.zdravilo)
                     mojScope.sprememba.zdravilo = [];
-                console.log(mojScope.sprememba.zdravilo);
                 var idx = existsInArray(mojScope.sprememba.zdravilo, 'zdravilo', zdravilo);
                 if(idx == -1) {
                     tmp = {
                       'zdravilo': zdravilo
                     };
                     mojScope.sprememba.zdravilo.push(tmp);
+                    $scope.zdravila = mojScope.sprememba.zdravilo;
                     $scope.izbranaZdravila = mojScope.sprememba.zdravilo;
                     $scope.tabelaDodanih.push(zdravilo);
                 }
@@ -118,7 +114,7 @@ angular.module('tpo')
                     return;
 
                 //ce obstaja, vrne njegov indeks, drugace vrne -1
-                var idx = existsInArray(zdravila, 'zdravilo', zdravilo.zdravilo);
+                var idx = existsDeeperInArray(zdravila, 'zdravilo.zdravilo', zdravilo.zdravilo.zdravilo);
 
                 if(idx > -1) {
                     if(existsInArray($scope.izbranaZdravila, 'zdravilo', zdravila[idx]) == -1) {
@@ -127,10 +123,7 @@ angular.module('tpo')
                         $scope.zdravila = zdravila;
                     }
                     //pobrisano zdravilo dodam v tabeloZbrisanih
-                    console.log(idx);
-                    console.log(zdravila);
                     $scope.obstojecaZbrisana.push(zdravila[0]);
-                    console.log($scope.obstojecaZbrisana);
                 }
             };
 
@@ -146,6 +139,15 @@ angular.module('tpo')
                 }
                 return -1;
             }
+            function existsDeeperInArray(array, key, val) {
+                var keys = key.split('.');
+                for(var i=0; i<array.length; i++) {
+                    if(array[i][keys[0]][keys[1]] === val)
+                        return i;
+                }
+                return -1;
+            }
+
 
             /*
             $scope.dodajZdraviloVSA = function(zdravilo) {

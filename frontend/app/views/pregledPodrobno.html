@@ -76,7 +76,9 @@
                 <td><b>Navodila:</b></td>
                 <td>
                     <span ng-repeat="zdravilo in pregled.zdravilo">
-                      - <a ng-href="{{zdravilo.navodila}}">{{zdravilo.navodila}}</a>
+                        <ul ng-repeat="navodilo in zdravilo.navodila" >
+                            <li><a ng-href="{{navodilo.url}}">{{navodilo.url}}</a></li>
+                        </ul>
                       <br>
                     </span>
                     <span ng-show="pregled.zdravilo.length == 0">/</span>
