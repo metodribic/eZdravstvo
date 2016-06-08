@@ -53,7 +53,7 @@
                 <td><b>Zdravila:</b></td>
                 <td>
                     <span ng-repeat="zdravilo in pregled.zdravilo">
-                        - <a {{zdravilo.navodila}}>{{zdravilo.zdravilo}}</a>  <!-- <i>(<a ng-href="{{zdravilo.navodila}}">Povezava do navodil</a>)</i> -->
+                        - <a>{{zdravilo.zdravilo}}</a>  <!-- <i>(<a ng-href="{{zdravilo.navodila}}">Povezava do navodil</a>)</i> -->
                         <ul ng-repeat="navodilo in zdravilo.navodila" >
                           <li><a ng-href="{{navodilo.url}}"><i>{{navodilo.url}}</i></a><br></li>
                         </ul>
