@@ -102,6 +102,33 @@ angular.module('tpo')
           });
         }
       }
+      else if($scope.izbranaMeritev.tip == 'Holesterol'){
+
+        // first check if all field are filled
+        // prvo preveri če so null, potem pa če niso, preveri še če so dolžine inputov daljše kot 0,
+        // ker če uporabnik najrpej nekaj vpiše pa potem zbriše ni null, ampak ga vseeno ne smeš spustit naprej
+        if($scope.vrednostMeritveNormalni === null || $scope.vrednostMeritveLDL === null || $scope.vrednostiMeritveHDL === null ||
+          $scope.vrednostMeritveNormalni.length <= 0 || $scope.vrednostMeritveLDL.length <= 0 || $scope.vrednostMeritveHDL.length <= 0){
+          Notification.warning('Za nadaljevanje vnesite vrednosti meritve!');
+        }
+        // preveri veljavnost vpisanih podatkov
+        else if(!checkValidInput()){
+          Notification.warning({message: 'Mogoče vrednosti so: <br> normalni/LDL/HDL: od <b>'+$scope.izbranaMeritev.nemogoce_min+'</b> do <b>'+$scope.izbranaMeritev.nemogoce_max+'</b>', title: '<b>Vrednosti meritve so zunaj dovoljenih vrednosti!</b>'});
+        }
+        else{
+          var holesterol = $scope.vrednostMeritveNormalni+'/'+$scope.vrednostMeritveLDL + '/' + $scope.vrednostMeritveHDL;
+          var novaMeritev = new Meritve();
+          novaMeritev.tip_meritve = $scope.izbranaMeritev;
+          novaMeritev.vrednost_meritve = holesterol;
+          novaMeritev.uporabnik = $rootScope.uporabnik.id;
+          novaMeritev.pregled = null;
+          novaMeritev.datum = moment().format("YYYY-MM-DDTHH:mm");
+          novaMeritev.$save(function(response){
+              Notification.success('Meritev uspešno dodana!');
+              $scope.reloadState();
+          });
+        }
+      }
       else{
         // preveri če je polje vrednost izpoljeno
         if($scope.vrednostMeritve === null || $scope.vrednostMeritve.length === 0){
@@ -147,6 +174,12 @@ angular.module('tpo')
           }
         }
         else
+          return false;
+      } else if($scope.izbranaMeritev.tip === 'Holesterol') {
+        var defaultMin = $scope.izbranaMeritev.nemogoce_min.split('/');
+        var defaultMax = $scope.izbranaMeritev.nemogoce_max.split('/');
+
+        if(parseFloat($scope.vrednostMeritveNormalni) >= parseFloat(defaultMin[0]) && parseFloat($scope.vrednostMeritveNormalni) <= parseFloat(defaultMax[0])  && parseFloat($scope.vrednostMeritveLDL) >= parseFloat(defaultMin[1]) && parseFloat($scope.vrednostMeritveLDL) <= parseFloat(defaultMax[1]) && parseFloat($scope.vrednostMeritveHDL) >= parseFloat(defaultMin[2]) && parseFloat($scope.vrednostMeritveHDL) <= parseFloat(defaultMax[2])) { return true; }
           return false;
       }
       else{

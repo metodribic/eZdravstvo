@@ -36,7 +36,7 @@
 
         <!-- FORM MERITEV -->
         <form name="form-temperatura" ng-submit="saveMeritev()">
-          <div class="form-group margin-top-15" ng-hide="izbranaMeritev.tip == 'Krvni pritisk'">
+          <div class="form-group margin-top-15" ng-hide="izbranaMeritev.tip == 'Krvni pritisk' || izbranaMeritev.tip == 'Holesterol'">
             <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
             <div class="col-sm-10 margin-top-15">
               <input id="vrednost" type="text" ng-model="vrednostMeritve"/> &nbsp;{{izbranaMeritev.enota}}
@@ -58,6 +58,15 @@
             </div>
           </div>
 
+          <!-- forma za hole es terol -->
+          <div class="form-group margin-top-15" ng-show="izbranaMeritev.tip == 'Holesterol'">
+            <label class="control-label col-sm-2 margin-top-15">Vrednost meritve:</label>
+            <div class="col-sm-10 margin-top-15">
+              <input id="normalni" type="text"  placeholder="normalni" ng-model="vrednostMeritveNormalni"/> /
+              <input id="ldl" type="text"  placeholder="LDL" ng-model="vrednostMeritveLDL"/> /
+              <input id="hdl" type="text"  placeholder="hDL" ng-model="vrednostMeritveHDL"/> &nbsp;{{izbranaMeritev.enota}}
+            </div>
+          </div>
           <button type="submit" class="btn btn-success pull-right margin-15">Shrani</button>
           <button type="reset" class="btn btn-default pull-right margin-15" ng-click="resetForm()">Pobriši</button>
         </form>

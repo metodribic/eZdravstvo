@@ -157,6 +157,26 @@ angular.module('tpo')
                     Notification.error({message: "Podatki za KRVNI PRITISK so napačni!"});
                     break;
                 }
+            }else if (meritev.tip === "Holesterol") {
+                //ce je v mejah normale, ga sprejmi
+                var nemogoce_min = meritev.nemogoce_min.split('/');
+                var nemogoce_max = meritev.nemogoce_max.split('/');
+                if ((mojScope.holesterolNormalen >= nemogoce_min[0] &&
+			                mojScope.holesterolNormalen <= nemogoce_max[0]) &&
+		                (mojScope.holesterolLDL >= nemogoce_min[1] &&
+		                 mojScope.holesterolLDL <= nemogoce_max[1]) &&
+		                (mojScope.holesterolHDL >= nemogoce_min[2] &&
+		                 mojScope.holesterolHDL <= nemogoce_max[2])) {
+                     mojScope.rezultatiMeritev.push({vrednost:mojScope.holesterolNormalen +
+	                     "/"+mojScope.holesterolLDL + '/' + mojScope.holesterolHDL, tip:6});
+                }
+                //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
+                else {
+                    shraniPregledBoolean = false;
+                    Notification.error({message: "Podatki za HOLESTEROL so napačni!"});
+                    break;
+                }
+
             }else if (meritev.tip === "Srčni utrip") {
                 //ce je v mejah normale, ga sprejmi
                 if (mojScope.srcniMeritev >= meritev.nemogoce_min && mojScope.srcniMeritev <= meritev.nemogoce_max) {
@@ -234,6 +254,8 @@ angular.module('tpo')
                 mojScope.prikaziGlukozo = true;
             }else if (meritev.tip === "Krvni pritisk") {
                 mojScope.prikaziKrvni = true;
+            }else if (meritev.tip === "Holesterol") {
+                mojScope.prikaziHolesterol = true;
             }else if (meritev.tip === "Srčni utrip") {
                 mojScope.prikaziSrcni = true;
             }else if (meritev.tip === "ITM") {

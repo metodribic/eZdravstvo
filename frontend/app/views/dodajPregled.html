@@ -98,6 +98,29 @@
 					<span> ({{telesna_temperatura.nemogoce_min}} - {{telesna_temperatura.nemogoce_max}}) {{telesna_temperatura.enota}}</span> 
                 </div>
              </div>
+            <div class="form-group" ng-show="prikaziHolesterol">
+                <label class="control-label col-sm-2">Holesterol (NORMALNI):</label>
+                <div class="col-sm-2">
+                    <input type="number" ng-model="holesterolNormalen"/>
+                    <br />
+					<span> ({{holesterol.nemogoce_min}} - {{holesterol.nemogoce_max}}) {{holesterol.enota}}</span> 
+                </div>
+                
+                <label class="control-label col-sm-2">Holesterol (LDL):</label>
+                <div class="col-sm-2">
+                    <input type="number" ng-model="holesterolLDL"/>
+                    <br />
+					<span> ({{holesterol.nemogoce_min}} - {{holesterol.nemogoce_max}}) {{holesterol.enota}}</span> 
+                </div>
+                
+                <label class="control-label col-sm-2">Holesterol (HDL):</label>
+                <div class="col-sm-2">
+                    <input type="number" ng-model="holesterolHDL"/>
+                    <br />
+					<span> ({{holesterol.nemogoce_min}} - {{holesterol.nemogoce_max}}) {{holesterol.enota}}</span> 
+                </div>
+
+             </div>
 
 
             <!-- bolezni -->
