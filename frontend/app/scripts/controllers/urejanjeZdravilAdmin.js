@@ -65,8 +65,9 @@ angular.module('tpo')
             //funkcija za pridobivanje zdravil
             $scope.ustvariBolezen = function (bolezen) {
                 $scope.izbranaZdravila = [];
-                mojScope.sprememba.zdravilo = [];
                 $scope.izbranaBolezen = bolezen;
+                $scope.tabelaDodanih = [];
+                $scope.tabelaZbrisanih = [];
                 //tukaj dobis stevilo zdravil, ki jih ima bolezen
                 //console.log(bolezen.zdravilo.length);
 
@@ -79,27 +80,20 @@ angular.module('tpo')
 
 
             $scope.dodajZdravilo = function(zdravilo) {
-                if(!mojScope.sprememba.zdravilo)
-                    mojScope.sprememba.zdravilo = [];
-                var idx = existsInArray(mojScope.sprememba.zdravilo, 'zdravilo', zdravilo.zdravilo);
+                var izbranaZdravila = $scope.izbranaZdravila;
+                var idx = existsInArray(izbranaZdravila, 'zdravilo', zdravilo.zdravilo);
                 if(idx == -1) {
-                    mojScope.sprememba.zdravilo.push(zdravilo);
-                    $scope.izbranaZdravila = mojScope.sprememba.zdravilo;
+                    izbranaZdravila.push(zdravilo);
                 }
             };
 
             $scope.dodajZdraviloSelect = function(zdravilo) {
-                // console.log(zdravilo);
-                if(!mojScope.sprememba.zdravilo)
-                    mojScope.sprememba.zdravilo = [];
-                var idx = existsInArray(mojScope.sprememba.zdravilo, 'zdravilo', zdravilo);
+                var idx = existsInArray($scope.izbranaZdravila, 'zdravilo', zdravilo);
                 if(idx == -1) {
                     tmp = {
                       'zdravilo': zdravilo
                     };
-                    mojScope.sprememba.zdravilo.push(tmp);
-                    $scope.zdravila = mojScope.sprememba.zdravilo;
-                    $scope.izbranaZdravila = mojScope.sprememba.zdravilo;
+                    $scope.izbranaZdravila.push(tmp);
                     $scope.tabelaDodanih.push(zdravilo);
                 }
             };
@@ -107,7 +101,7 @@ angular.module('tpo')
 
             $scope.odstraniZdravilo = function(zdravilo) {
                 //tukaj dobim vsa izbrana zdravila
-                var zdravila = mojScope.sprememba.zdravilo;
+                var zdravila = $scope.izbranaZdravila;
 
                 //ce so prazna
                 if(!zdravila)
@@ -117,13 +111,9 @@ angular.module('tpo')
                 var idx = existsDeeperInArray(zdravila, 'zdravilo.zdravilo', zdravilo.zdravilo.zdravilo);
 
                 if(idx > -1) {
-                    if(existsInArray($scope.izbranaZdravila, 'zdravilo', zdravila[idx]) == -1) {
-                         //console.log($scope.izbrisanaZdravila);
-                        zdravila = zdravila.splice(idx,1);
-                        $scope.zdravila = zdravila;
-                    }
+                    zdravila = zdravila.splice(idx,1);
                     //pobrisano zdravilo dodam v tabeloZbrisanih
-                    $scope.obstojecaZbrisana.push(zdravila[0]);
+                    $scope.obstojecaZbrisana.push(zdravilo);
                 }
             };
 
