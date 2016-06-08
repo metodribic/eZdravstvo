@@ -267,17 +267,21 @@
                   <tr class="col-12" ng-repeat="bolezen in $data" >
 
                       <td class="col-1" title="'mkb10'" >{{bolezen.mkb10}}</td>
-                      <td class="col-4" title="'Naziv'" >{{bolezen.naziv}}</td>
-                      <td class="col-6" title="'Zdravila'"  >
+                      <td class="col-2" title="'Naziv'" >{{bolezen.naziv}}</td>
+                      <td class="col-4" title="'Zdravila'"  >
                           <span ng-repeat="zdravilo in bolezen.deleted ">
                               <span ng-hide="zdravilo.zbrisano">{{zdravilo.zdravilo.zdravilo}}, </span>
                           </span>
                       </td>
+                      <td class="col-4" title="'Navodila'" >
+                            {{bolezen.deleted}}
+                      </td>
+
                       <td class="col-1" title="'Alergija'" >
                           <i ng-show="bolezen.alergija" class="fa fa-check"></i>
                           <i ng-show="!bolezen.alergija" class="fa fa-times"></i>
                       </td>
-                  </tr>
+                  </span>
               </table>
       </div>
 
