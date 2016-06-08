@@ -575,6 +575,7 @@ def urejanjeZdravilAdmin(request, format=None):
     tabelaAdded = request.data['tabelaDodanih']
     tabelaDeleted = request.data['tabelaZbrisanih']
     izbranaBolezen = request.data['izbranaBolezen']['id']
+    print izbranaBolezen
 
     # dodaj zdravilo
     for a in tabelaAdded:
@@ -588,11 +589,16 @@ def urejanjeZdravilAdmin(request, format=None):
 
     # brisi zdravilo
     for d in tabelaDeleted:
-        bolezniZdravila = BolezniZdravila.objects.get(bolezni_id=izbranaBolezen, zdravilo_id=d['zdravilo']['id'])
+        try:
+            bolezniZdravila = BolezniZdravila.objects.get(bolezni_id=izbranaBolezen, zdravilo_id=d['zdravilo']['id'])
+        except ObjectDoesNotExist:
+            continue
         bolezniZdravila.zbrisano=True
         bolezniZdravila.save()
-
-    bolezen = Bolezni.objects.get(id=izbranaBolezen)
+    try:
+        bolezen = Bolezni.objects.get(id=izbranaBolezen)
+    except ObjectDoesNotExist:
+        pass
     tmp = BolezniZdravila.objects.filter(bolezni_id=bolezen.id)
     bolezen.deleted = BolezniZdravilaSerializer(tmp, many=True, context={'request': request}).data
     serializer = BolezniSerializer(bolezen, context={'request': request})
