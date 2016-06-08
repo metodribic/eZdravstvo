@@ -89,7 +89,7 @@ angular.module('tpo')
                 novClanekZdravilo.$save(function (response) {
                    Notification.success('Navodilo uspešno dodano!');
                     $scope.clankiZdravila.navodila.push({'url':response.navodilo.url, 'id': response.navodilo.id});
-                    $scope.novClanekZdravilo = "";
+                    $scope.novClanekZdravila = "";
                 });
             };
 
@@ -120,7 +120,7 @@ angular.module('tpo')
             //doda navodilo dieti
             $scope.dodajClanekDieta = function () {
                 novoNavodilo = new DodajDietiClanek();
-                novoNavodilo.url = $scope.novClanekDiete;
+                novoNavodilo.url = $scope.novClanekDieta;
                 novoNavodilo.dieta = $scope.clankiDiete.id;
                 novoNavodilo.$save(function(response){
                     Notification.success('Navodilo uspešno dodano!');
