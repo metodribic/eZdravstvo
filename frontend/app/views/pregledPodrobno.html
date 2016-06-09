@@ -33,28 +33,71 @@
               <tr>
                 <td><b>Meritve:</b></td>
                   <td>
+                      <span ng-show = "meritve.length == 0">/</span>
                       <span ng-hide = "meritve.length == 0" ng-repeat="meritev in meritve">
                       - {{meritev.tip_meritve.tip}}&nbsp;<i>(šifra: {{meritev.tip_meritve.sifra}})</i>:
                       <b ng-bind-html="meritev.vrednost_meritve"></b> 
                       <br />
                       </span>
                   </td>
-                  <span ng-show = "meritve.length == 0">/</span>
               </tr>
               <tr>
                 <td><b>Bolezni:</b></td>
+                    <td>
+                        <span ng-show="pregled.bolezen.length == 0">/</span>
+                        <div class="col-md-12" ng-show="pregled.bolezen.length != 0">
+                          <table ng-table="tableBolezen" class="table" id="tabelcaUpor">
+                              <tr ng-repeat="bolezen in pregled.bolezen" >
+                                  <td class="col-3" title="'Naziv'"  >{{bolezen.naziv}}</td>
+                                  <td class="col-9" title="'Navodilo'" >
+
+                                      <!--{{ bolezen.navodila }}-->
+                                      <span ng-show="bolezen.clanki.length == 0">/</span>
+                                      <span ng-repeat="navodilo in bolezen.clanki">
+                                          <a ng-href="{{navodilo.clanek}}">{{okrajsaj(navodilo.clanek, 30)}}</a>
+                                          <br>
+                                      </span>
+                                  </td>
+                              </tr>
+                          </table>
+                        </div>
+                    </td>
+
+                <!--
                 <td>
                     <span ng-repeat="bolezen in pregled.bolezen">
                         - {{bolezen.naziv}} <span ng-show="bolezen.alergija"><i>(Alergija)</i></span> - <i>{{bolezen.mkb10}}</i><br>
                     </span>
                     <span ng-show="pregled.bolezen.length == 0">/</span>
                 </td>
+                -->
               </tr>
               <tr>
                 <td><b>Zdravila:</b></td>
                 <td>
+                    <span ng-show="pregled.zdravilo.length == 0">/</span>
+                    <div class="col-md-12" ng-show="pregled.zdravilo.length != 0">
+                      <table ng-table="tableZdravilo" class="table" id="tabelcaUpor">
+                          <tr ng-repeat="zdravilo in pregled.zdravilo" >
+                              <td class="col-3" title="'Naziv'"  >{{zdravilo.zdravilo}}</td>
+                              <td class="col-9" title="'Navodilo'" >
+
+                                  <!--{{ zdravilo.navodila }}-->
+                                  <span ng-show="zdravilo.navodila.length == 0">/</span>
+                                  <span ng-repeat="navodilo in zdravilo.navodila">
+                                      <a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url, 30)}}</a>
+                                      <br>
+                                  </span>
+                              </td>
+                          </tr>
+                      </table>
+                    </div>
+                </td>
+
+                <!--
+                <td>
                     <span ng-repeat="zdravilo in pregled.zdravilo">
-                        - <a>{{zdravilo.zdravilo}}</a>  <!-- <i>(<a ng-href="{{zdravilo.navodila}}">Povezava do navodil</a>)</i> -->
+                        - <a>{{zdravilo.zdravilo}}</a>
                         <ul ng-repeat="navodilo in zdravilo.navodila" >
                           <li><a ng-href="{{navodilo.url}}"><i>{{navodilo.url}}</i></a><br></li>
                         </ul>
@@ -63,19 +106,32 @@
                     <span class="pull-right"><u><i>Za podrobna navodila kliknite na ime zdravila</i></u> </span>
                     <span ng-show="pregled.zdravilo.length == 0">/</span>
                 </td>
+                  -->
               </tr>
               <tr>
-                <td><b>Dieta:</b></td>
+                <td><b>Diete:</b></td>
                 <td>
-                    <span ng-repeat="dieta in pregled.dieta">
-                        - {{dieta.naziv}} <br>
-                        <ul ng-repeat="navodilo in dieta.navodila" >
-                          <li><a ng-href="{{navodilo.url}}"><i>{{navodilo.url}}</i></a><br></li>
-                        </ul>
-                    </span>
                     <span ng-show="pregled.dieta.length == 0">/</span>
+                    <div class="col-md-12" ng-show="pregled.dieta.length != 0">
+                      <table ng-table="tableDieta" class="table " id="tabelcaUpor">
+                          <tr ng-repeat="dieta in pregled.dieta" >
+                              <td class="col-2" title="'Naziv'"  >{{dieta.naziv}}</td>
+                              <td class="col-2" title="'Šifra'" >{{dieta.sifra}}</td>
+                              <td class="col-8" title="'Navodilo'" >
+                                  <!--{{ dieta.navodila }}-->
+                                  <span ng-show="dieta.navodila.length == 0">/</span>
+                                  <span ng-repeat="navodilo in dieta.navodila">
+                                      <a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url, 30)}}</a>
+                                      <br>
+                                  </span>
+                              </td>
+                          </tr>
+                      </table>
+                    </div>
                 </td>
               </tr>
+
+              <!--
               <tr>
                 <td><b>Navodila:</b></td>
                 <td>
@@ -88,8 +144,9 @@
                     <span ng-show="pregled.zdravilo.length == 0">/</span>
                 </td>
               </tr>
+              -->
               <tr>
-                <td><b>Opombe:</b></td>
+                <td><b>Ugotovitve / navodila:</b></td>
                 <td>
                     <span ng-show="pregled.opombe.length > 0">{{pregled.opombe}}</span>
                     <span ng-show="pregled.opombe.length == 0">/</span>

@@ -96,7 +96,7 @@ angular.module('tpo.models', ['ngResource', 'config'])
 .factory('Osebje', function($resource, API_URL) {
 	return $resource('http://' + API_URL + '/osebje/:osebjeId',{ osebjeId: '@osebjeId'}, {
 		update: {
-			method: 'PUT'
+			method: 'PATCH'
 		}
 	});
 })
