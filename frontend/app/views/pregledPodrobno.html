@@ -148,7 +148,7 @@
               <tr>
                 <td><b>Ugotovitve / navodila:</b></td>
                 <td>
-                    <span ng-show="pregled.opombe.length > 0">{{pregled.opombe}}</span>
+                    <span ng-show="pregled.opombe.length > 0" ng-bind-html="pregled.opombe"></span>
                     <span ng-show="pregled.opombe.length == 0">/</span>
                 </td>
               </tr>

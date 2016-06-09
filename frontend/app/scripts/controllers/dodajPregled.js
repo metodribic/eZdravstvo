@@ -133,6 +133,8 @@ angular.module('tpo')
         a.zdravilo = mojScope.pregled.zdravilo;
         a.dieta = mojScope.pregled.dieta;
         a.opombe = mojScope.opombe;
+        a.opombe = a.opombe.replace(/\n/g, '<br />')
+        console.log(a.opombe);
 
         //mojScope.rezultatiMeritev = [];
         var shraniPregledBoolean = true;

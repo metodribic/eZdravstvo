@@ -25,7 +25,7 @@
                     <tr ng-repeat="pregled in pregledi" >
                       <td ui-sref="pregledPodrobno({id:pregled.id})"><i class="fa fa-search" style="cursor:pointer"></i></td>
                       <td>{{pregled.datum | date:'dd.MM.yyyy HH:mm'}}</td>
-                      <td>{{pregled.opombe}}</td>
+                      <td><span ng-bind-html="pregled.opombe"></span></td>
                       <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
                       <td>
                         <span ng-repeat="bolezen in pregled.bolezen">
