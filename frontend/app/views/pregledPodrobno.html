@@ -51,6 +51,7 @@
                                   <td class="col-9" title="'Navodilo'" >
 
                                       <!--{{ bolezen.navodila }}-->
+                                      <span ng-show="bolezen.clanki.length == 0">/</span>
                                       <span ng-repeat="navodilo in bolezen.clanki">
                                           <a ng-href="{{navodilo.clanek}}">{{okrajsaj(navodilo.clanek, 30)}}</a>
                                           <br>
@@ -81,6 +82,7 @@
                               <td class="col-9" title="'Navodilo'" >
 
                                   <!--{{ zdravilo.navodila }}-->
+                                  <span ng-show="zdravilo.navodila.length == 0">/</span>
                                   <span ng-repeat="navodilo in zdravilo.navodila">
                                       <a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url, 30)}}</a>
                                       <br>
@@ -116,6 +118,7 @@
                               <td class="col-2" title="'Šifra'" >{{dieta.sifra}}</td>
                               <td class="col-8" title="'Navodilo'" >
                                   <!--{{ dieta.navodila }}-->
+                                  <span ng-show="dieta.navodila.length == 0">/</span>
                                   <span ng-repeat="navodilo in dieta.navodila">
                                       <a ng-href="{{navodilo.url}}">{{okrajsaj(navodilo.url, 30)}}</a>
                                       <br>
