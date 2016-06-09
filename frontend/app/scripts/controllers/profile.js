@@ -22,6 +22,8 @@ angular.module('tpo')
               "stevilka_zzzs": true,
               "zdravnik": true,
               "zobozdravnik": true,
+              "alergije": true,
+              "diete": 10,
               "pregledi": 10,
               "meritve": 10,
               "bolezni": 10,

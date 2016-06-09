@@ -72,6 +72,7 @@ class PersonalizacijaViewSet(viewsets.ModelViewSet):
             user.save()
             ps = PersonalizacijaNadzornePlosceSerializer(p, context={'request': request})
             return Response(ps.data)
+
         except ObjectDoesNotExist as e:
             print(e)
             response = JSONResponse({"error":"Uporabnik ne obstaja."})
@@ -642,9 +643,12 @@ def ustvariPregled(request, format=None):
 
         # pohendlaj bolezni
         for b in bolezen:
-            pregled.bolezen.add(Bolezni.objects.get(naziv=b["naziv"], mkb10=b["mkb10"], alergija=b["alergija"]))
-            #dodaj tudi uporabniku
-            uporabnik.bolezni.add(Bolezni.objects.get(naziv=b["naziv"], mkb10=b["mkb10"], alergija=b["alergija"]))
+            # pridobi bolezen
+            trenutnaBolezen = Bolezni.objects.get(id=b['id'])
+            # dodaj pregeldu
+            pregled.bolezen.add(trenutnaBolezen)
+            # dodaj uporabniku
+            uporabnik.bolezni.add(trenutnaBolezen)
 
 
         #pohendlaj zdravila

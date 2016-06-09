@@ -108,6 +108,8 @@ angular.module('tpo')
           $scope.uporPersonal.pregledi = 10;
           $scope.uporPersonal.meritve = 10;
           $scope.uporPersonal.bolezni = 10;
+          $scope.uporPersonal.diete = 10;
+          $scope.uporPersonal.alergije = true;
       }else{
           $scope.uporPersonal = $rootScope.uporabnik.personalizacija;
           /*
@@ -167,16 +169,16 @@ angular.module('tpo')
 
 
 
-      if( $scope.uporPersonal.zdravila === 5 || $scope.uporPersonal.zdravila === 20 ){
+      if( $scope.uporPersonal.diete === 5 || $scope.uporPersonal.diete === 20 ){
           $scope.dieteCounts = [5,20].sort(function(a, b){return a-b});
       }else{
-          $scope.dieteCounts = [5,$scope.uporPersonal.zdravila,20].sort(function(a, b){return a-b});
+          $scope.dieteCounts = [5,$scope.uporPersonal.diete,20].sort(function(a, b){return a-b});
       }
           // init table numbs
       $scope.dieteData = [];
       $scope.tableSet = [];
       $scope.tableSet.perPage = 1;
-      $scope.tableSet.perCou = $scope.uporPersonal.zdravila;
+      $scope.tableSet.perCou = $scope.uporPersonal.diete;
 
       var tpDieta = new NgTableParams({
           page : $scope.tableSet.perPage,     // show first page
@@ -241,6 +243,8 @@ angular.module('tpo')
                   $scope.tableSet.perPage = params.page();
                   $scope.tableSet.perCou = params.count();
 
+                  // izloči alergije če je tako nastavljeno v personalizaciji
+                  data = data.filter(filterRemoveAlergija(data));
                   // order data
                   data = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
 
@@ -421,6 +425,16 @@ angular.module('tpo')
           mojScope.pregledi = [];
           mojScope.osebniZdravnik = {};
           mojScope.osebniZobozdravnik = {};
+      }
+
+      function filterRemoveAlergija( upor ) {
+          return function( bolezen ) {
+              if(bolezen.alergija && !$scope.uporPersonal.alergije){
+                  return false;
+              }else{
+                  return true;
+              }
+          };
       }
 
 
