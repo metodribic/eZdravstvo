@@ -43,6 +43,7 @@ class AmbulantaSerializer(serializers.HyperlinkedModelSerializer):
 """ OSEBJE/MED. SESTRE """
 class OsebjeSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField()
+    role = VlogaSerializer()
     class Meta:
         model = Osebje
         exclude = ('password', 'first_name', 'last_name', 'is_superuser', 'is_staff')

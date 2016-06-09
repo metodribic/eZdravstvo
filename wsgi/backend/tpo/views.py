@@ -209,7 +209,8 @@ class ZdravnikUporabnikiViewSet(viewsets.ModelViewSet):
         try:
             pacient = self.request.META['HTTP_PACIENT']
             if pacient != None:
-                user = Uporabnik.objects.get(user_ptr_id = pacient)
+               # user = Uporabnik.objects.get(user_ptr_id = pacient)
+               pass
         except Exception as e:
             print(e)
         return Uporabnik.objects.filter(zdravnik__id=user.id)

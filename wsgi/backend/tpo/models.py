@@ -117,12 +117,12 @@ class BolezniZdravila(models.Model):
 
 class Pregled(models.Model):
     opombe = models.CharField(max_length=2048)
-    datum = models.DateField()
+    datum = models.DateTimeField()
     zdravnik = models.ForeignKey('Zdravnik')
     bolezen = models.ManyToManyField('Bolezni')
     zdravilo = models.ManyToManyField('Zdravilo')
     dieta = models.ManyToManyField('Dieta')
-    datum_naslednjega = models.DateField(blank=True, null=True)
+    datum_naslednjega = models.DateTimeField(blank=True, null=True)
     uporabnik = models.ForeignKey('Uporabnik')
 
 

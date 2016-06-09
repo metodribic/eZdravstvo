@@ -32,7 +32,7 @@
                             {{$select.selected.ime}} {{$select.selected.priimek}}
                         </ui-select-match>
                         <ui-select-choices repeat="pacient in pacienti">
-                            <div ng-bind-html="pacient.ime">{{pacient.ime}} {{pacient.priimek}}</div>
+                            <div>{{pacient.ime}} {{pacient.priimek}}</div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -101,21 +101,21 @@
             <div class="form-group" ng-show="prikaziHolesterol">
                 <label class="control-label col-sm-2">Holesterol (NORMALNI):</label>
                 <div class="col-sm-2">
-                    <input type="number" ng-model="holesterolNormalen"/>
+                    <input type="number" step="0.01" ng-model="holesterolNormalen"/>
                     <br />
 					<span> ({{holesterol.nemogoce_min}} - {{holesterol.nemogoce_max}}) {{holesterol.enota}}</span> 
                 </div>
                 
                 <label class="control-label col-sm-2">Holesterol (LDL):</label>
                 <div class="col-sm-2">
-                    <input type="number" ng-model="holesterolLDL"/>
+                    <input type="number" step="0.01" ng-model="holesterolLDL"/>
                     <br />
 					<span> ({{holesterol.nemogoce_min}} - {{holesterol.nemogoce_max}}) {{holesterol.enota}}</span> 
                 </div>
                 
                 <label class="control-label col-sm-2">Holesterol (HDL):</label>
                 <div class="col-sm-2">
-                    <input type="number" ng-model="holesterolHDL"/>
+                    <input type="number" step="0.01" ng-model="holesterolHDL"/>
                     <br />
 					<span> ({{holesterol.nemogoce_min}} - {{holesterol.nemogoce_max}}) {{holesterol.enota}}</span> 
                 </div>
@@ -195,7 +195,7 @@
 
               <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default" ui-sref="prijavaPregled">Prijavi na pregled</button>
+                <button type="button" class="btn btn-default" ng-click="notRealized()">Prijavi na pregled</button>
               </div>
             </div>
 

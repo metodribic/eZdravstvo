@@ -13,6 +13,7 @@ angular.module('tpo')
     $scope.drawChart = function() {
         startDate = moment($scope.chart.start, 'DD.MM.YYYY');
         endDate = moment($scope.chart.end, 'DD.MM.YYYY');
+        endDate.add(1, 'days');
         tipMeritveId = $scope.meritev.tip_meritve.id;
         Meritve.query({tipMeritveId: tipMeritveId, startDate: startDate.format('YYYY-MM-DD'),
             endDate: endDate.format('YYYY-MM-DD'), ordering: 'datum'}).$promise.then(function(response) {

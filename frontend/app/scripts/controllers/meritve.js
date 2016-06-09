@@ -87,14 +87,14 @@ angular.module('tpo')
           novaMeritev.vrednost_meritve = pritisk;
           novaMeritev.uporabnik = $rootScope.uporabnik.id;
           novaMeritev.pregled = null;
-          novaMeritev.datum = moment().format("YYYY-MM-DDTHH:mm");
+          novaMeritev.datum = moment().utc().format("YYYY-MM-DDTHH:mm");
           novaMeritev.$save(function(response){
 
             novaMeritev.tip_meritve = $scope.vrednostiZaUtrip;
             novaMeritev.vrednost_meritve = $scope.vrednostMeritveUtrip;
             novaMeritev.uporabnik = $rootScope.uporabnik.id;
             novaMeritev.pregled = null;
-            novaMeritev.datum = moment().format("YYYY-MM-DDTHH:mm");
+            novaMeritev.datum = moment().utc().format("YYYY-MM-DDTHH:mm");
             novaMeritev.$save(function(response){
               Notification.success('Meritev uspešno dodana!');
               $scope.reloadState();
@@ -122,7 +122,7 @@ angular.module('tpo')
           novaMeritev.vrednost_meritve = holesterol;
           novaMeritev.uporabnik = $rootScope.uporabnik.id;
           novaMeritev.pregled = null;
-          novaMeritev.datum = moment().format("YYYY-MM-DDTHH:mm");
+          novaMeritev.datum = moment().utc().format("YYYY-MM-DDTHH:mm");
           novaMeritev.$save(function(response){
               Notification.success('Meritev uspešno dodana!');
               $scope.reloadState();
@@ -145,7 +145,7 @@ angular.module('tpo')
           novaMeritev.vrednost_meritve = $scope.vrednostMeritve;
           novaMeritev.uporabnik = $rootScope.uporabnik.id;
           novaMeritev.pregled = null;
-          novaMeritev.datum = moment().format("YYYY-MM-DDTHH:mm");
+          novaMeritev.datum = moment().utc().format("YYYY-MM-DDTHH:mm");
           novaMeritev.$save(function(response){
             Notification.success('Meritev uspešno dodana!');
             $scope.reloadState();

@@ -67,7 +67,7 @@ angular.module('tpo')
       $scope.trenutniZdravnik = $rootScope.uporabnik.ime +' '+$rootScope.uporabnik.priimek + naziv;
 
       // pridobi ustrezen datum
-      $scope.datum_pregleda = moment().format("DD.MM.YYYY");
+      $scope.datum_pregleda = moment().format("DD.MM.YYYY HH:mm:ss");
 
       //pridobi vse bolezni za izbiro
       BolezniSeznam.query().$promise.then(function(response){
@@ -110,7 +110,7 @@ angular.module('tpo')
         $scope.besedZaUpor = "";
         var a = new DodajPregled();
 
-        a.datum_pregleda = moment(mojScope.datum_pregleda, "DD.MM.YYYY").format("YYYY-MM-DD");
+        a.datum_pregleda = moment(mojScope.datum_pregleda, "DD.MM.YYYY HH:mm:ss").utc().format("YYYY-MM-DD HH:mm:ss");
         a.zdravnik = $rootScope.uporabnik.id;
         if(mojScope.pregled.uporabnik)
 	        a.uporabnik = mojScope.pregled.uporabnik.id;
@@ -335,4 +335,9 @@ angular.module('tpo')
 		  }
 		  return -1;
 	  }
+
+      $scope.notRealized = function() {
+          Notification.info({message: "Zgodba žal ni realizirana. Vseeno hvala za zanimanje. " + 
+                               "Ob morebitnem povečanju 'budgeta' bomo realizirali tudi to zgodbo"});
+      }
   }]);

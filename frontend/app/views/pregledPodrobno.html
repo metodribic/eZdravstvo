@@ -24,7 +24,7 @@
               <tr>
                 <td class="col-xs-2"><b>Datum:</b></td>
                 <td class="col-xs-10">
-                    <span ng-show="pregled.datum.length > 0">{{pregled.datum | date:'dd.MM.yyyy'}}</span>
+                    <span ng-show="pregled.datum.length > 0">{{pregled.datum | date:'dd.MM.yyyy HH:mm'}}</span>
                     <span ng-show="pregled.datum.length == 0">/</span>
                 </td>
               </tr>
@@ -98,7 +98,7 @@
               <tr>
                 <td><b>Naslednji pregled:</b></td>
                 <td>
-                <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega | date:'dd.MM.yyyy'}}</span>
+                <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega | date:'dd.MM.yyyy HH:mm'}}</span>
                 <span ng-show="pregled.datum_naslednjega.length == null">Ponovni pregled ni potreben!</span>
               </td>
               </tr>
