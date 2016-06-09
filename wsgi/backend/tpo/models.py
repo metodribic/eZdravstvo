@@ -207,11 +207,14 @@ class PersonalizacijaNadzornePlosce(models.Model):
     datum_rojstva = models.BooleanField(default=True)
     kraj_rojstva = models.BooleanField(default=True)
     naslov = models.BooleanField(default=True)
-    stevilka_zzzs  = models.BooleanField(default=True)
-    zdravnik  = models.BooleanField(default=True)
-    zobozdravnik  = models.BooleanField(default=True)
+    stevilka_zzzs = models.BooleanField(default=True)
+    zdravnik = models.BooleanField(default=True)
+    zobozdravnik = models.BooleanField(default=True)
     pregledi = models.IntegerField(default = 10)
     meritve = models.IntegerField(default = 10)
     bolezni = models.IntegerField(default = 10)
     zdravila = models.IntegerField(default = 10)
+    diete = models.IntegerField(default=10)
+    alergije = models.BooleanField(default=True)
+
 

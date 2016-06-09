@@ -8,7 +8,6 @@ angular.module('tpo')
     // shrani uporabnika, ki je trenutno prijavljen
     var trenutniUporabnik = $rootScope.uporabnik;
     $scope.sprejema = true;
-
     // Preveri ali je prijavljena oseba zravnik ali pacient
     if(trenutniUporabnik.role.naziv == 'Pacient') {
       $scope.tipUporabnika = 'Pacient';
@@ -23,6 +22,8 @@ angular.module('tpo')
               "stevilka_zzzs": true,
               "zdravnik": true,
               "zobozdravnik": true,
+              "alergije": true,
+              "diete": 10,
               "pregledi": 10,
               "meritve": 10,
               "bolezni": 10,

@@ -36,7 +36,7 @@
                       <span ng-show = "meritve.length == 0">/</span>
                       <span ng-hide = "meritve.length == 0" ng-repeat="meritev in meritve">
                       - {{meritev.tip_meritve.tip}}&nbsp;<i>(šifra: {{meritev.tip_meritve.sifra}})</i>:
-                      <b ng-bind-html="meritev.vrednost_meritve"></b> 
+                      <span ng-bind-html="meritev.vrednost_meritve"></span> 
                       <br />
                       </span>
                   </td>

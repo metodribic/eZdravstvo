@@ -9,6 +9,7 @@ angular.module('tpo')
       if($state.current.name == "logout" && AuthService.isAuthenticated()) {
           AuthService.logout();
           $rootScope.logged_out = true;
+          $rootScope.oskrbovanecAlert = false;
           $state.go('login');
       }
 
