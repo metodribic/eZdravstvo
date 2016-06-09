@@ -114,7 +114,7 @@
             <a  target="_self">{{uporabnik.role.naziv}}</a>
           </div>
         </div>
-        <div class="izbiraOskrbovanca" ng-hide="isDoctor || isSuperU">
+        <div class="izbiraOskrbovanca" ng-show="user.role.naziv === 'Pacient' ">
             <p>Izbrani uporabnik</p>
             <ui-select ng-model="selected.value" on-select="changeUser($item, $model)">
                 <ui-select-match>

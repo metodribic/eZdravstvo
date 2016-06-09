@@ -2,8 +2,8 @@
 
 
 angular.module('tpo')
-  .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik','Notification', 'Ustanova', 'KontaktnaOseba',  '$http', '$q', 'API_URL', 'Personalizacija',
-  function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik, Notification, Ustanova, KontaktnaOseba, $http, $q, API_URL, Personalizacija) {
+  .controller('ProfileCtrl', ['$scope','AuthService', '$state', '$rootScope','Posta','Uporabniki', 'Zdravnik','Notification', 'Ustanova', 'KontaktnaOseba',  '$http', '$q', 'API_URL', 'Personalizacija', 'Osebje',
+  function ($scope, AuthService, $state, $rootScope, Posta, Uporabniki, Zdravnik, Notification, Ustanova, KontaktnaOseba, $http, $q, API_URL, Personalizacija, Osebje) {
 
     // shrani uporabnika, ki je trenutno prijavljen
     var trenutniUporabnik = $rootScope.uporabnik;
@@ -27,10 +27,13 @@ angular.module('tpo')
               "meritve": 10,
               "bolezni": 10,
               "zdravila": 10
-          }
+          };
 	  }
     else if(trenutniUporabnik.role.naziv == 'Zdravnik'){
       $scope.tipUporabnika = 'Zdravnik';
+    }
+    else if(trenutniUporabnik.role.naziv == 'Medicinska sestra'){
+      $scope.tipUporabnika = 'Medicinska sestra';
     }
 
     // metoda za posodabljanje profila
@@ -57,6 +60,7 @@ angular.module('tpo')
         // posodobi  zdravnik
         zdravnik.$update({zdravnikId: trenutniUporabnik.id}, function(response){
           $rootScope.uporabnik = response;
+          $rootScope.user = response;
           window.localStorage.setItem('user', JSON.stringify(response));
         });
         Notification.success('Profil uspešno posodobljen!');
@@ -73,6 +77,24 @@ angular.module('tpo')
       }
     };
 
+    $scope.shrani_spremembe_med_sestra = function(){
+      var sestra = new Osebje();
+      sestra.id = $rootScope.uporabnik.id;
+      sestra.ime = $rootScope.uporabnik.ime;
+      sestra.priimek = $rootScope.uporabnik.priimek;
+      sestra.telefon = $rootScope.uporabnik.telefon;
+      sestra.email = $rootScope.uporabnik.email;
+      sestra.ustanova = {
+        id: $rootScope.uporabnik.ustanova.id
+      };
+
+      sestra.$update({osebjeId: sestra.id}, function(response){
+        $rootScope.uporabnik = response;
+        $rootScope.user = response;
+        window.localStorage.setItem('user', JSON.stringify(response));
+        Notification.success('Profil uspešno posodobljen!');
+      });
+    };
 
     // POSODOBI PROFIL
     $scope.shrani_spremembe_pacient = function(){

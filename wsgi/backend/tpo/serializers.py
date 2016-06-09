@@ -40,20 +40,31 @@ class AmbulantaSerializer(serializers.HyperlinkedModelSerializer):
         model = Ambulanta
 
 
-""" OSEBJE/MED. SESTRE """
-class OsebjeSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.IntegerField()
-    role = VlogaSerializer()
-    class Meta:
-        model = Osebje
-        exclude = ('password', 'first_name', 'last_name', 'is_superuser', 'is_staff')
-
-
 """ SIFRANT REGISTRIRANIH """
 class SifrantRegistriranihSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField()
     class Meta:
         model = SifrantRegistriranih
+
+
+""" OSEBJE/MED. SESTRE """
+class OsebjeSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField()
+    sifra = SifrantRegistriranihSerializer()
+    role = VlogaSerializer()
+    ustanova = UstanovaSerializer()
+
+    class Meta:
+        model = Osebje
+        exclude = ('password', 'first_name', 'last_name', 'is_superuser', 'is_staff')
+
+    def update(self, instance, validated_data):
+        instance.ime = validated_data['ime']
+        instance.priimek = validated_data['priimek']
+        instance.telefon = validated_data['telefon']
+        instance.ustanova_id = validated_data['ustanova']['id']
+        instance.save()
+        return instance
 
 
 """ ZDRAVNIK """
@@ -64,6 +75,7 @@ class ZdravnikSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField()
     sifra = SifrantRegistriranihSerializer()
     ustanova = UstanovaSerializer()
+
 
     class Meta:
         model = Zdravnik
