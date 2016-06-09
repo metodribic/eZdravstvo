@@ -33,16 +33,17 @@
               <tr>
                 <td><b>Meritve:</b></td>
                   <td>
+                      <span ng-show = "meritve.length == 0">/</span>
                       <span ng-hide = "meritve.length == 0" ng-repeat="meritev in meritve">
                       - {{meritev.tip_meritve.tip}}&nbsp;<i>(šifra: {{meritev.tip_meritve.sifra}})</i>:
                       <b>{{meritev.vrednost_meritve}}</b> <br>
                       </span>
                   </td>
-                  <span ng-show = "meritve.length == 0">/</span>
               </tr>
               <tr>
                 <td><b>Bolezni:</b></td>
                     <td>
+                        <span ng-show="pregled.bolezen.length == 0">/</span>
                         <div class="col-md-12" ng-show="pregled.bolezen.length != 0">
                           <table ng-table="tableBolezen" class="table" id="tabelcaUpor">
                               <tr ng-repeat="bolezen in pregled.bolezen" >
@@ -72,6 +73,7 @@
               <tr>
                 <td><b>Zdravila:</b></td>
                 <td>
+                    <span ng-show="pregled.zdravilo.length == 0">/</span>
                     <div class="col-md-12" ng-show="pregled.zdravilo.length != 0">
                       <table ng-table="tableZdravilo" class="table" id="tabelcaUpor">
                           <tr ng-repeat="zdravilo in pregled.zdravilo" >
@@ -106,6 +108,7 @@
               <tr>
                 <td><b>Diete:</b></td>
                 <td>
+                    <span ng-show="pregled.zdravilo.length == 0">/</span>
                     <div class="col-md-12" ng-show="pregled.dieta.length != 0">
                       <table ng-table="tableDieta" class="table " id="tabelcaUpor">
                           <tr ng-repeat="dieta in pregled.dieta" >
