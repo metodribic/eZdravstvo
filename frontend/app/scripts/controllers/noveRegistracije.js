@@ -24,9 +24,9 @@ angular.module('tpo')
       
       // dates
       $scope.chart = {'start': moment(), 'end': moment()}
-      $scope.startDate = moment($scope.chart.start, 'DD.MM.YYYY');
-      $scope.endDate = moment($scope.chart.end, 'DD.MM.YYYY');
-
+      $scope.startDate = moment($scope.chart.start, 'DD.MM.YYYY').utc();
+      $scope.chart.start.subtract(1, 'weeks');
+      $scope.endDate = moment($scope.chart.end, 'DD.MM.YYYY').utc();
 
 ///   DATES
       $scope.filtrirejDatum = function( dat ){
@@ -39,8 +39,10 @@ angular.module('tpo')
                   return true;
               }*/
               // dat.date_joined with format "dd.mm.yyyy" doesnt work
-              if( $scope.startDate <= moment(dat.date_joined,"YYYY-MM-DD"  )
-                  && $scope.endDate >= moment(dat.date_joined,"YYYY-MM-DD" )  ){
+              console.log($scope.startDate)
+              console.log($scope.startDate)
+              if( $scope.startDate <= moment(dat.date_joined,"YYYY-MM-DD"  ).utc()
+                  && $scope.endDate >= moment(dat.date_joined,"YYYY-MM-DD" ).utc()  ){
                   return true;
               }
 
@@ -118,8 +120,8 @@ angular.module('tpo')
       $scope.naloziDatumInReload = function() {
           
           //$scope.izbranDatum = true;
-          $scope.startDate = moment($scope.chart.start, 'DD.MM.YYYY');
-          $scope.endDate = moment($scope.chart.end, 'DD.MM.YYYY');
+          $scope.startDate = moment($scope.chart.start, 'DD.MM.YYYY').utc();
+          $scope.endDate = moment($scope.chart.end, 'DD.MM.YYYY').utc();
           
           // validate
           if( $scope.startDate > $scope.endDate ){
@@ -288,5 +290,6 @@ angular.module('tpo')
           return today;
       }
 
+      $scope.naloziDatumInReload();
   }]);
 
