@@ -134,7 +134,7 @@ angular
               templateUrl: '../views/nedokoncanaRegistracija.html',
               controller: 'nedokoncanaRegistracijaCtrl'
           })
-          
+
           .state('noveRegistracije', {
               url: '/noveRegistracije',
               templateUrl: '../views/noveRegistracije.html',
