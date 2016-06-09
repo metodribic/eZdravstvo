@@ -6,7 +6,7 @@
       <h3 class="bottom-border header">Uporabniški profil</h3>
       <div class="row">
         <div class="col-md-12">
-          <form class="form-horizontal" role="form" ng-submit="shrani_spremembe_pacient()" ng-if="tipUporabnika !='Zdravnik'">
+          <form class="form-horizontal" role="form" ng-submit="shrani_spremembe_pacient()" ng-if="tipUporabnika =='Pacient'">
 
             <!-- Ime uporabnika -->
             <div class="form-group">
@@ -92,6 +92,7 @@
 
             <button class="btn btn-default pull-right">Shrani spremembe</button>
           </form>
+          <!-- ############################################### END: PACIENT ########################################################################## -->
 
           <!-- ############################################### ZDRAVNIK ########################################################################## -->
 
@@ -136,7 +137,7 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Email:</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control" ng-model = "uporabnik.email" required>
+                <input type="email" class="form-control" ng-model = "uporabnik.email" disabled>
               </div>
             </div>
 
@@ -175,8 +176,69 @@
             <button class="btn btn-default pull-right">Shrani spremembe</button>
           </form>
 
+          <!-- ############################################### END: ZDRAVNIK ####################################################################### -->
 
 
+          <!-- ############################################### MED.SESTRA ########################################################################## -->
+
+          <form class="form-horizontal" role="form" ng-submit="shrani_spremembe_med_sestra()" ng-if="tipUporabnika=='Medicinska sestra'">
+
+            <!-- SIFRA -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Šifra med. sestre:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model = "uporabnik.sifra.sifra" disabled>
+              </div>
+            </div>
+
+            <!-- Ime uporabnika -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Ime:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model = "uporabnik.ime" required>
+              </div>
+            </div>
+
+            <!-- Priimek uporabnika -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Priimek:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model = "uporabnik.priimek" required>
+              </div>
+            </div>
+
+
+            <!-- Telefonska številka uporabnika -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Telefonska številka:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model = "uporabnik.telefon" required>
+              </div>
+            </div>
+
+
+            <!-- email -->
+            <div class="form-group">
+              <label class="control-label col-sm-2">Email:</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" ng-model = "uporabnik.email" disabled>
+              </div>
+            </div>
+
+            <!-- Ustanova -->
+            <div class="form-group" ng-show="tipUporabnika=='Medicinska sestra'">
+              <label class="control-label col-sm-2">Šifra ustanove:</label>
+              <div class="col-sm-5">
+                <input type="number" class="form-control" ng-blur="pridobi_ustanovo()" ng-model="uporabnik.ustanova.id" required>
+              </div>
+              <div class="col-sm-5">
+                <input type="text" disabled class="form-control" ng-model = "uporabnik.ustanova.naziv" required>
+              </div>
+            </div>
+            <button class="btn btn-default pull-right">Shrani spremembe</button>
+          </form>
+
+          <!-- ############################################### END: SESTRA ####################################################################### -->
 
 
 
@@ -187,7 +249,7 @@
   </div> <!-- end box -->
 
   <!-- PODATKI O KONTAKTNI OSEBI -->
-  <div class="box" ng-if="tipUporabnika!='Zdravnik'">
+  <div class="box" ng-if="tipUporabnika=='Pacient'">
     <div class="box-body">
       <h3 class="bottom-border header">Podatki o kontaktni osebi</h3>
       <div class="row">
