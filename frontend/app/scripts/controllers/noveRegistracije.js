@@ -178,12 +178,12 @@ angular.module('tpo')
               rows[i].index = i+1;
               rows[i].username = $scope.saveDataForPdf[i].username;
 
-              if( $scope.saveDataForPdf[i].ime == "" ){
+              if( $scope.saveDataForPdf[i].ime == "" || $scope.saveDataForPdf[i].ime == null ){
                   rows[i].ime = "/";
               }else{
                   rows[i].ime = $scope.saveDataForPdf[i].ime;
               }
-              if( $scope.saveDataForPdf[i].priimek == "" ){
+              if( $scope.saveDataForPdf[i].priimek == "" || $scope.saveDataForPdf[i].priimek == null ){
                   rows[i].priimek = "/";
               }else{
                   rows[i].priimek = $scope.saveDataForPdf[i].priimek;
