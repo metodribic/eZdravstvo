@@ -13,6 +13,7 @@ angular.module('tpo')
     $scope.drawChart = function() {
         startDate = moment($scope.chart.start, 'DD.MM.YYYY');
         endDate = moment($scope.chart.end, 'DD.MM.YYYY');
+        endDate.add(1, 'days');
         tipMeritveId = $scope.meritev.tip_meritve.id;
         Meritve.query({tipMeritveId: tipMeritveId, startDate: startDate.format('YYYY-MM-DD'),
             endDate: endDate.format('YYYY-MM-DD'), ordering: 'datum'}).$promise.then(function(response) {
@@ -22,7 +23,31 @@ angular.module('tpo')
                 for(var i=0; i<response.length; i++) {
                     if(i === 0)
                         data[0].key = response[i].tip_meritve.tip;
-                    if(response[i].tip_meritve.tip === "Krvni pritisk") {
+                    if(response[i].tip_meritve.tip === "Holesterol") {
+                        if(data.length < 3) {
+                            data.push({values:[], key: "LDL"});
+                            data.push({values:[], key: "HDL"});
+                            data[0].key = "Normalni holesterol";
+                        }
+                        var vrednosti = response[i].vrednost_meritve.split("/");
+
+                        data[0].values.push({
+							x: moment(response[i].datum, 'YYYY-MM-DD %H:%m:%s').valueOf(),
+							y: parseFloat(vrednosti[0])
+                        });
+
+                        data[1].values.push({
+							x: moment(response[i].datum, 'YYYY-MM-DD %H:%m:%s').valueOf(),
+							y: parseFloat(vrednosti[1])
+                        });
+                        
+                        data[2].values.push({
+							x: moment(response[i].datum, 'YYYY-MM-DD %H:%m:%s').valueOf(),
+							y: parseFloat(vrednosti[2])
+                        });
+
+                    }
+                    else if(response[i].tip_meritve.tip === "Krvni pritisk") {
                         if(data.length < 2) {
                             data.push({values:[], key: "Sistolični krvni pritisk"});
                             data[0].key = "Diastolični krvni pritisk";

@@ -220,8 +220,8 @@ angular.module('tpo')
 
       $scope.filterEmptyNames = function( upor ) {
           return function( upo ) {
-
-              if( upo.ime.length == 0 || upo.priimek.length == 0){
+              console.log(upo)
+              if(!upo || !upo.ime || upo.ime.length == 0 || upo.priimek.length == 0){
                   return true;
               }else{
                   return false;

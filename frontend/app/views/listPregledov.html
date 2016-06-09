@@ -24,7 +24,7 @@
                 <tbody>
                     <tr ng-repeat="pregled in pregledi" >
                       <td ui-sref="pregledPodrobno({id:pregled.id})"><i class="fa fa-search" style="cursor:pointer"></i></td>
-                      <td>{{pregled.datum | date:'dd.MM.yyyy'}}</td>
+                      <td>{{pregled.datum | date:'dd.MM.yyyy HH:mm'}}</td>
                       <td>{{pregled.opombe}}</td>
                       <td>{{pregled.zdravnik.ime}} {{pregled.zdravnik.priimek}}</td>
                       <td>
@@ -46,7 +46,7 @@
                         <span ng-show="pregled.dieta.length == 0">/</span>
                       </td>
                       <td>
-                        <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega | date: 'dd.MM.yyyy'}}</span>
+                        <span ng-show="pregled.datum_naslednjega != null">{{pregled.datum_naslednjega | date: 'dd.MM.yyyy HH:mm'}}</span>
                         <span ng-show="pregled.datum_naslednjega.length == null">Ponoven pregled ni potreben!</span>
                       </td>
                     </tr>

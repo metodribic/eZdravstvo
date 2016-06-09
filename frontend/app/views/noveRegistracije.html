@@ -42,11 +42,11 @@
                         <td>{{ ((tableSet.perPage-1)*tableSet.perCou) + $index+1 }}</td>
                         <td title="'Uporabniško ime'" sortable="'username'" filter="{username:'text'}" >{{u.username}}</td>
                         <td title="'Ime'" sortable="'ime'" filter="{ime:'text'}" >
-                            <div ng-show="u.ime.length < 1">/</div>
+                            <div ng-hide="u.ime.length > 0">/</div>
                             <div ng-show="u.ime.length >= 1">{{u.ime}}</div>
                         </td>
                         <td title="'Priimek'" sortable="'priimek'" filter="{priimek:'text'}" >
-                            <div ng-show="u.priimek.length < 1">/</div>
+                            <div ng-hide="u.priimek.length > 0">/</div>
                             <div ng-show="u.priimek.length >= 1">{{u.priimek}}</div>
                         </td>
                         <td title="'Uporabniška vloga'" sortable="'role.naziv'" filter="{'uporVloga':'text'}">{{u.role.naziv}}</td>

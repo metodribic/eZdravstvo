@@ -18,6 +18,14 @@ angular.module('tpo')
 
       Meritve.query({pregledId: pregledID}).$promise.then(function(response) {
             $scope.meritve = response;
+            for(i=0; i<$scope.meritve.length; i++) {
+                var m = $scope.meritve;
+                if(m[i].tip_meritve.tip === "Holesterol") {
+                    var vrednosti = m[i].vrednost_meritve.split("/");
+                    m[i].vrednost_meritve = "<br/> Normalna: " + vrednosti[0] + "<br/> LDL: " + 
+                        vrednosti[1] + "<br /> HDL: " + vrednosti[2];
+                }
+            }
       });
 
 
