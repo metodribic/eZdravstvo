@@ -19,5 +19,12 @@ angular.module('tpo')
       Meritve.query({pregledId: pregledID}).$promise.then(function(response) {
             $scope.meritve = response;
       });
-      
+
+
+      $scope.okrajsaj = function (input, len) {
+          if (input.length > len+10)
+              return input.substring(0, len) + "...";
+          return input;
+      };
+
   }]);
