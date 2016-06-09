@@ -77,9 +77,17 @@ angular.module('tpo')
 
       //pridobi vse meritve za izbiro
       VrednostiMeritevSeznam.query().$promise.then(function(response) {
-        $scope.vrednosti_meritev = response;
-        //console.log(response);
-      });
+         $scope.vrednosti_meritev = response;
+
+         for (var el in response){
+           // tega rabiš posebi, da lahko pri pritisku preveriš če je input v mejah...
+           if(response[el].tip === "Srčni utrip"){
+             $scope.srcni_utrip = response[el];
+             break;
+           }
+         }
+       });
+
 
       //pridobi vsa zdravila za izbiro
       ZdravilaSeznam.query().$promise.then(function(response) {
@@ -147,14 +155,17 @@ angular.module('tpo')
                 if ((mojScope.krvniMeritevSpodnji >= meritev.nemogoce_min &&
 			                mojScope.krvniMeritevSpodnji<=meritev.nemogoce_max) &&
 		                (mojScope.krvniMeritevZgornji >= meritev.nemogoce_min &&
-		                 mojScope.krvniMeritevZgornji <= meritev.nemogoce_max)) {
+		                 mojScope.krvniMeritevZgornji <= meritev.nemogoce_max) &&
+                        mojScope.srcniMeritev >= meritev.nemogoce_min &&
+                        mojScope.srcniMeritev <= meritev.nemogoce_max) {
                      mojScope.rezultatiMeritev.push({vrednost:mojScope.krvniMeritevSpodnji +
 	                     "/"+mojScope.krvniMeritevZgornji, tip:2});
+                     mojScope.rezultatiMeritev.push({vrednost:mojScope.srcniMeritev, tip:3});
                 }
                 //drugace obvesti zdravnika, da ni pravilno vnesel podatkov
                 else {
                     shraniPregledBoolean = false;
-                    Notification.error({message: "Podatki za KRVNI PRITISK so napačni!"});
+                    Notification.error("Podatki za to meritev so napačni!");
                     break;
                 }
             }else if (meritev.tip === "Holesterol") {
@@ -241,6 +252,7 @@ angular.module('tpo')
             mojScope.prikaziTeza = false;
             mojScope.prikaziTemperatura = false;
 
+
            mojScope.rezultatiMeritev = [];
 
         for (var i=0; i<izbranaMeritev.length; i++)  {
@@ -254,6 +266,7 @@ angular.module('tpo')
                 mojScope.prikaziGlukozo = true;
             }else if (meritev.tip === "Krvni pritisk") {
                 mojScope.prikaziKrvni = true;
+                mojScope.prikaziSrcni = true;
             }else if (meritev.tip === "Holesterol") {
                 mojScope.prikaziHolesterol = true;
             }else if (meritev.tip === "Srčni utrip") {
